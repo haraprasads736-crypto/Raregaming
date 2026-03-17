@@ -3,35 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rare Gaming-FF</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <title>RARE GAMING 🎮</title>
     <style>
-        body { background-color: #0b0c10; color: white; font-family: sans-serif; text-align: center; margin: 0; padding: 0; }
-        .header { background-color: #1f2833; padding: 15px; border-bottom: 2px solid #66fcf1; }
-        
-        /* Logo placeholder agar photo na mile */
-        .logo-box { 
-            width: 150px; height: 150px; margin: 20px auto; 
-            border: 3px solid #66fcf1; border-radius: 20px;
-            background: url('logo.jpg'), url('https://i.imgur.com/8K0S8qS.png'); /* Backup image link */
-            background-size: cover; background-position: center;
-            box-shadow: 0px 0px 20px #66fcf1;
-        }
-
-        h1 { color: #66fcf1; text-transform: uppercase; letter-spacing: 2px; }
-        .btn { background-color: #66fcf1; color: #0b0c10; padding: 15px; text-decoration: none; font-size: 18px; font-weight: bold; border-radius: 10px; display: block; width: 80%; margin: 15px auto; border: none; }
+        body { background-color: #0b0c10; color: #ffffff; font-family: 'Poppins', sans-serif; text-align: center; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .header { background: #1f2833; padding: 25px; border-bottom: 3px solid #66fcf1; box-shadow: 0px 4px 15px rgba(102, 252, 241, 0.2); }
+        .main-content { flex: 1; padding: 20px; }
+        .logo-box { width: 140px; height: 140px; margin: 20px auto; border: 4px solid #66fcf1; border-radius: 50%; background-image: url('logo.jpg'); background-size: cover; background-position: center; box-shadow: 0px 0px 30px rgba(102, 252, 241, 0.5); }
+        h1 { color: #66fcf1; text-transform: uppercase; letter-spacing: 2px; margin: 10px 0; font-size: 28px; }
+        .tagline { color: #45a29e; font-size: 16px; margin-bottom: 25px; font-weight: bold; }
+        .btn { display: block; width: 85%; max-width: 320px; margin: 12px auto; padding: 15px; background-color: #66fcf1; color: #0b0c10; text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 12px; transition: 0.3s ease; box-shadow: 0px 4px 10px rgba(0,0,0,0.3); }
+        .btn:active { transform: scale(0.96); }
         .btn-sec { background-color: transparent; color: #66fcf1; border: 2px solid #66fcf1; }
+        footer { background-color: #1f2833; padding: 15px; font-size: 13px; color: #45a29e; border-top: 1px solid #45a29e; }
     </style>
 </head>
 <body>
-    <div class="header"><h2>🎮 RARE GAMING 🎮</h2></div>
-    
-    <div class="logo-box"></div>
 
-    <h1>Rare Gaming-FF</h1>
-    <p>GAME IS PEACE</p>
+    <div class="header">
+        <h2 style="margin:0; color:#66fcf1;">RARE GAMING OFFICIAL</h2>
+    </div>
 
-    <button class="btn" onclick="window.location.href='register.html'">📝 Register</button>
-    <button class="btn btn-sec" onclick="window.location.href='schedule.html'">⏰ Schedule</button>
-    <button class="btn btn-sec" onclick="window.location.href='points.html'">🏆 Points Table</button>
+    <div class="main-content">
+        <div class="logo-box"></div>
+        <h1>Rare Gaming-FF</h1>
+        <p class="tagline">"GAME IS PEACE"</p>
+        
+        <a href="register.html" class="btn">📝 REGISTER SQUAD</a>
+        <a href="schedule.html" class="btn btn-sec">📅 MATCH SCHEDULE</a>
+        <a href="points.html" class="btn btn-sec">🏆 POINTS TABLE</a>
+        <a href="https://chat.whatsapp.com/GzBfH6zVqYv7y7" class="btn btn-sec">💬 WHATSAPP GROUP</a>
+    </div>
+
+    <footer>
+        &copy; 2026 | Developed by Rare Gaming
+    </footer>
+
 </body>
 </html>
