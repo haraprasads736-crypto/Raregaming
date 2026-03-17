@@ -8,84 +8,142 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
-        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; overflow-x: hidden; }
+        body { 
+            background-color: #0c0e12; 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; text-align: center; overflow-x: hidden; 
+        }
 
-        /* --- AUTO SLIDER STYLE --- */
+        /* --- AUTO SLIDER (CHHOTA AUR LAMBA) --- */
         .slider-container {
-            width: 100%;
-            max-width: 450px;
-            height: 120px; /* Choti height slider ke liye */
-            margin: 0 auto;
+            width: 85%; 
+            max-width: 320px; 
+            height: 160px; /* Thoda lamba size */
+            margin: 15px auto; 
+            border-radius: 12px;
             overflow: hidden;
             position: relative;
-            border-bottom: 2px solid #66fcf1;
+            border: 2px solid #ff4b2b; /* Red border gaming feel ke liye */
+            box-shadow: 0px 4px 15px rgba(255, 75, 43, 0.4);
         }
 
         .slider-track {
             display: flex;
-            width: 300%; /* 3 images ke liye 300% */
+            width: 200%; 
             height: 100%;
-            animation: scroll 12s infinite linear; /* Automatic slide animation */
+            animation: scroll-2 8s infinite linear; 
         }
 
         .slide {
-            width: 100%;
+            width: 50%; 
             height: 100%;
             background-size: cover;
             background-position: center;
         }
 
-        /* Slide Animation */
-        @keyframes scroll {
+        @keyframes scroll-2 {
             0% { transform: translateX(0); }
-            30% { transform: translateX(0); }
-            33% { transform: translateX(-33.33%); }
-            63% { transform: translateX(-33.33%); }
-            66% { transform: translateX(-66.66%); }
-            96% { transform: translateX(-66.66%); }
-            100% { transform: translateX(0); }
+            45% { transform: translateX(0); } 
+            50% { transform: translateX(-50%); } 
+            95% { transform: translateX(-50%); } 
+            100% { transform: translateX(0); } 
         }
 
         /* --- APP CONTENT STYLE --- */
-        .header { background: #15181e; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; border-bottom: 1px solid #2b303b; }
+        .header { 
+            background: #15181e; padding: 15px; 
+            border-bottom: 2px solid #66fcf1;
+            display: flex; align-items: center; justify-content: center; gap: 10px; 
+        }
+
         .container { padding: 10px; }
 
-        .matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 450px; margin: 15px auto; }
-        .match-card { background: #15181e; border-radius: 12px; overflow: hidden; border: 1px solid #2b303b; box-shadow: 0px 4px 10px rgba(0,0,0,0.5); }
-        .match-img { width: 100%; height: 110px; background-size: cover; background-position: center; position: relative; }
-        .match-tag { position: absolute; top: 5px; left: 5px; background: rgba(0, 0, 0, 0.8); color: #66fcf1; font-size: 9px; padding: 2px 5px; border-radius: 3px; }
-        .reg-btn { background: #66fcf1; color: #0c0e12; padding: 8px 0; text-decoration: none; font-weight: 800; font-size: 10px; display: block; text-transform: uppercase; }
-        .match-schedule { background: #2b303b; color: white; font-size: 9px; padding: 5px 0; border-top: 1px solid #3d4451; }
+        .matches-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px;
+            max-width: 450px;
+            margin: 10px auto;
+        }
 
-        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 450px; margin: 20px auto; }
-        .menu-item { background: #15181e; padding: 12px 5px; border-radius: 10px; border: 1px solid #2b303b; text-decoration: none; color: #66fcf1; font-size: 10px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .menu-item span { font-size: 22px; color: white; }
+        .match-card {
+            background: #15181e;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #2b303b;
+            display: flex; flex-direction: column;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .match-img {
+            width: 100%; height: 120px;
+            background-size: cover; background-position: center;
+            position: relative;
+        }
+
+        .match-tag {
+            position: absolute; top: 5px; left: 5px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #66fcf1; font-size: 10px; padding: 2px 6px; border-radius: 3px;
+        }
+
+        .reg-btn {
+            background: #66fcf1; color: #0c0e12;
+            padding: 8px 2px; text-decoration: none;
+            font-weight: 800; font-size: 11px; text-transform: uppercase;
+        }
+
+        .match-schedule {
+            background: #2b303b; color: #ffffff;
+            font-size: 9px; padding: 6px 0; border-top: 1px solid #3d4451; font-weight: 600;
+        }
+
+        /* --- BOTTOM MENU --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px; max-width: 450px; margin: 25px auto;
+        }
+
+        .menu-item {
+            background: #15181e; padding: 15px 5px;
+            border-radius: 10px; border: 1px solid #2b303b;
+            text-decoration: none; color: #66fcf1;
+            font-size: 10px; font-weight: 600;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+        }
+        .menu-item span { font-size: 24px; color: white; }
     </style>
 </head>
 <body>
+
+    <div class="header">
+        <img src="logo.jpg" style="width: 30px; border-radius: 50%;">
+        <span style="font-weight: 800; color:#66fcf1;">RARE GAMING</span>
+    </div>
 
     <div class="slider-container">
         <div class="slider-track">
             <div class="slide" style="background-image: url('rule1.jpg');"></div>
             <div class="slide" style="background-image: url('rule2.jpg');"></div>
-            <div class="slide" style="background-image: url('rule3.jpg');"></div>
         </div>
-    </div>
-
-    <div class="header">
-        <img src="logo.jpg" style="width: 25px; border-radius: 50%;">
-        <span style="font-weight: 800; color:#66fcf1; font-size: 16px;">RARE GAMING</span>
     </div>
 
     <div class="container">
         <div class="matches-grid">
             <div class="match-card">
-                <div class="match-img" style="background-image: url('br_poster.jpg');"><div class="match-tag">BR MATCH</div></div>
+                <div class="match-img" style="background-image: url('br_poster.jpg');">
+                    <div class="match-tag">BR MATCH</div>
+                </div>
                 <a href="register.html" class="reg-btn">REGISTER</a>
                 <div class="match-schedule">📅 23 MAR | 04:00 PM</div>
             </div>
+
             <div class="match-card">
-                <div class="match-img" style="background-image: url('cs_poster.jpg');"><div class="match-tag">CS MATCH</div></div>
+                <div class="match-img" style="background-image: url('cs_poster.jpg');">
+                    <div class="match-tag">CS MATCH</div>
+                </div>
                 <a href="register.html" class="reg-btn">REGISTER</a>
                 <div class="match-schedule">📅 NOT DECIDED</div>
             </div>
@@ -98,7 +156,7 @@
         </div>
     </div>
 
-    <p style="font-size: 9px; color: #444; margin-top: 20px;">Developed by Rare Gaming-FF</p>
+    <p style="font-size: 10px; color: #444; margin-top: 30px;">Developed by Rare Gaming-FF</p>
 
 </body>
 </html>
