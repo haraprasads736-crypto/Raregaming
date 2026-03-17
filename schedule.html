@@ -3,71 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Match Schedule</title>
     <style>
-        body {
-            background-color: #0b0c10;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        h2 {
-            color: #66fcf1;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-        p {
-            color: #c5c6c7;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-        .schedule-box {
-            background-color: #1f2833;
-            padding: 25px;
-            margin: 20px auto;
-            border-radius: 12px;
-            width: 85%;
-            border: 2px solid #66fcf1;
-            text-align: center;
-            box-shadow: 0px 0px 20px rgba(102, 252, 241, 0.3);
-        }
-        .match-title {
-            color: #66fcf1;
-            font-weight: bold;
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-        .match-details {
-            color: #c5c6c7;
-            font-size: 18px;
-            line-height: 2;
-        }
-        .highlight {
-            color: #66fcf1;
-            font-weight: bold;
-        }
-        .back-btn {
-            background-color: transparent;
-            color: #c5c6c7;
-            border: none;
-            margin-top: 30px;
-            font-size: 16px;
-            text-decoration: underline;
-            cursor: pointer;
-        }
+        body { background-color: #0b0c10; color: white; font-family: Arial, sans-serif; text-align: center; padding: 15px; margin: 0; }
+        h2 { color: #66fcf1; text-transform: uppercase; margin-top: 20px; text-shadow: 0px 0px 10px #66fcf1; }
+        .schedule-box { background-color: #1f2833; border: 2px solid #45a29e; border-radius: 10px; margin: 15px auto; padding: 15px; width: 90%; max-width: 400px; text-align: left; }
+        .match-title { color: #66fcf1; font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+        .match-time { color: #c5c6c7; font-size: 14px; margin-bottom: 10px; }
+        .map-name { display: inline-block; background-color: #45a29e; color: #0b0c10; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+        .back-btn { background-color: transparent; color: #66fcf1; border: 2px solid #66fcf1; padding: 12px; margin: 30px auto; border-radius: 8px; cursor: pointer; width: 90%; max-width: 400px; font-weight: bold; display: block; text-decoration: none; text-align: center; }
     </style>
 </head>
 <body>
 
-    <h2>⏰ Tournament Schedule</h2>
-    <p>Rare Gaming-FF Official Match</p>
+    <h2>📅 Match Schedule</h2>
 
     <div class="schedule-box">
-        <div class="match-title">MONDAY NIGHT BATTLE</div>
-        <div class="match-details">
-            📅 <b>Date:</b> <span class="highlight">23 March 2026</span><br>
-            🗓️ <b>Day:</b> Monday<br>
-            ⏰ <b>Time:</b> <span class="highlight">07:00 PM (Night)</span>
-            
+        <div class="match-title">Match 1: Bermuda (Classic)</div>
+        <div class="match-time">🗓 Date: 20 March 2026 | ⏰ Time: 7:00 PM</div>
+        <div class="map-name">Map: Bermuda</div>
+    </div>
+
+    <div class="schedule-box">
+        <div class="match-title">Match 2: Purgatory (Clash)</div>
+        <div class="match-time">🗓 Date: 21 March 2026 | ⏰ Time: 8:00 PM</div>
+        <div class="map-name">Map: Purgatory</div>
+    </div>
+
+    <div class="schedule-box">
+        <div class="match-title">Match 3: Kalahari (Finals)</div>
+        <div class="match-time">🗓 Date: 22 March 2026 | ⏰ Time: 7:30 PM</div>
+        <div class="map-name">Map: Kalahari</div>
+    </div>
+
+    <a href="index.html" class="back-btn">⬅ BACK TO HOME</a>
+
+</body>
+</html>
