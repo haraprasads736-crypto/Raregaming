@@ -6,26 +6,54 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>RARE GAMING 🎮</title>
     <style>
-        body { background-color: #0b0c10; color: #ffffff; font-family: sans-serif; text-align: center; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
-        .header { background: #1f2833; padding: 25px; border-bottom: 3px solid #66fcf1; }
-        .main-content { flex: 1; padding: 20px; }
-        .logo-box { width: 140px; height: 140px; margin: 20px auto; border: 4px solid #66fcf1; border-radius: 50%; background-image: url('logo.jpg'); background-size: cover; background-position: center; }
-        h1 { color: #66fcf1; text-transform: uppercase; margin: 10px 0; }
-        .btn { display: block; width: 85%; max-width: 320px; margin: 12px auto; padding: 15px; background-color: #66fcf1; color: #0b0c10; text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 12px; }
-        .btn-sec { background-color: transparent; color: #66fcf1; border: 2px solid #66fcf1; }
-        footer { background-color: #1f2833; padding: 15px; font-size: 13px; color: #45a29e; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        
+        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; }
+        .header { background: #15181e; padding: 15px; border-bottom: 2px solid #66fcf1; display: flex; align-items: center; justify-content: center; gap: 12px; }
+        .container { padding: 15px; }
+
+        /* Match Card */
+        .match-card {
+            width: 100%; max-width: 360px; background: #15181e; border-radius: 15px; overflow: hidden; margin: 15px auto; border: 1px solid #2b303b;
+        }
+        .match-img {
+            width: 100%; height: 200px; 
+            background-image: url('poster.jpg'); /* Yahan tumhari bheji hui photo dikhegi */
+            background-size: cover; background-position: center; position: relative;
+        }
+        .match-tag { position: absolute; top: 12px; left: 12px; background: #ff4b2b; color: white; padding: 5px 12px; font-size: 14px; font-weight: bold; border-radius: 5px; }
+        
+        .reg-btn { background: #66fcf1; color: #0c0e12; padding: 15px; display: block; text-decoration: none; font-weight: 800; font-size: 18px; text-transform: uppercase; }
+
+        /* Icons Grid */
+        .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 360px; margin: 25px auto; }
+        .grid-item {
+            background: #15181e; padding: 20px 5px; border-radius: 12px; border: 1px solid #2b303b; text-decoration: none; color: #66fcf1; font-size: 11px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .grid-item span { font-size: 35px; } /* Bade Icons */
     </style>
 </head>
 <body>
-    <div class="header"><h2 style="margin:0; color:#66fcf1;">RARE GAMING OFFICIAL</h2></div>
-    <div class="main-content">
-        <div class="logo-box"></div>
-        <h1>Rare Gaming-FF</h1>
-        <a href="register.html" class="btn">📝 REGISTER SQUAD</a>
-        <a href="schedule.html" class="btn btn-sec">📅 MATCH SCHEDULE</a>
-        <a href="points.html" class="btn btn-sec">🏆 POINTS TABLE</a>
-        <a href="https://wa.me/qr/J6HUB4OMBTXHJ1" class="btn btn-sec">💬 CONTACT ME</a>
+
+    <div class="header">
+        <img src="logo.jpg" style="width: 35px; border-radius: 50%;">
+        <span style="font-weight: 800; letter-spacing: 2px; color:#66fcf1;">RARE GAMING</span>
     </div>
-    <footer>&copy; 2026 | Developed by Rare Gaming</footer>
+
+    <div class="container">
+        <div class="match-card">
+            <div class="match-img"><div class="match-tag">FF MAX I</div></div>
+            <a href="register.html" class="reg-btn">TAP TO REGISTRATION</a>
+        </div>
+
+        <div class="grid-container">
+            <a href="https://wa.me/qr/J6HUB4OMBTXHJ1" class="grid-item"><span>💬</span> CONTACT ME</a>
+            <a href="points.html" class="grid-item"><span>🏆</span> POINT TABLE</a>
+            <a href="schedule.html" class="grid-item"><span>📅</span> SCHEDULE</a>
+        </div>
+    </div>
+
+    <p style="font-size: 10px; color: #444; margin-top: 40px;">Developed by Rare Gaming-FF</p>
+
 </body>
 </html>
