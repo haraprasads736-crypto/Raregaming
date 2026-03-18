@@ -8,97 +8,173 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
-        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; overflow-x: hidden; }
-        
-        /* Nav Header */
-        .nav-header { background: #15181e; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; }
-        .nav-title { font-weight: 800; font-size: 18px; color: white; }
+        body { 
+            background-color: #0c0e12; 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            text-align: center; 
+            overflow-x: hidden; 
+        }
+
+        /* Top Header */
+        .nav-header { 
+            background: #15181e; 
+            padding: 15px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 2px solid #66fcf1; 
+        }
+        .nav-title { font-weight: 800; font-size: 18px; color: white; letter-spacing: 0.5px; }
         .logo-circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
 
         .container { padding: 10px; max-width: 480px; margin: auto; }
 
-        /* --- SLIDER (MEDIUM PERFECT SIZE) --- */
-        .slider-container {
+        /* Profile Header */
+        .profile-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 20px 0; }
+        .pfp-main { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #66fcf1; overflow: hidden; }
+        .pfp-main img { width: 100%; height: 100%; object-fit: cover; }
+        .app-title { font-weight: 800; font-size: 20px; color: #66fcf1; text-transform: uppercase; letter-spacing: 1.5px; }
+
+        /* --- SLIDER (Compact & Full Photo) --- */
+        .rules-slider {
             width: 100%; 
-            height: 160px; /* <--- 160px: Na zyada bada, na zyada chhota */
-            border-radius: 12px; 
+            height: 135px; 
+            border-radius: 10px; 
             overflow: hidden; 
-            margin: 10px 0 20px 0; 
+            margin-bottom: 25px; 
             border: 1.5px solid #66fcf1; 
             position: relative;
-            box-shadow: 0 4px 15px rgba(102, 252, 241, 0.2);
+            box-shadow: 0 4px 15px rgba(102, 252, 241, 0.3);
+            background-color: rgba(0,0,0,0.3); 
         }
-        .slides { display: flex; width: 200%; height: 100%; animation: slideTwo 7s infinite; }
-        
-        /* Poster poora dikhega */
-        .slides img { width: 50%; height: 100%; object-fit: fill; } 
-        
-        @keyframes slideTwo {
-            0%, 45% { transform: translateX(0); }
-            50%, 95% { transform: translateX(-50%); }
+        .rules-slides { 
+            display: flex; 
+            width: 200%; 
+            height: 100%; 
+            animation: slideTwoAnim 6s infinite; 
+            align-items: center; 
+        }
+        .rules-slides img { 
+            width: 50%; 
+            height: 100%; 
+            object-fit: contain; 
+            object-position: center; 
+        }
+
+        @keyframes slideTwoAnim {
+            0% { transform: translateX(0); }
+            45% { transform: translateX(0); }
+            50% { transform: translateX(-50%); }
+            95% { transform: translateX(-50%); }
             100% { transform: translateX(0); }
         }
 
-        /* --- MATCH CARDS --- */
-        .match-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .match-card { background: #1a1d24; border-radius: 12px; overflow: hidden; border: 1.5px solid #2b303b; text-decoration: none; }
-        .m-img-box { height: 105px; background-size: cover; background-position: center; position: relative; background-color: #222; }
-        .m-badge { position: absolute; top: 6px; left: 6px; background: rgba(0,0,0,0.8); color: #66fcf1; font-size: 8px; font-weight: 800; padding: 2px 5px; border-radius: 3px; border: 1px solid #66fcf1; }
-        .m-reg-bar { background: #66fcf1; color: #000; padding: 9px; font-weight: 800; font-size: 11px; text-transform: uppercase; }
-        .m-footer { background: #15181e; padding: 5px; font-size: 9px; color: #aaa; border-top: 1px solid #2b303b; }
-
-        /* --- MENU & PRIZE POOL --- */
-        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
-        .prize-btn { grid-column: span 2; border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.05); padding: 18px; font-size: 14px; text-decoration: none; border-radius: 12px; border: 1.5px solid #ffd700; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        /* --- MATCH CARDS (BR, CS & LONE WOLF 1) --- */
+        .matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
         
-        .menu-item { background: #15181e; padding: 16px 5px; border-radius: 12px; border: 1px solid #2b303b; text-decoration: none; color: #66fcf1; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .menu-item span { font-size: 26px; color: white; }
+        .match-card {
+            background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b;
+            overflow: hidden; text-decoration: none; display: flex; flex-direction: column;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .match-card:active { transform: scale(0.97); }
 
-        .footer { font-size: 8px; color: #444; margin: 20px 0; }
+        .m-image { height: 110px; background-size: cover; background-position: center; position: relative; }
+        .m-label { position: absolute; top: 6px; left: 6px; background: rgba(12, 14, 18, 0.8); border: 1px solid #66fcf1; color: #66fcf1; font-size: 8px; font-weight: 800; padding: 3px 6px; border-radius: 3px; text-transform: uppercase; }
+
+        .m-register { background: #66fcf1; color: #000; padding: 10px; font-weight: 800; font-size: 13px; text-transform: uppercase; text-align: center; }
+        .m-timestamp { background: #1a1d24; padding: 6px; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 9px; color: #a0aab2; font-weight: 600; border-top: 1px solid #2b303b; }
+        .m-timestamp span { color: #ff4b2b; font-size: 13px; }
+
+        /* --- 4 COMPACT ICONS --- */
+        .footer-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 400px; margin: 0 auto 30px; padding: 0 10px; }
+
+        .menu-btn {
+            background: #15181e; border: 1.5px solid #2b303b; border-radius: 10px;
+            padding: 18px 8px; text-decoration: none; color: #66fcf1;
+            font-size: 10px; font-weight: 800; text-transform: uppercase;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3); transition: 0.3s;
+        }
+        .menu-btn:active { background: #1f232b; border-color: #66fcf1; }
+        .menu-btn span { font-size: 24px; color: white; }
+
+        .dev-footer { font-size: 8px; color: #444; margin-bottom: 20px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
     <div class="nav-header">
         <span class="nav-title">Rare Gaming</span>
-        <div class="logo-circle"><img src="logo.jpg"></div>
+        <div class="logo-circle">
+            <img src="logo.jpg" alt="Logo">
+        </div>
+    </div>
+
+    <div class="profile-header">
+        <div class="pfp-main">
+            <img src="logo.jpg" alt="Rare Gaming PFP">
+        </div>
+        <span class="app-title">RARE GAMING</span>
     </div>
 
     <div class="container">
         
-        <div class="slider-container">
-            <div class="slides">
-                <img src="rule1.jpg" alt="Rules">
-                <img src="rule2.jpg" alt="Rules">
+        <div class="rules-slider">
+            <div class="rules-slides">
+                <img src="rule1.jpg" alt="Rule 1">
+                <img src="rule2.jpg" alt="Rule 2">
             </div>
         </div>
 
-        <div class="match-row">
-            <a href="register.html" class="match-card">
-                <div class="m-img-box" style="background-image: url('br_poster.jpg');"><span class="m-badge">BR MATCH</span></div>
-                <div class="m-reg-bar">REGISTER</div>
-                <div class="m-footer">📅 23 MAR | 04:00 PM</div>
-            </a>
-            <a href="register.html" class="match-card">
-                <div class="m-img-box" style="background-image: url('cs_poster.jpg');"><span class="m-badge">CS MATCH</span></div>
-                <div class="m-reg-bar">REGISTER</div>
-                <div class="m-footer">📅 NOT DECIDED</div>
-            </a>
-        </div>
-
-        <div class="menu-grid">
-            <a href="prizes.html" class="prize-btn"><span>🏆</span>PRIZE POOL</a>
+        <div class="matches-grid">
             
-            <a href="teams.html" class="menu-item"><span>🛡️</span>TEAMS INFO</a>
-            <a href="https://wa.me/qr/J6HUB4OMBTXHJ1" class="menu-item"><span>💬</span>CONTACT</a>
-            <a href="points.html" class="menu-item"><span>📊</span>POINTS</a>
-            <a href="schedule.html" class="menu-item"><span>📅</span>SCHEDULE</a>
+            <a href="register.html" class="match-card">
+                <div class="m-image" style="background-image: url('br_poster.jpg');">
+                    <div class="m-label">BR MATCH</div>
+                </div>
+                <div class="m-register">REGISTER</div>
+                <div class="m-timestamp">
+                    <span>📅</span> 23 MAR | 04:00 PM
+                </div>
+            </a>
+
+            <a href="register.html" class="match-card">
+                <div class="m-image" style="background-image: url('cs_poster.jpg');">
+                    <div class="m-label">CS MATCH</div>
+                </div>
+                <div class="m-register">REGISTER</div>
+                <div class="m-timestamp">
+                    <span>📅</span> NOT DECIDED
+                </div>
+            </a>
+
+            <a href="register.html" class="match-card">
+                <div class="m-image" style="background-image: url('lw_poster.jpg');">
+                    <div class="m-label">LONE WOLF 1</div>
+                </div>
+                <div class="m-register">REGISTER</div>
+                <div class="m-timestamp">
+                    <span>📅</span> DECIDING SOON
+                </div>
+            </a>
+
         </div>
 
-    </div>
+        <div class="footer-menu-grid">
+            <a href="teams.html" class="menu-btn"><span>🛡️</span>TEAMS INFO</a>
+            <a href="https://wa.me/qr/J6HUB4OMBTXHJ1" class="menu-btn"><span>💬</span>CONTACT</a>
+            <a href="prizes.html" class="menu-btn"><span>🏆</span>PRIZE POOL</a>
+            <a href="points.html" class="menu-btn"><span>📊</span>POINTS</a>
+        </div>
 
-    <div class="footer">DEVELOPED BY RARE GAMING © 2026</div>
+    </div> 
+
+    <div class="dev-footer">DEVELOPED BY RARE GAMING © 2026</div>
 
 </body>
 </html>
