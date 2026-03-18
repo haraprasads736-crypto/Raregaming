@@ -4,20 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <title>RARE GAMING-FF</title>
+    <title>RARE GAMING Dashboard</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; overflow-x: hidden; }
-        .header { background: #15181e; padding: 15px; border-bottom: 2px solid #66fcf1; font-weight: 800; font-size: 18px; color: #66fcf1; text-transform: uppercase; }
+        
+        /* 1. Top Nav & Profile */
+        .nav-header { background: #15181e; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; }
+        .nav-title { font-weight: 800; font-size: 18px; color: white; }
+        .logo-circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; }
+        .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
+
         .container { padding: 10px; max-width: 480px; margin: auto; }
 
-        /* 1. Compact Slider */
+        /* 2. Compact Auto-Slide (SABSE UPAR) */
         .slider-container {
-            width: 100%; height: 110px; border-radius: 10px; overflow: hidden; 
-            margin-bottom: 15px; border: 1.5px solid #66fcf1; position: relative;
+            width: 100%; height: 120px; border-radius: 12px; overflow: hidden; 
+            margin: 10px 0 20px 0; border: 1.5px solid #66fcf1; position: relative;
         }
-        .slides { display: flex; width: 300%; height: 100%; animation: slideAnim 8s infinite; }
+        .slides { display: flex; width: 300%; height: 100%; animation: slideAnim 9s infinite; }
         .slides img { width: 100%; height: 100%; object-fit: cover; }
         @keyframes slideAnim {
             0% { transform: translateX(0); }
@@ -29,46 +35,57 @@
             100% { transform: translateX(0); }
         }
 
-        /* 2. Match Registration Cards */
-        .match-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        /* 3. Match Cards (BR & CS) */
+        .match-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         .match-card { background: #1a1d24; border-radius: 12px; overflow: hidden; border: 1.5px solid #2b303b; text-decoration: none; }
-        .m-img-box { height: 90px; background-size: cover; background-position: center; position: relative; background-color: #222; }
-        .m-badge { position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.8); color: #66fcf1; font-size: 7px; font-weight: 800; padding: 2px 4px; border: 1px solid #66fcf1; border-radius: 3px; }
-        .m-reg-bar { background: #66fcf1; color: #000; padding: 8px; font-weight: 800; font-size: 11px; }
-        .m-footer { background: #15181e; padding: 4px; font-size: 8px; color: #aaa; }
+        .m-img-box { height: 100px; background-size: cover; background-position: center; position: relative; background-color: #222; }
+        .m-badge { position: absolute; top: 6px; left: 6px; background: rgba(0,0,0,0.8); color: #66fcf1; font-size: 8px; font-weight: 800; padding: 2px 5px; border-radius: 3px; border: 1px solid #66fcf1; }
+        .m-reg-bar { background: #66fcf1; color: #000; padding: 8px; font-weight: 800; font-size: 11px; text-transform: uppercase; }
+        .m-footer { background: #15181e; padding: 5px; font-size: 9px; color: #aaa; border-top: 1px solid #2b303b; }
 
-        /* 3. Prize Pool & Menu Grid */
-        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-        .menu-item { background: #15181e; padding: 12px 5px; border-radius: 10px; border: 1px solid #2b303b; text-decoration: none; color: #66fcf1; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        /* 4. Menu Grid & Prize Pool */
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px; }
+        .menu-item { background: #15181e; padding: 15px 5px; border-radius: 12px; border: 1px solid #2b303b; text-decoration: none; color: #66fcf1; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 6px; }
         
-        /* Prize Pool Button (Niche laya gaya) */
-        .prize-btn { grid-column: span 2; border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.05); padding: 15px; font-size: 13px; margin-bottom: 5px; }
-        .menu-item span { font-size: 22px; }
+        /* Prize Pool (Gold & Bada) */
+        .prize-btn { grid-column: span 2; border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.05); padding: 18px; font-size: 14px; margin-bottom: 5px; }
+        .menu-item span { font-size: 26px; }
 
         .footer { font-size: 8px; color: #444; margin: 20px 0; }
     </style>
 </head>
 <body>
 
-    <div class="header">RARE GAMING-FF</div>
+    <div class="nav-header">
+        <span class="nav-title">Rare Gaming</span>
+        <div class="logo-circle"><img src="logo.jpg" alt="Logo"></div>
+    </div>
 
     <div class="container">
+        
         <div class="slider-container">
             <div class="slides">
-                <img src="poster1.jpg" alt="P1"><img src="poster2.jpg" alt="P2"><img src="poster3.jpg" alt="P3">
+                <img src="poster1.jpg" alt="P1">
+                <img src="poster2.jpg" alt="P2">
+                <img src="poster3.jpg" alt="P3">
             </div>
         </div>
 
         <div class="match-row">
-            <a href="https://forms.gle/your_br_link" class="match-card">
-                <div class="m-img-box" style="background-image: url('br_match.jpg');"><span class="m-badge">BR MATCH</span></div>
+            <a href="register.html" class="match-card">
+                <div class="m-img-box" style="background-image: url('br_poster.jpg');">
+                    <span class="m-badge">BR MATCH</span>
+                </div>
                 <div class="m-reg-bar">REGISTER</div>
-                <div class="m-time-footer" style="font-size: 8px; padding: 4px; color: #ccc;">📅 23 MAR | 04:00 PM</div>
+                <div class="m-footer">📅 23 MAR | 04:00 PM</div>
             </a>
-            <a href="https://forms.gle/your_cs_link" class="match-card">
-                <div class="m-img-box" style="background-image: url('cs_match.jpg');"><span class="m-badge">CS MATCH</span></div>
+
+            <a href="register.html" class="match-card">
+                <div class="m-img-box" style="background-image: url('cs_poster.jpg');">
+                    <span class="m-badge">CS MATCH</span>
+                </div>
                 <div class="m-reg-bar">REGISTER</div>
-                <div class="m-time-footer" style="font-size: 8px; padding: 4px; color: #ccc;">📅 NOT DECIDED</div>
+                <div class="m-footer">📅 NOT DECIDED</div>
             </a>
         </div>
 
@@ -80,8 +97,10 @@
             <a href="points.html" class="menu-item"><span>📊</span>POINTS</a>
             <a href="schedule.html" class="menu-item"><span>📅</span>SCHEDULE</a>
         </div>
+
     </div>
 
     <div class="footer">DEVELOPED BY RARE GAMING © 2026</div>
+
 </body>
 </html>
