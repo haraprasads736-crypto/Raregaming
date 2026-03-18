@@ -10,7 +10,7 @@
         
         body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; overflow-x: hidden; }
 
-        /* --- AUTO SLIDER (CHHOTA AUR LAMBA) --- */
+        /* --- AUTO SLIDER --- */
         .slider-container {
             width: 85%; max-width: 320px; height: 160px; margin: 15px auto; border-radius: 12px; overflow: hidden; position: relative; border: 2px solid #ff4b2b; box-shadow: 0px 4px 15px rgba(255, 75, 43, 0.4);
         }
@@ -33,33 +33,43 @@
         /* --- MATCH BOXES --- */
         .matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 450px; margin: 10px auto; }
         .match-card { background: #15181e; border-radius: 12px; overflow: hidden; border: 1px solid #2b303b; display: flex; flex-direction: column; box-shadow: 0px 4px 10px rgba(0,0,0,0.5); }
-        .match-img { width: 100%; height: 120px; background-size: cover; background-position: center; position: relative; }
+        .match-img { width: 100%; height: 110px; background-size: cover; background-position: center; position: relative; }
         .match-tag { position: absolute; top: 5px; left: 5px; background: rgba(0, 0, 0, 0.8); color: #66fcf1; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
         .reg-btn { background: #66fcf1; color: #0c0e12; padding: 8px 2px; text-decoration: none; font-weight: 800; font-size: 11px; text-transform: uppercase; }
         .match-schedule { background: #2b303b; color: #ffffff; font-size: 9px; padding: 6px 0; border-top: 1px solid #3d4451; font-weight: 600; }
 
-        /* --- BOTTOM MENU (4 Buttons - 2x2 Grid) --- */
+        /* --- MENU BUTTONS --- */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr); 
-            gap: 10px; max-width: 450px; margin: 25px auto;
+            gap: 10px; max-width: 450px; margin: 20px auto;
         }
 
         .menu-item {
-            background: #15181e; padding: 15px 5px;
+            background: #15181e; padding: 12px 5px;
             border-radius: 10px; border: 1px solid #2b303b;
             text-decoration: none; color: #66fcf1;
             font-size: 11px; font-weight: 600;
             display: flex; flex-direction: column; align-items: center; gap: 5px;
         }
-        .menu-item span { font-size: 26px; color: white; }
+        .menu-item span { font-size: 22px; }
+
+        /* Highlighted Prize Button */
+        .prize-btn {
+            grid-column: span 2;
+            background: linear-gradient(90deg, #ffd700, #ffae00);
+            color: #000 !important;
+            border: none;
+            font-weight: 800;
+            padding: 15px;
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
         <img src="logo.jpg" style="width: 30px; border-radius: 50%;">
-        <span style="font-weight: 800; color:#66fcf1;">RARE GAMING</span>
+        <span style="font-weight: 800; color:#66fcf1;">RARE GAMING eSports</span>
     </div>
 
     <div class="slider-container">
@@ -70,6 +80,7 @@
     </div>
 
     <div class="container">
+        
         <div class="matches-grid">
             <div class="match-card">
                 <div class="match-img" style="background-image: url('br_poster.jpg');"><div class="match-tag">BR MATCH</div></div>
@@ -79,19 +90,24 @@
             <div class="match-card">
                 <div class="match-img" style="background-image: url('cs_poster.jpg');"><div class="match-tag">CS MATCH</div></div>
                 <a href="register.html" class="reg-btn">REGISTER</a>
-                <div class="match-schedule">📅 NOT DECIDED</div>
+                <div class="match-schedule">📅 COMING SOON</div>
             </div>
         </div>
 
         <div class="menu-grid">
+            <a href="prizes.html" class="menu-item prize-btn">
+                <span style="color: #000;">🏆</span> PRIZE POOL (₹220)
+            </a>
+            
             <a href="teams.html" class="menu-item"><span>🛡️</span>TEAMS INFO</a>
             <a href="https://wa.me/qr/J6HUB4OMBTXHJ1" class="menu-item"><span>💬</span>CONTACT</a>
-            <a href="points.html" class="menu-item"><span>🏆</span>POINTS</a>
+            <a href="points.html" class="menu-item"><span>📊</span>POINTS TABLE</a>
             <a href="schedule.html" class="menu-item"><span>📅</span>SCHEDULE</a>
         </div>
+
     </div>
 
-    <p style="font-size: 10px; color: #444; margin-top: 30px; padding-bottom: 20px;">Developed by Rare Gaming-FF</p>
+    <p style="font-size: 10px; color: #444; margin-top: 20px; padding-bottom: 20px;">Rare Gaming-FF © Puri, Odisha</p>
 
 </body>
 </html>
