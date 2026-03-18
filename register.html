@@ -41,7 +41,6 @@
             <div class="form-title">📝 Register Your Team</div>
 
             <form id="registrationForm">
-                
                 <div class="input-group">
                     <label>Select Match Category</label>
                     <select name="matchType" id="matchType" required onchange="generatePlayerFields()">
@@ -58,8 +57,7 @@
                     <input type="text" name="teamName" placeholder="Enter Team Name" required>
                 </div>
 
-                <div id="dynamic-players">
-                    </div>
+                <div id="dynamic-players"></div>
 
                 <div class="input-group" style="margin-top: 20px;">
                     <label>WhatsApp Number (For Updates)</label>
@@ -72,7 +70,6 @@
     </div>
 
     <script>
-        // Form Fields Generate Karne ka Script
         function generatePlayerFields() {
             const matchType = document.getElementById("matchType").value;
             const playersContainer = document.getElementById("dynamic-players");
@@ -102,31 +99,34 @@
             }
         }
 
-        // Data Google Sheet mein bhejne ka Jadoo (Fetch API)
         const form = document.getElementById('registrationForm');
         const submitBtn = document.getElementById('submitBtn');
         
-        // Yahan tumhara diya hua Web App URL laga diya gaya hai!
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyuK9MVQUQePuEI0g0d09GuLi8NYZ7ZY14l1ntJjlq55C37D9f-zBCj8mB-iHniLj7fhA/exec';
+        // YAHAN TUMHARA NAYA WEB APP URL DAAL DIYA HAI 👇
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxWtwQoqAY-rt4yRNZ_msxOOjlxXCERU9eEZ2sMExHaJgzrW9CopAn9jVfIbBwmL7UWdw/exec';
 
         form.addEventListener('submit', e => {
-            e.preventDefault(); // Page refresh hone se rokna
+            e.preventDefault(); 
             
-            // Button ki styling change (Submitting...)
-            submitBtn.innerText = "SUBMITTING...";
+            submitBtn.innerText = "CHECKING DETAILS...";
             submitBtn.disabled = true;
 
-            fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
-                .then(response => {
-                    alert("Registration Successful! Welcome to Rare Gaming Esports!");
-                    form.reset(); // Form khali karna
-                    document.getElementById("dynamic-players").innerHTML = ""; // Player fields reset
+            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => response.text()) 
+                .then(result => {
+                    if (result === "Duplicate") {
+                        alert("❌ Arey Bhai! Is UID ne is match ke liye pehle hi registration kar liya hai!");
+                    } else {
+                        alert("✅ Registration Successful! Welcome to Rare Gaming Esports!");
+                        form.reset(); 
+                        document.getElementById("dynamic-players").innerHTML = ""; 
+                    }
                     submitBtn.innerText = "SUBMIT REGISTRATION";
                     submitBtn.disabled = false;
                 })
                 .catch(error => {
-                    alert("Error! Registration failed. Please try again.");
-                    console.error('Error!', error.message);
+                    alert("Error! Registration failed. Please check your internet connection.");
+                    console.error('Error!', error);
                     submitBtn.innerText = "SUBMIT REGISTRATION";
                     submitBtn.disabled = false;
                 });
