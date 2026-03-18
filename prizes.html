@@ -4,83 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <title>PRIZE POOL - RARE GAMING 🏆</title>
+    <title>PRIZES - RARE GAMING</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; }
-        
-        .header { background: #15181e; padding: 15px; border-bottom: 2px solid #ffd700; font-weight: 800; font-size: 18px; color: #ffd700; letter-spacing: 1px; }
-        
-        .container { padding: 15px; max-width: 450px; margin: auto; }
+        .header { background: #15181e; padding: 12px; border-bottom: 2px solid #ffd700; font-weight: 800; font-size: 16px; color: #ffd700; }
+        .container { padding: 10px; max-width: 400px; margin: auto; }
 
+        /* Compact Prize Card */
         .prize-card {
-            background: linear-gradient(145deg, #1a1d24, #15181e);
-            border: 1px solid #2b303b;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-top: 4px solid #ffd700;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+            background: #15181e; border: 1px solid #2b303b; border-radius: 10px;
+            padding: 12px; margin-bottom: 15px; border-top: 3px solid #ffd700;
         }
 
-        .match-type { font-size: 12px; color: #66fcf1; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        
-        .total-pool { font-size: 26px; font-weight: 800; color: #ffffff; margin: 5px 0; }
-        
-        .rank-list { list-style: none; padding: 0; margin: 20px 0 0 0; }
-        .rank-item { 
-            display: flex; justify-content: space-between; padding: 15px; 
-            background: rgba(102, 252, 241, 0.05); border-radius: 10px; margin-bottom: 10px;
-            border: 1px solid #2b303b;
+        .title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #2b303b; padding-bottom: 5px; }
+        .m-name { font-size: 12px; font-weight: 800; color: #66fcf1; }
+        .m-date { font-size: 10px; color: #ffd700; font-weight: 700; }
+
+        .rank-row { display: flex; justify-content: space-around; margin: 12px 0; }
+        .rank-box { text-align: center; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; width: 42%; border: 1px solid #2b303b; }
+        .r-label { font-size: 10px; color: #ffd700; display: block; font-weight: 700; }
+        .r-amt { font-size: 18px; font-weight: 800; }
+
+        .m-footer { font-size: 9px; color: #a0aab2; display: flex; justify-content: space-between; padding: 0 5px; }
+
+        /* CS Alert Section */
+        .cs-card {
+            background: #1a1010; border: 1px solid #451a1a; border-radius: 10px;
+            padding: 10px; border-left: 4px solid #ff4b2b; text-align: left;
         }
-        .rank-no { color: #ffd700; font-weight: 800; font-size: 15px; }
-        .rank-val { font-weight: 800; color: #ffffff; font-size: 18px; }
+        .cs-status { font-size: 11px; font-weight: 800; color: #ff4b2b; }
+        .cs-msg { font-size: 10px; color: #a0aab2; }
 
-        /* Free Entry Badge */
-        .free-badge {
-            background: #44bd32; color: white; padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: 800; margin-bottom: 10px; display: inline-block;
-        }
-
-        .info-bar { display: flex; justify-content: space-around; margin-top: 20px; font-size: 11px; color: #a0aab2; font-weight: 600; border-top: 1px solid #2b303b; padding-top: 15px; }
-        .info-item span { color: #66fcf1; display: block; font-size: 15px; margin-top: 5px; }
-
-        .back-btn { display: block; background: #ffd700; color: #000; text-align: center; padding: 14px; border-radius: 10px; text-decoration: none; font-weight: 800; margin-top: 25px; text-transform: uppercase; }
+        .back-btn { display: block; background: #ffd700; color: #000; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 800; margin-top: 20px; font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <div class="header">🏆 TOURNAMENT PRIZE POOL</div>
+    <div class="header">🏆 TOURNAMENT PRIZES</div>
     
     <div class="container">
         
         <div class="prize-card">
-            <div class="free-badge">FREE ENTRY</div>
-            <span class="match-type">Battle Royale (BR) Match</span>
-            <div class="total-pool">TOTAL PRIZE: ₹220</div>
+            <div class="title-row">
+                <span class="m-name">BATTLE ROYALE</span>
+                <span class="m-date">📅 23 MARCH</span>
+            </div>
             
-            <div class="rank-list">
-                <div class="rank-item">
-                    <span class="rank-no">🥇 1st PRIZE</span>
-                    <span class="rank-val">₹150</span>
+            <div class="rank-row">
+                <div class="rank-box">
+                    <span class="r-label">🥇 1st Prize</span>
+                    <span class="r-amt">₹150</span>
                 </div>
-                <div class="rank-item">
-                    <span class="rank-no">🥈 2nd PRIZE</span>
-                    <span class="rank-val">₹70</span>
+                <div class="rank-box">
+                    <span class="r-label">🥈 2nd Prize</span>
+                    <span class="r-amt">₹70</span>
                 </div>
             </div>
+            
+            <div class="m-footer">
+                <span>Entry: FREE</span>
+                <span>Map: Bermuda</span>
+                <span>Kill: ₹0</span>
+            </div>
+        </div>
 
-            <div class="info-bar">
-                <div class="info-item">ENTRY FEE<span>FREE</span></div>
-                <div class="info-item">PER KILL<span>₹0</span></div>
-                <div class="info-item">MAP<span>BERMUDA</span></div>
-            </div>
+        <div class="cs-card">
+            <div class="cs-status">⚠️ CS MATCH: NOT AVAILABLE</div>
+            <div class="cs-msg">Match schedule abhi decide nahi hua hai.</div>
         </div>
 
         <a href="index.html" class="back-btn">⬅ BACK TO HOME</a>
     </div>
 
-    <p style="font-size: 10px; color: #444; margin-top: 20px;">Rare Gaming-FF eSports</p>
+    <p style="font-size: 9px; color: #444; margin-top: 15px;">Rare Gaming-FF eSports</p>
 
 </body>
 </html>
