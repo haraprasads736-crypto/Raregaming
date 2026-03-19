@@ -10,32 +10,38 @@
     <title>RARE GAMING Dashboard</title>
     
     <script>
+        // Login Check
         if (!localStorage.getItem("rareGamingUser")) {
             window.location.href = "login.html";
         }
 
-        // AUTO-REFRESH LOGIC: Har 1 minute mein ek baar auto-refresh karega naye update ke liye
+        // AUTO-REFRESH & DATA LOAD
         window.onload = function() {
             let lastRefresh = localStorage.getItem("lastRefresh");
             let now = new Date().getTime();
             
+            // Har 1 minute mein ek baar auto-refresh
             if (!lastRefresh || (now - lastRefresh > 60000)) { 
                 localStorage.setItem("lastRefresh", now);
                 location.reload(true); 
                 return; 
             }
 
-            // User Profile Load
+            // Load User Profile Data
             let savedUser = localStorage.getItem("rareGamingUser");
             if(savedUser) {
                 let user = JSON.parse(savedUser);
                 document.getElementById("user-name").innerText = user.name;
-                document.getElementById("user-pfp").src = user.picture;
-                document.getElementById("nav-pfp").src = user.picture;
+                document.getElementById("user-pfp").src = user.picture || 'logo.jpg';
+                document.getElementById("nav-pfp").src = user.picture || 'logo.jpg';
             }
 
-            // Fetch Teams from Sheet1
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbyWOip7PNtmpnZ2aRfmLHuHIUewH6OFx_HyAq6uk2krClRwdscljQMq0ctccWmD1sU6bw/exec';
+            // Load Wallet Balance
+            let wallet = localStorage.getItem("rareWallet") || 0;
+            document.getElementById("wallet-amount").innerText = wallet;
+
+            // Fetch Teams from Sheet1 using your NEW Script URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxrbctK3eaMb9hIFjb387wwqokuM8-pFwFkmegooVRormfdhzvEAp3s1pfwfem27Zqu/exec';
             fetch(scriptURL)
                 .then(res => res.json())
                 .then(data => {
@@ -51,7 +57,7 @@
 
         function updateList(id, arr) {
             const el = document.getElementById(id);
-            if (!arr || arr.length === 0) { el.innerHTML = "No Teams Yet"; return; }
+            if (!arr || arr.length === 0) { el.innerHTML = "No Teams Yet 🏆"; return; }
             el.innerHTML = arr.map(t => `<div>⚔️ ${t}</div>`).join('');
         }
     </script>
@@ -59,30 +65,49 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; overflow-x: hidden; }
-        .nav-header { background: #15181e; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; }
-        .nav-title { font-weight: 800; font-size: 18px; color: white; text-transform: uppercase; }
-        .nav-icons { display: flex; gap: 18px; align-items: center; }
+        
+        /* HEADER */
+        .nav-header { background: #15181e; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #66fcf1; }
+        .nav-title { font-weight: 800; font-size: 18px; color: white; text-transform: uppercase; letter-spacing: 0.5px; }
+        .nav-icons { display: flex; gap: 15px; align-items: center; }
         .settings-btn { font-size: 22px; color: #66fcf1; text-decoration: none; cursor: pointer; }
-        .logo-circle { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; display: block; }
+        .logo-circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; display: block; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .container { padding: 10px; max-width: 480px; margin: auto; }
-        .profile-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 20px 0; }
-        .pfp-main { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #66fcf1; overflow: hidden; }
+
+        /* WALLET CARD */
+        .wallet-card { background: linear-gradient(135deg, #1a1d24 0%, #0c0e12 100%); padding: 15px; margin: 15px; border-radius: 12px; border: 1px solid #2b303b; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .wallet-info { text-align: left; }
+        .wallet-label { font-size: 9px; color: #a0aab2; font-weight: 600; letter-spacing: 1px; }
+        .wallet-val { font-size: 22px; font-weight: 800; color: #66fcf1; display: block; }
+        .add-money-btn { background: #66fcf1; color: #000; padding: 8px 15px; border-radius: 6px; font-size: 11px; font-weight: 800; text-decoration: none; text-transform: uppercase; }
+
+        .container { padding: 5px 15px; max-width: 480px; margin: auto; }
+        
+        /* PROFILE HEADER */
+        .profile-header { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 15px 0; }
+        .pfp-main { width: 40px; height: 40px; border-radius: 50%; border: 2.5px solid #66fcf1; overflow: hidden; }
         .pfp-main img { width: 100%; height: 100%; object-fit: cover; }
-        .app-title { font-weight: 800; font-size: 16px; color: #66fcf1; text-transform: uppercase; }
-        .rules-slider { width: 100%; height: 135px; border-radius: 10px; overflow: hidden; margin-bottom: 25px; border: 1.5px solid #66fcf1; position: relative; }
+        .app-title { font-weight: 800; font-size: 14px; color: white; text-transform: uppercase; }
+
+        /* RULES SLIDER */
+        .rules-slider { width: 100%; height: 130px; border-radius: 12px; overflow: hidden; margin-bottom: 25px; border: 1.5px solid #2b303b; }
         .rules-slides { display: flex; width: 200%; height: 100%; animation: slideTwoAnim 6s infinite; }
         .rules-slides img { width: 50%; height: 100%; object-fit: contain; }
         @keyframes slideTwoAnim { 0%, 45% { transform: translateX(0); } 50%, 95% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+
+        /* MATCH CARDS */
         .matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
-        .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; }
-        .m-image { height: 110px; background-size: cover; background-position: center; position: relative; }
-        .m-label { position: absolute; top: 6px; left: 6px; background: rgba(0,0,0,0.7); border: 1px solid #66fcf1; color: #66fcf1; font-size: 8px; font-weight: 800; padding: 3px 6px; border-radius: 3px; }
+        .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: 0.2s; }
+        .match-card:active { transform: scale(0.96); }
+        .m-image { height: 100px; background-size: cover; background-position: center; position: relative; }
+        .m-label { position: absolute; top: 6px; left: 6px; background: rgba(0,0,0,0.8); border: 1px solid #66fcf1; color: #66fcf1; font-size: 7px; font-weight: 800; padding: 2px 5px; border-radius: 3px; }
         .m-registered-box { background: #0c0e12; padding: 6px; font-size: 9px; color: #a0aab2; height: 45px; overflow-y: auto; text-align: left; }
         .m-registered-box div { padding: 2px 0; border-bottom: 1px dashed #2b303b; color: white; }
         .m-register { background: #66fcf1; color: #000; padding: 10px; font-weight: 800; font-size: 12px; text-transform: uppercase; }
-        .m-timestamp { background: #1a1d24; padding: 6px; font-size: 9px; color: #a0aab2; border-top: 1px solid #2b303b; }
-        .footer-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
+        .m-timestamp { background: #1a1d24; padding: 6px; font-size: 8px; color: #a0aab2; border-top: 1px solid #2b303b; }
+
+        /* FOOTER MENU */
+        .footer-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 40px; }
         .menu-btn { background: #15181e; border: 1.5px solid #2b303b; border-radius: 10px; padding: 15px; text-decoration: none; color: #66fcf1; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .menu-btn span { font-size: 22px; color: white; }
     </style>
@@ -95,6 +120,14 @@
             <a href="profile.html" class="settings-btn" title="Settings">⚙️</a>
             <a href="profile.html" class="logo-circle"><img id="nav-pfp" src="logo.jpg"></a>
         </div>
+    </div>
+
+    <div class="wallet-card">
+        <div class="wallet-info">
+            <span class="wallet-label">YOUR WALLET</span>
+            <span class="wallet-val">₹<span id="wallet-amount">0</span></span>
+        </div>
+        <a href="redeem.html" class="add-money-btn">REDEEM CODE</a>
     </div>
 
     <div class="profile-header">
@@ -113,33 +146,33 @@
         <div class="matches-grid">
             <a href="match_details.html?match=BR" class="match-card">
                 <div class="m-image" style="background-image: url('br_poster.jpg');"><div class="m-label">BR MATCH</div></div>
-                <div id="list-BR" class="m-registered-box">Loading...</div>
+                <div id="list-BR" class="m-registered-box">Loading Teams...</div>
                 <div class="m-register">DETAILS</div>
                 <div class="m-timestamp">📅 23 MAR | 07:00 PM</div>
             </a>
             <a href="match_details.html?match=CS" class="match-card">
                 <div class="m-image" style="background-image: url('cs_poster.jpg');"><div class="m-label">CS MATCH</div></div>
-                <div id="list-CS" class="m-registered-box">Loading...</div>
+                <div id="list-CS" class="m-registered-box">Loading Teams...</div>
                 <div class="m-register">DETAILS</div>
                 <div class="m-timestamp">📅 NOT DECIDED</div>
             </a>
             <a href="match_details.html?match=LW" class="match-card">
                 <div class="m-image" style="background-image: url('lw_poster.jpg');"><div class="m-label">LONE WOLF</div></div>
-                <div id="list-LW" class="m-registered-box">Loading...</div>
+                <div id="list-LW" class="m-registered-box">Loading Teams...</div>
                 <div class="m-register">DETAILS</div>
-                <div class="m-timestamp">📅 SOON</div>
+                <div class="m-timestamp">📅 DECIDING SOON</div>
             </a>
             <a href="match_details.html?match=1V1" class="match-card">
                 <div class="m-image" style="background-image: url('1v1_poster.jpg');"><div class="m-label">1V1 MATCH</div></div>
-                <div id="list-1V1" class="m-registered-box">Loading...</div>
+                <div id="list-1V1" class="m-registered-box">Loading Teams...</div>
                 <div class="m-register">DETAILS</div>
-                <div class="m-timestamp">📅 SOON</div>
+                <div class="m-timestamp">📅 DECIDING SOON</div>
             </a>
         </div>
 
         <div class="footer-menu-grid">
             <a href="teams.html" class="menu-btn"><span>🛡️</span>TEAMS INFO</a>
-            <a href="https://wa.me/qr/J6HUB4OMBTXHJ1" class="menu-btn"><span>💬</span>CONTACT</a>
+            <a href="https://wa.me/917606014322" class="menu-btn"><span>💬</span>CONTACT</a>
             <a href="prizes.html" class="menu-btn"><span>🏆</span>PRIZE POOL</a>
             <a href="points.html" class="menu-btn"><span>📊</span>POINTS</a>
         </div>
