@@ -39,13 +39,21 @@
         .i-val.free { color: #ff4b2b; font-size: 16px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        .prize-dist { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #2b303b; }
+        .prize-dist { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #2b303b; }
         .p-row { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; padding: 4px 0; border-bottom: 1px solid #1a1d24; }
         .p-row:last-child { border-bottom: none; }
         .p-row span:nth-child(2) { color: #66fcf1; }
 
+        /* LIVE TEAMS LIST CSS */
+        .team-list-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #2b303b; }
+        .team-list-title { margin-top: 0; color: #66fcf1; font-size: 13px; text-transform: uppercase; border-bottom: 1px solid #1a1d24; padding-bottom: 8px; margin-bottom: 8px; }
+        .teams-container { max-height: 200px; overflow-y: auto; }
+        .team-item { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; padding: 6px 0; border-bottom: 1px dashed #1a1d24; color: #d1d5db; }
+        .team-item:last-child { border-bottom: none; }
+
         .register-btn { display: block; width: 100%; background: #66fcf1; color: #000; padding: 15px; text-align: center; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 800; text-transform: uppercase; box-shadow: 0 4px 10px rgba(102, 252, 241, 0.3); transition: 0.3s; box-sizing: border-box; }
         .register-btn:active { transform: scale(0.97); background: #4de2d6; }
+        .register-btn.free-btn { background: #25d366; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
 
         .empty-state { text-align: center; padding: 40px 20px; background: #15181e; border-radius: 12px; border: 1.5px dashed #2b303b; color: #a0aab2; }
         .empty-icon { font-size: 40px; margin-bottom: 10px; }
@@ -87,6 +95,13 @@
                         <div class="p-row"><span>🥈 2nd Prize</span><span>₹70</span></div>
                     </div>
 
+                    <div class="team-list-box" id="team-list-container">
+                        <h3 class="team-list-title">Registered Teams 🛡️</h3>
+                        <div class="teams-container" id="teams-list">
+                            <div style="text-align:center; padding: 10px; color:#a0aab2; font-size:11px;">Fetching teams from server...</div>
+                        </div>
+                    </div>
+
                     <a href="register.html" class="register-btn" id="register-btn">REGISTER NOW</a>
                 </div>
             </div>
@@ -108,11 +123,14 @@
     </div>
 
     <script>
+        // Apps Script URL - Teams ka data yahan se aayega
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxrbctK3eaMb9hIFjb387wwqokuM8-pFwFkmegooVRormfdhzvEAp3s1pfwfem27Zqu/exec';
+
         // 1. URL se pata lagana kaunsa match click hua hai
         const urlParams = new URLSearchParams(window.location.search);
-        const matchId = urlParams.get('match') || 'BR'; // Agar kuch nahi mila toh BR
+        const matchId = urlParams.get('match') || 'BR'; 
 
-        // 2. Har match ka alag data
+        // 2. Har match ka alag data aur FEES bhi yahan set hai!
         const matchConfig = {
             "BR": {
                 title: "BR SQUAD BATTLE",
@@ -122,28 +140,41 @@
                 entry: '<div class="i-val free">FREE</div>',
                 banner: "br_poster.jpg",
                 badge: "Special Free Entry",
-                available: true // Match chalu hai!
+                available: true, 
+                feeParam: "free" // Wallet system ke liye
             },
             "CS": {
                 title: "CLASH SQUAD MATCH",
                 time: "🕒 NOT DECIDED",
+                prize: "TBD",
+                perKill: "TBD",
+                entry: '<div class="i-val" style="color:#ff4b2b;">₹50</div>',
                 banner: "cs_poster.jpg",
                 badge: "Upcoming",
-                available: false // Match band hai
+                available: false, 
+                feeParam: "50"
             },
             "LW": {
                 title: "LONE WOLF 1",
                 time: "🕒 DECIDING SOON",
+                prize: "TBD",
+                perKill: "TBD",
+                entry: '<div class="i-val" style="color:#ff4b2b;">₹15</div>',
                 banner: "lw_poster.jpg",
                 badge: "Upcoming",
-                available: false // Match band hai
+                available: false, 
+                feeParam: "15"
             },
             "1V1": {
                 title: "1V1 MATCH",
                 time: "🕒 DECIDING SOON",
+                prize: "TBD",
+                perKill: "TBD",
+                entry: '<div class="i-val" style="color:#ff4b2b;">₹30</div>',
                 banner: "1v1_poster.jpg",
                 badge: "Upcoming",
-                available: false // Match band hai
+                available: false, 
+                feeParam: "30"
             }
         };
 
@@ -161,15 +192,41 @@
             document.getElementById('prize-pool').innerHTML = data.prize;
             document.getElementById('per-kill').innerHTML = data.perKill;
             document.getElementById('entry-fee-box').innerHTML = data.entry;
-            // Register form ka link theek karna (Match ke hisaab se)
-            regBtn.href = "register.html?type=" + matchId; 
+            
+            // SMART LINK: Jo form ko batayega paise katne hain ya nahi
+            regBtn.href = "register.html?match=" + matchId + "&fee=" + data.feeParam; 
+            
+            if(data.feeParam === "free") {
+                regBtn.innerText = "REGISTER FOR FREE";
+                regBtn.classList.add("free-btn");
+            } else {
+                regBtn.innerText = "PAY ₹" + data.feeParam + " & REGISTER";
+            }
+
+            // 4. GOOGLE SHEET SE TEAMS FETCH KARNA
+            fetch(scriptURL)
+                .then(res => res.json())
+                .then(sheetData => {
+                    let teams = sheetData[matchId]; // BR, CS wagaira ki list
+                    let listEl = document.getElementById("teams-list");
+                    
+                    if (!teams || teams.length === 0) {
+                        listEl.innerHTML = "<div style='text-align:center; padding: 10px; color:#a0aab2;'>No teams registered yet. Be the first! 🏆</div>";
+                    } else {
+                        listEl.innerHTML = teams.map((t, index) => `<div class='team-item'><span>${index + 1}. ${t}</span> <span>⚔️</span></div>`).join('');
+                    }
+                }).catch(err => {
+                    document.getElementById("teams-list").innerHTML = "<div style='text-align:center; padding: 10px; color:#ff4b2b;'>Network Error! Could not load teams.</div>";
+                });
+
         } else {
             // Agar match available nahi hai toh boxes chhupa do
             document.getElementById('match-info-grid').style.display = 'none';
             document.getElementById('prize-dist-box').style.display = 'none';
+            document.getElementById('team-list-container').style.display = 'none'; // Teams box bhi chupao
             
             // Button ko lock kar do aur text badal do
-            regBtn.innerText = "REGISTRATION NOT AVAILABLE";
+            regBtn.innerText = "REGISTRATION CLOSED";
             regBtn.style.background = "#333";
             regBtn.style.color = "#888";
             regBtn.style.pointerEvents = "none"; // Click nahi hoga
