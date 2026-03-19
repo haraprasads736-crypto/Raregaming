@@ -3,74 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Points Table</title>
+    <title>RARE GAMING - Points Table</title>
     <style>
-        body { background-color: #0b0c10; color: white; font-family: Arial, sans-serif; text-align: center; padding: 15px; margin: 0; }
-        h2 { color: #66fcf1; text-transform: uppercase; margin-top: 20px; text-shadow: 0px 0px 10px #66fcf1; }
-        .table-container { padding: 10px; padding-bottom: 50px; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; background-color: #1f2833; font-size: 14px; border: 1px solid #45a29e; }
-        th, td { padding: 12px 8px; border: 1px solid #45a29e; text-align: left; }
-        th { background-color: #45a29e; color: #0b0c10; text-align: center; font-weight: bold; }
-        .zero { text-align: center; font-weight: bold; color: #66fcf1; }
-        .team-name { color: #ffffff; font-weight: bold; font-size: 15px; }
-        .players { color: #c5c6c7; font-size: 12px; }
-        .back-btn { background-color: #1f2833; color: #66fcf1; border: 2px solid #66fcf1; padding: 10px; margin: 20px auto; border-radius: 8px; cursor: pointer; width: 80%; font-weight: bold; display: block; text-decoration: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        
+        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+        
+        .nav-header { background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; font-size: 14px; background: rgba(102, 252, 241, 0.1); padding: 5px 10px; border-radius: 5px; border: 1px solid #66fcf1; }
+        .nav-title { font-weight: 800; font-size: 18px; color: white; letter-spacing: 1px; text-transform: uppercase; }
+        
+        .container { padding: 15px; max-width: 480px; margin: auto; }
+        
+        .page-title { text-align: center; font-size: 18px; font-weight: 800; color: #66fcf1; margin-bottom: 5px; text-transform: uppercase; }
+        .page-subtitle { text-align: center; font-size: 11px; color: #a0aab2; font-weight: 600; margin-bottom: 25px; letter-spacing: 1px; }
+
+        /* LEADERBOARD LIST */
+        .leaderboard { display: flex; flex-direction: column; gap: 10px; }
+
+        .team-row { background: #1a1d24; border-radius: 10px; border: 1.5px solid #2b303b; display: flex; align-items: center; padding: 12px 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: 0.3s; }
+        
+        /* Rank Number */
+        .rank-box { width: 35px; height: 35px; background: #15181e; border: 2px solid #2b303b; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 16px; font-weight: 800; color: #a0aab2; margin-right: 15px; flex-shrink: 0; }
+        
+        /* Top 3 Ranks Styling */
+        .rank-1 .rank-box { border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+        .rank-2 .rank-box { border-color: #c0c0c0; color: #c0c0c0; background: rgba(192, 192, 192, 0.1); }
+        .rank-3 .rank-box { border-color: #cd7f32; color: #cd7f32; background: rgba(205, 127, 50, 0.1); }
+
+        /* Team Info */
+        .team-info { flex-grow: 1; }
+        .team-name { font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; margin-bottom: 2px; }
+        .player-names { font-size: 10px; font-weight: 600; color: #66fcf1; text-transform: uppercase; }
+
+        /* Points Box */
+        .pts-box { text-align: right; }
+        .pts-value { font-size: 20px; font-weight: 800; color: #66fcf1; line-height: 1; }
+        .pts-label { font-size: 9px; font-weight: 800; color: #a0aab2; text-transform: uppercase; }
+
+        /* WARNING NO RESPONSE */
+        .rank-warn { border-color: #ff4b2b; opacity: 0.7; }
+        .rank-warn .rank-box { border-color: #ff4b2b; color: #ff4b2b; }
+        .rank-warn .team-name { color: #ff4b2b; text-decoration: line-through; }
+        .rank-warn .player-names { color: #a0aab2; }
+        .warn-tag { font-size: 9px; background: #ff4b2b; color: white; padding: 2px 5px; border-radius: 3px; font-weight: 800; margin-top: 3px; display: inline-block; }
+
     </style>
 </head>
 <body>
 
-    <h2>🏆 Live Standings</h2>
+    <div class="nav-header">
+        <a href="index.html" class="back-btn">⬅ BACK</a>
+        <span class="nav-title">LEADERBOARD</span>
+        <div style="width: 60px;"></div>
+    </div>
 
-    <div class="table-container">
-        <table>
-            <tr>
-                <th>Team & Players</th>
-                <th>Kills</th>
-                <th>Pts</th>
-            </tr>
-            <tr>
-                <td><span class="team-name">1. Aura Warriors</span><br><span class="players">Sumendra & Ayush</span></td>
-                <td class="zero">0</td>
-                <td class="zero">0</td>
-            </tr>
-            <tr>
-                <td><span class="team-name">2. Team Gobinda</span><br><span class="players">Gobinda & Ananda</span></td>
-                <td class="zero">0</td>
-                <td class="zero">0</td>
-            </tr>
-            <tr>
-                <td><span class="team-name">3. Puri Pila</span><br><span class="players">Alok & Asu</span></td>
-                <td class="zero">0</td>
-                <td class="zero">0</td>
-            </tr>
-            <tr>
-                <td><span class="team-name">4. Legend</span><br><span class="players">Veer & Mafia</span></td>
-                <td class="zero">0</td>
-                <td class="zero">0</td>
-            </tr>
-            <tr>
-                <td><span class="team-name">5. Odisha Hacker</span><br><span class="players">Deepak & Omm</span></td>
-                <td class="zero">0</td>
-                <td class="zero">0</td>
-            </tr>
-            <tr>
-                <td><span class="team-name">6. Ind Gamer</span><br><span class="players">Squad Entry</span></td>
-                <td class="zero">0</td>
-                <td class="zero">0</td>
-            </tr>
-            <tr>
-                <td><span class="team-name">7. Itz Ashis</span><br><span class="players">Solo Entry</span></td>
-                <td class="zero">0</td>
-                <td class="zero">0</td>
-            </tr>
-            <tr>
-                <td><span class="team-name">8. ★ᶦᶰᵈ᭄❂Gᴀᴍᴇʀ࿐</span><br><span class="players">Abhishek & Debendra</span></td>
-                <td class="zero">0</td>
-                <td class="zero">0</td>
-            </tr>
-        </table>
+    <div class="container">
+        <div class="page-title">📊 BR SQUAD POINTS 📊</div>
+        <div class="page-subtitle">MATCH DATE: 23 MAR | 07:00 PM</div>
 
-        <button class="back-btn" onclick="window.location.href='index.html'">⬅ Back to Home</button>
+        <div class="leaderboard">
+            
+            <div class="team-row rank-1">
+                <div class="rank-box">1</div>
+                <div class="team-info">
+                    <div class="team-name">Aura Warriors</div>
+                    <div class="player-names">Sumendra • Ayush</div>
+                </div>
+                <div class="pts-box">
+                    <div class="pts-value">0</div>
+                    <div class="pts-label">PTS</div>
+                </div>
+            </div>
+
+            <div class="team-row rank-2">
+                <div class="rank-box">2</div>
+                <div class="team-info">
+                    <div class="team-name">MJ Gang</div>
+                    <div class="player-names">Alok • Badri</div>
+                </div>
+                <div class="pts-box">
+                    <div class="pts-value">0</div>
+                    <div class="pts-label">PTS</div>
+                </div>
+            </div>
+
+            <div class="team-row rank-3">
+                <div class="rank-box">3</div>
+                <div class="team-info">
+                    <div class="team-name">Legend</div>
+                    <div class="player-names">Veer • Veer Brother</div>
+                </div>
+                <div class="pts-box">
+                    <div class="pts-value">0</div>
+                    <div class="pts-label">PTS</div>
+                </div>
+            </div>
+
+            <div class="team-row">
+                <div class="rank-box">4</div>
+                <div class="team-info">
+                    <div class="team-name">Odisha Hacker</div>
+                    <div class="player-names">Deepak • Omm</div>
+                </div>
+                <div class="pts-box">
+                    <div class="pts-value">0</div>
+                    <div class="pts-label">PTS</div>
+                </div>
+            </div>
+
+            <div class="team-row">
+                <div class="rank-box">5</div>
+                <div class="team-info">
+                    <div class="team-name">Ind Gamer</div>
+                    <div class="player-names">Player 1 • Player 2</div>
+                </div>
+                <div class="pts-box">
+                    <div class="pts-value">0</div>
+                    <div class="pts-label">PTS</div>
+                </div>
+            </div>
+
+            <div class="team-row">
+                <div class="rank-box">6</div>
+                <div class="team-info">
+                    <div class="team-name">Team Gobinda</div>
+                    <div class="player-names">Gobinda • Ananda</div>
+                </div>
+                <div class="pts-box">
+                    <div class="pts-value">0</div>
+                    <div class="pts-label">PTS</div>
+                </div>
+            </div>
+
+            <div class="team-row">
+                <div class="rank-box">7</div>
+                <div class="team-info">
+                    <div class="team-name">★ᶦᶰᵈ᭄❂Gᴀᴍᴇʀ࿐</div>
+                    <div class="player-names">Abhishek • Debendra</div>
+                </div>
+                <div class="pts-box">
+                    <div class="pts-value">0</div>
+                    <div class="pts-label">PTS</div>
+                </div>
+            </div>
+
+            <div class="team-row rank-warn">
+                <div class="rank-box">-</div>
+                <div class="team-info">
+                    <div class="team-name">Itz Ashis</div>
+                    <div class="player-names">Ashis</div>
+                    <div class="warn-tag">NO RESPONSE</div>
+                </div>
+                <div class="pts-box">
+                    <div class="pts-value">0</div>
+                    <div class="pts-label">PTS</div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </body>
