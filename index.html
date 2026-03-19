@@ -3,52 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>RARE GAMING Dashboard</title>
     
     <script>
         if (!localStorage.getItem("rareGamingUser")) {
             window.location.href = "login.html";
         }
+
+        // AUTO-REFRESH LOGIC: Har 1 minute mein ek baar auto-refresh karega naye update ke liye
+        window.onload = function() {
+            let lastRefresh = localStorage.getItem("lastRefresh");
+            let now = new Date().getTime();
+            
+            if (!lastRefresh || (now - lastRefresh > 60000)) { 
+                localStorage.setItem("lastRefresh", now);
+                location.reload(true); 
+                return; 
+            }
+
+            // User Profile Load
+            let savedUser = localStorage.getItem("rareGamingUser");
+            if(savedUser) {
+                let user = JSON.parse(savedUser);
+                document.getElementById("user-name").innerText = user.name;
+                document.getElementById("user-pfp").src = user.picture;
+                document.getElementById("nav-pfp").src = user.picture;
+            }
+
+            // Fetch Teams from Sheet1
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbyWOip7PNtmpnZ2aRfmLHuHIUewH6OFx_HyAq6uk2krClRwdscljQMq0ctccWmD1sU6bw/exec';
+            fetch(scriptURL)
+                .then(res => res.json())
+                .then(data => {
+                    updateList('list-BR', data['BR']);
+                    updateList('list-CS', data['CS']);
+                    updateList('list-LW', data['LW']);
+                    updateList('list-1V1', data['1V1']);
+                })
+                .catch(err => {
+                    document.querySelectorAll('.m-registered-box').forEach(el => el.innerHTML = "Offline Mode");
+                });
+        };
+
+        function updateList(id, arr) {
+            const el = document.getElementById(id);
+            if (!arr || arr.length === 0) { el.innerHTML = "No Teams Yet"; return; }
+            el.innerHTML = arr.map(t => `<div>⚔️ ${t}</div>`).join('');
+        }
     </script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        
         body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; overflow-x: hidden; }
-        
-        /* CLEAN HEADER */
         .nav-header { background: #15181e; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; }
-        .nav-title { font-weight: 800; font-size: 18px; color: white; text-transform: uppercase; letter-spacing: 0.5px; }
-        
+        .nav-title { font-weight: 800; font-size: 18px; color: white; text-transform: uppercase; }
         .nav-icons { display: flex; gap: 18px; align-items: center; }
-        .settings-btn { font-size: 22px; color: #66fcf1; text-decoration: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; }
-        .settings-btn:active { transform: scale(0.9) rotate(45deg); }
-        
+        .settings-btn { font-size: 22px; color: #66fcf1; text-decoration: none; cursor: pointer; }
         .logo-circle { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; display: block; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-        
         .container { padding: 10px; max-width: 480px; margin: auto; }
-        
         .profile-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 20px 0; }
         .pfp-main { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #66fcf1; overflow: hidden; }
         .pfp-main img { width: 100%; height: 100%; object-fit: cover; }
         .app-title { font-weight: 800; font-size: 16px; color: #66fcf1; text-transform: uppercase; }
-
         .rules-slider { width: 100%; height: 135px; border-radius: 10px; overflow: hidden; margin-bottom: 25px; border: 1.5px solid #66fcf1; position: relative; }
         .rules-slides { display: flex; width: 200%; height: 100%; animation: slideTwoAnim 6s infinite; }
         .rules-slides img { width: 50%; height: 100%; object-fit: contain; }
         @keyframes slideTwoAnim { 0%, 45% { transform: translateX(0); } 50%, 95% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
-
         .matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
-        .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: 0.2s; }
-        .match-card:active { transform: scale(0.97); }
+        .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; }
         .m-image { height: 110px; background-size: cover; background-position: center; position: relative; }
         .m-label { position: absolute; top: 6px; left: 6px; background: rgba(0,0,0,0.7); border: 1px solid #66fcf1; color: #66fcf1; font-size: 8px; font-weight: 800; padding: 3px 6px; border-radius: 3px; }
         .m-registered-box { background: #0c0e12; padding: 6px; font-size: 9px; color: #a0aab2; height: 45px; overflow-y: auto; text-align: left; }
         .m-registered-box div { padding: 2px 0; border-bottom: 1px dashed #2b303b; color: white; }
         .m-register { background: #66fcf1; color: #000; padding: 10px; font-weight: 800; font-size: 12px; text-transform: uppercase; }
         .m-timestamp { background: #1a1d24; padding: 6px; font-size: 9px; color: #a0aab2; border-top: 1px solid #2b303b; }
-
         .footer-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
         .menu-btn { background: #15181e; border: 1.5px solid #2b303b; border-radius: 10px; padding: 15px; text-decoration: none; color: #66fcf1; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .menu-btn span { font-size: 22px; color: white; }
@@ -112,36 +145,5 @@
         </div>
     </div>
 
-    <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyWOip7PNtmpnZ2aRfmLHuHIUewH6OFx_HyAq6uk2krClRwdscljQMq0ctccWmD1sU6bw/exec';
-        
-        window.onload = function() {
-            let savedUser = localStorage.getItem("rareGamingUser");
-            if(savedUser) {
-                let user = JSON.parse(savedUser);
-                document.getElementById("user-name").innerText = user.name;
-                document.getElementById("user-pfp").src = user.picture;
-                document.getElementById("nav-pfp").src = user.picture;
-            }
-
-            fetch(scriptURL)
-                .then(res => res.json())
-                .then(data => {
-                    updateList('list-BR', data['BR']);
-                    updateList('list-CS', data['CS']);
-                    updateList('list-LW', data['LW']);
-                    updateList('list-1V1', data['1V1']);
-                })
-                .catch(err => {
-                    document.querySelectorAll('.m-registered-box').forEach(el => el.innerHTML = "Offline");
-                });
-        };
-
-        function updateList(id, arr) {
-            const el = document.getElementById(id);
-            if (!arr || arr.length === 0) { el.innerHTML = "No Teams Yet"; return; }
-            el.innerHTML = arr.map(t => `<div>⚔️ ${t}</div>`).join('');
-        }
-    </script>
 </body>
 </html>
