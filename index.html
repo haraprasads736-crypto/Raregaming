@@ -3,126 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>RARE GAMING Dashboard</title>
-    
     <script>
-        if (!localStorage.getItem("rareGamingUser")) {
-            window.location.href = "login.html";
-        }
+        if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; }
     </script>
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        
-        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; overflow-x: hidden; }
+        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; }
         .nav-header { background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; }
-        .nav-title { font-weight: 800; font-size: 18px; color: white; letter-spacing: 0.5px; text-transform: uppercase; }
-        
-        .logo-circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; display: block; cursor: pointer; transition: 0.3s; }
-        .logo-circle:active { transform: scale(0.9); border-color: white; }
+        .nav-title { font-weight: 800; font-size: 18px; color: white; text-transform: uppercase; }
+        .logo-circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; display: block; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-        
         .container { padding: 10px; max-width: 480px; margin: auto; }
-        
         .profile-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 15px 0 20px 0; }
         .pfp-main { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #66fcf1; overflow: hidden; }
         .pfp-main img { width: 100%; height: 100%; object-fit: cover; }
-        .app-title { font-weight: 800; font-size: 16px; color: #66fcf1; text-transform: uppercase; letter-spacing: 1px; }
-
-        .rules-slider { width: 100%; height: 135px; border-radius: 10px; overflow: hidden; margin-bottom: 25px; border: 1.5px solid #66fcf1; position: relative; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.3); background-color: rgba(0,0,0,0.3); }
-        .rules-slides { display: flex; width: 200%; height: 100%; animation: slideTwoAnim 6s infinite; align-items: center; }
-        .rules-slides img { width: 50%; height: 100%; object-fit: contain; object-position: center; }
-        @keyframes slideTwoAnim { 0%, 45% { transform: translateX(0); } 50%, 95% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
-
+        .app-title { font-weight: 800; font-size: 16px; color: #66fcf1; text-transform: uppercase; }
         .matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
-        .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.3s; }
-        .match-card:active { transform: scale(0.97); }
+        .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: 0.3s; }
         .m-image { height: 110px; background-size: cover; background-position: center; position: relative; }
-        .m-label { position: absolute; top: 6px; left: 6px; background: rgba(12, 14, 18, 0.8); border: 1px solid #66fcf1; color: #66fcf1; font-size: 8px; font-weight: 800; padding: 3px 6px; border-radius: 3px; text-transform: uppercase; }
-        
+        .m-label { position: absolute; top: 6px; left: 6px; background: rgba(255, 75, 43, 0.9); color: white; font-size: 8px; font-weight: 800; padding: 3px 6px; border-radius: 3px; text-transform: uppercase; }
         .m-registered-box { background: #0c0e12; padding: 6px; font-size: 9px; color: #a0aab2; height: 45px; overflow-y: auto; text-align: left; border-top: 1px solid #2b303b; }
-        .m-registered-box div { padding: 3px 0; border-bottom: 1px dashed #2b303b; color: white; font-weight: 600; }
-        .m-registered-box div:last-child { border-bottom: none; }
-        .no-players { color: #66fcf1 !important; text-align: center; font-style: italic; }
-
-        .m-register { background: #66fcf1; color: #000; padding: 10px; font-weight: 800; font-size: 13px; text-transform: uppercase; text-align: center; }
-        .m-timestamp { background: #1a1d24; padding: 6px; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 9px; color: #a0aab2; font-weight: 600; border-top: 1px solid #2b303b; }
-        .m-timestamp span { color: #ff4b2b; font-size: 13px; }
-
-        .footer-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 400px; margin: 0 auto 30px; padding: 0 10px; }
-        .menu-btn { background: #15181e; border: 1.5px solid #2b303b; border-radius: 10px; padding: 18px 8px; text-decoration: none; color: #66fcf1; font-size: 10px; font-weight: 800; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); transition: 0.3s; }
-        .menu-btn:active { background: #1f232b; border-color: #66fcf1; }
-        .menu-btn span { font-size: 24px; color: white; }
-        .dev-footer { font-size: 8px; color: #444; margin-bottom: 20px; letter-spacing: 1px; }
+        .m-registered-box div { padding: 2px 0; border-bottom: 1px dashed #2b303b; color: white; }
+        .m-register { background: #66fcf1; color: #000; padding: 10px; font-weight: 800; font-size: 12px; text-transform: uppercase; }
+        .m-timestamp { background: #1a1d24; padding: 6px; font-size: 9px; color: #a0aab2; font-weight: 600; border-top: 1px solid #2b303b; }
+        .footer-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
+        .menu-btn { background: #15181e; border: 1.5px solid #2b303b; border-radius: 10px; padding: 15px; text-decoration: none; color: #66fcf1; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 5px; }
     </style>
 </head>
 <body>
-
     <div class="nav-header">
         <span class="nav-title">Rare Gaming</span>
-        <a href="profile.html" class="logo-circle"><img id="nav-pfp" src="logo.jpg" alt="Profile"></a>
+        <a href="profile.html" class="logo-circle"><img id="nav-pfp" src="logo.jpg"></a>
     </div>
-
     <div class="profile-header">
-        <div class="pfp-main"><img id="user-pfp" src="logo.jpg" alt="Player PFP"></div>
-        <span class="app-title" id="user-name">GUEST PLAYER</span>
+        <div class="pfp-main"><img id="user-pfp" src="logo.jpg"></div>
+        <span class="app-title" id="user-name">LOADING...</span>
     </div>
-
     <div class="container">
-        
-        <div class="rules-slider">
-            <div class="rules-slides">
-                <img src="rule1.jpg" alt="Rule 1">
-                <img src="rule2.jpg" alt="Rule 2">
+        <div class="matches-grid" id="cards-container">
             </div>
-        </div>
-
-        <div class="matches-grid">
-            <a href="match_details.html?match=BR" class="match-card">
-                <div class="m-image" style="background-image: url('br_poster.jpg');"><div class="m-label">BR MATCH</div></div>
-                <div class="m-registered-box" id="list-BR">🔄 Loading Teams...</div>
-                <div class="m-register">DETAILS</div>
-                <div class="m-timestamp"><span>📅</span> 23 MAR | 07:00 PM</div>
-            </a>
-            
-            <a href="match_details.html?match=CS" class="match-card">
-                <div class="m-image" style="background-image: url('cs_poster.jpg');"><div class="m-label">CS MATCH</div></div>
-                <div class="m-registered-box" id="list-CS">🔄 Loading Teams...</div>
-                <div class="m-register">DETAILS</div>
-                <div class="m-timestamp"><span>📅</span> NOT DECIDED</div>
-            </a>
-            
-            <a href="match_details.html?match=LW" class="match-card">
-                <div class="m-image" style="background-image: url('lw_poster.jpg');"><div class="m-label">LONE WOLF 1</div></div>
-                <div class="m-registered-box" id="list-LW">🔄 Loading Teams...</div>
-                <div class="m-register">DETAILS</div>
-                <div class="m-timestamp"><span>📅</span> DECIDING SOON</div>
-            </a>
-            
-            <a href="match_details.html?match=1V1" class="match-card">
-                <div class="m-image" style="background-image: url('1v1_poster.jpg');"><div class="m-label">1V1 MATCH</div></div>
-                <div class="m-registered-box" id="list-1V1">🔄 Loading Teams...</div>
-                <div class="m-register">DETAILS</div>
-                <div class="m-timestamp"><span>📅</span> DECIDING SOON</div>
-            </a>
-        </div>
-
         <div class="footer-menu-grid">
             <a href="teams.html" class="menu-btn"><span>🛡️</span>TEAMS INFO</a>
             <a href="https://wa.me/qr/J6HUB4OMBTXHJ1" class="menu-btn"><span>💬</span>CONTACT</a>
             <a href="prizes.html" class="menu-btn"><span>🏆</span>PRIZE POOL</a>
             <a href="points.html" class="menu-btn"><span>📊</span>POINTS</a>
         </div>
-    </div> 
-
-    <div class="dev-footer">DEVELOPED BY RARE GAMING © 2026</div>
-
+    </div>
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxWtwQoqAY-rt4yRNZ_msxOOjlxXCERU9eEZ2sMExHaJgzrW9CopAn9jVfIbBwmL7UWdw/exec';
-
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbweiFB-PavZXtVn0bGUIT6pzV2UuKp4fcQA36pJ270oNreoEVbVB27xL9jghN5_sf2xxA/exec';
+        
         window.onload = function() {
-            // Player ka data set karna
             let savedUser = localStorage.getItem("rareGamingUser");
             if(savedUser) {
                 let user = JSON.parse(savedUser);
@@ -131,30 +62,31 @@
                 document.getElementById("nav-pfp").src = user.picture;
             }
 
-            // Sheet se registered teams lana
             fetch(scriptURL)
                 .then(response => response.json())
                 .then(data => {
-                    updateList('list-BR', data['BR']);
-                    updateList('list-CS', data['CS']);
-                    updateList('list-LW', data['LW']);
-                    updateList('list-1V1', data['1V1']);
-                })
-                .catch(error => {
-                    document.querySelectorAll('.m-registered-box').forEach(el => el.innerHTML = "Offline Mode");
+                    const container = document.getElementById('cards-container');
+                    const config = data.MatchConfig;
+                    const matches = ['BR', 'CS', 'LW', '1V1'];
+                    
+                    container.innerHTML = ""; // Clear loader
+                    matches.forEach(mId => {
+                        const m = config[mId];
+                        const teams = data[mId] || [];
+                        let teamHtml = teams.length > 0 ? teams.map(t => `<div>⚔️ ${t}</div>`).join('') : "<div style='text-align:center; font-style:italic;'>Be the first!</div>";
+                        
+                        container.innerHTML += `
+                            <a href="match_details.html?match=${mId}" class="match-card">
+                                <div class="m-image" style="background-image: url('${m.banner}');">
+                                    <div class="m-label">${m.status}</div>
+                                </div>
+                                <div class="m-registered-box">${teamHtml}</div>
+                                <div class="m-register">DETAILS</div>
+                                <div class="m-timestamp">📅 ${m.time}</div>
+                            </a>`;
+                    });
                 });
         };
-
-        function updateList(elementId, playersArray) {
-            const el = document.getElementById(elementId);
-            if (!playersArray || playersArray.length === 0) {
-                el.innerHTML = "<div class='no-players'>Be the first to register! 🏆</div>";
-                return;
-            }
-            let html = "";
-            playersArray.forEach(player => { html += `<div>⚔️ ${player}</div>`; });
-            el.innerHTML = html;
-        }
     </script>
 </body>
 </html>
