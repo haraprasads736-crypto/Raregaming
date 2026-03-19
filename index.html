@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>RARE GAMING Dashboard</title>
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
@@ -14,10 +17,15 @@
         .logo-circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
         .container { padding: 10px; max-width: 480px; margin: auto; }
-        .profile-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 20px 0; }
+        
+        .profile-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 15px 0 5px 0; }
         .pfp-main { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #66fcf1; overflow: hidden; }
         .pfp-main img { width: 100%; height: 100%; object-fit: cover; }
-        .app-title { font-weight: 800; font-size: 20px; color: #66fcf1; text-transform: uppercase; letter-spacing: 1.5px; }
+        .app-title { font-weight: 800; font-size: 16px; color: #66fcf1; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Login & Logout Buttons */
+        .login-container { display: flex; justify-content: center; margin-bottom: 15px; min-height: 45px; }
+        .logout-btn { background: #ff4b2b; color: white; border: none; padding: 5px 15px; border-radius: 5px; font-weight: 800; font-size: 10px; cursor: pointer; display: none; margin: 0 auto 15px auto; text-transform: uppercase; }
 
         .rules-slider { width: 100%; height: 135px; border-radius: 10px; overflow: hidden; margin-bottom: 25px; border: 1.5px solid #66fcf1; position: relative; box-shadow: 0 4px 15px rgba(102, 252, 241, 0.3); background-color: rgba(0,0,0,0.3); }
         .rules-slides { display: flex; width: 200%; height: 100%; animation: slideTwoAnim 6s infinite; align-items: center; }
@@ -30,7 +38,6 @@
         .m-image { height: 110px; background-size: cover; background-position: center; position: relative; }
         .m-label { position: absolute; top: 6px; left: 6px; background: rgba(12, 14, 18, 0.8); border: 1px solid #66fcf1; color: #66fcf1; font-size: 8px; font-weight: 800; padding: 3px 6px; border-radius: 3px; text-transform: uppercase; }
         
-        /* Players ka naam dikhane wala dabba */
         .m-registered-box { background: #0c0e12; padding: 6px; font-size: 9px; color: #a0aab2; height: 45px; overflow-y: auto; text-align: left; border-top: 1px solid #2b303b; }
         .m-registered-box div { padding: 3px 0; border-bottom: 1px dashed #2b303b; color: white; font-weight: 600; }
         .m-registered-box div:last-child { border-bottom: none; }
@@ -51,13 +58,22 @@
 
     <div class="nav-header">
         <span class="nav-title">Rare Gaming</span>
-        <div class="logo-circle"><img src="logo.jpg" alt="Logo"></div>
+        <div class="logo-circle"><img id="nav-pfp" src="logo.jpg" alt="Logo"></div>
     </div>
 
     <div class="profile-header">
-        <div class="pfp-main"><img src="logo.jpg" alt="Rare Gaming PFP"></div>
-        <span class="app-title">RARE GAMING</span>
+        <div class="pfp-main"><img id="user-pfp" src="logo.jpg" alt="Player PFP"></div>
+        <span class="app-title" id="user-name">GUEST PLAYER</span>
     </div>
+    
+    <div class="login-container" id="g_id_onload"
+         data-client_id="299201806190-akf2tp7vakr0c1lbl58boi7qa0lr78vv.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin" data-type="standard" data-theme="filled_black" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left" id="google-btn-wrapper"></div>
+
+    <button class="logout-btn" id="logoutBtn" onclick="logoutUser()">Logout</button>
 
     <div class="container">
         
@@ -75,21 +91,18 @@
                 <div class="m-register">REGISTER</div>
                 <div class="m-timestamp"><span>📅</span> 23 MAR | 04:00 PM</div>
             </a>
-
             <a href="register.html" class="match-card">
                 <div class="m-image" style="background-image: url('cs_poster.jpg');"><div class="m-label">CS MATCH</div></div>
                 <div class="m-registered-box" id="list-CS">🔄 Loading Teams...</div>
                 <div class="m-register">REGISTER</div>
                 <div class="m-timestamp"><span>📅</span> NOT DECIDED</div>
             </a>
-
             <a href="register.html" class="match-card">
                 <div class="m-image" style="background-image: url('lw_poster.jpg');"><div class="m-label">LONE WOLF 1</div></div>
                 <div class="m-registered-box" id="list-LW">🔄 Loading Teams...</div>
                 <div class="m-register">REGISTER</div>
                 <div class="m-timestamp"><span>📅</span> DECIDING SOON</div>
             </a>
-
             <a href="register.html" class="match-card">
                 <div class="m-image" style="background-image: url('1v1_poster.jpg');"><div class="m-label">1V1 MATCH</div></div>
                 <div class="m-registered-box" id="list-1V1">🔄 Loading Teams...</div>
@@ -104,16 +117,16 @@
             <a href="prizes.html" class="menu-btn"><span>🏆</span>PRIZE POOL</a>
             <a href="points.html" class="menu-btn"><span>📊</span>POINTS</a>
         </div>
-
     </div> 
 
     <div class="dev-footer">DEVELOPED BY RARE GAMING © 2026</div>
 
     <script>
-        // YAHAN TUMHARA NAYA WEB APP URL DAAL DIYA HAI 👇
+        // DATA DIKHANE KA SCRIPT (Tumhari sheet ka link)
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxWtwQoqAY-rt4yRNZ_msxOOjlxXCERU9eEZ2sMExHaJgzrW9CopAn9jVfIbBwmL7UWdw/exec';
 
         window.onload = function() {
+            // Sheet se data lana
             fetch(scriptURL)
                 .then(response => response.json())
                 .then(data => {
@@ -123,9 +136,15 @@
                     updateList('list-1V1', data['1V1']);
                 })
                 .catch(error => {
-                    console.error('Error:', error);
                     document.querySelectorAll('.m-registered-box').forEach(el => el.innerHTML = "Offline Mode");
                 });
+
+            // Check karna ki player pehle se login hai ya nahi
+            let savedUser = localStorage.getItem("rareGamingUser");
+            if(savedUser) {
+                let user = JSON.parse(savedUser);
+                updateProfileUI(user.name, user.picture);
+            }
         };
 
         function updateList(elementId, playersArray) {
@@ -134,12 +153,49 @@
                 el.innerHTML = "<div class='no-players'>Be the first to register! 🏆</div>";
                 return;
             }
-            
             let html = "";
-            playersArray.forEach(player => {
-                html += `<div>⚔️ ${player}</div>`; 
-            });
+            playersArray.forEach(player => { html += `<div>⚔️ ${player}</div>`; });
             el.innerHTML = html;
+        }
+
+        // GOOGLE LOGIN JADOO 🪄
+        function parseJwt(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        function handleCredentialResponse(response) {
+            // Google se details nikalna
+            const responsePayload = parseJwt(response.credential);
+            const userName = responsePayload.name;
+            const userEmail = responsePayload.email;
+            const userPicture = responsePayload.picture;
+
+            // Player ka data browser mein save karna taaki register page par bhi kaam aaye
+            localStorage.setItem("rareGamingUser", JSON.stringify({ name: userName, email: userEmail, picture: userPicture }));
+
+            // UI Update karna (Naam aur Photo badalna)
+            updateProfileUI(userName, userPicture);
+            alert("Welcome to Rare Gaming, " + userName + "! 🔥");
+        }
+
+        function updateProfileUI(name, pictureUrl) {
+            document.getElementById("user-name").innerText = name;
+            document.getElementById("user-pfp").src = pictureUrl;
+            document.getElementById("nav-pfp").src = pictureUrl;
+            
+            // Google button chupana aur Logout button dikhana
+            document.getElementById("google-btn-wrapper").style.display = "none";
+            document.getElementById("logoutBtn").style.display = "block";
+        }
+
+        function logoutUser() {
+            localStorage.removeItem("rareGamingUser");
+            location.reload(); // Page refresh karke wapas normal kar dena
         }
     </script>
 </body>
