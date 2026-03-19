@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RARE GAMING - Login</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>RARE GAMING - Player Login</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; }
         
-        .logo-container { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #66fcf1; overflow: hidden; margin-bottom: 20px; box-shadow: 0 0 20px rgba(102, 252, 241, 0.5); }
+        .logo-container { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #66fcf1; overflow: hidden; margin-bottom: 15px; box-shadow: 0 0 15px rgba(102, 252, 241, 0.4); }
         .logo-container img { width: 100%; height: 100%; object-fit: cover; }
         
-        .app-title { font-weight: 800; font-size: 28px; color: #66fcf1; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
-        .subtitle { font-size: 12px; color: #a0aab2; margin-bottom: 40px; font-weight: 600; letter-spacing: 1px; }
+        .app-title { font-weight: 800; font-size: 24px; color: #66fcf1; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .subtitle { font-size: 11px; color: #a0aab2; margin-bottom: 30px; font-weight: 600; letter-spacing: 1px; }
 
-        .login-box { background: #15181e; padding: 30px; border-radius: 15px; border: 1.5px solid #2b303b; box-shadow: 0 5px 15px rgba(0,0,0,0.5); width: 80%; max-width: 350px; }
-        .login-title { font-size: 14px; font-weight: 800; color: white; margin-bottom: 20px; text-transform: uppercase; }
-
-        /* Google Button Wrapper */
-        .google-btn-wrapper { display: flex; justify-content: center; margin-top: 10px; }
+        .login-box { background: #1a1d24; padding: 25px; border-radius: 12px; border: 1.5px solid #2b303b; box-shadow: 0 5px 15px rgba(0,0,0,0.5); width: 85%; max-width: 320px; }
+        
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; font-size: 11px; font-weight: 600; color: #a0aab2; margin-bottom: 5px; text-transform: uppercase; }
+        .input-group input { width: 100%; padding: 12px; background: #15181e; border: 1px solid #2b303b; border-radius: 8px; color: white; font-family: 'Poppins', sans-serif; font-size: 13px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        .input-group input:focus { border-color: #66fcf1; box-shadow: 0 0 8px rgba(102, 252, 241, 0.3); }
+        
+        .submit-btn { width: 100%; background: #66fcf1; color: #000; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; transition: 0.3s; box-shadow: 0 4px 10px rgba(102, 252, 241, 0.3); }
+        .submit-btn:active { transform: scale(0.97); background: #4de2d6; }
     </style>
 </head>
 <body>
@@ -30,53 +33,51 @@
     </div>
     
     <div class="app-title">RARE GAMING</div>
-    <div class="subtitle">ESPORTS TOURNAMENTS</div>
+    <div class="subtitle">PLAYER AUTHENTICATION</div>
 
     <div class="login-box">
-        <div class="login-title">Player Authentication</div>
-        
-        <div id="g_id_onload"
-             data-client_id="299201806190-akf2tp7vakr0c1lbl58boi7qa0lr78vv.apps.googleusercontent.com"
-             data-callback="handleCredentialResponse"
-             data-auto_prompt="false">
-        </div>
-        <div class="google-btn-wrapper">
-            <div class="g_id_signin" data-type="standard" data-theme="filled_black" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
-        </div>
+        <form id="customLoginForm">
+            <div class="input-group">
+                <label>In-Game Name (IGN)</label>
+                <input type="text" id="playerName" placeholder="Enter your game name" required>
+            </div>
+            <div class="input-group">
+                <label>Game UID</label>
+                <input type="number" id="playerUid" placeholder="Enter your UID" required>
+            </div>
+            <button type="submit" class="submit-btn">ENTER DASHBOARD</button>
+        </form>
     </div>
 
     <script>
-        // Check karo ki player pehle se toh login nahi hai?
+        // Check karo ki player pehle se login toh nahi hai?
         window.onload = function() {
             if (localStorage.getItem("rareGamingUser")) {
-                // Agar pehle se login hai, toh seedha andar bhej do
+                // Agar login hai, toh direct andar bhej do
                 window.location.href = "index.html";
             }
         };
 
-        // Google se details nikalna
-        function parseJwt(token) {
-            var base64Url = token.split('.')[1];
-            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(jsonPayload);
-        }
+        // Form submit hone par jadoo
+        document.getElementById('customLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Page refresh hone se rokna
+            
+            const ign = document.getElementById('playerName').value;
+            const uid = document.getElementById('playerUid').value;
 
-        // Login successful hone par kya hoga
-        function handleCredentialResponse(response) {
-            const responsePayload = parseJwt(response.credential);
-            const userName = responsePayload.name;
-            const userEmail = responsePayload.email;
-            const userPicture = responsePayload.picture;
+            // Player ka data save karna (Sath mein logo.jpg ko profile pic set kar diya)
+            const userData = {
+                name: ign,
+                uid: uid,
+                picture: "logo.jpg" 
+            };
 
-            // Player ka data save karna
-            localStorage.setItem("rareGamingUser", JSON.stringify({ name: userName, email: userEmail, picture: userPicture }));
+            // Phone ki memory mein save kar diya
+            localStorage.setItem("rareGamingUser", JSON.stringify(userData));
 
-            // JADOO: Login hote hi seedha Dashboard par teleport karna!
+            // Dashboard par teleport!
             window.location.href = "index.html";
-        }
+        });
     </script>
 </body>
 </html>
