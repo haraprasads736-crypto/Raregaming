@@ -12,21 +12,22 @@
         body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; }
         .nav-header { background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; }
         .nav-title { font-weight: 800; font-size: 18px; color: white; text-transform: uppercase; }
-        .logo-circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; display: block; }
+        .logo-circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
         .container { padding: 10px; max-width: 480px; margin: auto; }
         .profile-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 15px 0 20px 0; }
         .pfp-main { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #66fcf1; overflow: hidden; }
         .pfp-main img { width: 100%; height: 100%; object-fit: cover; }
         .app-title { font-weight: 800; font-size: 16px; color: #66fcf1; text-transform: uppercase; }
+        
         .matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
-        .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: 0.3s; }
-        .m-image { height: 110px; background-size: cover; background-position: center; position: relative; }
-        .m-label { position: absolute; top: 6px; left: 6px; background: rgba(255, 75, 43, 0.9); color: white; font-size: 8px; font-weight: 800; padding: 3px 6px; border-radius: 3px; text-transform: uppercase; }
-        .m-registered-box { background: #0c0e12; padding: 6px; font-size: 9px; color: #a0aab2; height: 45px; overflow-y: auto; text-align: left; border-top: 1px solid #2b303b; }
-        .m-registered-box div { padding: 2px 0; border-bottom: 1px dashed #2b303b; color: white; }
-        .m-register { background: #66fcf1; color: #000; padding: 10px; font-weight: 800; font-size: 12px; text-transform: uppercase; }
-        .m-timestamp { background: #1a1d24; padding: 6px; font-size: 9px; color: #a0aab2; font-weight: 600; border-top: 1px solid #2b303b; }
+        .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; }
+        .m-image { height: 110px; background-size: cover; background-position: center; position: relative; background-color: #2b303b; }
+        .m-label { position: absolute; top: 6px; left: 6px; background: #ff4b2b; color: white; font-size: 8px; font-weight: 800; padding: 3px 6px; border-radius: 3px; }
+        .m-registered-box { background: #0c0e12; padding: 6px; font-size: 9px; color: #a0aab2; height: 45px; overflow-y: auto; text-align: left; }
+        .m-register { background: #66fcf1; color: #000; padding: 10px; font-weight: 800; font-size: 12px; }
+        .m-timestamp { background: #1a1d24; padding: 6px; font-size: 9px; color: #a0aab2; border-top: 1px solid #2b303b; }
+
         .footer-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
         .menu-btn { background: #15181e; border: 1.5px solid #2b303b; border-radius: 10px; padding: 15px; text-decoration: none; color: #66fcf1; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 5px; }
     </style>
@@ -38,11 +39,25 @@
     </div>
     <div class="profile-header">
         <div class="pfp-main"><img id="user-pfp" src="logo.jpg"></div>
-        <span class="app-title" id="user-name">LOADING...</span>
+        <span class="app-title" id="user-name">Welcome</span>
     </div>
+
     <div class="container">
         <div class="matches-grid" id="cards-container">
-            </div>
+            <a href="match_details.html?match=BR" class="match-card">
+                <div class="m-image" style="background-image: url('br_banner.jpg');"><div class="m-label">DAILY MATCH</div></div>
+                <div class="m-registered-box">Loading teams...</div>
+                <div class="m-register">DETAILS</div>
+                <div class="m-timestamp">BATTLE ROYALE</div>
+            </a>
+            <a href="match_details.html?match=CS" class="match-card">
+                <div class="m-image" style="background-image: url('cs_banner.jpg');"><div class="m-label">4V4 CLASH</div></div>
+                <div class="m-registered-box">Loading teams...</div>
+                <div class="m-register">DETAILS</div>
+                <div class="m-timestamp">CLASH SQUAD</div>
+            </a>
+        </div>
+
         <div class="footer-menu-grid">
             <a href="teams.html" class="menu-btn"><span>🛡️</span>TEAMS INFO</a>
             <a href="https://wa.me/qr/J6HUB4OMBTXHJ1" class="menu-btn"><span>💬</span>CONTACT</a>
@@ -50,10 +65,12 @@
             <a href="points.html" class="menu-btn"><span>📊</span>POINTS</a>
         </div>
     </div>
+
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbweiFB-PavZXtVn0bGUIT6pzV2UuKp4fcQA36pJ270oNreoEVbVB27xL9jghN5_sf2xxA/exec';
         
         window.onload = function() {
+            // User profile load
             let savedUser = localStorage.getItem("rareGamingUser");
             if(savedUser) {
                 let user = JSON.parse(savedUser);
@@ -62,6 +79,7 @@
                 document.getElementById("nav-pfp").src = user.picture;
             }
 
+            // Fetch dynamic data from Sheet
             fetch(scriptURL)
                 .then(response => response.json())
                 .then(data => {
@@ -69,23 +87,26 @@
                     const config = data.MatchConfig;
                     const matches = ['BR', 'CS', 'LW', '1V1'];
                     
-                    container.innerHTML = ""; // Clear loader
-                    matches.forEach(mId => {
-                        const m = config[mId];
-                        const teams = data[mId] || [];
-                        let teamHtml = teams.length > 0 ? teams.map(t => `<div>⚔️ ${t}</div>`).join('') : "<div style='text-align:center; font-style:italic;'>Be the first!</div>";
-                        
-                        container.innerHTML += `
-                            <a href="match_details.html?match=${mId}" class="match-card">
-                                <div class="m-image" style="background-image: url('${m.banner}');">
-                                    <div class="m-label">${m.status}</div>
-                                </div>
-                                <div class="m-registered-box">${teamHtml}</div>
-                                <div class="m-register">DETAILS</div>
-                                <div class="m-timestamp">📅 ${m.time}</div>
-                            </a>`;
-                    });
-                });
+                    if(config && config['BR']) {
+                        container.innerHTML = ""; // Clear backup cards if sheet data is found
+                        matches.forEach(mId => {
+                            const m = config[mId];
+                            const teams = data[mId] || [];
+                            let teamHtml = teams.length > 0 ? teams.map(t => `<div>⚔️ ${t}</div>`).join('') : "<div>No teams yet</div>";
+                            
+                            container.innerHTML += `
+                                <a href="match_details.html?match=${mId}" class="match-card">
+                                    <div class="m-image" style="background-image: url('${m.banner}');">
+                                        <div class="m-label">${m.status}</div>
+                                    </div>
+                                    <div class="m-registered-box">${teamHtml}</div>
+                                    <div class="m-register">DETAILS</div>
+                                    <div class="m-timestamp">📅 ${m.time}</div>
+                                </a>`;
+                        });
+                    }
+                })
+                .catch(err => console.log("Using backup cards. Error:", err));
         };
     </script>
 </body>
