@@ -16,28 +16,23 @@
         
         body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; overflow-x: hidden; }
         
-        /* HEADER WITH SETTINGS & PROFILE */
-        .nav-header { background: #15181e; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; }
-        .nav-title { font-weight: 800; font-size: 18px; color: white; text-transform: uppercase; }
+        /* CLEAN HEADER */
+        .nav-header { background: #15181e; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; }
+        .nav-title { font-weight: 800; font-size: 18px; color: white; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        .nav-icons { display: flex; gap: 15px; align-items: center; }
-        .settings-btn { font-size: 22px; color: #66fcf1; text-decoration: none; cursor: pointer; transition: 0.3s; }
-        .settings-btn:active { transform: rotate(90deg); }
+        .nav-icons { display: flex; gap: 18px; align-items: center; }
+        .settings-btn { font-size: 22px; color: #66fcf1; text-decoration: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; }
+        .settings-btn:active { transform: scale(0.9) rotate(45deg); }
         
-        .logo-circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; display: block; }
+        .logo-circle { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #66fcf1; overflow: hidden; display: block; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
         
         .container { padding: 10px; max-width: 480px; margin: auto; }
         
-        .profile-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 15px 0 20px 0; }
+        .profile-header { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 20px 0; }
         .pfp-main { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #66fcf1; overflow: hidden; }
         .pfp-main img { width: 100%; height: 100%; object-fit: cover; }
         .app-title { font-weight: 800; font-size: 16px; color: #66fcf1; text-transform: uppercase; }
-
-        /* NOTICE BOARD (Chalti hui line) */
-        .notice-board { background: #ff4b2b; color: white; font-size: 11px; font-weight: 800; padding: 5px 0; overflow: hidden; white-space: nowrap; margin-bottom: 15px; }
-        .notice-text { display: inline-block; animation: scrollText 15s linear infinite; padding-left: 100%; }
-        @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         .rules-slider { width: 100%; height: 135px; border-radius: 10px; overflow: hidden; margin-bottom: 25px; border: 1.5px solid #66fcf1; position: relative; }
         .rules-slides { display: flex; width: 200%; height: 100%; animation: slideTwoAnim 6s infinite; }
@@ -45,7 +40,8 @@
         @keyframes slideTwoAnim { 0%, 45% { transform: translateX(0); } 50%, 95% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
 
         .matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
-        .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; }
+        .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: 0.2s; }
+        .match-card:active { transform: scale(0.97); }
         .m-image { height: 110px; background-size: cover; background-position: center; position: relative; }
         .m-label { position: absolute; top: 6px; left: 6px; background: rgba(0,0,0,0.7); border: 1px solid #66fcf1; color: #66fcf1; font-size: 8px; font-weight: 800; padding: 3px 6px; border-radius: 3px; }
         .m-registered-box { background: #0c0e12; padding: 6px; font-size: 9px; color: #a0aab2; height: 45px; overflow-y: auto; text-align: left; }
@@ -55,7 +51,7 @@
 
         .footer-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
         .menu-btn { background: #15181e; border: 1.5px solid #2b303b; border-radius: 10px; padding: 15px; text-decoration: none; color: #66fcf1; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .menu-btn span { font-size: 20px; color: white; }
+        .menu-btn span { font-size: 22px; color: white; }
     </style>
 </head>
 <body>
@@ -66,10 +62,6 @@
             <a href="profile.html" class="settings-btn" title="Settings">⚙️</a>
             <a href="profile.html" class="logo-circle"><img id="nav-pfp" src="logo.jpg"></a>
         </div>
-    </div>
-
-    <div class="notice-board">
-        <div class="notice-text">📢 AB AAP APNI PROFILE AUR SETTINGS CHANGE KAR SAKTE HAIN! GEAR ICON ⚙️ PAR CLICK KAREIN.</div>
     </div>
 
     <div class="profile-header">
@@ -139,6 +131,9 @@
                     updateList('list-CS', data['CS']);
                     updateList('list-LW', data['LW']);
                     updateList('list-1V1', data['1V1']);
+                })
+                .catch(err => {
+                    document.querySelectorAll('.m-registered-box').forEach(el => el.innerHTML = "Offline");
                 });
         };
 
