@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redeem Code - RARE GAMING</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; }
+        .nav-header { background: #15181e; padding: 15px 20px; display: flex; align-items: center; border-bottom: 2px solid #66fcf1; }
+        .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; border: 1px solid #66fcf1; padding: 5px 10px; border-radius: 5px; margin-right: 20px; font-size: 12px; }
+        .container { padding: 30px 20px; max-width: 400px; margin: auto; }
+        .box { background: #15181e; padding: 25px; border-radius: 15px; border: 1.5px solid #2b303b; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h2 { color: #66fcf1; font-weight: 800; text-transform: uppercase; margin-top: 0; }
+        input { width: 100%; background: #0c0e12; border: 1px solid #2b303b; color: white; padding: 15px; border-radius: 8px; font-size: 16px; font-family: 'Poppins'; text-align: center; text-transform: uppercase; margin: 20px 0; box-sizing: border-box; }
+        input:focus { border-color: #66fcf1; outline: none; }
+        .redeem-btn { width: 100%; background: #66fcf1; color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        .redeem-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
+        .status-msg { font-size: 12px; margin-top: 15px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="index.html" class="back-btn">BACK</a>
+        <span style="font-weight:800; font-size:14px;">WALLET REFILL</span>
+    </div>
+
+    <div class="container">
+        <div class="box">
+            <h2>REDEEM</h2>
+            <p style="font-size: 11px; color: #a0aab2;">Enter secret code to add money</p>
+            
+            <input type="text" id="couponInput" placeholder="RARE-XXXX-XXXX">
+            
+            <button class="redeem-btn" id="mainBtn" onclick="verifyCode()">REDEEM NOW</button>
+            <div id="status" class="status-msg"></div>
+        </div>
+        
+        <p style="font-size: 10px; color: #444; margin-top: 30px;">Contact Admin for Codes 💬</p>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxrbctK3eaMb9hIFjb387wwqokuM8-pFwFkmegooVRormfdhzvEAp3s1pfwfem27Zqu/exec';
+
+        function verifyCode() {
+            const code = document.getElementById("couponInput").value.trim();
+            const btn = document.getElementById("mainBtn");
+            const status = document.getElementById("status");
+
+            if (!code) {
+                alert("Please enter a code!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "VERIFYING...";
+            status.innerText = "Checking code with server...";
+            status.style.color = "#a0aab2";
+
+            fetch(`${scriptURL}?action=redeem&code=${code}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === "Success") {
+                        // Wallet update karna
+                        let currentWallet = parseInt(localStorage.getItem("rareWallet") || 0);
+                        let reward = parseInt(data.amount);
+                        localStorage.setItem("rareWallet", currentWallet + reward);
+                        
+                        status.innerText = `SUCCESS! ₹${reward} added to wallet.`;
+                        status.style.color = "#66fcf1";
+                        alert(`Successfully Redeemed ₹${reward}!`);
+                        window.location.href = "index.html";
+                    } else {
+                        status.innerText = "INVALID OR USED CODE! ❌";
+                        status.style.color = "#ff4b2b";
+                        btn.disabled = false;
+                        btn.innerText = "REDEEM NOW";
+                    }
+                })
+                .catch(err => {
+                    status.innerText = "Network Error! Try Again.";
+                    status.style.color = "#ff4b2b";
+                    btn.disabled = false;
+                    btn.innerText = "REDEEM NOW";
+                });
+        }
+    </script>
+</body>
+</html>
