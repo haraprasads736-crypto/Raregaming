@@ -21,6 +21,9 @@
         .input-group input, .input-group select { width: 100%; padding: 12px; background: #15181e; border: 1px solid #2b303b; border-radius: 8px; color: white; font-family: 'Poppins', sans-serif; font-size: 13px; box-sizing: border-box; outline: none; transition: 0.3s; }
         .input-group input:focus, .input-group select:focus { border-color: #66fcf1; box-shadow: 0 0 8px rgba(102, 252, 241, 0.3); }
         
+        /* Dropdown lock hone par kaisa dikhega */
+        .locked-select { pointer-events: none; background-color: #111318 !important; color: #66fcf1 !important; font-weight: 800; border-color: #2b303b !important; }
+
         .player-divider { font-size: 12px; font-weight: 800; color: #66fcf1; margin-top: 20px; margin-bottom: 10px; border-bottom: 1px dashed #2b303b; padding-bottom: 5px; }
         
         .submit-btn { width: 100%; background: #66fcf1; color: #000; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 15px; transition: 0.3s; box-shadow: 0 4px 10px rgba(102, 252, 241, 0.3); }
@@ -42,7 +45,7 @@
 
             <form id="registrationForm">
                 <div class="input-group">
-                    <label>Select Match Category</label>
+                    <label>Selected Match Category</label>
                     <select name="matchType" id="matchType" required onchange="generatePlayerFields()">
                         <option value="" disabled selected>-- Choose Match --</option>
                         <option value="BR">🎮 BATTLE ROYALE (BR - Duo)</option>
@@ -70,6 +73,24 @@
     </div>
 
     <script>
+        // 1. PAGE LOAD HOTE HI LINK CHECK KARNA (JADOO YAHAN HAI ✨)
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const matchTypeParam = urlParams.get('type'); // Link se BR ya CS uthana
+
+            if (matchTypeParam) {
+                const selectBox = document.getElementById("matchType");
+                selectBox.value = matchTypeParam; // Dropdown set karna
+                
+                // Dropdown ko Lock kar dena taaki player change na kar sake
+                selectBox.classList.add("locked-select");
+
+                // Player ke boxes apne aap khol dena
+                generatePlayerFields();
+            }
+        };
+
+        // 2. PLAYER BOXES GENERATE KARNE KA CODE
         function generatePlayerFields() {
             const matchType = document.getElementById("matchType").value;
             const playersContainer = document.getElementById("dynamic-players");
@@ -99,10 +120,9 @@
             }
         }
 
+        // 3. FORM SUBMIT KARNE KA CODE
         const form = document.getElementById('registrationForm');
         const submitBtn = document.getElementById('submitBtn');
-        
-        // YAHAN TUMHARA NAYA WEB APP URL DAAL DIYA HAI 👇
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxWtwQoqAY-rt4yRNZ_msxOOjlxXCERU9eEZ2sMExHaJgzrW9CopAn9jVfIbBwmL7UWdw/exec';
 
         form.addEventListener('submit', e => {
@@ -118,8 +138,7 @@
                         alert("❌ Arey Bhai! Is UID ne is match ke liye pehle hi registration kar liya hai!");
                     } else {
                         alert("✅ Registration Successful! Welcome to Rare Gaming Esports!");
-                        form.reset(); 
-                        document.getElementById("dynamic-players").innerHTML = ""; 
+                        window.location.href = "index.html"; // Success ke baad wapas dashboard par bhej dena
                     }
                     submitBtn.innerText = "SUBMIT REGISTRATION";
                     submitBtn.disabled = false;
