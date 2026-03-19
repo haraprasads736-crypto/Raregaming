@@ -7,7 +7,6 @@
     <title>RARE GAMING Dashboard</title>
     
     <script>
-        // Agar koi chori-chupe index.html kholta hai bina login kiye, toh usey login page par fenk do
         if (!localStorage.getItem("rareGamingUser")) {
             window.location.href = "login.html";
         }
@@ -81,28 +80,31 @@
         </div>
 
         <div class="matches-grid">
-            <a href="register.html" class="match-card">
+            <a href="match_details.html?match=BR" class="match-card">
                 <div class="m-image" style="background-image: url('br_poster.jpg');"><div class="m-label">BR MATCH</div></div>
                 <div class="m-registered-box" id="list-BR">🔄 Loading Teams...</div>
-                <div class="m-register">REGISTER</div>
-                <div class="m-timestamp"><span>📅</span> 23 MAR | 04:00 PM</div>
+                <div class="m-register">DETAILS</div>
+                <div class="m-timestamp"><span>📅</span> 23 MAR | 07:00 PM</div>
             </a>
-            <a href="register.html" class="match-card">
+            
+            <a href="match_details.html?match=CS" class="match-card">
                 <div class="m-image" style="background-image: url('cs_poster.jpg');"><div class="m-label">CS MATCH</div></div>
                 <div class="m-registered-box" id="list-CS">🔄 Loading Teams...</div>
-                <div class="m-register">REGISTER</div>
+                <div class="m-register">DETAILS</div>
                 <div class="m-timestamp"><span>📅</span> NOT DECIDED</div>
             </a>
-            <a href="register.html" class="match-card">
+            
+            <a href="match_details.html?match=LW" class="match-card">
                 <div class="m-image" style="background-image: url('lw_poster.jpg');"><div class="m-label">LONE WOLF 1</div></div>
                 <div class="m-registered-box" id="list-LW">🔄 Loading Teams...</div>
-                <div class="m-register">REGISTER</div>
+                <div class="m-register">DETAILS</div>
                 <div class="m-timestamp"><span>📅</span> DECIDING SOON</div>
             </a>
-            <a href="register.html" class="match-card">
+            
+            <a href="match_details.html?match=1V1" class="match-card">
                 <div class="m-image" style="background-image: url('1v1_poster.jpg');"><div class="m-label">1V1 MATCH</div></div>
                 <div class="m-registered-box" id="list-1V1">🔄 Loading Teams...</div>
-                <div class="m-register">REGISTER</div>
+                <div class="m-register">DETAILS</div>
                 <div class="m-timestamp"><span>📅</span> DECIDING SOON</div>
             </a>
         </div>
@@ -121,7 +123,6 @@
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxWtwQoqAY-rt4yRNZ_msxOOjlxXCERU9eEZ2sMExHaJgzrW9CopAn9jVfIbBwmL7UWdw/exec';
 
         window.onload = function() {
-            // Player ka data lagana
             let savedUser = localStorage.getItem("rareGamingUser");
             if(savedUser) {
                 let user = JSON.parse(savedUser);
@@ -130,7 +131,6 @@
                 document.getElementById("nav-pfp").src = user.picture;
             }
 
-            // Sheet se registered teams lana
             fetch(scriptURL)
                 .then(response => response.json())
                 .then(data => {
@@ -155,7 +155,6 @@
             el.innerHTML = html;
         }
 
-        // Logout hoke wapas login page par jana
         function logoutUser() {
             localStorage.removeItem("rareGamingUser");
             window.location.href = "login.html";
