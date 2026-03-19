@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RARE GAMING - My Profile</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        
+        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+        
+        /* Header */
+        .nav-header { background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; font-size: 14px; background: rgba(102, 252, 241, 0.1); padding: 5px 10px; border-radius: 5px; border: 1px solid #66fcf1; }
+        .nav-title { font-weight: 800; font-size: 18px; color: white; letter-spacing: 1px; text-transform: uppercase; }
+        
+        .container { padding: 20px; max-width: 480px; margin: auto; text-align: center; }
+
+        /* Profile Top Section */
+        .profile-card { background: #1a1d24; border-radius: 15px; border: 2px solid #2b303b; padding: 30px 20px; margin-bottom: 25px; position: relative; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.6); }
+        .profile-card::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(102,252,241,0.1) 0%, rgba(12,14,18,0) 70%); pointer-events: none; }
+
+        .avatar-circle { width: 100px; height: 100px; border-radius: 50%; border: 4px solid #66fcf1; margin: 0 auto 15px; overflow: hidden; box-shadow: 0 0 15px rgba(102, 252, 241, 0.5); }
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+        .p-ign { font-size: 22px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .p-uid { font-size: 12px; font-weight: 600; color: #a0aab2; background: #0c0e12; padding: 4px 10px; border-radius: 20px; border: 1px solid #2b303b; display: inline-block; }
+
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .stat-box { background: #15181e; border-radius: 10px; border: 1.5px solid #2b303b; padding: 15px; text-align: center; transition: 0.3s; }
+        .stat-box:active { border-color: #66fcf1; transform: scale(0.98); }
+        .s-icon { font-size: 24px; margin-bottom: 5px; display: block; }
+        .s-val { font-size: 20px; font-weight: 800; color: white; line-height: 1.2; }
+        .s-label { font-size: 10px; font-weight: 700; color: #a0aab2; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-box.earn { border-color: #4de2d6; background: rgba(77, 226, 214, 0.05); grid-column: span 2; } /* Total Earnings full width */
+        .stat-box.earn .s-val { color: #4de2d6; }
+
+        /* Logout Button */
+        .logout-btn { width: 100%; background: rgba(255, 75, 43, 0.1); color: #ff4b2b; padding: 12px; border: 2px solid #ff4b2b; border-radius: 8px; font-size: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        .logout-btn:active { background: #ff4b2b; color: white; transform: scale(0.97); }
+
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="index.html" class="back-btn">⬅ BACK</a>
+        <span class="nav-title">MY PROFILE</span>
+        <div style="width: 60px;"></div> </div>
+
+    <div class="container">
+        
+        <div class="profile-card">
+            <div class="avatar-circle">
+                <img src="logo.jpg" alt="Player Avatar">
+            </div>
+            <div class="p-ign" id="display-ign">GUEST PLAYER</div>
+            <div class="p-uid" id="display-uid">UID: ----------</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="s-icon">🎮</span>
+                <div class="s-val">0</div>
+                <div class="s-label">Matches Played</div>
+            </div>
+            <div class="stat-box">
+                <span class="s-icon">⚔️</span>
+                <div class="s-val">0</div>
+                <div class="s-label">Total Kills</div>
+            </div>
+            <div class="stat-box">
+                <span class="s-icon">🏆</span>
+                <div class="s-val">0</div>
+                <div class="s-label">Booyahs</div>
+            </div>
+            <div class="stat-box earn">
+                <span class="s-icon">💰</span>
+                <div class="s-val">₹0</div>
+                <div class="s-label">Total Earnings</div>
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logoutUser()">LOGOUT FROM APP</button>
+
+    </div>
+
+    <script>
+        // PAGE LOAD HOTE HI STORED DATA DIKHANA
+        window.onload = function() {
+            const savedUser = localStorage.getItem("rareGamingUser");
+            if(savedUser) {
+                const user = JSON.parse(savedUser);
+                // HTML mein Name aur UID update karna
+                document.getElementById("display-ign").innerText = user.name;
+                document.getElementById("display-uid").innerText = "UID: " + user.uid;
+            } else {
+                // Agar login data nahi hai (kuch gadbad hui), toh wapas login page pe bhej do
+                window.location.href = "login.html";
+            }
+        };
+
+        // Logout function
+        function logoutUser() {
+            if(confirm("Bhai, sach mein logout karna hai?")) {
+                localStorage.removeItem("rareGamingUser"); // Memory clean karna
+                window.location.href = "login.html"; // Login page pe teleport
+            }
+        }
+    </script>
+</body>
+</html>
