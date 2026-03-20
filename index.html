@@ -19,17 +19,31 @@
             }
 
             let savedUser = localStorage.getItem("rareGamingUser");
+            let username = "Player";
             if(savedUser) {
                 let user = JSON.parse(savedUser);
+                username = user.name; // Yahi naam database mein jayega
                 document.getElementById("user-name").innerText = user.name;
                 document.getElementById("user-pfp").src = user.picture || 'logo.jpg';
                 document.getElementById("nav-pfp").src = user.picture || 'logo.jpg';
             }
 
-            let wallet = localStorage.getItem("rareWallet") || 0;
-            document.getElementById("wallet-amount").innerText = wallet;
+            // 👇 TUMHARA NAYA CLOUD SCRIPT URL 👇
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbyWwgq1lQyL0jS1-cPM1CIZNCcUd8-lyKc9xqDOzTMfn3cr-NnetjAl6USn8_TOdF3cRg/exec';
 
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbxrbctK3eaMb9hIFjb387wwqokuM8-pFwFkmegooVRormfdhzvEAp3s1pfwfem27Zqu/exec';
+            // ☁️ 1. CLOUD SE WALLET BALANCE MANGWANA
+            document.getElementById("wallet-amount").innerText = "⏳"; // Loading sign
+            fetch(scriptURL + "?action=getWallet&username=" + encodeURIComponent(username))
+                .then(res => res.text())
+                .then(bal => {
+                    document.getElementById("wallet-amount").innerText = bal;
+                    localStorage.setItem("rareWallet", bal); // Backup ke liye local save
+                }).catch(err => {
+                    // Agar net slow ho toh purana balance dikha do
+                    document.getElementById("wallet-amount").innerText = localStorage.getItem("rareWallet") || 0;
+                });
+
+            // 🏆 2. GOOGLE SHEET SE TEAMS FETCH KARNA
             fetch(scriptURL)
                 .then(res => res.json())
                 .then(data => {
