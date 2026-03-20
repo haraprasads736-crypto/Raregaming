@@ -96,6 +96,10 @@
         .rules-slides img { width: 50%; height: 100%; object-fit: contain; }
         @keyframes slideTwoAnim { 0%, 45% { transform: translateX(0); } 50%, 95% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
 
+        /* 🔥 VIP ROOM ID BUTTON CSS 🔥 */
+        .room-btn-vip { background: linear-gradient(90deg, #ff0055, #cc0044); color: white; padding: 16px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 15px; display: block; text-align: center; margin-bottom: 25px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4); border: 1px solid #ff0055; letter-spacing: 1px; transition: 0.2s; }
+        .room-btn-vip:active { transform: scale(0.97); }
+
         .matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
         .match-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: 0.2s; position: relative; }
         .match-card:active { transform: scale(0.96); }
@@ -147,6 +151,8 @@
                 <img src="rule2.jpg">
             </div>
         </div>
+
+        <a href="room.html" class="room-btn-vip">🎮 GET ROOM ID & PASS</a>
 
         <div class="matches-grid">
             <a href="match_details.html?match=BR" class="match-card">
