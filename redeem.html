@@ -6,85 +6,100 @@
     <title>Redeem Code - RARE GAMING</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; }
-        .nav-header { background: #15181e; padding: 15px 20px; display: flex; align-items: center; border-bottom: 2px solid #66fcf1; }
-        .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; border: 1px solid #66fcf1; padding: 5px 10px; border-radius: 5px; margin-right: 20px; font-size: 12px; }
-        .container { padding: 30px 20px; max-width: 400px; margin: auto; }
-        .box { background: #15181e; padding: 25px; border-radius: 15px; border: 1.5px solid #2b303b; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h2 { color: #66fcf1; font-weight: 800; text-transform: uppercase; margin-top: 0; }
-        input { width: 100%; background: #0c0e12; border: 1px solid #2b303b; color: white; padding: 15px; border-radius: 8px; font-size: 16px; font-family: 'Poppins'; text-align: center; text-transform: uppercase; margin: 20px 0; box-sizing: border-box; }
-        input:focus { border-color: #66fcf1; outline: none; }
-        .redeem-btn { width: 100%; background: #66fcf1; color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-        .redeem-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
-        .status-msg { font-size: 12px; margin-top: 15px; font-weight: 600; }
+        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        
+        .nav-header { position: absolute; top: 0; width: 100%; background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; box-sizing: border-box; }
+        .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; border: 1px solid #66fcf1; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
+        
+        .wallet-box { background: #15181e; padding: 30px; border-radius: 15px; border: 1.5px solid #2b303b; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .wallet-box h2 { color: #66fcf1; font-weight: 800; margin-bottom: 5px; text-transform: uppercase; }
+        .wallet-box p { color: #a0aab2; font-size: 12px; margin-bottom: 25px; }
+
+        .balance-text { font-size: 14px; font-weight: 600; color: white; margin-bottom: 15px; }
+        .balance-amt { font-size: 28px; font-weight: 800; color: #66fcf1; display: block; margin-bottom: 20px; }
+
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; font-size: 11px; color: #a0aab2; font-weight: 600; margin-bottom: 5px; text-transform: uppercase; }
+        .input-group input { width: 100%; background: #0c0e12; border: 1px solid #2b303b; color: white; padding: 15px; border-radius: 8px; font-family: 'Poppins'; box-sizing: border-box; font-size: 16px; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+        .input-group input:focus { border-color: #66fcf1; outline: none; }
+
+        .submit-btn { width: 100%; background: #66fcf1; color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 16px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .submit-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
     <div class="nav-header">
         <a href="index.html" class="back-btn">BACK</a>
-        <span style="font-weight:800; font-size:14px;">WALLET REFILL</span>
+        <span style="font-weight:800; font-size:14px; text-transform:uppercase;">ADD MONEY</span>
     </div>
 
-    <div class="container">
-        <div class="box">
-            <h2>REDEEM</h2>
-            <p style="font-size: 11px; color: #a0aab2;">Enter secret code to add money</p>
-            
-            <input type="text" id="couponInput" placeholder="RARE-XXXX-XXXX">
-            
-            <button class="redeem-btn" id="mainBtn" onclick="verifyCode()">REDEEM NOW</button>
-            <div id="status" class="status-msg"></div>
+    <div class="wallet-box">
+        <h2>REDEEM CODE</h2>
+        <p>Enter your 10-digit code to add money to your Wallet.</p>
+
+        <div class="balance-text">Current Balance <span class="balance-amt" id="current-wallet">⏳</span></div>
+
+        <div class="input-group">
+            <input type="text" id="redeemCode" placeholder="ENTER CODE HERE" maxlength="15">
         </div>
-        
-        <p style="font-size: 10px; color: #444; margin-top: 30px;">Contact Admin for Codes 💬</p>
+
+        <button class="submit-btn" id="redeemBtn" onclick="redeemMoney()">REDEEM NOW</button>
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxrbctK3eaMb9hIFjb387wwqokuM8-pFwFkmegooVRormfdhzvEAp3s1pfwfem27Zqu/exec';
+        // 👇 TUMHARA NAYA CLOUD SCRIPT URL 👇
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyWwgq1lQyL0jS1-cPM1CIZNCcUd8-lyKc9xqDOzTMfn3cr-NnetjAl6USn8_TOdF3cRg/exec';
 
-        function verifyCode() {
-            const code = document.getElementById("couponInput").value.trim();
-            const btn = document.getElementById("mainBtn");
-            const status = document.getElementById("status");
+        // Player ka naam nikalna
+        let username = "Player";
+        let savedUser = localStorage.getItem("rareGamingUser");
+        if(savedUser) {
+            let user = JSON.parse(savedUser);
+            username = user.name;
+        }
 
-            if (!code) {
-                alert("Please enter a code!");
-                return;
-            }
+        window.onload = function() {
+            // Screen khulte hi naya Cloud balance dikhana
+            fetch(scriptURL + "?action=getWallet&username=" + encodeURIComponent(username))
+                .then(res => res.text())
+                .then(bal => {
+                    document.getElementById("current-wallet").innerText = "₹" + bal;
+                    localStorage.setItem("rareWallet", bal); // Backup ke liye save
+                }).catch(err => {
+                    let localBal = localStorage.getItem("rareWallet") || 0;
+                    document.getElementById("current-wallet").innerText = "₹" + localBal;
+                });
+        };
 
+        function redeemMoney() {
+            let codeInput = document.getElementById("redeemCode").value.trim();
+            if (codeInput === "") { alert("Please enter a code!"); return; }
+
+            let btn = document.getElementById("redeemBtn");
+            btn.innerText = "CHECKING...";
             btn.disabled = true;
-            btn.innerText = "VERIFYING...";
-            status.innerText = "Checking code with server...";
-            status.style.color = "#a0aab2";
 
-            fetch(`${scriptURL}?action=redeem&code=${code}`)
-                .then(res => res.json())
+            // ☁️ NAYA CLOUD REDEEM SYSTEM (Sheet mein Player ka naam aur code bhejna)
+            fetch(scriptURL + "?action=redeem&code=" + encodeURIComponent(codeInput) + "&username=" + encodeURIComponent(username))
+                .then(response => response.json())
                 .then(data => {
                     if (data.status === "Success") {
-                        // Wallet update karna
-                        let currentWallet = parseInt(localStorage.getItem("rareWallet") || 0);
-                        let reward = parseInt(data.amount);
-                        localStorage.setItem("rareWallet", currentWallet + reward);
-                        
-                        status.innerText = `SUCCESS! ₹${reward} added to wallet.`;
-                        status.style.color = "#66fcf1";
-                        alert(`Successfully Redeemed ₹${reward}!`);
-                        window.location.href = "index.html";
+                        alert("🎉 ₹" + data.amount + " Added to your Wallet successfully!");
+                        window.location.href = "index.html"; // Wapas dashboard bhejo
                     } else {
-                        status.innerText = "INVALID OR USED CODE! ❌";
-                        status.style.color = "#ff4b2b";
-                        btn.disabled = false;
+                        alert("❌ Invalid or Already Used Code!");
                         btn.innerText = "REDEEM NOW";
+                        btn.disabled = false;
                     }
                 })
-                .catch(err => {
-                    status.innerText = "Network Error! Try Again.";
-                    status.style.color = "#ff4b2b";
-                    btn.disabled = false;
+                .catch(error => {
+                    alert("⚠️ Network Error! Please try again.");
                     btn.innerText = "REDEEM NOW";
+                    btn.disabled = false;
                 });
         }
     </script>
+
 </body>
 </html>
