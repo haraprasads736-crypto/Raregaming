@@ -3,72 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Match Room - RARE GAMING</title>
+    <title>Match Rooms - RARE GAMING</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
         
-        .nav-header { width: 100%; background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff0055; box-sizing: border-box; position: sticky; top: 0; z-index: 10;}
-        .back-btn { color: #ff0055; text-decoration: none; font-weight: 800; border: 1px solid #ff0055; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
+        .nav-header { width: 100%; background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; box-sizing: border-box; position: sticky; top: 0; z-index: 10;}
+        .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; border: 1px solid #66fcf1; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
         
         .container { padding: 25px 15px; width: 100%; max-width: 400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; }
 
-        /* THE SECRET VAULT DESIGN */
-        .room-card { background: linear-gradient(135deg, #15181e 0%, #0c0e12 100%); padding: 25px; border-radius: 12px; border: 1.5px solid #ff0055; text-align: center; box-shadow: 0 4px 20px rgba(255, 0, 85, 0.2); position: relative; overflow: hidden; }
-        
-        /* TOP SECRET TAG */
-        .room-card::before { content: 'TOP SECRET'; position: absolute; top: 12px; left: -35px; background: #ff0055; color: white; font-size: 10px; font-weight: 800; padding: 5px 40px; transform: rotate(-45deg); letter-spacing: 1px; box-shadow: 0 2px 5px rgba(0,0,0,0.5);}
-        
-        .room-card h3 { color: #fff; font-weight: 800; margin-top: 15px; margin-bottom: 5px; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;}
-        .room-card p { color: #a0aab2; font-size: 11px; margin-bottom: 25px; }
+        /* LOADING SPINNER */
+        #loader { text-align: center; color: #66fcf1; font-weight: 800; font-size: 14px; margin-top: 50px; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
 
-        .detail-box { background: #0c0e12; border: 1px solid #2b303b; border-radius: 8px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        /* MATCH CARD DESIGN */
+        .room-card { background: linear-gradient(135deg, #15181e 0%, #0c0e12 100%); padding: 25px; border-radius: 12px; border: 1.5px solid #2b303b; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); position: relative; overflow: hidden; margin-bottom: 20px; }
+        
+        /* UNLOCKED (GREEN/CYAN) */
+        .room-card.unlocked { border-color: #66fcf1; box-shadow: 0 4px 20px rgba(102, 252, 241, 0.15); }
+        .room-card.unlocked::before { content: 'UNLOCKED'; position: absolute; top: 12px; left: -30px; background: #66fcf1; color: #000; font-size: 10px; font-weight: 800; padding: 5px 35px; transform: rotate(-45deg); letter-spacing: 1px; }
+        
+        /* LOCKED (RED) */
+        .room-card.locked { border-color: #ff0055; box-shadow: 0 4px 20px rgba(255, 0, 85, 0.15); }
+        .room-card.locked::before { content: 'LOCKED'; position: absolute; top: 12px; left: -25px; background: #ff0055; color: white; font-size: 10px; font-weight: 800; padding: 5px 35px; transform: rotate(-45deg); letter-spacing: 1px; }
+
+        .room-card h3 { color: #fff; font-weight: 800; margin-top: 15px; margin-bottom: 5px; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;}
+        .match-type { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 20px; }
+        .type-free { background: #25d366; color: #000; }
+        .type-paid { background: #ff0055; color: #fff; }
+
+        .detail-box { background: #0c0e12; border: 1px solid #2b303b; border-radius: 8px; padding: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
         .detail-text { text-align: left; }
         .detail-text span { display: block; color: #a0aab2; font-size: 10px; font-weight: 600; text-transform: uppercase; margin-bottom: 3px;}
-        .detail-text strong { color: #66fcf1; font-size: 18px; font-weight: 800; letter-spacing: 2px;}
+        .detail-text strong { color: #fff; font-size: 14px; font-weight: 800; letter-spacing: 1px;}
         
-        .copy-btn { background: #66fcf1; color: #000; border: none; padding: 8px 15px; border-radius: 5px; font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.2s; text-transform: uppercase;}
+        .copy-btn { background: #66fcf1; color: #000; border: none; padding: 6px 12px; border-radius: 5px; font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.2s; text-transform: uppercase;}
         .copy-btn:active { transform: scale(0.95); }
-
+        
+        .locked-btn { background: #ff0055; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 800; font-size: 12px; cursor: pointer; width: 100%; text-transform: uppercase; margin-top: 10px; text-decoration: none; display: block; box-sizing: border-box;}
     </style>
 </head>
 <body>
 
     <div class="nav-header">
         <a href="index.html" class="back-btn">BACK</a>
-        <span style="font-weight:800; font-size:14px; text-transform:uppercase;">MATCH ROOM</span>
+        <span style="font-weight:800; font-size:14px; text-transform:uppercase;">ROOM DETAILS</span>
     </div>
 
-    <div class="container">
-        <div class="room-card">
-            <h3>🎮 LIVE ROOM DETAILS</h3>
-            <p>Match start hone se 15 minute pehle Room ID aur Password yahan update hoga. Refresh karte rahein!</p>
-
-            <div class="detail-box">
-                <div class="detail-text">
-                    <span>ROOM ID</span>
-                    <strong id="roomId">WAITING...</strong>
-                </div>
-                <button class="copy-btn" onclick="copyText('roomId')">COPY</button>
-            </div>
-
-            <div class="detail-box">
-                <div class="detail-text">
-                    <span>PASSWORD</span>
-                    <strong id="roomPass">****</strong>
-                </div>
-                <button class="copy-btn" onclick="copyText('roomPass')">COPY</button>
-            </div>
+    <div class="container" id="rooms-container">
+        <div id="loader">🔄 CHECKING ACCESS...</div>
         </div>
-    </div>
 
     <script>
-        // Copy Button Logic
-        function copyText(elementId) {
-            let text = document.getElementById(elementId).innerText;
-            if(text === "WAITING..." || text === "****") {
-                alert("⚠️ Abhi admin ne room nahi banaya hai! Thodi der mein check karein.");
+        // TUMHARA NAYA DEPLOY KIYA HUA SCRIPT URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyaTlBw70BReutApo88k-yJxMgMQ6PFzogZgQ2xZNLlLKVhQx5dmLaeBn4FBaki-5TZDw/exec';
+
+        let username = "Player";
+        let savedUser = localStorage.getItem("rareGamingUser");
+        if(savedUser) {
+            let user = JSON.parse(savedUser);
+            username = user.name;
+        }
+
+        window.onload = function() {
+            fetchRooms();
+        };
+
+        function fetchRooms() {
+            fetch(scriptURL + "?action=getRooms&username=" + encodeURIComponent(username))
+                .then(response => response.json())
+                .then(data => {
+                    let container = document.getElementById("rooms-container");
+                    container.innerHTML = ""; // Clear loader
+
+                    if(data.length === 0) {
+                        container.innerHTML = "<h4 style='text-align:center; color:#a0aab2;'>No Matches Found</h4>";
+                        return;
+                    }
+
+                    data.forEach(match => {
+                        let isUnlocked = match.status === "UNLOCKED";
+                        let cardClass = isUnlocked ? "unlocked" : "locked";
+                        let typeClass = match.type.toLowerCase() === "free" ? "type-free" : "type-paid";
+                        
+                        let cardHTML = `
+                            <div class="room-card ${cardClass}">
+                                <h3>🎮 ${match.name}</h3>
+                                <span class="match-type ${typeClass}">${match.type.toUpperCase()} MATCH</span>
+
+                                <div class="detail-box">
+                                    <div class="detail-text">
+                                        <span>ROOM ID</span>
+                                        <strong style="color: ${isUnlocked ? '#66fcf1' : '#ff0055'}">${match.id}</strong>
+                                    </div>
+                                    ${isUnlocked ? `<button class="copy-btn" onclick="copyText('${match.id}')">COPY</button>` : ``}
+                                </div>
+
+                                <div class="detail-box">
+                                    <div class="detail-text">
+                                        <span>PASSWORD</span>
+                                        <strong style="color: ${isUnlocked ? '#66fcf1' : '#ff0055'}">${match.pass}</strong>
+                                    </div>
+                                    ${isUnlocked ? `<button class="copy-btn" onclick="copyText('${match.pass}')">COPY</button>` : ``}
+                                </div>
+
+                                ${!isUnlocked ? `<a href="index.html" class="locked-btn">🔒 REGISTER TO UNLOCK</a>` : ``}
+                            </div>
+                        `;
+                        container.innerHTML += cardHTML;
+                    });
+                })
+                .catch(error => {
+                    document.getElementById("rooms-container").innerHTML = "<h4 style='text-align:center; color:#ff0055;'>⚠️ Connection Error!</h4>";
+                });
+        }
+
+        function copyText(text) {
+            if(text === "WAITING..." || text === "****" || text === "ACCESS DENIED" || text === "🔒 PAY ENTRY") {
+                alert("⚠️ Abhi admin ne room update nahi kiya hai!");
                 return;
             }
             navigator.clipboard.writeText(text).then(() => {
