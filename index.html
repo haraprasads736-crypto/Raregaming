@@ -22,24 +22,23 @@
             let username = "Player";
             if(savedUser) {
                 let user = JSON.parse(savedUser);
-                username = user.name; // Yahi naam database mein jayega
+                username = user.name; 
                 document.getElementById("user-name").innerText = user.name;
                 document.getElementById("user-pfp").src = user.picture || 'logo.jpg';
                 document.getElementById("nav-pfp").src = user.picture || 'logo.jpg';
             }
 
-            // 👇 TUMHARA NAYA CLOUD SCRIPT URL 👇
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbyWwgq1lQyL0jS1-cPM1CIZNCcUd8-lyKc9xqDOzTMfn3cr-NnetjAl6USn8_TOdF3cRg/exec';
+            // 👇 NAYA DEPLOY ID YAHAN HAI 👇
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbyJtD9m9kekQ8qkJQlAXB7cXsnJ1ffA3gu_Joqg8mKmcOD9I1FBZlcZyEfDL3vZLu3WTg/exec';
 
             // ☁️ 1. CLOUD SE WALLET BALANCE MANGWANA
-            document.getElementById("wallet-amount").innerText = "⏳"; // Loading sign
+            document.getElementById("wallet-amount").innerText = "⏳"; 
             fetch(scriptURL + "?action=getWallet&username=" + encodeURIComponent(username))
                 .then(res => res.text())
                 .then(bal => {
                     document.getElementById("wallet-amount").innerText = bal;
-                    localStorage.setItem("rareWallet", bal); // Backup ke liye local save
+                    localStorage.setItem("rareWallet", bal); 
                 }).catch(err => {
-                    // Agar net slow ho toh purana balance dikha do
                     document.getElementById("wallet-amount").innerText = localStorage.getItem("rareWallet") || 0;
                 });
 
@@ -78,7 +77,12 @@
         .wallet-info { text-align: left; }
         .wallet-label { font-size: 9px; color: #a0aab2; font-weight: 600; letter-spacing: 1px; }
         .wallet-val { font-size: 22px; font-weight: 800; color: #66fcf1; display: block; }
-        .add-money-btn { background: #66fcf1; color: #000; padding: 8px 15px; border-radius: 6px; font-size: 11px; font-weight: 800; text-decoration: none; }
+        
+        /* Action Buttons Styling */
+        .wallet-actions { display: flex; flex-direction: column; gap: 8px; }
+        .action-btn { padding: 6px 12px; border-radius: 6px; font-size: 10px; font-weight: 800; text-decoration: none; text-transform: uppercase; border: none; text-align: center; }
+        .btn-add { background: #66fcf1; color: #000; }
+        .btn-withdraw { background: #ff4b2b; color: #fff; border: 1px solid #ff4b2b; }
 
         .container { padding: 5px 15px; max-width: 480px; margin: auto; }
         
@@ -125,7 +129,10 @@
             <span class="wallet-label">YOUR WALLET</span>
             <span class="wallet-val">₹<span id="wallet-amount">0</span></span>
         </div>
-        <a href="redeem.html" class="add-money-btn">REDEEM CODE</a>
+        <div class="wallet-actions">
+            <a href="redeem.html" class="action-btn btn-add">➕ ADD MONEY</a>
+            <a href="withdraw.html" class="action-btn btn-withdraw">💸 WITHDRAW</a>
+        </div>
     </div>
 
     <div class="profile-header">
