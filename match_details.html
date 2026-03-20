@@ -3,244 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RARE GAMING - Match Details</title>
+    <title>Match Details - RARE GAMING</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap');
+        body { background-color: #090a0f; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; }
         
-        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+        .nav-header { background: rgba(21, 24, 30, 0.9); padding: 15px; border-bottom: 1px solid rgba(255, 0, 127, 0.3); text-align: left; position: sticky; top: 0;}
+        .back-btn { color: #00f2fe; text-decoration: none; font-weight: 800; font-size: 14px; text-transform: uppercase; border: 1px solid #00f2fe; padding: 5px 10px; border-radius: 5px;}
         
-        .nav-header { background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; }
-        .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; font-size: 14px; background: rgba(102, 252, 241, 0.1); padding: 5px 10px; border-radius: 5px; border: 1px solid #66fcf1; }
-        .nav-title { font-weight: 800; font-size: 18px; color: white; letter-spacing: 1px; text-transform: uppercase; }
+        .container { padding: 20px; max-width: 400px; margin: auto; }
         
-        .container { padding: 15px; max-width: 480px; margin: auto; }
-
-        .tabs-container { display: flex; background: #1a1d24; border-radius: 8px; margin-bottom: 20px; padding: 5px; border: 1px solid #2b303b; }
-        .tab-btn { flex: 1; padding: 10px; text-align: center; font-size: 12px; font-weight: 800; color: #a0aab2; cursor: pointer; border-radius: 5px; text-transform: uppercase; transition: 0.3s; }
-        .tab-btn.active { background: #66fcf1; color: #000; box-shadow: 0 0 10px rgba(102, 252, 241, 0.4); }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .detail-card { background: #15181e; border-radius: 12px; border: 1.5px solid #2b303b; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .d-banner { height: 130px; background-size: cover; background-position: center; position: relative; }
-        .d-badge { position: absolute; top: 10px; left: 10px; background: #ff4b2b; color: white; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; }
+        .match-card { background: linear-gradient(135deg, #12141d 0%, #0b0c10 100%); border-radius: 16px; border: 1px solid rgba(122, 0, 255, 0.3); padding: 25px 20px; box-shadow: 0 8px 20px rgba(122, 0, 255, 0.15); margin-top: 20px;}
         
-        .d-body { padding: 15px; }
-        .d-title { font-size: 18px; font-weight: 800; color: #66fcf1; margin-bottom: 5px; }
-        .d-time { font-size: 11px; color: #a0aab2; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+        .title { font-size: 26px; font-weight: 800; margin-bottom: 5px; background: linear-gradient(90deg, #ff007a, #7a00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase;}
+        .fee-box { display: inline-block; background: rgba(0, 242, 254, 0.1); border: 1px solid #00f2fe; color: #00f2fe; font-size: 14px; font-weight: 800; padding: 5px 15px; border-radius: 20px; margin-bottom: 25px; }
         
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .info-box { background: #1a1d24; border: 1px solid #2b303b; padding: 10px 5px; border-radius: 8px; text-align: center; }
-        .i-label { font-size: 9px; color: #a0aab2; font-weight: 600; text-transform: uppercase; margin-bottom: 3px; }
-        .i-val { font-size: 14px; font-weight: 800; color: white; }
-        .i-val.green { color: #4de2d6; }
-        .i-val.free { color: #ff4b2b; font-size: 16px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .info-row { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 10px 0; font-size: 12px; color: #a0aab2; font-weight: 600;}
+        .info-row span { color: #fff; font-weight: 700; }
 
-        .prize-dist { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #2b303b; }
-        .p-row { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; padding: 4px 0; border-bottom: 1px solid #1a1d24; }
-        .p-row:last-child { border-bottom: none; }
-        .p-row span:nth-child(2) { color: #66fcf1; }
-
-        /* LIVE TEAMS LIST CSS */
-        .team-list-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #2b303b; }
-        .team-list-title { margin-top: 0; color: #66fcf1; font-size: 13px; text-transform: uppercase; border-bottom: 1px solid #1a1d24; padding-bottom: 8px; margin-bottom: 8px; }
-        .teams-container { max-height: 200px; overflow-y: auto; }
-        .team-item { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; padding: 6px 0; border-bottom: 1px dashed #1a1d24; color: #d1d5db; }
-        .team-item:last-child { border-bottom: none; }
-
-        .register-btn { display: block; width: 100%; background: #66fcf1; color: #000; padding: 15px; text-align: center; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 800; text-transform: uppercase; box-shadow: 0 4px 10px rgba(102, 252, 241, 0.3); transition: 0.3s; box-sizing: border-box; }
-        .register-btn:active { transform: scale(0.97); background: #4de2d6; }
-        .register-btn.free-btn { background: #25d366; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
-
-        .empty-state { text-align: center; padding: 40px 20px; background: #15181e; border-radius: 12px; border: 1.5px dashed #2b303b; color: #a0aab2; }
-        .empty-icon { font-size: 40px; margin-bottom: 10px; }
-        .empty-text { font-size: 12px; font-weight: 600; }
+        .join-btn { background: linear-gradient(90deg, #ff007a, #ff4b2b); color: #fff; border: none; padding: 16px; width: 100%; border-radius: 10px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.2s; text-transform: uppercase; margin-top: 25px; box-shadow: 0 4px 15px rgba(255, 0, 122, 0.4); letter-spacing: 1px;}
+        .join-btn:active { transform: scale(0.96); }
+        .join-btn:disabled { background: #2b303b; color: #6e7681; box-shadow: none; cursor: not-allowed; }
+        
+        #statusMsg { margin-top: 15px; font-size: 12px; font-weight: 700; }
     </style>
 </head>
 <body>
 
     <div class="nav-header">
         <a href="index.html" class="back-btn">⬅ BACK</a>
-        <span class="nav-title">MATCH DETAILS</span>
-        <div style="width: 60px;"></div>
     </div>
 
     <div class="container">
-        <div class="tabs-container">
-            <div class="tab-btn active" onclick="switchTab('upcoming')">Upcoming</div>
-            <div class="tab-btn" onclick="switchTab('ongoing')">Ongoing</div>
-            <div class="tab-btn" onclick="switchTab('result')">Result</div>
-        </div>
+        <div class="match-card">
+            <h1 class="title" id="m-name">LOADING...</h1>
+            <div class="fee-box" id="m-fee">ENTRY: ₹0</div>
+            
+            <div class="info-row">MAP <span>BERMUDA / PURGATORY</span></div>
+            <div class="info-row">MODE <span>CUSTOM ROOM</span></div>
+            <div class="info-row">PRIZE <span>CHECK PRIZE POOL</span></div>
 
-        <div id="upcoming" class="tab-content active">
-            <div class="detail-card">
-                <div class="d-banner" id="match-banner">
-                    <div class="d-badge" id="match-badge">Loading...</div>
-                </div>
-                <div class="d-body">
-                    <div class="d-title" id="match-title">Loading...</div>
-                    <div class="d-time" id="match-time">🕒 Loading...</div>
-                    
-                    <div class="info-grid" id="match-info-grid">
-                        <div class="info-box"><div class="i-label">Prize Pool</div><div class="i-val green" id="prize-pool">--</div></div>
-                        <div class="info-box"><div class="i-label">Per Kill</div><div class="i-val" id="per-kill">--</div></div>
-                        <div class="info-box"><div class="i-label">Entry Fee</div><div id="entry-fee-box">--</div></div>
-                    </div>
-
-                    <div class="prize-dist" id="prize-dist-box">
-                        <div class="p-row"><span>🏆 1st Prize</span><span>₹150</span></div>
-                        <div class="p-row"><span>🥈 2nd Prize</span><span>₹70</span></div>
-                    </div>
-
-                    <div class="team-list-box" id="team-list-container">
-                        <h3 class="team-list-title">Registered Teams 🛡️</h3>
-                        <div class="teams-container" id="teams-list">
-                            <div style="text-align:center; padding: 10px; color:#a0aab2; font-size:11px;">Fetching teams from server...</div>
-                        </div>
-                    </div>
-
-                    <a href="register.html" class="register-btn" id="register-btn">REGISTER NOW</a>
-                </div>
-            </div>
-        </div>
-
-        <div id="ongoing" class="tab-content">
-            <div class="empty-state">
-                <div class="empty-icon">🎮</div>
-                <div class="empty-text">No matches are currently ongoing. Check the Upcoming tab!</div>
-            </div>
-        </div>
-
-        <div id="result" class="tab-content">
-            <div class="empty-state">
-                <div class="empty-icon">🏆</div>
-                <div class="empty-text">Results will be updated here after the match ends.</div>
-            </div>
+            <button class="join-btn" id="joinBtn" onclick="joinMatch()">PAY & JOIN MATCH</button>
+            <div id="statusMsg"></div>
         </div>
     </div>
 
     <script>
-        // Apps Script URL - Teams ka data yahan se aayega
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxrbctK3eaMb9hIFjb387wwqokuM8-pFwFkmegooVRormfdhzvEAp3s1pfwfem27Zqu/exec';
+        // 👇 TUMHARA NAYA DEPLOY KIYA HUA SCRIPT URL YAHAN HAI 👇
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbx2z4GZ8uIyKH9yTQqD_n3XBYEQe3_3k2YyQobq5ucoguHkYu3kwCZer3qYlOR1bstAlA/exec';
 
-        // 1. URL se pata lagana kaunsa match click hua hai
+        // URL se check karna ki player ne kaunsa match click kiya hai
         const urlParams = new URLSearchParams(window.location.search);
-        const matchId = urlParams.get('match') || 'BR'; 
+        const matchID = urlParams.get('match');
+        
+        let matchName = "Unknown Match";
+        let entryFee = 0;
 
-        // 2. Har match ka alag data aur FEES bhi yahan set hai!
-        const matchConfig = {
-            "BR": {
-                title: "BR SQUAD BATTLE",
-                time: "🕒 23 MAR 2026 | 07:00 PM",
-                prize: "₹220",
-                perKill: "₹0",
-                entry: '<div class="i-val free">FREE</div>',
-                banner: "br_poster.jpg",
-                badge: "Special Free Entry",
-                available: true, 
-                feeParam: "free" // Wallet system ke liye
-            },
-            "CS": {
-                title: "CLASH SQUAD MATCH",
-                time: "🕒 NOT DECIDED",
-                prize: "TBD",
-                perKill: "TBD",
-                entry: '<div class="i-val" style="color:#ff4b2b;">₹50</div>',
-                banner: "cs_poster.jpg",
-                badge: "Upcoming",
-                available: false, 
-                feeParam: "50"
-            },
-            "LW": {
-                title: "LONE WOLF 1",
-                time: "🕒 DECIDING SOON",
-                prize: "TBD",
-                perKill: "TBD",
-                entry: '<div class="i-val" style="color:#ff4b2b;">₹15</div>',
-                banner: "lw_poster.jpg",
-                badge: "Upcoming",
-                available: false, 
-                feeParam: "15"
-            },
-            "1V1": {
-                title: "1V1 MATCH",
-                time: "🕒 DECIDING SOON",
-                prize: "TBD",
-                perKill: "TBD",
-                entry: '<div class="i-val" style="color:#ff4b2b;">₹30</div>',
-                banner: "1v1_poster.jpg",
-                badge: "Upcoming",
-                available: false, 
-                feeParam: "30"
-            }
-        };
+        if(matchID === "BR") { matchName = "BR MATCH"; entryFee = 0; }
+        else if(matchID === "CS") { matchName = "CS MATCH"; entryFee = 50; }
+        else if(matchID === "LW") { matchName = "LONE WOLF"; entryFee = 15; }
+        else if(matchID === "1V1") { matchName = "1V1 MATCH"; entryFee = 30; }
 
-        const data = matchConfig[matchId];
+        document.getElementById("m-name").innerText = matchName;
+        document.getElementById("m-fee").innerText = entryFee === 0 ? "ENTRY: FREE" : "ENTRY: ₹" + entryFee;
+        
+        let joinBtn = document.getElementById("joinBtn");
+        joinBtn.innerText = entryFee === 0 ? "JOIN FOR FREE" : "PAY ₹" + entryFee + " & JOIN";
 
-        // 3. Page par data set karna
-        document.getElementById('match-title').innerText = data.title;
-        document.getElementById('match-time').innerText = data.time;
-        document.getElementById('match-banner').style.backgroundImage = `url('${data.banner}')`;
-        document.getElementById('match-badge').innerText = data.badge;
-
-        const regBtn = document.getElementById('register-btn');
-
-        if (data.available) {
-            document.getElementById('prize-pool').innerHTML = data.prize;
-            document.getElementById('per-kill').innerHTML = data.perKill;
-            document.getElementById('entry-fee-box').innerHTML = data.entry;
-            
-            // SMART LINK: Jo form ko batayega paise katne hain ya nahi
-            regBtn.href = "register.html?match=" + matchId + "&fee=" + data.feeParam; 
-            
-            if(data.feeParam === "free") {
-                regBtn.innerText = "REGISTER FOR FREE";
-                regBtn.classList.add("free-btn");
-            } else {
-                regBtn.innerText = "PAY ₹" + data.feeParam + " & REGISTER";
-            }
-
-            // 4. GOOGLE SHEET SE TEAMS FETCH KARNA
-            fetch(scriptURL)
-                .then(res => res.json())
-                .then(sheetData => {
-                    let teams = sheetData[matchId]; // BR, CS wagaira ki list
-                    let listEl = document.getElementById("teams-list");
-                    
-                    if (!teams || teams.length === 0) {
-                        listEl.innerHTML = "<div style='text-align:center; padding: 10px; color:#a0aab2;'>No teams registered yet. Be the first! 🏆</div>";
-                    } else {
-                        listEl.innerHTML = teams.map((t, index) => `<div class='team-item'><span>${index + 1}. ${t}</span> <span>⚔️</span></div>`).join('');
-                    }
-                }).catch(err => {
-                    document.getElementById("teams-list").innerHTML = "<div style='text-align:center; padding: 10px; color:#ff4b2b;'>Network Error! Could not load teams.</div>";
-                });
-
-        } else {
-            // Agar match available nahi hai toh boxes chhupa do
-            document.getElementById('match-info-grid').style.display = 'none';
-            document.getElementById('prize-dist-box').style.display = 'none';
-            document.getElementById('team-list-container').style.display = 'none'; // Teams box bhi chupao
-            
-            // Button ko lock kar do aur text badal do
-            regBtn.innerText = "REGISTRATION CLOSED";
-            regBtn.style.background = "#333";
-            regBtn.style.color = "#888";
-            regBtn.style.pointerEvents = "none"; // Click nahi hoga
-            regBtn.href = "#";
+        let username = "Player";
+        let savedUser = localStorage.getItem("rareGamingUser");
+        if(savedUser) {
+            username = JSON.parse(savedUser).name;
         }
 
-        // Tabs badalne ka code
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
+        function joinMatch() {
+            joinBtn.disabled = true;
+            joinBtn.innerText = "⏳ PROCESSING...";
+            document.getElementById("statusMsg").innerText = "Cloud se connect kar raha hai...";
+            document.getElementById("statusMsg").style.color = "#00f2fe";
+
+            fetch(`${scriptURL}?action=joinMatch&username=${encodeURIComponent(username)}&matchName=${encodeURIComponent(matchID)}&fee=${entryFee}`)
+            .then(res => res.text())
+            .then(status => {
+                if(status === "Success") {
+                    document.getElementById("statusMsg").innerHTML = "✅ SUCCESS! Match Joined. <br>Ab Room ID page par jao.";
+                    document.getElementById("statusMsg").style.color = "#00e676";
+                    joinBtn.innerText = "JOINED SUCESSFULLY";
+                    // Wallet balance update karne ke liye local cache clear karo
+                    localStorage.removeItem("lastRefresh"); 
+                } 
+                else if(status === "Low Balance") {
+                    document.getElementById("statusMsg").innerHTML = "🚫 FAILED! Wallet mein paise kam hain. Pehle Add Funds karo.";
+                    document.getElementById("statusMsg").style.color = "#ff007a";
+                    joinBtn.innerText = "PAY ₹" + entryFee + " & JOIN";
+                    joinBtn.disabled = false;
+                }
+                else if(status === "Already Joined") {
+                    document.getElementById("statusMsg").innerHTML = "⚠️ Tum pehle se hi is match mein ho!";
+                    document.getElementById("statusMsg").style.color = "#ffea00";
+                    joinBtn.innerText = "ALREADY JOINED";
+                }
+                else {
+                    document.getElementById("statusMsg").innerText = "❌ Error: " + status;
+                    document.getElementById("statusMsg").style.color = "#ff007a";
+                    joinBtn.innerText = "TRY AGAIN";
+                    joinBtn.disabled = false;
+                }
+            })
+            .catch(err => {
+                document.getElementById("statusMsg").innerText = "⚠️ Network Error! Internet check karo.";
+                document.getElementById("statusMsg").style.color = "#ff007a";
+                joinBtn.disabled = false;
+                joinBtn.innerText = "PAY ₹" + entryFee + " & JOIN";
+            });
         }
     </script>
 </body>
-    </html>
-    
+</html>
