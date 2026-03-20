@@ -11,54 +11,69 @@
         .nav-header { width: 100%; background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; box-sizing: border-box; position: sticky; top: 0; z-index: 10;}
         .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; border: 1px solid #66fcf1; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
         
-        .container { padding: 20px; width: 100%; max-width: 400px; box-sizing: border-box; margin-top: 10px; }
+        .container { padding: 15px; width: 100%; max-width: 400px; box-sizing: border-box; margin-top: 5px; }
 
-        .wallet-box { background: #15181e; padding: 25px; border-radius: 15px; border: 1.5px solid #2b303b; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); margin-bottom: 20px; }
-        .wallet-box h2 { color: #66fcf1; font-weight: 800; margin-top: 0; margin-bottom: 5px; text-transform: uppercase; }
-        .wallet-box p { color: #a0aab2; font-size: 11px; margin-bottom: 20px; }
+        /* NAYA PAYMENT BOX */
+        .payment-box { background: linear-gradient(135deg, #15181e 0%, #0c0e12 100%); padding: 20px; border-radius: 12px; border: 1.5px dashed #25d366; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2); }
+        .payment-box h3 { color: #25d366; font-weight: 800; margin-top: 0; margin-bottom: 5px; font-size: 15px; text-transform: uppercase; }
+        .payment-box p { color: #a0aab2; font-size: 11px; margin-bottom: 15px; }
+        
+        .qr-image { width: 140px; height: 140px; border: 3px solid #66fcf1; border-radius: 8px; margin-bottom: 15px; object-fit: cover; }
+        
+        .upi-container { display: flex; justify-content: space-between; align-items: center; background: #0c0e12; border: 1px solid #2b303b; border-radius: 8px; padding: 8px 12px; gap: 10px; }
+        .upi-text { font-size: 11px; color: white; font-weight: 600; text-align: left; }
+        .upi-text span { display: block; color: #66fcf1; font-size: 12px; font-weight: 800; }
+        
+        .wa-btn { background: #25d366; color: #000; text-decoration: none; padding: 8px 12px; border-radius: 6px; font-weight: 800; font-size: 11px; display: flex; align-items: center; gap: 5px; text-transform: uppercase; white-space: nowrap; }
 
-        .balance-text { font-size: 13px; font-weight: 600; color: white; margin-bottom: 10px; }
-        .balance-amt { font-size: 32px; font-weight: 800; color: #66fcf1; display: block; margin-bottom: 20px; }
+        /* PURANA REDEEM BOX */
+        .wallet-box { background: #15181e; padding: 25px; border-radius: 12px; border: 1.5px solid #2b303b; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .wallet-box h3 { color: #66fcf1; font-weight: 800; margin-top: 0; margin-bottom: 5px; font-size: 15px; text-transform: uppercase; }
+        
+        .balance-text { font-size: 12px; font-weight: 600; color: #a0aab2; margin-top: 15px; margin-bottom: 5px; }
+        .balance-amt { font-size: 28px; font-weight: 800; color: #66fcf1; display: block; margin-bottom: 20px; }
 
         .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group input { width: 100%; background: #0c0e12; border: 1px dashed #66fcf1; color: #66fcf1; padding: 15px; border-radius: 8px; font-family: 'Poppins'; box-sizing: border-box; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
-        .input-group input:focus { border-style: solid; outline: none; }
+        .input-group input { width: 100%; background: #0c0e12; border: 1px solid #66fcf1; color: #66fcf1; padding: 15px; border-radius: 8px; font-family: 'Poppins'; box-sizing: border-box; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+        .input-group input:focus { outline: none; box-shadow: 0 0 10px rgba(102, 252, 241, 0.4); }
 
         .submit-btn { width: 100%; background: #66fcf1; color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 16px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
         .submit-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
-
-        /* NAYA BUY STORE SECTION */
-        .store-box { background: linear-gradient(135deg, #1a1d24 0%, #0c0e12 100%); padding: 20px; border-radius: 15px; border: 1px dashed #25d366; text-align: center; }
-        .store-box h3 { color: #25d366; margin-top: 0; font-size: 16px; text-transform: uppercase; }
-        .store-box p { color: #a0aab2; font-size: 11px; margin-bottom: 15px; }
-        .buy-btn { display: block; width: 100%; background: #25d366; color: #000; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 14px; text-transform: uppercase; text-decoration: none; box-sizing: border-box; }
-        .buy-btn span { font-size: 18px; vertical-align: middle; margin-right: 5px; }
     </style>
 </head>
 <body>
 
     <div class="nav-header">
         <a href="index.html" class="back-btn">BACK</a>
-        <span style="font-weight:800; font-size:14px; text-transform:uppercase;">WALLET</span>
+        <span style="font-weight:800; font-size:14px; text-transform:uppercase;">ADD MONEY</span>
     </div>
 
     <div class="container">
-        <div class="store-box">
-            <h3>Don't have a Code?</h3>
-            <p>Buy a wallet code instantly using PhonePe, Google Pay, or Paytm. 100% Safe & Instant Delivery.</p>
-            <a href="#" id="buy-store-link" class="buy-btn" onclick="alert('Store is setting up... Check back soon!')"><span>🛒</span> BUY CODE INSTANTLY</a>
+        
+        <div class="payment-box">
+            <h3>STEP 1: PAY & GET CODE</h3>
+            <p>Scan QR or copy UPI ID to pay. Send the screenshot on WhatsApp to receive your secret Wallet Code.</p>
+            
+            <img src="my_qr.jpg" alt="Scan to Pay" class="qr-image">
+            
+            <div class="upi-container">
+                <div class="upi-text">
+                    UPI ID:
+                    <span>8328875119-3@ybl</span>
+                </div>
+                <a href="https://wa.me/917606014322?text=Hi%20Rare%20Gaming,%20I%20have%20paid%20money.%20Here%20is%20my%20screenshot%20for%20the%20wallet%20code!" class="wa-btn">
+                    <span>💬</span> SEND SS
+                </a>
+            </div>
         </div>
 
-        <div style="text-align: center; color: #a0aab2; font-weight: 800; margin: 15px 0; font-size: 12px;">OR</div>
-
         <div class="wallet-box">
-            <h2>REDEEM CODE</h2>
-            <p>Paste your purchased 10-digit code below.</p>
-
+            <h3>STEP 2: REDEEM CODE</h3>
+            
             <div class="balance-text">Current Balance <span class="balance-amt" id="current-wallet">⏳</span></div>
 
             <div class="input-group">
-                <input type="text" id="redeemCode" placeholder="ENTER CODE HERE" maxlength="15">
+                <input type="text" id="redeemCode" placeholder="ENTER 10-DIGIT CODE" maxlength="15">
             </div>
 
             <button class="submit-btn" id="redeemBtn" onclick="redeemMoney()">REDEEM NOW</button>
@@ -66,7 +81,7 @@
     </div>
 
     <script>
-        // TUMHARA NAYA CLOUD SCRIPT URL
+        // NAYA CLOUD SCRIPT URL
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyJtD9m9kekQ8qkJQlAXB7cXsnJ1ffA3gu_Joqg8mKmcOD9I1FBZlcZyEfDL3vZLu3WTg/exec';
 
         let username = "Player";
