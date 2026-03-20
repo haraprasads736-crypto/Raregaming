@@ -6,21 +6,25 @@
     <title>Add Money - RARE GAMING</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        
+        /* 1. Body se Flex aur Center hata diya, ab ye normal app ki tarah top se shuru hoga */
+        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
         
         .nav-header { width: 100%; background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; box-sizing: border-box; position: sticky; top: 0; z-index: 10;}
         .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; border: 1px solid #66fcf1; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
         
-        .container { padding: 15px; width: 100%; max-width: 400px; box-sizing: border-box; margin-top: 5px; }
+        /* 2. Container mein proper top-margin aur gap laga diya */
+        .container { padding: 25px 15px; width: 100%; max-width: 400px; margin: 0 auto; box-sizing: border-box; display: flex; flex-direction: column; gap: 25px; }
 
         /* NAYA PAYMENT BOX */
-        .payment-box { background: linear-gradient(135deg, #15181e 0%, #0c0e12 100%); padding: 20px; border-radius: 12px; border: 1.5px dashed #25d366; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2); }
+        .payment-box { background: linear-gradient(135deg, #15181e 0%, #0c0e12 100%); padding: 20px; border-radius: 12px; border: 1.5px dashed #25d366; text-align: center; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.15); }
         .payment-box h3 { color: #25d366; font-weight: 800; margin-top: 0; margin-bottom: 5px; font-size: 15px; text-transform: uppercase; }
         .payment-box p { color: #a0aab2; font-size: 11px; margin-bottom: 15px; }
         
-        .qr-image { width: 140px; height: 140px; border: 3px solid #66fcf1; border-radius: 8px; margin-bottom: 15px; object-fit: cover; }
+        /* 3. QR Code thoda smart/chhota kar diya */
+        .qr-image { width: 120px; height: 120px; border: 2.5px solid #66fcf1; border-radius: 8px; margin-bottom: 15px; object-fit: cover; }
         
-        .upi-container { display: flex; justify-content: space-between; align-items: center; background: #0c0e12; border: 1px solid #2b303b; border-radius: 8px; padding: 8px 12px; gap: 10px; }
+        .upi-container { display: flex; justify-content: space-between; align-items: center; background: #0c0e12; border: 1px solid #2b303b; border-radius: 8px; padding: 10px 12px; gap: 10px; }
         .upi-text { font-size: 11px; color: white; font-weight: 600; text-align: left; }
         .upi-text span { display: block; color: #66fcf1; font-size: 12px; font-weight: 800; }
         
@@ -78,6 +82,7 @@
 
             <button class="submit-btn" id="redeemBtn" onclick="redeemMoney()">REDEEM NOW</button>
         </div>
+        
     </div>
 
     <script>
