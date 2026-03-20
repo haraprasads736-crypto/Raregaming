@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Details</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+        
+        .bg-orb-1 { position: fixed; top: -10%; left: -20%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 0, 122, 0.2) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
+        .bg-orb-2 { position: fixed; bottom: -10%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(122, 0, 255, 0.2) 0%, transparent 70%); filter: blur(50px); z-index: -1; }
+
+        .nav-header { padding: 12px; background: rgba(5, 5, 8, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; }
+        .back-btn { color: #00f2fe; text-decoration: none; font-weight: 800; border: 1px solid #00f2fe; padding: 5px 12px; border-radius: 6px; font-size: 12px; }
+
+        .container { padding: 20px; max-width: 450px; margin: auto; }
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); }
+
+        .banner { width: 100%; height: 170px; border-radius: 15px; background-size: cover; background-position: center; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        h2 { font-size: 24px; font-weight: 800; color: #fff; margin: 0; text-transform: uppercase; }
+        .time { font-size: 11px; color: #00f2fe; margin-bottom: 20px; display: block; }
+
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+        .info-box { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .label { font-size: 9px; color: #a0aab2; text-transform: uppercase; margin-bottom: 5px; }
+        .val { font-size: 16px; font-weight: 800; color: #fff; }
+
+        .prize-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.05); }
+        .p-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .p-row:last-child { border-bottom: none; }
+        .p-rank { font-weight: 700; color: #ff007a; }
+        .p-win { font-weight: 800; color: #00f2fe; }
+
+        .reg-btn { display: block; width: 100%; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; padding: 18px; border: none; border-radius: 15px; font-weight: 800; font-size: 16px; text-transform: uppercase; cursor: pointer; text-decoration: none; text-align: center; box-sizing: border-box; box-shadow: 0 0 20px rgba(255, 0, 122, 0.4); }
+    </style>
+</head>
+<body>
+    <div class="bg-orb-1"></div><div class="bg-orb-2"></div>
+    <div class="nav-header"><a href="index.html" class="back-btn">⬅ BACK</a></div>
+
+    <div class="container">
+        <div class="glass-panel">
+            <div class="banner" id="match-banner"></div>
+            <h2 id="mName">LOADING...</h2>
+            <span class="time" id="mTime">🕒 --:--</span>
+
+            <div class="info-grid">
+                <div class="info-box"><div class="label">Entry Fee</div><div class="val" id="mFee">--</div></div>
+                <div class="info-box"><div class="label">Map</div><div class="val">Bermuda</div></div>
+            </div>
+
+            <div class="prize-box">
+                <div class="p-row"><span class="p-rank">🥇 1st Prize</span><span class="p-win">₹150</span></div>
+                <div class="p-row"><span class="p-rank">🥈 2nd Prize</span><span class="p-win">₹70</span></div>
+            </div>
+
+            <a href="#" id="joinBtn" class="reg-btn">REGISTER NOW</a>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const match = urlParams.get('match') || 'BR';
+
+        // Sahi Poster aur Details
+        const config = {
+            "BR": { name: "BR SQUAD BATTLE", fee: "FREE", time: "23 MAR | 07:00 PM", img: "br_poster.jpg" },
+            "CS": { name: "CS PRO LEAGUE", fee: "₹50", time: "NOT DECIDED", img: "cs_poster.jpg" },
+            "LW": { name: "LONE WOLF 1", fee: "₹15", time: "SOON", img: "lw_poster.jpg" },
+            "1V1": { name: "1V1 SHOWDOWN", fee: "₹30", time: "SOON", img: "1v1_poster.jpg" }
+        };
+
+        const current = config[match];
+        document.getElementById('mName').innerText = current.name;
+        document.getElementById('mFee').innerText = current.fee;
+        document.getElementById('mTime').innerText = "🕒 " + current.time;
+        document.getElementById('match-banner').style.backgroundImage = `url('${current.img}')`;
+
+        // Link to registration page
+        document.getElementById('joinBtn').href = "register.html?match=" + match;
+    </script>
+</body>
+</html>
