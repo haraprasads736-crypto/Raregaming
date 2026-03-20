@@ -3,209 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tournament Registration - RARE GAMING</title>
+    <title>Registration - RARE GAMING</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
         
-        .nav-header { background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; }
-        .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; border: 1px solid #66fcf1; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
-        
-        .container { padding: 20px; max-width: 500px; margin: auto; }
-        
-        .wallet-status { background: #1a1d24; border: 1px dashed #66fcf1; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .wallet-status span { font-weight: 800; font-size: 14px; }
-        .balance-amt { color: #66fcf1; font-size: 20px; }
-        .fee-amt { color: #ff4b2b; font-size: 20px; }
+        /* 🔥 HEADER INFO */
+        .status-bar { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(0, 242, 254, 0.3); margin: 15px; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; font-size: 12px; }
+        .fee-tag { color: #ff007a; font-weight: 800; }
+        .wallet-tag { color: #00f2fe; font-weight: 800; }
 
-        .form-box { background: #15181e; padding: 20px; border-radius: 15px; border: 1.5px solid #2b303b; }
-        .form-title { color: #66fcf1; font-weight: 800; text-transform: uppercase; margin-top: 0; margin-bottom: 15px; font-size: 18px; text-align: center; }
-        
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 11px; color: #a0aab2; font-weight: 600; margin-bottom: 5px; text-transform: uppercase; }
-        .input-group input { width: 100%; background: #0c0e12; border: 1px solid #2b303b; color: white; padding: 12px; border-radius: 8px; font-family: 'Poppins'; box-sizing: border-box; }
-        .input-group input:focus { border-color: #66fcf1; outline: none; }
-        .input-group input:disabled { border-color: #66fcf1; color: #66fcf1; font-weight: 800; background: #1a1d24; cursor: not-allowed; text-align: center;}
-        
-        .player-box { background: #0c0e12; padding: 15px; border-radius: 8px; border: 1px solid #2b303b; margin-bottom: 15px; }
-        .player-box h4 { margin: 0 0 10px 0; color: #66fcf1; font-size: 13px; }
+        .container { padding: 15px; max-width: 450px; margin: auto; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        .submit-btn { width: 100%; background: #66fcf1; color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 16px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .submit-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
+        h2 { text-align: center; color: #fff; text-transform: uppercase; font-size: 18px; margin-bottom: 20px; letter-spacing: 1px; }
+        
+        .match-badge { background: #ff007a; color: white; padding: 4px 10px; border-radius: 5px; font-size: 10px; font-weight: 800; display: inline-block; margin-bottom: 10px; }
+
+        label { display: block; font-size: 10px; color: #a0aab2; margin-top: 15px; text-transform: uppercase; font-weight: 600; }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; font-family: 'Poppins'; box-sizing: border-box; margin-top: 5px; }
+
+        .player-section { border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-top: 15px; background: rgba(255,255,255,0.02); }
+        .section-title { color: #00f2fe; font-size: 11px; font-weight: 800; margin-bottom: 10px; display: block; }
+
+        .submit-btn { width: 100%; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; padding: 16px; border: none; border-radius: 12px; font-weight: 800; font-size: 15px; text-transform: uppercase; cursor: pointer; margin-top: 25px; box-shadow: 0 5px 15px rgba(255, 0, 122, 0.3); }
+        .submit-btn:disabled { background: #222; color: #555; cursor: not-allowed; box-shadow: none; }
+
+        #msg { text-align: center; margin-top: 15px; font-size: 12px; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <div class="nav-header">
-        <a href="javascript:history.back()" class="back-btn">BACK</a>
-        <span style="font-weight:800; font-size:14px; text-transform:uppercase;" id="match-title-top">REGISTER</span>
+    <div class="status-bar">
+        <div>ENTRY: <span class="fee-tag" id="feeVal">FREE</span></div>
+        <div>WALLET: <span class="wallet-tag" id="walletVal">₹0</span></div>
     </div>
 
     <div class="container">
-        
-        <div class="wallet-status">
-            <span>Entry Fee: <span class="fee-amt" id="display-fee-amount">₹10</span></span>
-            <span>Wallet: <span class="balance-amt" id="current-wallet">₹0</span></span>
-        </div>
-
-        <div class="form-box">
-            <h2 class="form-title">TEAM DETAILS</h2>
+        <div class="glass-card">
+            <div class="match-badge" id="mBadge">BR MATCH</div>
+            <h2 id="formTitle">DUO REGISTRATION</h2>
             
-            <form id="regForm" onsubmit="submitRegistration(event)">
-                
-                <div class="input-group">
-                    <label>Selected Match</label>
-                    <input type="text" id="matchDisplay" disabled value="LOADING...">
+            <div id="formFields">
+                <label>Team Name</label>
+                <input type="text" id="tName" placeholder="Enter Team Name">
+
+                <div class="player-section">
+                    <span class="section-title">PLAYER 1 (Leader)</span>
+                    <input type="text" id="p1Name" placeholder="IGN (Name)">
+                    <input type="text" id="p1Uid" placeholder="Game UID (Number)">
                 </div>
 
-                <div class="input-group">
-                    <label>Team Name</label>
-                    <input type="text" name="teamName" required placeholder="Enter Team Name">
-                </div>
-                
-                <div class="input-group">
-                    <label>WhatsApp Number</label>
-                    <input type="tel" name="whatsapp" required placeholder="For tournament updates">
+                <div class="player-section">
+                    <span class="section-title">PLAYER 2</span>
+                    <input type="text" id="p2Name" placeholder="IGN (Name)">
                 </div>
 
-                <div class="player-box" id="box-p1">
-                    <h4>Player 1 (Leader)</h4>
-                    <div class="input-group"><input type="text" name="p1ign" required placeholder="In-Game Name (IGN)"></div>
-                    <div class="input-group" style="margin-bottom: 0;"><input type="number" name="p1uid" required placeholder="Game UID"></div>
-                </div>
-
-                <div class="player-box" id="box-p2">
-                    <h4>Player 2</h4>
-                    <div class="input-group"><input type="text" id="req-p2ign" name="p2ign" required placeholder="In-Game Name (IGN)"></div>
-                    <div class="input-group" style="margin-bottom: 0;"><input type="number" id="req-p2uid" name="p2uid" required placeholder="Game UID"></div>
-                </div>
-
-                <div class="player-box" id="box-p3">
-                    <h4>Player 3</h4>
-                    <div class="input-group"><input type="text" id="req-p3ign" name="p3ign" placeholder="In-Game Name (IGN)"></div>
-                    <div class="input-group" style="margin-bottom: 0;"><input type="number" id="req-p3uid" name="p3uid" placeholder="Game UID"></div>
-                </div>
-
-                <div class="player-box" id="box-p4">
-                    <h4>Player 4</h4>
-                    <div class="input-group"><input type="text" id="req-p4ign" name="p4ign" placeholder="In-Game Name (IGN)"></div>
-                    <div class="input-group" style="margin-bottom: 0;"><input type="number" id="req-p4uid" name="p4uid" placeholder="Game UID"></div>
-                </div>
-
-                <button type="submit" class="submit-btn" id="submitBtn">PAY & REGISTER</button>
-            </form>
+                <button class="submit-btn" id="regBtn" onclick="sendData()">CONFIRM & JOIN</button>
+            </div>
+            
+            <div id="msg"></div>
         </div>
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxrbctK3eaMb9hIFjb387wwqokuM8-pFwFkmegooVRormfdhzvEAp3s1pfwfem27Zqu/exec';
+        const urlParams = new URLSearchParams(window.location.search);
+        const matchID = urlParams.get('match') || 'BR';
         
-        let ENTRY_FEE = 0;
-        let isFree = false;
+        // ⭐ CEO'S LOGIC SETTINGS ⭐
+        let fee = 0;
+        let isStarted = false;
 
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const matchType = urlParams.get('match') || "BR";
-            const feeParam = urlParams.get('fee') || "10"; 
+        if (matchID === "BR") {
+            fee = 0; // BR Match is FREE
+            isStarted = true; // BR is Active
+        } else {
+            isStarted = false; // CS, LW, 1V1 are NOT STARTED
+        }
 
-            // Form ke upar Match ka naam lock karna
-            document.getElementById("matchDisplay").value = matchType + " MATCH";
-            document.getElementById("match-title-top").innerText = matchType + " MATCH";
+        // Update UI
+        document.getElementById('mBadge').innerText = matchID + " MATCH";
+        document.getElementById('feeVal').innerText = fee === 0 ? "FREE" : "₹" + fee;
+        document.getElementById('walletVal').innerText = "₹" + (localStorage.getItem("rareWallet") || 0);
 
-            // 🎯 ASLI MAGIC YAHAN HAI: BOXES HIDE & SHOW LOGIC
-            if (matchType === "BR") {
-                // BR (Duo) - 2 Players
-                document.getElementById("box-p3").style.display = "none";
-                document.getElementById("box-p4").style.display = "none";
-            } 
-            else if (matchType === "CS") {
-                // CS (Squad) - 4 Players (Kuch hide nahi karna)
-            }
-            else if (matchType === "LW" || matchType === "1V1") {
-                // Solo - 1 Player
-                document.getElementById("box-p2").style.display = "none";
-                document.getElementById("box-p3").style.display = "none";
-                document.getElementById("box-p4").style.display = "none";
-                
-                // Form error na de isliye P2 ka required hata diya
-                document.getElementById("req-p2ign").removeAttribute("required");
-                document.getElementById("req-p2uid").removeAttribute("required");
-            }
+        if (!isStarted) {
+            document.getElementById('formFields').innerHTML = "<h3 style='color:#ffea00; text-align:center;'>REGISTRATION NOT STARTED YET</h3><p style='text-align:center; font-size:11px; color:#a0aab2;'>Please wait for the admin to open this match.</p>";
+            document.getElementById('formTitle').innerText = "CLOSED";
+        }
 
-            // Fee and Wallet Logic
-            if (feeParam.toLowerCase() === "free" || feeParam === "0") {
-                ENTRY_FEE = 0;
-                isFree = true;
-            } else {
-                ENTRY_FEE = parseInt(feeParam);
-                isFree = false;
-            }
-            
-            if (isFree) {
-                document.getElementById("display-fee-amount").innerText = "FREE";
-                document.getElementById("display-fee-amount").style.color = "#25d366";
-                document.getElementById("submitBtn").innerText = "REGISTER FOR FREE";
-                document.getElementById("submitBtn").style.background = "#25d366";
-            } else {
-                document.getElementById("display-fee-amount").innerText = "₹" + ENTRY_FEE;
-                document.getElementById("submitBtn").innerText = "PAY ₹" + ENTRY_FEE + " & REGISTER";
-            }
+        function sendData() {
+            const btn = document.getElementById('regBtn');
+            const team = document.getElementById('tName').value;
+            const p1 = document.getElementById('p1Name').value;
+            const p1u = document.getElementById('p1Uid').value;
+            const p2 = document.getElementById('p2Name').value;
 
-            let wallet = parseInt(localStorage.getItem("rareWallet") || 0);
-            document.getElementById("current-wallet").innerText = "₹" + wallet;
-        };
+            if(!team || !p1 || !p1u || !p2) return alert("Bhai, saari details bharo!");
 
-        function submitRegistration(event) {
-            event.preventDefault(); 
-            
-            let currentWallet = parseInt(localStorage.getItem("rareWallet") || 0);
-
-            if (!isFree && currentWallet < ENTRY_FEE) {
-                alert("Insufficient Balance! Aapke wallet mein ₹" + ENTRY_FEE + " nahi hain. Pehle Redeem karein.");
-                window.location.href = "redeem.html"; 
-                return;
-            }
-
-            const form = document.getElementById("regForm");
-            const btn = document.getElementById("submitBtn");
             btn.disabled = true;
-            btn.innerText = "PROCESSING...";
+            btn.innerText = "⏳ PROCESSING...";
 
-            if (!isFree) {
-                localStorage.setItem("rareWallet", currentWallet - ENTRY_FEE);
-                document.getElementById("current-wallet").innerText = "₹" + (currentWallet - ENTRY_FEE);
-            }
+            const user = JSON.parse(localStorage.getItem("rareGamingUser"));
+            const duoInfo = `DUO | Team: ${team} | Ldr: ${p1}(${p1u}) | P2: ${p2}`;
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbx2z4GZ8uIyKH9yTQqD_n3XBYEQe3_3k2YyQobq5ucoguHkYu3kwCZer3qYlOR1bstAlA/exec';
 
-            const formData = new FormData(form);
-            const urlParams = new URLSearchParams(window.location.search);
-            const matchType = urlParams.get('match') || "BR"; 
-            formData.append("matchType", matchType);
-
-            fetch(scriptURL, { method: 'POST', body: formData })
-                .then(response => response.text())
-                .then(data => {
-                    if(data.trim() === "Success") {
-                        if (isFree) {
-                            alert("🎉 Registration Successful for FREE!");
-                        } else {
-                            alert("🎉 Registration Successful! ₹" + ENTRY_FEE + " deducted from Wallet.");
-                        }
-                        window.location.href = "index.html"; 
-                    } else {
-                        if (!isFree) localStorage.setItem("rareWallet", currentWallet); 
-                        alert("Error in registration. Try again.");
-                        btn.disabled = false;
-                        btn.innerText = isFree ? "REGISTER FOR FREE" : "PAY ₹" + ENTRY_FEE + " & REGISTER";
-                    }
-                })
-                .catch(error => {
-                    if (!isFree) localStorage.setItem("rareWallet", currentWallet); 
-                    alert("Network Error! Registration failed.");
+            fetch(`${scriptURL}?action=joinMatch&username=${encodeURIComponent(user.name)}&matchName=${encodeURIComponent(matchID)}&fee=${fee}&squad=${encodeURIComponent(duoInfo)}`)
+            .then(res => res.text())
+            .then(status => {
+                const m = document.getElementById('msg');
+                if(status === "Success") {
+                    m.innerHTML = "✅ SUCCESS! Duo Registered.";
+                    m.style.color = "#00e676";
+                    setTimeout(() => { window.location.href="index.html"; }, 2000);
+                } else {
+                    m.innerHTML = "❌ " + status;
+                    m.style.color = "#ff4b2b";
                     btn.disabled = false;
-                    btn.innerText = isFree ? "REGISTER FOR FREE" : "PAY ₹" + ENTRY_FEE + " & REGISTER";
-                });
+                    btn.innerText = "CONFIRM & JOIN";
+                }
+            });
         }
     </script>
-
 </body>
 </html>
