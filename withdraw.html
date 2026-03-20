@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw Money - RARE GAMING</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+        
+        .nav-header { position: absolute; top: 0; width: 100%; background: #15181e; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #66fcf1; box-sizing: border-box; }
+        .back-btn { color: #66fcf1; text-decoration: none; font-weight: 800; border: 1px solid #66fcf1; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
+        
+        .wallet-box { background: #15181e; padding: 30px; border-radius: 15px; border: 1.5px solid #2b303b; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); margin-top: 60px;}
+        .wallet-box h2 { color: #66fcf1; font-weight: 800; margin-bottom: 5px; text-transform: uppercase; }
+        .wallet-box p { color: #a0aab2; font-size: 12px; margin-bottom: 20px; }
+
+        .balance-text { font-size: 14px; font-weight: 600; color: white; margin-bottom: 10px; }
+        .balance-amt { font-size: 28px; font-weight: 800; color: #25d366; display: block; margin-bottom: 20px; }
+
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; font-size: 11px; color: #a0aab2; font-weight: 600; margin-bottom: 5px; text-transform: uppercase; }
+        .input-group input { width: 100%; background: #0c0e12; border: 1px solid #2b303b; color: white; padding: 12px; border-radius: 8px; font-family: 'Poppins'; box-sizing: border-box; font-size: 14px; }
+        .input-group input:focus { border-color: #66fcf1; outline: none; }
+
+        /* Amount Selection Grid */
+        .amt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .amt-btn { background: #0c0e12; border: 1.5px solid #2b303b; color: white; padding: 10px; border-radius: 8px; font-family: 'Poppins'; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .amt-btn.selected { background: #66fcf1; color: #000; border-color: #66fcf1; font-weight: 800; box-shadow: 0 0 10px rgba(102, 252, 241, 0.5); }
+
+        .submit-btn { width: 100%; background: #ff4b2b; color: #fff; border: none; padding: 15px; border-radius: 8px; font-weight: 800; font-size: 16px; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: 5px; }
+        .submit-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="index.html" class="back-btn">BACK</a>
+        <span style="font-weight:800; font-size:14px; text-transform:uppercase;">WITHDRAW</span>
+    </div>
+
+    <div class="wallet-box">
+        <h2>WITHDRAW WINNINGS</h2>
+        <p>Transfer your wallet balance directly to your UPI ID.</p>
+
+        <div class="balance-text">Available Balance <span class="balance-amt" id="current-wallet">⏳</span></div>
+
+        <div class="input-group">
+            <label>Enter UPI ID (Paytm/PhonePe/GPay)</label>
+            <input type="text" id="upiId" placeholder="e.g., 9876543210@ybl">
+        </div>
+
+        <div class="input-group">
+            <label>Select Amount to Withdraw</label>
+        </div>
+        
+        <div class="amt-grid">
+            <button class="amt-btn" onclick="selectAmount(20, this)">₹20</button>
+            <button class="amt-btn" onclick="selectAmount(50, this)">₹50</button>
+            <button class="amt-btn" onclick="selectAmount(100, this)">₹100</button>
+            <button class="amt-btn" onclick="selectAmount(250, this)">₹250</button>
+            <button class="amt-btn" onclick="selectAmount(300, this)">₹300</button>
+            <button class="amt-btn" onclick="selectAmount(350, this)">₹350</button>
+            <button class="amt-btn" onclick="selectAmount(500, this)" style="grid-column: span 3;">₹500</button>
+        </div>
+
+        <button class="submit-btn" id="withdrawBtn" onclick="processWithdrawal()">WITHDRAW NOW</button>
+    </div>
+
+    <script>
+        // 👇 TUMHARA NAYA CLOUD SCRIPT URL 👇
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyWwgq1lQyL0jS1-cPM1CIZNCcUd8-lyKc9xqDOzTMfn3cr-NnetjAl6USn8_TOdF3cRg/exec';
+
+        let username = "Player";
+        let savedUser = localStorage.getItem("rareGamingUser");
+        if(savedUser) {
+            let user = JSON.parse(savedUser);
+            username = user.name;
+        }
+
+        let selectedAmount = 0;
+        let walletBalance = 0;
+
+        window.onload = function() {
+            fetch(scriptURL + "?action=getWallet&username=" + encodeURIComponent(username))
+                .then(res => res.text())
+                .then(bal => {
+                    walletBalance = parseInt(bal) || 0;
+                    document.getElementById("current-wallet").innerText = "₹" + walletBalance;
+                }).catch(err => {
+                    document.getElementById("current-wallet").innerText = "Network Error";
+                });
+        };
+
+        function selectAmount(amt, btnElement) {
+            selectedAmount = amt;
+            // Remove 'selected' class from all buttons
+            document.querySelectorAll('.amt-btn').forEach(btn => btn.classList.remove('selected'));
+            // Add to clicked button
+            btnElement.classList.add('selected');
+        }
+
+        function processWithdrawal() {
+            let upiInput = document.getElementById("upiId").value.trim();
+            
+            if (upiInput === "") { alert("Please enter your UPI ID!"); return; }
+            if (selectedAmount === 0) { alert("Please select an amount to withdraw!"); return; }
+            if (selectedAmount > walletBalance) { alert("Insufficient Balance! You only have ₹" + walletBalance); return; }
+
+            let btn = document.getElementById("withdrawBtn");
+            btn.innerText = "PROCESSING...";
+            btn.disabled = true;
+
+            // Send to Google Sheet
+            let requestUrl = scriptURL + "?action=withdraw&username=" + encodeURIComponent(username) + "&upi=" + encodeURIComponent(upiInput) + "&amount=" + selectedAmount;
+            
+            fetch(requestUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "Success") {
+                        alert("✅ Withdrawal Request Sent! Amount will be credited to your UPI within 24 hours.");
+                        window.location.href = "index.html"; // Go back to dashboard
+                    } else if (data.status === "Insufficient") {
+                        alert("❌ Transaction Failed! Insufficient Balance.");
+                        btn.innerText = "WITHDRAW NOW";
+                        btn.disabled = false;
+                    } else {
+                        alert("❌ Something went wrong. Try again.");
+                        btn.innerText = "WITHDRAW NOW";
+                        btn.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    alert("⚠️ Network Error! Please try again.");
+                    btn.innerText = "WITHDRAW NOW";
+                    btn.disabled = false;
+                });
+        }
+    </script>
+
+</body>
+</html>
