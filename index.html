@@ -3,213 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    
-    <title>RARE GAMING Dashboard</title>
-    
-    <script>
-        if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; }
-
-        window.onload = function() {
-            let lastRefresh = localStorage.getItem("lastRefresh");
-            let now = new Date().getTime();
-            if (!lastRefresh || (now - lastRefresh > 60000)) { 
-                localStorage.setItem("lastRefresh", now);
-                location.reload(true); return; 
-            }
-
-            let savedUser = localStorage.getItem("rareGamingUser");
-            let username = "Player";
-            if(savedUser) {
-                let user = JSON.parse(savedUser);
-                username = user.name; 
-                document.getElementById("user-name").innerText = user.name;
-                document.getElementById("user-pfp").src = user.picture || 'logo.jpg';
-                document.getElementById("nav-pfp").src = user.picture || 'logo.jpg';
-            }
-
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbyJtD9m9kekQ8qkJQlAXB7cXsnJ1ffA3gu_Joqg8mKmcOD9I1FBZlcZyEfDL3vZLu3WTg/exec';
-
-            document.getElementById("wallet-amount").innerText = "⏳"; 
-            fetch(scriptURL + "?action=getWallet&username=" + encodeURIComponent(username))
-                .then(res => res.text())
-                .then(bal => {
-                    document.getElementById("wallet-amount").innerText = bal;
-                    localStorage.setItem("rareWallet", bal); 
-                }).catch(err => {
-                    document.getElementById("wallet-amount").innerText = localStorage.getItem("rareWallet") || 0;
-                });
-
-            fetch(scriptURL)
-                .then(res => res.json())
-                .then(data => {
-                    updateList('list-BR', data['BR']);
-                    updateList('list-CS', data['CS']);
-                    updateList('list-LW', data['LW']);
-                    updateList('list-1V1', data['1V1']);
-                }).catch(err => {
-                    document.querySelectorAll('.m-registered-box').forEach(el => el.innerHTML = "Offline Mode");
-                });
-        };
-
-        function updateList(id, arr) {
-            const el = document.getElementById(id);
-            if (!arr || arr.length === 0) { el.innerHTML = "No Teams Yet"; return; }
-            el.innerHTML = arr.map(t => `<div style="font-size:10px;">⚡ ${t}</div>`).join('');
-        }
-    </script>
-
+    <title>Home - RARE GAMING</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap');
-        body { background-color: #090a0f; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; overflow-x: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
-        /* SLEEK NAVBAR */
-        .nav-header { background: rgba(21, 24, 30, 0.9); backdrop-filter: blur(10px); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 0, 127, 0.3); position: sticky; top: 0; z-index: 100;}
-        .nav-title { font-weight: 800; font-size: 16px; background: linear-gradient(90deg, #ff007a, #7a00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px;}
-        .nav-icons { display: flex; gap: 12px; align-items: center; }
-        .settings-btn { font-size: 18px; color: #fff; text-decoration: none; opacity: 0.8;}
-        .logo-circle { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #7a00ff; overflow: hidden; display: block; box-shadow: 0 0 10px rgba(122, 0, 255, 0.5);}
-        .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-
-        .container { padding: 10px 15px; max-width: 480px; margin: auto; }
-
-        /* PROFILE SECTION COMPACT */
-        .profile-header { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0; }
-        .pfp-main { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #ff007a; overflow: hidden; }
-        .pfp-main img { width: 100%; height: 100%; object-fit: cover; }
-        .app-title { font-weight: 700; font-size: 13px; color: #e0e0e0; text-transform: uppercase; letter-spacing: 0.5px;}
-
-        /* PREMIUM MIX-COLOR WALLET */
-        .wallet-card { background: linear-gradient(135deg, #2b0b3f 0%, #12091c 100%); padding: 15px 20px; margin-bottom: 20px; border-radius: 16px; border: 1px solid rgba(122, 0, 255, 0.4); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 8px 20px rgba(122, 0, 255, 0.15); }
-        .wallet-info { text-align: left; }
-        .wallet-label { font-size: 10px; color: #b39ddb; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;}
-        .wallet-val { font-size: 24px; font-weight: 800; color: #fff; display: block; text-shadow: 0 0 10px rgba(255,255,255,0.2);}
+        body { 
+            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; position: relative; padding-bottom: 90px; 
+        }
         
-        .wallet-actions { display: flex; flex-direction: column; gap: 8px; }
-        .action-btn { padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 700; text-decoration: none; text-transform: uppercase; border: none; text-align: center; transition: 0.2s;}
-        .btn-add { background: linear-gradient(90deg, #ff007a, #ff4b2b); color: #fff; box-shadow: 0 2px 10px rgba(255, 0, 122, 0.3);}
-        .btn-withdraw { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
-
-        /* RULES SLIDER */
-        .rules-slider { width: 100%; height: 110px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.5);}
-        .rules-slides { display: flex; width: 200%; height: 100%; animation: slideTwoAnim 6s infinite; }
-        .rules-slides img { width: 50%; height: 100%; object-fit: cover; }
-        @keyframes slideTwoAnim { 0%, 45% { transform: translateX(0); } 50%, 95% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
-
-        /* 🔥 VIP ROOM ID BUTTON (SLEEK & GRADIENT) 🔥 */
-        .room-btn-vip { background: linear-gradient(45deg, #00f2fe, #4facfe); color: #000; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 800; font-size: 13px; display: block; text-align: center; margin-bottom: 25px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3); letter-spacing: 1px; transition: 0.2s; }
-        .room-btn-vip:active { transform: scale(0.97); }
-
-        /* SLEEK MATCHES GRID */
-        .matches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
-        .match-card { background: #12141d; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
-        .match-card:active { transform: scale(0.96); border-color: #7a00ff;}
+        /* 🔥 BACKGROUND SPARKS - BIGGER to show through larger gaps */
+        .bg-orb-1 { position: fixed; top: 10%; left: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255, 0, 122, 0.15) 0%, transparent 70%); filter: blur(50px); animation: float1 8s infinite alternate; z-index: -1; }
+        .bg-orb-2 { position: fixed; bottom: 10%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(122, 0, 255, 0.15) 0%, transparent 70%); filter: blur(60px); animation: float2 10s infinite alternate; z-index: -1; }
         
-        .m-image { height: 85px; background-size: cover; background-position: center; position: relative; }
-        .m-image::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.1), #12141d); }
-        
-        .m-label { position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); border: 0.5px solid #ff007a; color: #fff; font-size: 8px; font-weight: 700; padding: 3px 6px; border-radius: 4px; z-index: 2;}
-        .m-price { position: absolute; top: 5px; right: 5px; background: linear-gradient(90deg, #7a00ff, #c100ff); color: #fff; font-size: 8px; font-weight: 700; padding: 3px 6px; border-radius: 4px; z-index: 2; box-shadow: 0 2px 5px rgba(122,0,255,0.4);}
-        
-        .m-registered-box { background: #12141d; padding: 6px 8px; font-size: 9px; color: #a0aab2; height: 35px; overflow-y: auto; text-align: left; }
-        .m-registered-box div { padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #d1d1d1; }
-        
-        .m-register { background: rgba(255, 255, 255, 0.05); color: #00f2fe; padding: 8px; font-weight: 700; font-size: 11px; text-transform: uppercase; border-top: 1px solid rgba(255,255,255,0.05);}
-        .m-timestamp { background: #0b0c10; padding: 5px; font-size: 8px; color: #6e7681; }
+        /* HEADER & WALLET */
+        .nav-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(5, 5, 8, 0.9); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); position: sticky; top: 0; z-index: 100; }
+        .nav-title { font-weight: 800; font-size: 18px; color: #fff; text-transform: uppercase; letter-spacing: 1px;}
+        .wallet-box { background: rgba(0, 242, 254, 0.1); border: 1px solid #00f2fe; padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 12px; color: #00f2fe; }
 
-        /* COMPACT FOOTER MENU */
-        .footer-menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 40px; }
-        .menu-btn { background: #12141d; border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 12px; text-decoration: none; color: #b39ddb; font-size: 10px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: 0.2s;}
-        .menu-btn:active { background: rgba(122, 0, 255, 0.1); }
-        .menu-btn span { font-size: 18px; color: #fff; }
+        /* SECTION TITLE */
+        .section-title { font-size: 20px; font-weight: 800; margin: 25px 15px 15px 15px; letter-spacing: 0.5px; }
+
+        /* 🎮 UPDATED: 2-COLUMN GRID LAYOUT (BIGGER CARDS, FEWER EMPTY SLOTS) 🎮 */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Only 2 cards per row for maximum size */
+            gap: 15px; /* Slightly larger gap */
+            padding: 0 15px;
+            max-width: 600px; /* Increased max width, still responsive on mobile */
+            margin: auto;
+            margin-bottom: 30px; /* Use vertical space */
+        }
+
+        /* UPDATED: BIGGER GRID CARD STYLING */
+        .grid-card {
+            position: relative;
+            border-radius: 16px; /* slightly more rounded for larger items */
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.1); /* thicker border */
+            display: block;
+            text-decoration: none;
+            /* Aspect ratio: Slightly portrait (3:4 or 4:5) is good. Let's try 4:5 to keep them tall but not overly so. */
+            aspect-ratio: 4 / 5; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.7); /* deeper shadow */
+            transition: transform 0.2s, border-color 0.3s;
+        }
+        .grid-card:active { transform: scale(0.97); border-color: #ff007a; }
+
+        /* BACKGROUND IMAGE INSIDE CARD */
+        .card-bg {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-color: #111;
+            transition: transform 0.3s ease;
+        }
+        .grid-card:active .card-bg {
+            transform: scale(1.05); /* Subtly scale background image on active */
+        }
+
+        /* OVERLAY TEXT - Adjusted for larger cards */
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            /* Taller gradient for larger text area */
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0) 100%);
+            padding: 20px 10px 10px 10px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .card-title {
+            color: white;
+            font-size: 14px; /* INCREASED text size for larger cards */
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 0;
+            text-shadow: 2px 2px 4px #000;
+        }
+        /* Optional: Add status info to the card overlay since there's more space */
+        .card-status {
+            font-size: 9px;
+            color: #ff007a;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 4px;
+            display: block;
+        }
+        .open-status { color: #00e676; }
+
+        /* 🔥 BOTTOM NAV BAR - UNCHANGED 🔥 */
+        .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; }
+        .bottom-nav { height: 70px; background: linear-gradient(0deg, rgba(5,5,8,1) 0%, rgba(5,5,8,0.95) 70%, rgba(5,5,8,0) 100%); backdrop-filter: blur(15px); position: relative; display: flex; justify-content: space-around; align-items: flex-end; padding: 0 10px; }
+        .nav-solid-bar { height: 60px; background: #000; position: absolute; bottom: 0; left: 0; width: 100%; z-index: 1; border-top: 1.5px solid transparent; border-image: linear-gradient(90deg, transparent 20%, #ff007a 50%, transparent 80%) 1; }
+        .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #555; font-size: 10px; font-weight: 800; text-transform: uppercase; position: relative; z-index: 2; flex: 1; transition: 0.3s; }
+        .nav-item .nav-icon { font-size: 20px; margin-bottom: 3px; transition: 0.3s; }
+        .nav-item.active { color: white; }
+        .nav-item.active::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 50px; height: 50px; background: linear-gradient(135deg, #ff007a 0%, #7a00ff 100%); border-radius: 10px; z-index: -1; box-shadow: 0 0 15px rgba(255,0,122,0.5); animation: activePop 0.3s ease-out; }
+        @keyframes activePop { 0% { transform: translateX(-50%) rotate(45deg) scale(0.8); opacity: 0; } 100% { transform: translateX(-50%) rotate(45deg) scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
+    
+    <div class="bg-orb-1"></div>
+    <div class="bg-orb-2"></div>
 
     <div class="nav-header">
-        <span class="nav-title">Rare Gaming</span>
-        <div class="nav-icons">
-            <a href="profile.html" class="settings-btn">⚙️</a>
-            <a href="profile.html" class="logo-circle"><img id="nav-pfp" src="logo.jpg"></a>
-        </div>
+        <span class="nav-title">RARE GAMING</span>
+        <div class="wallet-box" id="wallet-balance">₹0</div>
     </div>
 
-    <div class="container">
+    <div class="section-title">E-sports Matches</div>
 
-        <div class="profile-header">
-            <div class="pfp-main"><img id="user-pfp" src="logo.jpg"></div>
-            <span class="app-title" id="user-name">Welcome Player</span>
-        </div>
+    <div class="matches-grid">
 
-        <div class="wallet-card">
-            <div class="wallet-info">
-                <span class="wallet-label">Your Balance</span>
-                <span class="wallet-val">₹<span id="wallet-amount">0</span></span>
+        <a href="match_details.html?match=BR" class="grid-card">
+            <div class="card-bg" style="background-image: url('br_poster.jpg');"></div>
+            <div class="card-overlay">
+                <p class="card-title">BR SQUAD</p>
+                <span class="card-status open-status">Registration Open</span>
             </div>
-            <div class="wallet-actions">
-                <a href="redeem.html" class="action-btn btn-add">➕ ADD FUNDS</a>
-                <a href="withdraw.html" class="action-btn btn-withdraw">💸 WITHDRAW</a>
+        </a>
+
+        <a href="match_details.html?match=CS" class="grid-card">
+            <div class="card-bg" style="background-image: url('cs_poster.jpg');"></div>
+            <div class="card-overlay">
+                <p class="card-title">CLASH SQUAD</p>
+                <span class="card-status">Closed Soon</span>
             </div>
-        </div>
+        </a>
 
-        <div class="rules-slider">
-            <div class="rules-slides">
-                <img src="rule1.jpg">
-                <img src="rule2.jpg">
+        <a href="match_details.html?match=LW" class="grid-card">
+            <div class="card-bg" style="background-image: url('lw_poster.jpg');"></div>
+            <div class="card-overlay">
+                <p class="card-title">LONE WOLF</p>
+                <span class="card-status">Starting Soon</span>
             </div>
-        </div>
+        </a>
 
-        <a href="room.html" class="room-btn-vip">🎯 GET ROOM ID & PASSWORD</a>
+        <a href="match_details.html?match=1V1" class="grid-card">
+            <div class="card-bg" style="background-image: url('1v1_poster.jpg');"></div>
+            <div class="card-overlay">
+                <p class="card-title">1V1 SHOWDOWN</p>
+                <span class="card-status">Waitlisted</span>
+            </div>
+        </a>
 
-        <div class="matches-grid">
-            <a href="match_details.html?match=BR" class="match-card">
-                <div class="m-image" style="background-image: url('br_poster.jpg');">
-                    <div class="m-label">BR MATCH</div>
-                    <div class="m-price" style="background: linear-gradient(90deg, #00b09b, #96c93d);">FREE ENTRY</div>
-                </div>
-                <div id="list-BR" class="m-registered-box">Loading...</div>
-                <div class="m-register">VIEW DETAILS</div>
-                <div class="m-timestamp">📅 23 MAR | 07:00 PM</div>
-            </a>
-            
-            <a href="match_details.html?match=CS" class="match-card">
-                <div class="m-image" style="background-image: url('cs_poster.jpg');">
-                    <div class="m-label">CS MATCH</div>
-                    <div class="m-price">₹50 ENTRY</div>
-                </div>
-                <div id="list-CS" class="m-registered-box">Loading...</div>
-                <div class="m-register">VIEW DETAILS</div>
-                <div class="m-timestamp">📅 NOT DECIDED</div>
-            </a>
-            
-            <a href="match_details.html?match=LW" class="match-card">
-                <div class="m-image" style="background-image: url('lw_poster.jpg');">
-                    <div class="m-label">LONE WOLF</div>
-                    <div class="m-price">₹15 ENTRY</div>
-                </div>
-                <div id="list-LW" class="m-registered-box">Loading...</div>
-                <div class="m-register">VIEW DETAILS</div>
-                <div class="m-timestamp">📅 DECIDING SOON</div>
-            </a>
-            
-            <a href="match_details.html?match=1V1" class="match-card">
-                <div class="m-image" style="background-image: url('1v1_poster.jpg');">
-                    <div class="m-label">1V1 MATCH</div>
-                    <div class="m-price">₹30 ENTRY</div>
-                </div>
-                <div id="list-1V1" class="m-registered-box">Loading...</div>
-                <div class="m-register">VIEW DETAILS</div>
-                <div class="m-timestamp">📅 DECIDING SOON</div>
-            </a>
-        </div>
-
-        <div class="footer-menu-grid">
-            <a href="teams.html" class="menu-btn"><span>🛡️</span>TEAMS</a>
-            <a href="https://wa.me/917606014322" class="menu-btn"><span>💬</span>SUPPORT</a>
-            <a href="prizes.html" class="menu-btn"><span>🏆</span>PRIZES</a>
-            <a href="points.html" class="menu-btn"><span>📊</span>RANKING</a>
-        </div>
     </div>
 
+    <div class="bottom-nav-container">
+        <nav class="bottom-nav">
+            <div class="nav-solid-bar"></div>
+            <a href="index.html" class="nav-item active">
+                <i class="fas fa-home nav-icon"></i>
+                HOME
+            </a>
+            <a href="earn.html" class="nav-item">
+                <i class="fas fa-coins nav-icon"></i>
+                EARN
+            </a>
+            <a href="winners.html" class="nav-item">
+                <i class="fas fa-crown nav-icon"></i>
+                WINNERS
+            </a>
+            <a href="profile.html" class="nav-item">
+                <i class="fas fa-user-circle nav-icon"></i>
+                PROFILE
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        const currentWallet = localStorage.getItem("rareWallet") || 0;
+        document.getElementById('wallet-balance').innerText = "₹" + currentWallet;
+    </script>
 </body>
 </html>
