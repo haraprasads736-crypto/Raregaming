@@ -33,7 +33,15 @@
         .p-rank { font-weight: 700; color: #ff007a; }
         .p-win { font-weight: 800; color: #00f2fe; }
 
-        .reg-btn { display: block; width: 100%; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; padding: 18px; border: none; border-radius: 15px; font-weight: 800; font-size: 16px; text-transform: uppercase; cursor: pointer; text-decoration: none; text-align: center; box-sizing: border-box; box-shadow: 0 0 20px rgba(255, 0, 122, 0.4); }
+        /* REGISTER BUTTON DEFAULT STYLE */
+        .reg-btn { display: block; width: 100%; color: white; padding: 18px; border: none; border-radius: 15px; font-weight: 800; font-size: 16px; text-transform: uppercase; cursor: pointer; text-decoration: none; text-align: center; box-sizing: border-box; transition: 0.3s; }
+        
+        /* ACTIVE BUTTON STYLE */
+        .btn-active { background: linear-gradient(90deg, #ff007a, #7a00ff); box-shadow: 0 0 20px rgba(255, 0, 122, 0.4); }
+        .btn-active:active { transform: scale(0.96); }
+
+        /* CLOSED BUTTON STYLE */
+        .btn-closed { background: #2a2a35; color: #777; cursor: not-allowed; box-shadow: none; border: 1px solid #333; }
     </style>
 </head>
 <body>
@@ -52,11 +60,11 @@
             </div>
 
             <div class="prize-box">
-                <div class="p-row"><span class="p-rank">🥇 1st Prize</span><span class="p-win">₹150</span></div>
-                <div class="p-row"><span class="p-rank">🥈 2nd Prize</span><span class="p-win">₹70</span></div>
+                <div class="p-row"><span class="p-rank">🥇 1st Prize</span><span class="p-win" id="p1Win">₹150</span></div>
+                <div class="p-row"><span class="p-rank">🥈 2nd Prize</span><span class="p-win" id="p2Win">₹70</span></div>
             </div>
 
-            <a href="#" id="joinBtn" class="reg-btn">REGISTER NOW</a>
+            <a href="#" id="joinBtn" class="reg-btn">LOADING...</a>
         </div>
     </div>
 
@@ -64,22 +72,34 @@
         const urlParams = new URLSearchParams(window.location.search);
         const match = urlParams.get('match') || 'BR';
 
-        // Sahi Poster aur Details
+        // ⭐ MATCH STATUS SETTINGS (Open/Closed) ⭐
         const config = {
-            "BR": { name: "BR SQUAD BATTLE", fee: "FREE", time: "23 MAR | 07:00 PM", img: "br_poster.jpg" },
-            "CS": { name: "CS PRO LEAGUE", fee: "₹50", time: "NOT DECIDED", img: "cs_poster.jpg" },
-            "LW": { name: "LONE WOLF 1", fee: "₹15", time: "SOON", img: "lw_poster.jpg" },
-            "1V1": { name: "1V1 SHOWDOWN", fee: "₹30", time: "SOON", img: "1v1_poster.jpg" }
+            "BR": { name: "BR SQUAD BATTLE", fee: "FREE", time: "23 MAR | 07:00 PM", img: "br_poster.jpg", status: "open", p1: "₹150", p2: "₹70" },
+            "CS": { name: "CS PRO LEAGUE", fee: "₹50", time: "NOT DECIDED", img: "cs_poster.jpg", status: "closed", p1: "₹300", p2: "₹100" },
+            "LW": { name: "LONE WOLF 1", fee: "₹15", time: "SOON", img: "lw_poster.jpg", status: "closed", p1: "₹50", p2: "₹20" },
+            "1V1": { name: "1V1 SHOWDOWN", fee: "₹30", time: "SOON", img: "1v1_poster.jpg", status: "closed", p1: "₹100", p2: "₹40" }
         };
 
         const current = config[match];
         document.getElementById('mName').innerText = current.name;
         document.getElementById('mFee').innerText = current.fee;
         document.getElementById('mTime').innerText = "🕒 " + current.time;
+        document.getElementById('p1Win').innerText = current.p1;
+        document.getElementById('p2Win').innerText = current.p2;
         document.getElementById('match-banner').style.backgroundImage = `url('${current.img}')`;
 
-        // Link to registration page
-        document.getElementById('joinBtn').href = "register.html?match=" + match;
+        // ⭐ LOCK SYSTEM LOGIC ⭐
+        const joinButton = document.getElementById('joinBtn');
+        if (current.status === "open") {
+            joinButton.innerText = "REGISTER NOW";
+            joinButton.classList.add("btn-active");
+            joinButton.href = "register.html?match=" + match;
+        } else {
+            joinButton.innerText = "NOT STARTED YET";
+            joinButton.classList.add("btn-closed");
+            joinButton.href = "#"; // Disable link
+            joinButton.onclick = function(e) { e.preventDefault(); }; // Prevent any click action
+        }
     </script>
 </body>
 </html>
