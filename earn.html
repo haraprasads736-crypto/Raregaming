@@ -2,166 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#000000">
-    <meta name="color-scheme" content="dark">
-    <title>Wallet - RARE GAMING</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn - Rare Gaming</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; padding-bottom: 120px; }
-        .header { padding: 15px; text-align: center; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(5,5,8,0.8); position: sticky; top: 0; z-index: 100; letter-spacing: 1px; }
-        .container { padding: 15px; max-width: 450px; margin: auto; text-align: center; }
-        .wallet-card { background: linear-gradient(135deg, #111 0%, #050508 100%); border: 1px solid #00f2fe; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,242,254,0.1); }
-        .bal-title { font-size: 12px; color: #a0aab2; text-transform: uppercase; font-weight: 600; }
-        .bal-amount { font-size: 45px; font-weight: 800; color: #00f2fe; margin: 10px 0; }
-        .tab-box { display: flex; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 5px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; background: none; color: #555; font-weight: 800; cursor: pointer; border-radius: 10px; font-size: 12px; }
-        .tab-btn.active { background: #ff007a; color: white; }
-        .form-section { display: none; text-align: left; }
-        .form-section.active { display: block; }
-        label { display: block; font-size: 10px; color: #a0aab2; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; padding-left: 5px; }
-        input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: white; margin-bottom: 20px; box-sizing: border-box; font-family: 'Poppins'; }
-        .action-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; font-size: 14px; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; }
-        .qr-area { background: white; width: 130px; height: 130px; margin: 0 auto 15px auto; border-radius: 15px; padding: 8px; }
-        .qr-area img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
-        .scan-text { font-size: 10px; color: #a0aab2; text-align: center; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; }
-        .wa-btn { display: block; width: 100%; background: #25D366; color: white; padding: 15px; border-radius: 12px; text-align: center; font-weight: 800; text-decoration: none; font-size: 13px; margin-bottom: 25px; box-sizing: border-box;}
-        
-        .nav-wrapper { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #000000; z-index: 9999; padding-bottom: 25px; }
-        .bottom-nav { display: flex; justify-content: space-around; align-items: center; height: 65px; background-color: #000000; border-top: 1.5px solid rgba(255, 0, 122, 0.4); }
-        .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; font-size: 10px; font-weight: 800; text-transform: uppercase; flex: 1; position: relative; }
+        body { background: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; padding-bottom: 100px; }
+        .box { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #222; margin-bottom: 20px; }
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #050508; border: 1px solid #333; color: white; border-radius: 10px; box-sizing: border-box; font-family: 'Poppins'; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; }
+        .btn-redeem { background: #ffd700; color: black; }
+        .btn-withdraw { background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; }
+        .nav-wrapper { position: fixed; bottom: 0; left:0; width: 100%; background: #000; border-top: 1px solid #222; display: flex; justify-content: space-around; padding: 15px 0; }
+        .nav-item { color: #555; text-decoration: none; font-size: 10px; text-align: center; flex: 1; }
         .nav-item.active { color: white; }
-        .nav-item.active::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 45px; height: 45px; background: linear-gradient(135deg, #ff007a 0%, #7a00ff 100%); border-radius: 10px; z-index: -1; box-shadow: 0 0 15px rgba(255,0,122,0.5); }
     </style>
 </head>
 <body>
-    <div class="header">WALLET & EARNINGS</div>
-    <div class="container">
-        <div class="wallet-card"><div class="bal-title">Your Balance</div><div class="bal-amount" id="mainBal">₹0</div></div>
-        
-        <div class="tab-box">
-            <button class="tab-btn active" onclick="openTab('add')">ADD MONEY</button>
-            <button class="tab-btn" onclick="openTab('withdraw')">WITHDRAW</button>
-        </div>
-        
-        <div id="addSection" class="form-section active">
-            <div class="qr-area"><img src="my_qr.jpg" alt="Scan to Pay"></div>
-            <div class="scan-text">Scan to Pay & Take Screenshot</div>
-            <a href="https://wa.me/917008170291?text=Hello Admin, I have paid money. Here is my screenshot:" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> SEND SCREENSHOT ON WHATSAPP</a>
-            
-            <div style="background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.3); padding: 15px; border-radius: 15px;">
-                <label style="color: #ffd700;">HAVE A REDEEM CODE?</label>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="promoCode" placeholder="Enter Code" style="margin-bottom: 0;">
-                    <button onclick="redeemCode()" id="redeemBtn" style="background: #ffd700; color: #000; padding: 0 20px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer;">REDEEM</button>
-                </div>
-            </div>
-        </div>
-        
-        <div id="withdrawSection" class="form-section">
-            <label>Withdraw Amount</label>
-            <input type="number" id="witAmt" placeholder="Minimum ₹50">
-            <label>Your UPI ID / Number</label>
-            <input type="text" id="witUpi" placeholder="example@upi">
-            <button class="action-btn" onclick="submitWithdraw()" id="withBtn">REQUEST WITHDRAW</button>
-        </div>
-    </div>
+    <h2 style="text-align: center; font-weight: 800;">WALLET</h2>
     
+    <div class="box">
+        <label style="font-size: 12px; color: #ffd700; font-weight: 800;">PROMO CODE</label>
+        <input type="text" id="promoCode" placeholder="Enter Code (e.g. WELCOME50)">
+        <button class="btn btn-redeem" onclick="handleRedeem()">REDEEM CODE</button>
+    </div>
+
+    <div class="box">
+        <label style="font-size: 12px; color: #ff007a; font-weight: 800;">WITHDRAW MONEY</label>
+        <input type="number" id="witAmt" placeholder="Min ₹50">
+        <input type="text" id="witUpi" placeholder="UPI ID (example@upi)">
+        <button class="btn btn-withdraw" onclick="handleWithdraw()">REQUEST WITHDRAW</button>
+    </div>
+
     <div class="nav-wrapper">
-        <nav class="bottom-nav">
-            <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
-            <a href="earn.html" class="nav-item active"><i class="fas fa-wallet"></i><span>EARN</span></a>
-            <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
-            <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
-        </nav>
+        <a href="index.html" class="nav-item"><i class="fas fa-home" style="font-size:20px;"></i><br>HOME</a>
+        <a href="earn.html" class="nav-item active"><i class="fas fa-wallet" style="font-size:20px;"></i><br>EARN</a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user" style="font-size:20px;"></i><br>PROFILE</a>
     </div>
-    
+
     <script>
-        let currentWalletBal = parseInt(localStorage.getItem("rareWallet") || 0);
-        document.getElementById('mainBal').innerText = "₹" + currentWalletBal;
+        const scriptURL = "https://script.google.com/macros/s/AKfycbx4CbWAB9J5kanfjHZ_odNKtuHcBInFeQWnrFjWlD2-5EBIxmxxnwlIClkbWSZ-moG4kg/exec";
 
-        // 🔥 AAPKA NAYA MASTER SCRIPT LINK 🔥
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyhLzrIaAfFoqJ_221uWTLZAOWWbpm72EqFYdFjDD3dExLb0kWOley1tGO_P2jLSufQTA/exec";
+        function handleRedeem() {
+            const user = JSON.parse(localStorage.getItem("rareGamingUser")).name;
+            const code = document.getElementById('promoCode').value;
+            const btn = event.target;
+            btn.innerText = "CHECKING..."; btn.disabled = true;
 
-        function openTab(type) { 
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
-            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active')); 
-            if(type === 'add') { 
-                document.querySelectorAll('.tab-btn')[0].classList.add('active'); 
-                document.getElementById('addSection').classList.add('active'); 
-            } else { 
-                document.querySelectorAll('.tab-btn')[1].classList.add('active'); 
-                document.getElementById('withdrawSection').classList.add('active'); 
-            } 
+            let fd = new FormData();
+            fd.append("action", "redeem");
+            fd.append("username", user);
+            fd.append("code", code);
+
+            fetch(scriptURL, { method: 'POST', body: fd })
+            .then(res => res.text())
+            .then(data => {
+                if(data.includes("Success")) {
+                    alert("🎉 ₹50 Added to your Users sheet balance!");
+                    location.href = "index.html"; 
+                } else {
+                    alert("❌ Invalid or Already Used!");
+                    btn.innerText = "REDEEM CODE"; btn.disabled = false;
+                }
+            });
         }
 
-        function submitWithdraw() { 
-            const amtInput = document.getElementById('witAmt').value; 
-            const upi = document.getElementById('witUpi').value; 
-            const amt = parseInt(amtInput);
-            
-            if(!amt || amt < 50) return alert("Minimum ₹50 required!"); 
-            if(!upi) return alert("Enter UPI ID!"); 
-            if(amt > currentWalletBal) return alert("Low balance!");
+        function handleWithdraw() {
+            const user = JSON.parse(localStorage.getItem("rareGamingUser")).name;
+            const amt = document.getElementById('witAmt').value;
+            const upi = document.getElementById('witUpi').value;
+            const currentBal = parseInt(localStorage.getItem("rareWallet") || 0);
 
-            const btn = document.getElementById('withBtn');
+            if(amt < 50) return alert("Minimum ₹50 required!");
+            if(amt > currentBal) return alert("Low balance in Sheet!");
+
+            const btn = event.target;
             btn.innerText = "SENDING..."; btn.disabled = true;
 
-            const userData = JSON.parse(localStorage.getItem("rareGamingUser")) || {};
-            
-            let formData = new URLSearchParams();
-            formData.append("action", "withdraw");
-            formData.append("username", userData.name || "Unknown");
-            formData.append("upi", upi);
-            formData.append("amount", amt);
+            let fd = new FormData();
+            fd.append("action", "withdraw");
+            fd.append("username", user);
+            fd.append("amount", amt);
+            fd.append("upi", upi);
 
-            fetch(scriptURL, { method: 'POST', body: formData })
-            .then(res => res.text())
-            .then(data => {
-                if(data.includes("Withdraw_Success")) {
-                    currentWalletBal -= amt;
-                    localStorage.setItem("rareWallet", currentWalletBal);
-                    document.getElementById('mainBal').innerText = "₹" + currentWalletBal;
-                    alert("✅ Success! Balance updated in Users sheet."); 
-                    document.getElementById('witAmt').value = ''; document.getElementById('witUpi').value = '';
-                }
-                btn.innerText = "REQUEST WITHDRAW"; btn.disabled = false;
+            fetch(scriptURL, { method: 'POST', body: fd })
+            .then(() => {
+                alert("✅ Withdraw Request Sent! Balance updated in Users sheet.");
+                location.href = "index.html";
             })
-            .catch(e => { alert("❌ Error!"); btn.innerText = "REQUEST WITHDRAW"; btn.disabled = false; });
-        }
-
-        function redeemCode() { 
-            const code = document.getElementById('promoCode').value.trim().toUpperCase(); 
-            if(!code) return alert("Enter Code!"); 
-            
-            const btn = document.getElementById('redeemBtn');
-            btn.innerText = "WAIT..."; btn.disabled = true;
-
-            const userData = JSON.parse(localStorage.getItem("rareGamingUser")) || {};
-
-            let formData = new URLSearchParams();
-            formData.append("action", "redeem");
-            formData.append("code", code);
-            formData.append("username", userData.name || "Unknown");
-
-            fetch(scriptURL, { method: 'POST', body: formData })
-            .then(res => res.text())
-            .then(data => {
-                btn.innerText = "REDEEM"; btn.disabled = false;
-                if(data.includes("Success_50")) {
-                    currentWalletBal += 50; 
-                    localStorage.setItem("rareWallet", currentWalletBal); 
-                    document.getElementById('mainBal').innerText = "₹" + currentWalletBal; 
-                    alert("🎉 ₹50 Added to Wallet & Users sheet!"); 
-                    document.getElementById('promoCode').value = ''; 
-                } else if(data.includes("Used")) {
-                    alert("❌ Code already used!");
-                } else {
-                    alert("❌ Invalid Code!");
-                }
-            })
-            .catch(e => { alert("❌ Error!"); btn.innerText = "REDEEM"; btn.disabled = false; });
+            .catch(() => { alert("Error!"); btn.innerText = "REQUEST WITHDRAW"; btn.disabled = false; });
         }
     </script>
 </body>
