@@ -27,15 +27,10 @@
         .qr-area img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
         .scan-text { font-size: 10px; color: #a0aab2; text-align: center; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; }
         .wa-btn { display: block; width: 100%; background: #25D366; color: white; padding: 15px; border-radius: 12px; text-align: center; font-weight: 800; text-decoration: none; font-size: 13px; margin-bottom: 25px; box-sizing: border-box;}
-        .redeem-box { background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.3); padding: 15px; border-radius: 15px; margin-top: 10px; }
-        .redeem-flex { display: flex; gap: 10px; }
-        .redeem-flex input { margin-bottom: 0; }
-        .btn-redeem { background: #ffd700; color: #000; padding: 0 20px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; }
-
+        
         .nav-wrapper { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #000000; z-index: 9999; padding-bottom: 25px; }
         .bottom-nav { display: flex; justify-content: space-around; align-items: center; height: 65px; background-color: #000000; border-top: 1.5px solid rgba(255, 0, 122, 0.4); }
         .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; font-size: 10px; font-weight: 800; text-transform: uppercase; flex: 1; position: relative; }
-        .nav-icon { font-size: 22px; margin-bottom: 4px; transition: 0.3s; }
         .nav-item.active { color: white; }
         .nav-item.active::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 45px; height: 45px; background: linear-gradient(135deg, #ff007a 0%, #7a00ff 100%); border-radius: 10px; z-index: -1; box-shadow: 0 0 15px rgba(255,0,122,0.5); }
     </style>
@@ -44,6 +39,7 @@
     <div class="header">WALLET & EARNINGS</div>
     <div class="container">
         <div class="wallet-card"><div class="bal-title">Your Balance</div><div class="bal-amount" id="mainBal">₹0</div></div>
+        
         <div class="tab-box">
             <button class="tab-btn active" onclick="openTab('add')">ADD MONEY</button>
             <button class="tab-btn" onclick="openTab('withdraw')">WITHDRAW</button>
@@ -53,11 +49,12 @@
             <div class="qr-area"><img src="my_qr.jpg" alt="Scan to Pay"></div>
             <div class="scan-text">Scan to Pay & Take Screenshot</div>
             <a href="https://wa.me/917008170291?text=Hello Admin, I have paid money. Here is my screenshot:" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i> SEND SCREENSHOT ON WHATSAPP</a>
-            <div class="redeem-box">
+            
+            <div style="background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.3); padding: 15px; border-radius: 15px;">
                 <label style="color: #ffd700;">HAVE A REDEEM CODE?</label>
-                <div class="redeem-flex">
-                    <input type="text" id="promoCode" placeholder="Enter Code">
-                    <button class="btn-redeem" onclick="redeemCode()" id="redeemBtn">REDEEM</button>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="promoCode" placeholder="Enter Code" style="margin-bottom: 0;">
+                    <button onclick="redeemCode()" id="redeemBtn" style="background: #ffd700; color: #000; padding: 0 20px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer;">REDEEM</button>
                 </div>
             </div>
         </div>
@@ -67,16 +64,16 @@
             <input type="number" id="witAmt" placeholder="Minimum ₹50">
             <label>Your UPI ID / Number</label>
             <input type="text" id="witUpi" placeholder="example@upi">
-            <button class="action-btn btn-withdraw" onclick="submitWithdraw()" id="withBtn">REQUEST WITHDRAW</button>
+            <button class="action-btn" onclick="submitWithdraw()" id="withBtn">REQUEST WITHDRAW</button>
         </div>
     </div>
     
     <div class="nav-wrapper">
         <nav class="bottom-nav">
-            <a href="index.html" class="nav-item"><i class="fas fa-home nav-icon"></i><span>HOME</span></a>
-            <a href="earn.html" class="nav-item active"><i class="fas fa-wallet nav-icon"></i><span>EARN</span></a>
-            <a href="winners.html" class="nav-item"><i class="fas fa-crown nav-icon"></i><span>WINNERS</span></a>
-            <a href="profile.html" class="nav-item"><i class="fas fa-user-circle nav-icon"></i><span>PROFILE</span></a>
+            <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+            <a href="earn.html" class="nav-item active"><i class="fas fa-wallet"></i><span>EARN</span></a>
+            <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
+            <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
         </nav>
     </div>
     
@@ -84,7 +81,8 @@
         let currentWalletBal = parseInt(localStorage.getItem("rareWallet") || 0);
         document.getElementById('mainBal').innerText = "₹" + currentWalletBal;
 
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxKpw8Hi3FSLUZ8uDEOo6md-KNiui_6vKx9Op9PwYPDcZhuHK_y2GXRDInt7IL4ura7tg/exec";
+        // 🔥 AAPKA NAYA MASTER SCRIPT LINK 🔥
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyhLzrIaAfFoqJ_221uWTLZAOWWbpm72EqFYdFjDD3dExLb0kWOley1tGO_P2jLSufQTA/exec";
 
         function openTab(type) { 
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
@@ -103,9 +101,9 @@
             const upi = document.getElementById('witUpi').value; 
             const amt = parseInt(amtInput);
             
-            if(!amt || amt < 50) return alert("Minimum ₹50 withdraw kar sakte hain!"); 
-            if(!upi) return alert("Pehle apni UPI ID enter karo!"); 
-            if(amt > currentWalletBal) return alert("Aapke wallet mein itne paise nahi hain!");
+            if(!amt || amt < 50) return alert("Minimum ₹50 required!"); 
+            if(!upi) return alert("Enter UPI ID!"); 
+            if(amt > currentWalletBal) return alert("Low balance!");
 
             const btn = document.getElementById('withBtn');
             btn.innerText = "SENDING..."; btn.disabled = true;
@@ -125,17 +123,17 @@
                     currentWalletBal -= amt;
                     localStorage.setItem("rareWallet", currentWalletBal);
                     document.getElementById('mainBal').innerText = "₹" + currentWalletBal;
-                    alert("✅ Success! Request admin ko bhej di gayi hai."); 
+                    alert("✅ Success! Balance updated in Users sheet."); 
                     document.getElementById('witAmt').value = ''; document.getElementById('witUpi').value = '';
                 }
                 btn.innerText = "REQUEST WITHDRAW"; btn.disabled = false;
             })
-            .catch(e => { alert("❌ Network Error!"); btn.innerText = "REQUEST WITHDRAW"; btn.disabled = false; });
+            .catch(e => { alert("❌ Error!"); btn.innerText = "REQUEST WITHDRAW"; btn.disabled = false; });
         }
 
         function redeemCode() { 
             const code = document.getElementById('promoCode').value.trim().toUpperCase(); 
-            if(!code) return alert("Pehle code toh daalo!"); 
+            if(!code) return alert("Enter Code!"); 
             
             const btn = document.getElementById('redeemBtn');
             btn.innerText = "WAIT..."; btn.disabled = true;
@@ -155,10 +153,10 @@
                     currentWalletBal += 50; 
                     localStorage.setItem("rareWallet", currentWalletBal); 
                     document.getElementById('mainBal').innerText = "₹" + currentWalletBal; 
-                    alert("🎉 ₹50 Added to your wallet!"); 
+                    alert("🎉 ₹50 Added to Wallet & Users sheet!"); 
                     document.getElementById('promoCode').value = ''; 
                 } else if(data.includes("Used")) {
-                    alert("❌ Ye code aap pehle hi use kar chuke hain!");
+                    alert("❌ Code already used!");
                 } else {
                     alert("❌ Invalid Code!");
                 }
