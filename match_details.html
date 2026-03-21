@@ -3,158 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Match Details - RARE GAMING</title>
+    <title>Match Details</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; position: relative; z-index: 1;}
-        
-        /* 🔥 LIVE ANIMATED BACKGROUND 🔥 */
-        .bg-orb-1 { position: fixed; top: -10%; left: -20%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 0, 122, 0.2) 0%, transparent 70%); filter: blur(40px); animation: float1 8s infinite alternate; z-index: -1; }
-        .bg-orb-2 { position: fixed; bottom: -10%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(122, 0, 255, 0.2) 0%, transparent 70%); filter: blur(50px); animation: float2 10s infinite alternate; z-index: -1; }
-        
-        @keyframes float1 { 0% { transform: translate(0, 0); } 100% { transform: translate(40px, 30px); } }
-        @keyframes float2 { 0% { transform: translate(0, 0); } 100% { transform: translate(-30px, -50px); } }
+        .bg-orb-1 { position: fixed; top: -10%; left: -20%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 0, 122, 0.2) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
+        .bg-orb-2 { position: fixed; bottom: -10%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(122, 0, 255, 0.2) 0%, transparent 70%); filter: blur(50px); z-index: -1; }
 
-        /* 🔲 GLASS UI PANEL 🔲 */
-        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); }
-
-        /* NAVBAR */
-        .nav-header { padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(5, 5, 8, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); position: sticky; top: 0; z-index: 100; }
-        .back-btn { color: #00f2fe; text-decoration: none; font-weight: 800; font-size: 13px; text-transform: uppercase; border: 1px solid rgba(0, 242, 254, 0.3); padding: 5px 12px; border-radius: 6px; }
-        .logo-circle { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #ff007a; overflow: hidden; display: block; box-shadow: 0 0 10px rgba(255, 0, 122, 0.5);}
-        .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .wallet-display { color: #00f2fe; font-weight: 800; font-size: 13px; }
+        .nav-header { padding: 12px; background: rgba(5, 5, 8, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; }
+        .back-btn { color: #00f2fe; text-decoration: none; font-weight: 800; border: 1px solid #00f2fe; padding: 5px 12px; border-radius: 6px; font-size: 12px; }
 
         .container { padding: 20px; max-width: 450px; margin: auto; }
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); }
 
-        /* MATCH CARD */
-        .detail-card { border-radius: 20px; overflow: hidden; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1);}
-        .d-banner { height: 180px; background-size: cover; background-position: center; position: relative; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .banner { width: 100%; height: 170px; border-radius: 15px; background-size: cover; background-position: center; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
         
-        /* 🔥 DYNAMIC BADGE 🔥 */
-        .d-badge { position: absolute; top: 12px; right: 12px; font-size: 9px; font-weight: 800; padding: 5px 12px; border-radius: 6px; text-transform: uppercase; }
-        .badge-open { background: #00e676; color: white; box-shadow: 0 0 10px rgba(0,230,118,0.5); }
-        .badge-closed { background: #ff4b2b; color: white; box-shadow: 0 0 10px rgba(255,75,43,0.5); }
-        
-        .d-body { padding: 20px; }
-        .d-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .d-time { font-size: 11px; color: #00f2fe; font-weight: 600; margin-bottom: 20px; display: block; }
-        
-        /* INFO GRID */
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 25px; }
-        .info-box { padding: 15px 5px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05);}
-        .i-label { font-size: 9px; color: #a0aab2; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; }
-        .i-val { font-size: 16px; font-weight: 800; color: #fff; }
-        .neon-text { color: #ff007a; text-shadow: 0 0 10px rgba(255,0,122,0.3); }
+        h2 { font-size: 24px; font-weight: 800; color: #fff; margin: 0; text-transform: uppercase; }
+        .time { font-size: 11px; color: #00f2fe; margin-bottom: 20px; display: block; }
 
-        /* PRIZE LIST */
-        .prize-dist { padding: 15px; border-radius: 15px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
-        .p-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+        .info-box { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .label { font-size: 9px; color: #a0aab2; text-transform: uppercase; margin-bottom: 5px; }
+        .val { font-size: 16px; font-weight: 800; color: #fff; }
+
+        .prize-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.05); }
+        .p-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .p-row:last-child { border-bottom: none; }
-        .rank-gold { color: #ff007a; }
-        .rank-silver { color: #00f2fe; }
+        .p-rank { font-weight: 700; color: #ff007a; }
+        .p-win { font-weight: 800; color: #00f2fe; }
 
-        /* ⭐ NEON ACTION BUTTON ⭐ */
-        .action-btn { display: block; width: 100%; color: #fff; padding: 18px; border: none; text-align: center; text-decoration: none; border-radius: 15px; font-size: 16px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.3s; box-sizing: border-box; letter-spacing: 1px; }
-        
+        .reg-btn { display: block; width: 100%; color: white; padding: 18px; border: none; border-radius: 15px; font-weight: 800; font-size: 16px; text-transform: uppercase; cursor: pointer; text-decoration: none; text-align: center; box-sizing: border-box; transition: 0.3s; }
         .btn-active { background: linear-gradient(90deg, #ff007a, #7a00ff); box-shadow: 0 0 20px rgba(255, 0, 122, 0.4); }
         .btn-active:active { transform: scale(0.96); }
-        
         .btn-closed { background: #2a2a35; color: #777; cursor: not-allowed; box-shadow: none; border: 1px solid #333; }
-        .btn-closed:active { transform: none; }
     </style>
 </head>
 <body>
-    
-    <div class="bg-orb-1"></div>
-    <div class="bg-orb-2"></div>
-
-    <div class="nav-header">
-        <a href="index.html" class="back-btn">⬅ BACK</a>
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div class="wallet-display">₹100</div>
-            <a href="profile.html" class="logo-circle"><img src="logo.jpg"></a>
-        </div>
-    </div>
+    <div class="bg-orb-1"></div><div class="bg-orb-2"></div>
+    <div class="nav-header"><a href="index.html" class="back-btn">⬅ BACK</a></div>
 
     <div class="container">
-        <div class="detail-card glass-panel">
-            <div class="d-banner" id="match-banner">
-                <div class="d-badge" id="match-badge">UPCOMING</div>
-            </div>
-            <div class="d-body">
-                <div class="d-title" id="match-title">1V1 SHOWDOWN</div>
-                <span class="d-time" id="match-time">📅 20 MAR | 08:00 PM</span>
-                
-                <div class="info-grid">
-                    <div class="info-box"><div class="i-label">Prize Pool</div><div class="i-val neon-text" id="prize-pool">₹200</div></div>
-                    <div class="info-box"><div class="i-label">Per Kill</div><div class="i-val" id="per-kill">₹10</div></div>
-                    <div class="info-box"><div class="i-label">Entry Fee</div><div class="i-val neon-text" id="entry-fee">₹20</div></div>
-                </div>
+        <div class="glass-panel">
+            <div class="banner" id="match-banner"></div>
+            <h2 id="mName">LOADING...</h2>
+            <span class="time" id="mTime">🕒 --:--</span>
 
-                <div class="prize-dist glass-panel">
-                    <div class="p-row"><span class="rank-gold">🥇 1st Prize</span><span id="p1">₹100</span></div>
-                    <div class="p-row"><span class="rank-silver">🥈 2nd Prize</span><span id="p2">₹50</span></div>
-                    <div class="p-row"><span class="rank-silver">🥉 3rd Prize</span><span id="p3">₹30</span></div>
-                </div>
-
-                <a href="#" class="action-btn btn-closed" id="matchBtn">NOT STARTED YET</a>
+            <div class="info-grid">
+                <div class="info-box"><div class="label">Entry Fee</div><div class="val" id="mFee">--</div></div>
+                <div class="info-box"><div class="label">Map</div><div class="val">Bermuda</div></div>
             </div>
+
+            <div class="prize-box">
+                <div class="p-row"><span class="p-rank">🥇 1st Prize</span><span class="p-win" id="p1Win">₹150</span></div>
+                <div class="p-row" id="prize2Row"><span class="p-rank">🥈 2nd Prize</span><span class="p-win" id="p2Win">₹70</span></div>
+            </div>
+
+            <a href="#" id="joinBtn" class="reg-btn">LOADING...</a>
         </div>
     </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const matchID = urlParams.get('match') || 'BR';
+        const match = urlParams.get('match') || 'BR';
 
-        // ⭐ CEO'S UPDATED MATCH CONFIG (Logic Set, BR open, CS/LW closed) ⭐
+        // ⭐ CEO KI NEW MATCH CONFIG ⭐
         const config = {
-            "BR": { name: "BR SQUAD BATTLE", fee: 0, time: "23 MAR | 07:00 PM", img: "br_poster.jpg", status: "open", p1: 150, p2: 70, p3: 0 },
-            "CS": { name: "CS PRO LEAGUE", fee: 50, time: "NOT DECIDED", img: "cs_poster.jpg", status: "closed", p1: 50, p2: 0, p3: 0 },
-            "LW": { name: "LONE WOLF 1", fee: 15, time: "SOON", img: "lw_poster.jpg", status: "closed", p1: 50, p2: 20, p3: 0 },
-            "1V1": { name: "1V1 SHOWDOWN", fee: 30, time: "SOON", img: "1v1_poster.jpg", status: "closed", p1: 100, p2: 40, p3: 0 }
+            "BR": { name: "BR SQUAD BATTLE", fee: "FREE", time: "23 MAR | 07:00 PM", img: "br_poster.jpg", status: "open", p1: "₹150", p2: "₹70" },
+            "CS": { name: "CS PRO LEAGUE", fee: "₹50", time: "NOT DECIDED", img: "cs_poster.jpg", status: "closed", p1: "₹50", p2: null }, // CS mein p2 ko null kar diya
+            "LW": { name: "LONE WOLF 1", fee: "₹15", time: "SOON", img: "lw_poster.jpg", status: "closed", p1: "₹50", p2: "₹20" },
+            "1V1": { name: "1V1 SHOWDOWN", fee: "₹30", time: "SOON", img: "1v1_poster.jpg", status: "closed", p1: "₹100", p2: "₹40" }
         };
 
-        const current = config[matchID];
-
-        // 📊 UI UPDATE 📊
-        document.getElementById('match-title').innerText = current.name;
-        document.getElementById('match-time').innerText = "📅 " + current.time;
-        document.getElementById('prize-pool').innerText = "₹" + (current.p1 + current.p2 + current.p3);
-        document.getElementById('per-kill').innerText = "₹0"; // 1v1 doesn't have per kill
-        document.getElementById('entry-fee').innerText = current.fee === 0 ? "FREE" : "₹" + current.fee;
-        
-        // Poster & Prizes
+        const current = config[match];
+        document.getElementById('mName').innerText = current.name;
+        document.getElementById('mFee').innerText = current.fee;
+        document.getElementById('mTime').innerText = "🕒 " + current.time;
         document.getElementById('match-banner').style.backgroundImage = `url('${current.img}')`;
-        document.getElementById('p1').innerText = "₹" + current.p1;
-        document.getElementById('p2').innerText = current.p2 === 0 ? "---" : "₹" + current.p2;
-        document.getElementById('p3').innerText = current.p3 === 0 ? "---" : "₹" + current.p3;
 
-        // ⭐ LOCK LOGIC SET ⭐
-        const matchBadge = document.getElementById('match-badge');
-        const matchBtn = document.getElementById('matchBtn');
+        // PRIZE DISPLAY LOGIC
+        document.getElementById('p1Win').innerText = current.p1;
         
-        if (current.status === "open") {
-            // Match is open
-            matchBadge.innerText = "REGISTRATION OPEN";
-            matchBadge.classList.add("badge-open");
-            
-            matchBtn.innerText = current.fee === 0 ? "JOIN FOR FREE" : "REGISTER FOR ₹" + current.fee;
-            matchBtn.classList.remove("btn-closed");
-            matchBtn.classList.add("btn-active");
-            matchBtn.href = "register.html?match=" + matchID;
-            matchBtn.onclick = null; // Enable normal link
+        // Agar 2nd prize nahi hai (jaise CS mein), toh puri line hide kar do
+        if(current.p2) {
+            document.getElementById('prize2Row').style.display = "flex";
+            document.getElementById('p2Win').innerText = current.p2;
         } else {
-            // Match is locked
-            matchBadge.innerText = "UPCOMING";
-            matchBadge.classList.add("badge-closed");
-            
-            matchBtn.innerText = "NOT STARTED YET";
-            matchBtn.classList.remove("btn-active");
-            matchBtn.classList.add("btn-closed");
-            matchBtn.href = "#"; // Deactivate normal link
-            matchBtn.onclick = function(e) { e.preventDefault(); alert("Please wait for this match to open!"); }; // Enable deactivated behavior
+            document.getElementById('prize2Row').style.display = "none";
+        }
+
+        // LOCK SYSTEM
+        const joinButton = document.getElementById('joinBtn');
+        if (current.status === "open") {
+            joinButton.innerText = "REGISTER NOW";
+            joinButton.classList.add("btn-active");
+            joinButton.href = "register.html?match=" + match;
+        } else {
+            joinButton.innerText = "NOT STARTED YET";
+            joinButton.classList.add("btn-closed");
+            joinButton.href = "#"; 
+            joinButton.onclick = function(e) { e.preventDefault(); }; 
         }
     </script>
 </body>
