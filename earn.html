@@ -49,6 +49,7 @@
             <button class="tab-btn active" onclick="openTab('add')">ADD MONEY</button>
             <button class="tab-btn" onclick="openTab('withdraw')">WITHDRAW</button>
         </div>
+        
         <div id="addSection" class="form-section active">
             <div class="qr-area"><img src="my_qr.jpg" alt="Scan to Pay"></div>
             <div class="scan-text">Scan to Pay & Take Screenshot</div>
@@ -58,12 +59,16 @@
                 <div class="redeem-flex"><input type="text" id="promoCode" placeholder="Enter Code"><button class="btn-redeem" onclick="redeemCode()">REDEEM</button></div>
             </div>
         </div>
+        
         <div id="withdrawSection" class="form-section">
-            <label>Withdraw Amount</label><input type="number" id="witAmt" placeholder="Minimum ₹50">
-            <label>Your UPI ID / Number</label><input type="text" id="witUpi" placeholder="example@upi">
+            <label>Withdraw Amount</label>
+            <input type="number" id="witAmt" placeholder="Minimum ₹50">
+            <label>Your UPI ID / Number</label>
+            <input type="text" id="witUpi" placeholder="example@upi">
             <button class="action-btn btn-withdraw" onclick="submitWithdraw()">REQUEST WITHDRAW</button>
         </div>
     </div>
+    
     <div class="nav-wrapper">
         <nav class="bottom-nav">
             <a href="index.html" class="nav-item"><i class="fas fa-home nav-icon"></i><span>HOME</span></a>
@@ -72,11 +77,73 @@
             <a href="profile.html" class="nav-item"><i class="fas fa-user-circle nav-icon"></i><span>PROFILE</span></a>
         </nav>
     </div>
+    
     <script>
-        document.getElementById('mainBal').innerText = "₹" + (localStorage.getItem("rareWallet") || 0);
-        function openTab(type) { document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active')); if(type === 'add') { document.querySelectorAll('.tab-btn')[0].classList.add('active'); document.getElementById('addSection').classList.add('active'); } else { document.querySelectorAll('.tab-btn')[1].classList.add('active'); document.getElementById('withdrawSection').classList.add('active'); } }
-        function submitWithdraw() { const amt = document.getElementById('witAmt').value; const upi = document.getElementById('witUpi').value; if(amt < 50) return alert("Minimum ₹50 required for withdraw!"); if(!upi) return alert("UPI ID enter karo bhai!"); alert("Withdraw request sent for ₹" + amt); }
-        function redeemCode() { const code = document.getElementById('promoCode').value; if(!code) return alert("Pehle code toh daalo!"); if(code.toUpperCase() === "WELCOME50") { let current = parseInt(localStorage.getItem("rareWallet") || 0); localStorage.setItem("rareWallet", current + 50); document.getElementById('mainBal').innerText = "₹" + (current + 50); alert("🎉 Boom! ₹50 Added to your wallet!"); document.getElementById('promoCode').value = ''; } else { alert("❌ Invalid or Expired Code!"); } }
+        // Load initial balance
+        let currentWalletBal = parseInt(localStorage.getItem("rareWallet") || 0);
+        document.getElementById('mainBal').innerText = "₹" + currentWalletBal;
+
+        function openTab(type) { 
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
+            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active')); 
+            if(type === 'add') { 
+                document.querySelectorAll('.tab-btn')[0].classList.add('active'); 
+                document.getElementById('addSection').classList.add('active'); 
+            } else { 
+                document.querySelectorAll('.tab-btn')[1].classList.add('active'); 
+                document.getElementById('withdrawSection').classList.add('active'); 
+            } 
+        }
+
+        // 🔥 ASLI WITHDRAW LOGIC 🔥
+        function submitWithdraw() { 
+            const amtInput = document.getElementById('witAmt').value; 
+            const upi = document.getElementById('witUpi').value; 
+            const amt = parseInt(amtInput);
+            
+            // Check 1: Amount dala hai ya nahi, aur 50 se bada hai?
+            if(!amt || amt < 50) {
+                return alert("Minimum ₹50 withdraw kar sakte hain!"); 
+            }
+            
+            // Check 2: UPI ID dali hai?
+            if(!upi) {
+                return alert("Pehle apni UPI ID enter karo!"); 
+            }
+            
+            // Check 3: Kya wallet mein utne paise hain?
+            if(amt > currentWalletBal) {
+                return alert("Aapke wallet mein itne paise nahi hain! Balance: ₹" + currentWalletBal);
+            }
+
+            // Agar sab sahi hai, toh paise kaato (Deduct Money)
+            currentWalletBal = currentWalletBal - amt;
+            localStorage.setItem("rareWallet", currentWalletBal);
+            
+            // UI Update karo
+            document.getElementById('mainBal').innerText = "₹" + currentWalletBal;
+            
+            // Inputs khali karo
+            document.getElementById('witAmt').value = '';
+            document.getElementById('witUpi').value = '';
+
+            alert("✅ Success! ₹" + amt + " ka withdraw request lag gaya hai. 24 ghante mein aapke UPI par aa jayega."); 
+        }
+
+        // Redeem Code Logic
+        function redeemCode() { 
+            const code = document.getElementById('promoCode').value; 
+            if(!code) return alert("Pehle code toh daalo!"); 
+            if(code.toUpperCase() === "WELCOME50") { 
+                currentWalletBal = currentWalletBal + 50; 
+                localStorage.setItem("rareWallet", currentWalletBal); 
+                document.getElementById('mainBal').innerText = "₹" + currentWalletBal; 
+                alert("🎉 Boom! ₹50 Added to your wallet!"); 
+                document.getElementById('promoCode').value = ''; 
+            } else { 
+                alert("❌ Invalid or Expired Code!"); 
+            } 
+        }
     </script>
 </body>
 </html>
