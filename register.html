@@ -6,51 +6,36 @@
     <title>Registration - RARE GAMING</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        
         body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* 🔥 HYBRID BACKGROUND SPARKS */
-        .bg-orb-1 { position: fixed; top: -10%; left: -20%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 0, 122, 0.2) 0%, transparent 70%); filter: blur(40px); animation: float1 8s infinite alternate; z-index: -1; }
-        .bg-orb-2 { position: fixed; bottom: -10%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(122, 0, 255, 0.2) 0%, transparent 70%); filter: blur(50px); animation: float2 10s infinite alternate; z-index: -1; }
-        @keyframes float1 { 0% { transform: translate(0, 0); } 100% { transform: translate(40px, 30px); } }
-        @keyframes float2 { 0% { transform: translate(0, 0); } 100% { transform: translate(-30px, -50px); } }
+        /* 🔥 BACKGROUND SPARKS */
+        .bg-orb-1 { position: fixed; top: -10%; left: -20%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 0, 122, 0.2) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
+        .bg-orb-2 { position: fixed; bottom: -10%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(122, 0, 255, 0.2) 0%, transparent 70%); filter: blur(50px); z-index: -1; }
 
-        /* 📊 TOP STATUS BAR */
-        .status-bar { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(0, 242, 254, 0.2); margin: 15px; padding: 12px 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .fee-tag { font-weight: 800; font-size: 13px; color: #ff007a; }
-        .wallet-tag { font-weight: 800; font-size: 13px; color: #00f2fe; }
+        .status-bar { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(0, 242, 254, 0.2); margin: 15px; padding: 12px; border-radius: 15px; display: flex; justify-content: space-between; }
+        .fee-tag { font-weight: 800; color: #ff007a; }
+        .wallet-tag { font-weight: 800; color: #00f2fe; }
 
         .container { padding: 15px; max-width: 450px; margin: auto; }
-        
-        /* 🔲 GLASS FORM CARD */
         .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
 
-        h2 { text-align: center; color: #fff; text-transform: uppercase; font-size: 18px; margin-bottom: 25px; letter-spacing: 1px; font-weight: 800; }
-        
-        .match-label { background: #ff007a; color: white; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 15px; text-transform: uppercase; }
+        h2 { text-align: center; color: #fff; text-transform: uppercase; font-size: 18px; margin-bottom: 20px; font-weight: 800; }
+        .match-label { background: #ff007a; color: white; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 15px; }
 
         label { display: block; font-size: 10px; color: #a0aab2; margin-top: 15px; text-transform: uppercase; font-weight: 600; }
-        input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: white; font-family: 'Poppins'; box-sizing: border-box; margin-top: 5px; font-size: 14px; transition: 0.3s; }
-        input:focus { border-color: #00f2fe; outline: none; background: rgba(255,255,255,0.05); }
+        input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: white; font-family: 'Poppins'; box-sizing: border-box; margin-top: 5px; font-size: 14px; }
 
-        /* PLAYER BOX */
-        .player-box { border: 1px solid rgba(255,255,255,0.08); padding: 15px; border-radius: 15px; margin-top: 15px; background: rgba(255,255,255,0.02); }
-        .box-title { color: #00f2fe; font-size: 12px; font-weight: 800; margin-bottom: 12px; display: block; text-transform: uppercase; }
+        .player-box { border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-top: 15px; background: rgba(255,255,255,0.02); }
+        .box-title { color: #00f2fe; font-size: 12px; font-weight: 800; margin-bottom: 10px; display: block; }
 
-        /* NEON SUBMIT BUTTON */
-        .submit-btn { width: 100%; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; padding: 18px; border: none; border-radius: 15px; font-weight: 800; font-size: 15px; text-transform: uppercase; cursor: pointer; margin-top: 30px; box-shadow: 0 5px 20px rgba(255, 0, 122, 0.4); transition: 0.3s; }
-        .submit-btn:active { transform: scale(0.96); }
-        .submit-btn:disabled { background: #222; color: #555; cursor: not-allowed; box-shadow: none; }
-
-        #msg { text-align: center; margin-top: 20px; font-size: 13px; font-weight: 700; }
-        .footer-back { text-align: center; margin-top: 20px; }
-        .footer-back a { color: #a0aab2; text-decoration: none; font-size: 12px; font-weight: 600; }
+        .submit-btn { width: 100%; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; padding: 18px; border: none; border-radius: 15px; font-weight: 800; font-size: 15px; text-transform: uppercase; cursor: pointer; margin-top: 25px; box-shadow: 0 5px 20px rgba(255, 0, 122, 0.4); }
+        
+        #msg { text-align: center; margin-top: 20px; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <div class="bg-orb-1"></div>
-    <div class="bg-orb-2"></div>
+    <div class="bg-orb-1"></div><div class="bg-orb-2"></div>
 
     <div class="status-bar">
         <div>FEE: <span class="fee-tag" id="feeDisplay">₹0</span></div>
@@ -58,30 +43,26 @@
     </div>
 
     <div class="container">
-        <div class="glass-card" id="formWrapper">
+        <div class="glass-card">
             <div class="match-label" id="mType">BR MATCH</div>
-            <h2>DUO ENTRY FORM</h2>
+            <h2>DUO REGISTRATION</h2>
             
-            <div id="inputArea">
-                <label>TEAM NAME</label>
-                <input type="text" id="teamName" placeholder="Enter Team Name">
+            <label>TEAM NAME</label>
+            <input type="text" id="teamName" placeholder="Enter Team Name">
 
-                <div class="player-box">
-                    <span class="box-title">PLAYER 1 (LEADER)</span>
-                    <input type="text" id="p1Name" placeholder="In-game Name">
-                    <input type="text" id="p1Uid" placeholder="Player UID (Game ID)">
-                </div>
-
-                <div class="player-box">
-                    <span class="box-title">PLAYER 2</span>
-                    <input type="text" id="p2Name" placeholder="In-game Name">
-                </div>
-
-                <button class="submit-btn" id="regBtn" onclick="confirmJoin()">CONFIRM REGISTRATION</button>
+            <div class="player-box">
+                <span class="box-title">PLAYER 1 (LEADER)</span>
+                <input type="text" id="p1Name" placeholder="In-game Name">
+                <input type="text" id="p1Uid" placeholder="GAME UID (Number)">
             </div>
-            
+
+            <div class="player-box">
+                <span class="box-title">PLAYER 2</span>
+                <input type="text" id="p2Name" placeholder="In-game Name">
+            </div>
+
+            <button class="submit-btn" id="regBtn" onclick="confirmJoin()">CONFIRM REGISTRATION</button>
             <div id="msg"></div>
-            <div class="footer-back"><a href="index.html">⬅ Cancel & Go Back</a></div>
         </div>
     </div>
 
@@ -89,31 +70,15 @@
         const urlParams = new URLSearchParams(window.location.search);
         const matchID = urlParams.get('match') || 'BR';
         
-        // ⭐ MATCH CONFIG (As per CEO's instruction) ⭐
         let entryFee = 0;
-        let isActive = false;
+        if (matchID === "BR") entryFee = 0;
+        else if (matchID === "CS") entryFee = 50;
+        else if (matchID === "LW") entryFee = 15;
+        else entryFee = 30;
 
-        if (matchID === "BR") {
-            entryFee = 0; // BR is FREE
-            isActive = true; 
-        } else {
-            entryFee = (matchID === "CS") ? 50 : (matchID === "LW" ? 15 : 30);
-            isActive = false; // CS, LW, 1V1 are Not Started
-        }
-
-        // UPDATE UI
         document.getElementById('mType').innerText = matchID + " MATCH";
         document.getElementById('feeDisplay').innerText = entryFee === 0 ? "FREE" : "₹" + entryFee;
         document.getElementById('walletDisplay').innerText = "₹" + (localStorage.getItem("rareWallet") || 0);
-
-        // LOCK FOR CLOSED MATCHES
-        if (!isActive) {
-            document.getElementById('inputArea').innerHTML = `
-                <div style="text-align:center; padding: 20px;">
-                    <h3 style="color:#ffea00;">NOT STARTED YET</h3>
-                    <p style="color:#a0aab2; font-size:12px;">Ye match abhi shuru nahi hua hai. Thoda wait karein!</p>
-                </div>`;
-        }
 
         function confirmJoin() {
             const btn = document.getElementById('regBtn');
@@ -122,15 +87,13 @@
             const p1u = document.getElementById('p1Uid').value;
             const p2 = document.getElementById('p2Name').value;
 
-            if(!team || !p1 || !p1u || !p2) return alert("Bhai, sari details bharna zaroori hai!");
+            if(!team || !p1 || !p1u || !p2) return alert("Bhai, sari details (UID samet) bharna zaroori hai!");
 
             btn.disabled = true;
             btn.innerText = "⏳ REGISTERING...";
 
             const user = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!user) return alert("Pehle Login karein!");
-
-            const duoInfo = `TEAM: ${team} | P1: ${p1}(${p1u}) | P2: ${p2}`;
+            const duoInfo = `DUO | Team: ${team} | P1: ${p1}(${p1u}) | P2: ${p2}`;
             const scriptURL = 'https://script.google.com/macros/s/AKfycbx2z4GZ8uIyKH9yTQqD_n3XBYEQe3_3k2YyQobq5ucoguHkYu3kwCZer3qYlOR1bstAlA/exec';
 
             fetch(`${scriptURL}?action=joinMatch&username=${encodeURIComponent(user.name)}&matchName=${encodeURIComponent(matchID)}&fee=${entryFee}&squad=${encodeURIComponent(duoInfo)}`)
@@ -147,13 +110,8 @@
                     btn.disabled = false;
                     btn.innerText = "CONFIRM REGISTRATION";
                 }
-            })
-            .catch(err => {
-                alert("Network Problem! Try Again.");
-                btn.disabled = false;
             });
         }
     </script>
 </body>
-    </html>
-    
+</html>
