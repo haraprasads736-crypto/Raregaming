@@ -2,95 +2,137 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earn - Rare Gaming</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Earn - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; padding-bottom: 100px; }
-        .box { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #222; margin-bottom: 20px; }
-        input { width: 100%; padding: 15px; margin: 10px 0; background: #050508; border: 1px solid #333; color: white; border-radius: 10px; box-sizing: border-box; font-family: 'Poppins'; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; }
-        .btn-redeem { background: #ffd700; color: black; }
-        .btn-withdraw { background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; }
-        .nav-wrapper { position: fixed; bottom: 0; left:0; width: 100%; background: #000; border-top: 1px solid #222; display: flex; justify-content: space-around; padding: 15px 0; }
-        .nav-item { color: #555; text-decoration: none; font-size: 10px; text-align: center; flex: 1; }
+        
+        body { 
+            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; 
+            padding-bottom: 100px; /* Niche space taaki buttons na dabein */
+        }
+
+        /* 💰 WALLET CARD */
+        .wallet-card {
+            background: linear-gradient(135deg, #ff007a 0%, #7a00ff 100%);
+            margin: 20px; padding: 25px; border-radius: 20px;
+            text-align: center; box-shadow: 0 10px 20px rgba(255, 0, 122, 0.3);
+        }
+        .bal-label { font-size: 12px; opacity: 0.8; text-transform: uppercase; }
+        .bal-amount { font-size: 32px; font-weight: 800; margin-top: 5px; }
+
+        /* 📥 INPUT BOXES */
+        .action-box { background: #111; margin: 15px; padding: 20px; border-radius: 15px; border: 1px solid #222; }
+        .box-title { font-size: 14px; font-weight: 800; color: #ff007a; margin-bottom: 15px; display: block; }
+        
+        input { 
+            width: 100%; padding: 12px; margin-bottom: 15px; 
+            background: #000; border: 1px solid #333; color: #fff; 
+            border-radius: 10px; box-sizing: border-box; font-family: 'Poppins';
+        }
+
+        .btn { 
+            width: 100%; padding: 12px; border: none; border-radius: 10px; 
+            font-weight: 800; cursor: pointer; transition: 0.3s;
+        }
+        .btn-redeem { background: #ffd700; color: #000; }
+        .btn-withdraw { background: #00f2fe; color: #000; }
+
+        /* 🔥 FIXED BOTTOM NAV (Wahi design jo Index par hai) 🔥 */
+        .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; background: #000; }
+        .bottom-nav { 
+            display: flex; justify-content: space-around; align-items: center; 
+            height: 70px; padding-bottom: 20px; background: #000;
+            border-top: 1.5px solid #ff007a; 
+        }
+        .nav-item { 
+            text-decoration: none; display: flex; flex-direction: column; align-items: center; 
+            color: #555; font-size: 10px; font-weight: 800; flex: 1; margin-top: 10px;
+        }
         .nav-item.active { color: white; }
+        .nav-item .nav-icon { font-size: 22px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
-    <h2 style="text-align: center; font-weight: 800;">WALLET</h2>
-    
-    <div class="box">
-        <label style="font-size: 12px; color: #ffd700; font-weight: 800;">PROMO CODE</label>
+
+    <div class="wallet-card">
+        <div class="bal-label">Available Balance</div>
+        <div class="bal-amount" id="display-bal">₹...</div>
+    </div>
+
+    <div class="action-box">
+        <span class="box-title">REDEEM PROMO CODE</span>
         <input type="text" id="promoCode" placeholder="Enter Code (e.g. WELCOME50)">
-        <button class="btn btn-redeem" onclick="handleRedeem()">REDEEM CODE</button>
+        <button class="btn btn-redeem" onclick="handleRedeem()">REDEEM NOW</button>
     </div>
 
-    <div class="box">
-        <label style="font-size: 12px; color: #ff007a; font-weight: 800;">WITHDRAW MONEY</label>
-        <input type="number" id="witAmt" placeholder="Min ₹50">
-        <input type="text" id="witUpi" placeholder="UPI ID (example@upi)">
-        <button class="btn btn-withdraw" onclick="handleWithdraw()">REQUEST WITHDRAW</button>
+    <div class="action-box">
+        <span class="box-title">WITHDRAW MONEY</span>
+        <input type="number" id="witAmt" placeholder="Minimum ₹50">
+        <input type="text" id="witUpi" placeholder="UPI ID (e.g. name@apl)">
+        <button class="btn btn-withdraw" id="withBtn" onclick="handleWithdraw()">REQUEST WITHDRAW</button>
     </div>
 
-    <div class="nav-wrapper">
-        <a href="index.html" class="nav-item"><i class="fas fa-home" style="font-size:20px;"></i><br>HOME</a>
-        <a href="earn.html" class="nav-item active"><i class="fas fa-wallet" style="font-size:20px;"></i><br>EARN</a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user" style="font-size:20px;"></i><br>PROFILE</a>
+    <div class="bottom-nav-container">
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home nav-icon"></i><span>HOME</span>
+            </a>
+            <a href="earn.html" class="nav-item active">
+                <i class="fas fa-wallet nav-icon"></i><span>EARN</span>
+            </a>
+            <a href="winners.html" class="nav-item">
+                <i class="fas fa-crown nav-icon"></i><span>WINNERS</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <i class="fas fa-user-circle nav-icon"></i><span>PROFILE</span>
+            </a>
+        </nav>
     </div>
 
     <script>
+        // 🚨 APNA DEPLOY URL YAHAN DAALEIN 🚨
         const scriptURL = "https://script.google.com/macros/s/AKfycbx4CbWAB9J5kanfjHZ_odNKtuHcBInFeQWnrFjWlD2-5EBIxmxxnwlIClkbWSZ-moG4kg/exec";
+        
+        // 1. Balance dikhao jo Index ne sync kiya tha
+        const currentBal = localStorage.getItem("rareWallet") || "0";
+        document.getElementById('display-bal').innerText = "₹" + currentBal;
 
+        // 2. Withdraw Function (No-Cors Fix ke sath)
+        function handleWithdraw() {
+            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            const amt = document.getElementById('witAmt').value;
+            const upi = document.getElementById('witUpi').value;
+
+            if(amt < 50) return alert("Kam se kam ₹50 likho!");
+            if(amt > parseInt(currentBal)) return alert("Sheet mein itne paise nahi hain!");
+
+            document.getElementById('withBtn').innerText = "SENDING...";
+            
+            // Direct URL hit for better success rate
+            const finalURL = `${scriptURL}?action=withdraw&username=${encodeURIComponent(userData.name)}&amount=${amt}&upi=${encodeURIComponent(upi)}`;
+
+            fetch(finalURL, { method: 'POST', mode: 'no-cors' })
+            .then(() => {
+                alert("✅ Request Sent! Sheet mein entry check karein.");
+                location.reload();
+            }).catch(() => alert("Network Error!"));
+        }
+
+        // 3. Redeem Function
         function handleRedeem() {
             const user = JSON.parse(localStorage.getItem("rareGamingUser")).name;
             const code = document.getElementById('promoCode').value;
-            const btn = event.target;
-            btn.innerText = "CHECKING..."; btn.disabled = true;
-
-            let fd = new FormData();
-            fd.append("action", "redeem");
-            fd.append("username", user);
-            fd.append("code", code);
-
-            fetch(scriptURL, { method: 'POST', body: fd })
-            .then(res => res.text())
-            .then(data => {
-                if(data.includes("Success")) {
-                    alert("🎉 ₹50 Added to your Users sheet balance!");
-                    location.href = "index.html"; 
-                } else {
-                    alert("❌ Invalid or Already Used!");
-                    btn.innerText = "REDEEM CODE"; btn.disabled = false;
-                }
-            });
-        }
-
-        function handleWithdraw() {
-            const user = JSON.parse(localStorage.getItem("rareGamingUser")).name;
-            const amt = document.getElementById('witAmt').value;
-            const upi = document.getElementById('witUpi').value;
-            const currentBal = parseInt(localStorage.getItem("rareWallet") || 0);
-
-            if(amt < 50) return alert("Minimum ₹50 required!");
-            if(amt > currentBal) return alert("Low balance in Sheet!");
-
-            const btn = event.target;
-            btn.innerText = "SENDING..."; btn.disabled = true;
-
-            let fd = new FormData();
-            fd.append("action", "withdraw");
-            fd.append("username", user);
-            fd.append("amount", amt);
-            fd.append("upi", upi);
-
-            fetch(scriptURL, { method: 'POST', body: fd })
+            
+            const finalURL = `${scriptURL}?action=redeem&username=${encodeURIComponent(user)}&code=${encodeURIComponent(code)}`;
+            
+            fetch(finalURL, { method: 'POST', mode: 'no-cors' })
             .then(() => {
-                alert("✅ Withdraw Request Sent! Balance updated in Users sheet.");
-                location.href = "index.html";
-            })
-            .catch(() => { alert("Error!"); btn.innerText = "REQUEST WITHDRAW"; btn.disabled = false; });
+                alert("🎁 Code processed! Check your balance in a moment.");
+                location.href = "index.html"; // Sync karne ke liye home bhejo
+            });
         }
     </script>
 </body>
