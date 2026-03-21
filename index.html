@@ -2,78 +2,111 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rare Gaming - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Home - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 80px; }
-        .header { padding: 20px; text-align: center; border-bottom: 1px solid #222; font-weight: 800; }
-        .balance-card { background: linear-gradient(90deg, #ff007a, #7a00ff); margin: 15px; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(255,0,122,0.3); }
-        .match-card { background: #111; margin: 15px; padding: 15px; border-radius: 12px; border: 1px solid #333; }
-        .join-btn { background: #00f2fe; color: black; border: none; padding: 12px; border-radius: 8px; font-weight: 800; width: 100%; cursor: pointer; }
-        .nav-wrapper { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #222; display: flex; justify-content: space-around; padding: 15px 0; }
-        .nav-item { color: #555; text-decoration: none; font-size: 10px; text-align: center; flex: 1; }
+        
+        body { 
+            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; position: relative; 
+            padding-bottom: 110px; 
+        }
+        
+        /* BACKGROUND SPARKS */
+        .bg-orb-1 { position: fixed; top: 10%; left: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255, 0, 122, 0.15) 0%, transparent 70%); filter: blur(50px); z-index: -1; }
+        .bg-orb-2 { position: fixed; bottom: 10%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(122, 0, 255, 0.15) 0%, transparent 70%); filter: blur(60px); z-index: -1; }
+        
+        /* HEADER & WALLET */
+        .nav-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(5, 5, 8, 0.95); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); position: sticky; top: 0; z-index: 100; }
+        .nav-title { font-weight: 800; font-size: 18px; color: #fff; text-transform: uppercase; letter-spacing: 1px;}
+        .wallet-box { background: rgba(0, 242, 254, 0.1); border: 1px solid #00f2fe; padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 12px; color: #00f2fe; }
+
+        .section-title { font-size: 20px; font-weight: 800; margin: 25px 15px 15px 15px; letter-spacing: 0.5px; }
+
+        /* MATCH GRID (2 columns) */
+        .matches-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 15px; max-width: 600px; margin: auto; }
+        .grid-card { position: relative; border-radius: 16px; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.1); display: block; text-decoration: none; aspect-ratio: 4 / 5; box-shadow: 0 8px 25px rgba(0,0,0,0.7); transition: 0.2s; }
+        .grid-card:active { transform: scale(0.97); border-color: #ff007a; }
+        .card-bg { width: 100%; height: 100%; background-size: cover; background-position: center; background-color: #111; }
+        .card-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 100%); padding: 20px 10px 10px 10px; text-align: center; box-sizing: border-box; }
+        .card-title { color: white; font-size: 13px; font-weight: 800; text-transform: uppercase; margin: 0; }
+        .card-status { font-size: 9px; color: #ff007a; font-weight: 600; text-transform: uppercase; margin-top: 4px; display: block; }
+        .open-status { color: #00e676; }
+
+        /* NAV BAR */
+        .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; background: #000; }
+        .bottom-nav { display: flex; justify-content: space-around; align-items: center; height: 70px; padding-bottom: 20px; background: #000; border-top: 1.5px solid #ff007a; }
+        .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; font-size: 10px; font-weight: 800; flex: 1; margin-top: 10px; }
         .nav-item.active { color: white; }
+        .nav-item .nav-icon { font-size: 22px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
-    <div class="header">RARE GAMING</div>
     
-    <div class="balance-card">
-        <div style="font-size: 12px; opacity: 0.8;">Your Secure Balance</div>
-        <div id="mainBal" style="font-size: 35px; font-weight: 800;">₹...</div>
+    <div class="bg-orb-1"></div>
+    <div class="bg-orb-2"></div>
+
+    <div class="nav-header">
+        <span class="nav-title">RARE GAMING</span>
+        <div class="wallet-box" id="wallet-balance">₹...</div>
     </div>
 
-    <div class="match-card">
-        <h3 style="margin-top:0;">BR SQUAD - MATCH #101</h3>
-        <p style="font-size: 13px; color: #aaa;">Entry: ₹20 | Prize: ₹500</p>
-        <button class="join-btn" onclick="joinMatch('BR SQUAD #101')">JOIN MATCH</button>
+    <div class="section-title">E-sports Matches</div>
+
+    <div class="matches-grid">
+        <a href="match_details.html?match=BR" class="grid-card">
+            <div class="card-bg" style="background-image: url('br_poster.jpg');"></div>
+            <div class="card-overlay"><p class="card-title">BR SQUAD</p><span class="card-status open-status">Open</span></div>
+        </a>
+
+        <a href="match_details.html?match=CS" class="grid-card">
+            <div class="card-bg" style="background-image: url('cs_poster.jpg');"></div>
+            <div class="card-overlay"><p class="card-title">CLASH SQUAD</p><span class="card-status">Soon</span></div>
+        </a>
+
+        <a href="match_details.html?match=LW" class="grid-card">
+            <div class="card-bg" style="background-image: url('lw_poster.jpg');"></div>
+            <div class="card-overlay"><p class="card-title">LONE WOLF</p><span class="card-status">Soon</span></div>
+        </a>
+
+        <a href="match_details.html?match=1V1" class="grid-card">
+            <div class="card-bg" style="background-image: url('1v1_poster.jpg');"></div>
+            <div class="card-overlay"><p class="card-title">1V1 BATTLE</p><span class="card-status">Soon</span></div>
+        </a>
     </div>
 
-    <div class="nav-wrapper">
-        <a href="index.html" class="nav-item active"><i class="fas fa-home" style="font-size:20px;"></i><br>HOME</a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet" style="font-size:20px;"></i><br>EARN</a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user" style="font-size:20px;"></i><br>PROFILE</a>
+    <div class="bottom-nav-container">
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item active"><i class="fas fa-home nav-icon"></i><span>HOME</span></a>
+            <a href="earn.html" class="nav-item"><i class="fas fa-wallet nav-icon"></i><span>EARN</span></a>
+            <a href="winners.html" class="nav-item"><i class="fas fa-crown nav-icon"></i><span>WINNERS</span></a>
+            <a href="profile.html" class="nav-item"><i class="fas fa-user-circle nav-icon"></i><span>PROFILE</span></a>
+        </nav>
     </div>
 
     <script>
+        // MASTER SCRIPT SE BALANCE SYNC KARNA
         const scriptURL = "https://script.google.com/macros/s/AKfycbx4CbWAB9J5kanfjHZ_odNKtuHcBInFeQWnrFjWlD2-5EBIxmxxnwlIClkbWSZ-moG4kg/exec";
 
-        // 1. ASLI BALANCE SYNC (Jhoot pakadne ke liye)
-        function syncBalance() {
+        function syncRealBalance() {
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!userData) return;
-            
+
             fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(userData.name))
             .then(res => res.text())
             .then(bal => {
                 localStorage.setItem("rareWallet", bal);
-                document.getElementById('mainBal').innerText = "₹" + bal;
+                document.getElementById('wallet-balance').innerText = "₹" + bal;
             })
-            .catch(() => { document.getElementById('mainBal').innerText = "Offline"; });
+            .catch(() => {
+                const oldBal = localStorage.getItem("rareWallet") || 0;
+                document.getElementById('wallet-balance').innerText = "₹" + oldBal;
+            });
         }
 
-        // 2. MATCH JOIN (Sheet1 mein entry)
-        function joinMatch(matchName) {
-            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            const btn = event.target;
-            btn.innerText = "JOINING..."; btn.disabled = true;
-
-            let fd = new FormData();
-            fd.append("username", userData.name);
-            fd.append("uid", userData.uid || "N/A");
-            fd.append("match", matchName);
-
-            fetch(scriptURL, { method: 'POST', body: fd })
-            .then(() => {
-                alert("Match Joined Successfully! Details saved in Sheet1.");
-                btn.innerText = "JOINED";
-            })
-            .catch(() => { alert("Error joining match!"); btn.innerText = "JOIN MATCH"; btn.disabled = false; });
-        }
-
-        window.onload = syncBalance;
+        window.onload = syncRealBalance;
     </script>
 </body>
 </html>
