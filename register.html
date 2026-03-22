@@ -3,159 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Register Match - RARE GAMING</title>
+    <title>Registration - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
+        .reg-container { padding: 20px; }
+        .section-header { font-size: 20px; font-weight: 800; color: #00f2fe; margin-bottom: 20px; text-transform: uppercase; text-align: center; }
         
-        body { 
-            background: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
-        }
-
-        .reg-box { 
-            background: #111116; padding: 25px 20px; border-radius: 25px; 
-            border: 1.5px solid #ff007a; width: 100%; max-width: 350px; 
-            box-shadow: 0 0 20px rgba(255, 0, 122, 0.2); text-align: center;
-        }
-
-        .icon-header { font-size: 40px; color: #ffd700; margin-bottom: 10px; }
+        .form-card { background: #111116; border: 1px solid #1f1f25; border-radius: 15px; padding: 20px; margin-bottom: 20px; }
+        .player-title { font-size: 13px; font-weight: 800; color: #ffd700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         
-        h2 { font-weight: 800; text-transform: uppercase; margin: 0; font-size: 20px; }
-        .match-display { color: #00f2fe; font-weight: 800; font-size: 14px; margin: 10px 0 20px 0; background: rgba(0, 242, 254, 0.1); padding: 5px; border-radius: 8px; }
-
-        .player-title { font-size: 12px; font-weight: 800; color: #ff007a; text-align: left; margin-top: 15px; border-bottom: 1px solid #333; padding-bottom: 5px;}
-
         input { 
-            width: 100%; padding: 12px; margin-top: 10px; background: #000; 
-            border: 1px solid #222; color: #fff; border-radius: 10px; 
-            box-sizing: border-box; font-family: 'Poppins'; font-size: 12px;
+            width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; 
+            color: #fff; border-radius: 10px; margin-bottom: 12px; box-sizing: border-box; 
+            font-family: 'Poppins'; font-size: 13px;
         }
+        input:focus { border-color: #00f2fe; outline: none; }
 
-        .btn-confirm { 
-            width: 100%; padding: 15px; margin-top: 20px;
-            background: linear-gradient(90deg, #ff007a, #7a00ff); 
-            border: none; color: white; font-weight: 800; font-size: 14px;
-            border-radius: 12px; cursor: pointer; text-transform: uppercase;
+        .btn-submit { 
+            width: 100%; padding: 15px; background: #00f2fe; color: #000; border: none; 
+            border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase;
         }
-        .btn-confirm:disabled { background: #555; cursor: not-allowed; }
+        .btn-submit:active { transform: scale(0.98); }
 
-        #msg { margin-top: 15px; font-weight: 600; font-size: 13px; min-height: 20px; }
-        .back-link { display: inline-block; margin-top: 15px; color: #555; text-decoration: none; font-size: 12px; font-weight: 600; }
-        
-        #dynamic-players { text-align: left; }
+        /* 🔥 NAVIGATION SYSTEM 🔥 */
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; color: #666; }
+        .nav-item.active { color: white; position: relative; }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
+        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
 
-    <div class="reg-box">
-        <i class="fas fa-trophy icon-header"></i>
-        <h2>Join Match</h2>
-        <div class="match-display" id="matchName">Loading Match...</div>
+    <div class="reg-container">
+        <div class="section-header">Squad Registration</div>
         
-        <div id="dynamic-players"></div>
-        
-        <button class="btn-confirm" id="submitBtn" onclick="submitRegistration()">Confirm & Register</button>
-        
-        <div id="msg"></div>
-        <a href="index.html" class="back-link">Cancel and Go Back</a>
+        <div class="form-card">
+            <div class="player-title"><i class="fas fa-users"></i> TEAM DETAILS</div>
+            <input type="text" id="teamName" placeholder="Enter Team Name">
+            <input type="text" id="whatsapp" placeholder="WhatsApp Number">
+        </div>
+
+        <div class="form-card">
+            <div class="player-title"><i class="fas fa-user"></i> PLAYER 1 (Leader)</div>
+            <input type="text" id="p1Name" placeholder="In-Game Name">
+            <input type="text" id="p1Uid" placeholder="Game UID">
+        </div>
+
+        <div class="form-card">
+            <div class="player-title"><i class="fas fa-user"></i> PLAYER 2</div>
+            <input type="text" id="p2Name" placeholder="In-Game Name">
+            <input type="text" id="p2Uid" placeholder="Game UID">
+        </div>
+
+        <div class="form-card">
+            <div class="player-title"><i class="fas fa-user"></i> PLAYER 3</div>
+            <input type="text" id="p3Name" placeholder="In-Game Name">
+            <input type="text" id="p3Uid" placeholder="Game UID">
+        </div>
+
+        <div class="form-card">
+            <div class="player-title"><i class="fas fa-user"></i> PLAYER 4</div>
+            <input type="text" id="p4Name" placeholder="In-Game Name">
+            <input type="text" id="p4Uid" placeholder="Game UID">
+        </div>
+
+        <button class="btn-submit" id="regBtn" onclick="submitReg()">SUBMIT ENTRY</button>
     </div>
 
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+    </nav>
+    <div class="system-nav-bar"></div>
+
     <script>
-        // 1. MATCH KA NAAM NIKALNA
-        const urlParams = new URLSearchParams(window.location.search);
-        const match = urlParams.get('match') || "UNKNOWN MATCH";
-        document.getElementById('matchName').innerText = match;
-
-        const matchUpper = match.toUpperCase();
-        const dynamicDiv = document.getElementById('dynamic-players');
-        const submitBtn = document.getElementById('submitBtn');
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwND_rIFJw-9MwiRGhOP0_j4mauz8ICSro5e3GbNpWfUW9zDGEHFS8VHeB5Ac35IWQMDw/exec";
         
-        let isRegistrationOpen = false;
-        let totalPlayers = 0;
+        // URL se match name pakadne ke liye (e.g. match=BR)
+        const urlParams = new URLSearchParams(window.location.search);
+        const matchType = urlParams.get('match') || "Squad Match";
 
-        // 2. CHECK KARNA KISME FORM DIKHANA HAI
-        if (matchUpper.includes("BR")) {
-            // Sirf BR ke liye form chalu hai (2 Players)
-            isRegistrationOpen = true;
-            totalPlayers = 2; 
-            
-            let htmlContent = "";
-            for (let i = 1; i <= totalPlayers; i++) {
-                htmlContent += `
-                    <div class="player-title">PLAYER ${i} DETAILS</div>
-                    <input type="number" id="p${i}Uid" placeholder="Player ${i} UID (e.g. 12345678)">
-                    <input type="text" id="p${i}Name" placeholder="Player ${i} In-Game Name">
-                `;
-            }
-            dynamicDiv.innerHTML = htmlContent;
-
-        } else {
-            // Baaki sab Matches (CS, LONE WOLF, 1V1) ke liye COMING SOON
-            dynamicDiv.innerHTML = `
-                <div style="padding: 40px 10px; color: #ff007a; font-size: 20px; font-weight: 800; text-transform: uppercase; text-align: center;">
-                    <i class="fas fa-lock" style="font-size: 40px; margin-bottom: 15px; color: #555;"></i><br>
-                    Registration<br><span style="color:#fff;">Coming Soon!</span>
-                </div>
-            `;
-            // Submit button ko hata do
-            submitBtn.style.display = "none";
-        }
-
-        // 🔥 AAPKA MASTER SCRIPT URL 🔥
-        const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec";
-
-        // 3. SUBMIT KARNE KA FUNCTION (Sirf BR ke time kaam karega)
-        function submitRegistration() {
-            if (!isRegistrationOpen) return; // Agar form band hai toh kuch mat karo
-
-            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!userData) { alert("Pehle app mein login karo!"); return; }
-
-            const btn = document.getElementById('submitBtn');
-            let uids = [];
-            let names = [];
-
-            // Dono players ka data nikalna
-            for (let i = 1; i <= totalPlayers; i++) {
-                let uid = document.getElementById(`p${i}Uid`).value.trim();
-                let name = document.getElementById(`p${i}Name`).value.trim();
-                
-                if (!uid || !name) {
-                    alert(`Player ${i} ki details missing hai. Pura form bharo!`);
-                    return;
-                }
-                uids.push(uid);
-                names.push(name);
-            }
-
-            btn.innerText = "PROCESSING...";
+        function submitReg() {
+            const btn = document.getElementById('regBtn');
+            btn.innerText = "REGISTERING...";
             btn.disabled = true;
 
-            // Data combine karna
-            const finalUid = uids.join(" & ");
-            const finalName = names.join(" & ");
-
             const params = new URLSearchParams();
-            params.append("action", "register"); 
-            params.append("username", userData.name); 
-            params.append("gameUid", finalUid);            
-            params.append("gameName", finalName);        
-            params.append("match", match);           
+            params.append("action", "register");
+            params.append("match", matchType);
+            params.append("teamName", document.getElementById('teamName').value);
+            params.append("whatsapp", document.getElementById('whatsapp').value);
+            params.append("p1Name", document.getElementById('p1Name').value);
+            params.append("p1Uid", document.getElementById('p1Uid').value);
+            params.append("p2Name", document.getElementById('p2Name').value);
+            params.append("p2Uid", document.getElementById('p2Uid').value);
+            params.append("p3Name", document.getElementById('p3Name').value);
+            params.append("p3Uid", document.getElementById('p3Uid').value);
+            params.append("p4Name", document.getElementById('p4Name').value);
+            params.append("p4Uid", document.getElementById('p4Uid').value);
 
-            fetch(scriptURL, { 
-                method: 'POST', 
-                mode: 'no-cors', 
-                body: params 
-            })
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
             .then(() => {
-                document.getElementById('msg').innerHTML = "<span style='color: #00e676;'>✅ Registration Successful!</span>";
-                setTimeout(() => { window.location.href = "index.html"; }, 2000);
+                alert("✅ Registration Successful! All details saved.");
+                window.location.href = "index.html";
             })
             .catch(() => {
-                alert("Network Error! Try again.");
+                alert("❌ Error! Internet check karein.");
+                btn.innerText = "SUBMIT ENTRY";
                 btn.disabled = false;
-                btn.innerText = "Confirm & Register";
             });
         }
     </script>
