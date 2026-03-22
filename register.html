@@ -28,7 +28,6 @@
         /* Closed Message Style */
         .closed-box { text-align: center; padding: 40px 20px; background: #111116; border: 1px solid #ff007a; border-radius: 15px; }
         .closed-box i { font-size: 50px; color: #ff007a; margin-bottom: 15px; }
-        .closed-box h2 { color: #fff; font-size: 18px; margin-bottom: 10px; }
 
         /* 🔥 NAVIGATION 🔥 */
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
@@ -55,13 +54,12 @@
     <script>
         const scriptURL = "https://script.google.com/macros/s/AKfycbwND_rIFJw-9MwiRGhOP0_j4mauz8ICSro5e3GbNpWfUW9zDGEHFS8VHeB5Ac35IWQMDw/exec";
         const urlParams = new URLSearchParams(window.location.search);
-        const match = urlParams.get('match');
+        const match = urlParams.get('match') || ""; // URL se match name liya
 
         const container = document.getElementById('mainContainer');
 
-        // Logic to show Form or Closed Message
-        if (match === 'BR') {
-            // BR SQUAD - Registration Open (2 Players Duo)
+        // 🔥 FIX: Check agar match name mein "BR" likha hai (chahe BR ho ya BR SQUAD)
+        if (match.includes("BR")) {
             container.innerHTML = `
                 <div class="section-header">BR DUO REGISTRATION</div>
                 <div class="form-card">
@@ -82,12 +80,11 @@
                 <button class="btn-submit" id="regBtn" onclick="submitReg()">JOIN MATCH</button>
             `;
         } else {
-            // CS, LW, 1V1 - Registration Band
             container.innerHTML = `
                 <div class="closed-box">
                     <i class="fas fa-lock"></i>
                     <h2>REGISTRATION CLOSED</h2>
-                    <p style="color: #666; font-size: 13px;">Bhai, is match ka registration abhi band hai. Naye match ka intezaar karein!</p>
+                    <p style="color: #666; font-size: 13px;">Is match ka registration abhi band hai.</p>
                     <button class="btn-submit" style="margin-top:20px; background:#444; color:#fff;" onclick="window.location.href='index.html'">GO BACK</button>
                 </div>
             `;
@@ -100,14 +97,13 @@
 
             const params = new URLSearchParams();
             params.append("action", "register");
-            params.append("match", "BR DUO");
+            params.append("match", match); 
             params.append("teamName", document.getElementById('teamName').value);
             params.append("whatsapp", document.getElementById('whatsapp').value);
             params.append("p1Name", document.getElementById('p1Name').value);
             params.append("p1Uid", document.getElementById('p1Uid').value);
             params.append("p2Name", document.getElementById('p2Name').value);
             params.append("p2Uid", document.getElementById('p2Uid').value);
-            // P3 aur P4 khali jayenge kyunki Duo match hai
             params.append("p3Name", ""); params.append("p3Uid", "");
             params.append("p4Name", ""); params.append("p4Uid", "");
 
