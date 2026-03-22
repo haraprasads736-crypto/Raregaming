@@ -11,8 +11,7 @@
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 0; overflow-x: hidden; 
-            /* Content nav bar ke peeche na chhupe isliye bottom padding */
-            padding-bottom: 130px; 
+            padding-bottom: 140px; 
         }
 
         /* Top Header */
@@ -25,83 +24,72 @@
 
         .section-title { font-size: 18px; font-weight: 800; margin: 15px 20px; text-transform: uppercase; }
 
-        /* 1. MATCH GRID (Matches Cards) */
-        .match-grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; 
-        }
-        .match-card { 
-            position: relative; border-radius: 20px; overflow: hidden; 
-            aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1);
-            text-decoration: none; display: block;
-        }
+        /* MATCH GRID */
+        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
+        .match-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; display: block; }
         .match-card img { width: 100%; height: 100%; object-fit: cover; }
-        .card-overlay { 
-            position: absolute; bottom: 0; width: 100%; 
-            background: linear-gradient(transparent, rgba(0,0,0,0.95));
-            padding: 15px 10px; text-align: center; box-sizing: border-box;
-        }
+        .card-overlay { position: absolute; bottom: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); padding: 15px 10px; text-align: center; box-sizing: border-box; }
         .match-name { font-size: 13px; font-weight: 800; color: #fff; text-transform: uppercase; margin: 0; }
         .match-status { font-size: 10px; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
         .status-open { color: #00e676; }
         .status-soon { color: #ff007a; }
 
-        /* 2. QUICK ACTIONS GRID */
-        .action-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px;
-        }
-        .action-card {
-            background: #111116; border: 1px solid #1f1f25; border-radius: 15px;
-            padding: 20px 10px; text-align: center; text-decoration: none;
-            transition: 0.3s; display: block;
-        }
-        .action-card:active { transform: scale(0.95); background: #1a1a20; }
+        /* QUICK ACTIONS */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        .action-card { background: #111116; border: 1px solid #1f1f25; border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; transition: 0.3s; display: block; }
         .action-card i { font-size: 28px; margin-bottom: 10px; display: block; }
         .action-card span { font-size: 11px; font-weight: 800; color: #00f2fe; text-transform: uppercase; }
-        
-        .icon-teams { color: #a2b2c8; }
-        .icon-contact { color: #ffffff; }
-        .icon-prize { color: #ffd700; }
-        .icon-points { color: #ffffff; }
+        .icon-teams { color: #a2b2c8; } .icon-contact { color: #ffffff; } .icon-prize { color: #ffd700; } .icon-points { color: #ffffff; }
 
-        /* 3. GLOWING BOTTOM NAVIGATION (Glass Effect + Pink Glow) */
+        /* =========================================================
+           🔥 NAYA FIX: EXACTLY WAISE HI NAVIGATION JAISA MANGAA THA
+           ========================================================= */
+
+        /* 1. Niche ki GREY Patti (Phone ke buttons ke liye) */
+        .system-nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 48px; /* Phone ke buttons ki height */
+            background-color: #4f515e; /* Aapki photo wala exact Grey color */
+            z-index: 1001;
+        }
+
+        /* 2. App ka Black Navigation Bar (Grey patti ke theek upar) */
         .bottom-nav { 
             position: fixed; 
-            bottom: 0; 
+            bottom: 48px; /* Grey patti ke upar shift kar diya */
             left: 0;
             width: 100%; 
-            height: 70px; /* Base height */
-            
-            /* Glass jaisa translucent background */
-            background: rgba(15, 15, 20, 0.85); 
-            backdrop-filter: blur(15px); /* Peeche ka hissa dhundhla (blur) karega */
-            -webkit-backdrop-filter: blur(15px);
-            
+            height: 70px; 
+            background: #111116; /* Dark Black Background */
             display: flex; 
             justify-content: space-around; 
             align-items: center; 
-            
-            /* Upar ki taraf Pink Glow aur Border */
-            border-top: 1px solid rgba(255, 0, 122, 0.5); 
-            box-shadow: 0 -5px 25px rgba(255, 0, 122, 0.25); 
-            
+            border-top: 1px solid rgba(255, 255, 255, 0.05); 
             z-index: 1000;
-            /* SAFE AREA */
-            padding-bottom: env(safe-area-inset-bottom, 15px); 
         }
         
         .nav-item { 
-            text-decoration: none; color: #555; font-size: 10px; font-weight: 800; 
-            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
+            text-decoration: none; color: #666; font-size: 10px; font-weight: 800; 
+            display: flex; flex-direction: column; align-items: center; 
             flex: 1; margin-top: 5px;
         }
-        .nav-item i { font-size: 20px; margin-bottom: 5px; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; color: #666; }
         
+        /* 3. ACTIVE ITEM (White Glowing Diamond jaisa photo me hai) */
         .nav-item.active { color: white; position: relative; }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; } /* Icon Kaala aur bada */
+        .nav-item.active span { z-index: 2; margin-top: 2px; }
+        
+        /* White Diamond Background */
         .nav-item.active::before { 
-            content: ''; position: absolute; top: -18px; 
-            width: 55px; height: 55px; background: linear-gradient(135deg, #ff007a, #7a00ff); 
-            border-radius: 15px; transform: rotate(45deg); z-index: -1;
-            box-shadow: 0 0 20px rgba(255,0,122,0.6);
+            content: ''; position: absolute; top: -16px; 
+            width: 58px; height: 58px; 
+            background: #ffffff; /* Pure White */
+            border-radius: 16px; transform: rotate(45deg); z-index: -1;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); /* Safed Chamak */
         }
     </style>
 </head>
@@ -116,98 +104,57 @@
     <div class="match-grid">
         <a href="match_details.html?match=BR" class="match-card">
             <img src="br_poster.jpg" alt="BR Squad" onerror="this.src='https://via.placeholder.com/300x400/111/fff?text=BR+SQUAD'">
-            <div class="card-overlay">
-                <p class="match-name">BR SQUAD</p>
-                <div class="match-status status-open">OPEN</div>
-            </div>
+            <div class="card-overlay"><p class="match-name">BR SQUAD</p><div class="match-status status-open">OPEN</div></div>
         </a>
-
         <a href="match_details.html?match=CS" class="match-card">
             <img src="cs_poster.jpg" alt="CS Squad" onerror="this.src='https://via.placeholder.com/300x400/111/fff?text=CLASH+SQUAD'">
-            <div class="card-overlay">
-                <p class="match-name">CLASH SQUAD</p>
-                <div class="match-status status-soon">SOON</div>
-            </div>
+            <div class="card-overlay"><p class="match-name">CLASH SQUAD</p><div class="match-status status-soon">SOON</div></div>
         </a>
-        
         <a href="match_details.html?match=LW" class="match-card">
             <img src="lw_poster.jpg" alt="Lone Wolf" onerror="this.src='https://via.placeholder.com/300x400/111/fff?text=LONE+WOLF'">
-            <div class="card-overlay">
-                <p class="match-name">LONE WOLF</p>
-                <div class="match-status status-soon">SOON</div>
-            </div>
+            <div class="card-overlay"><p class="match-name">LONE WOLF</p><div class="match-status status-soon">SOON</div></div>
         </a>
-
         <a href="match_details.html?match=1V1" class="match-card">
             <img src="1v1_poster.jpg" alt="1v1" onerror="this.src='https://via.placeholder.com/300x400/111/fff?text=1V1+BATTLE'">
-            <div class="card-overlay">
-                <p class="match-name">1V1 BATTLE</p>
-                <div class="match-status status-soon">SOON</div>
-            </div>
+            <div class="card-overlay"><p class="match-name">1V1 BATTLE</p><div class="match-status status-soon">SOON</div></div>
         </a>
     </div>
 
     <div class="section-title">Quick Actions</div>
     <div class="action-grid">
-        <a href="teams.html" class="action-card">
-            <i class="fas fa-shield-alt icon-teams"></i>
-            <span>Teams Info</span>
-        </a>
-        <a href="https://wa.me/91XXXXXXXXXX" class="action-card"> 
-            <i class="fas fa-comment-dots icon-contact"></i>
-            <span>Contact</span>
-        </a>
-        <a href="prizes.html" class="action-card">
-            <i class="fas fa-trophy icon-prize"></i>
-            <span>Prize Pool</span>
-        </a>
-        <a href="points.html" class="action-card">
-            <i class="fas fa-chart-bar icon-points"></i>
-            <span>Points</span>
-        </a>
+        <a href="teams.html" class="action-card"><i class="fas fa-shield-alt icon-teams"></i><span>Teams Info</span></a>
+        <a href="https://wa.me/91XXXXXXXXXX" class="action-card"><i class="fas fa-comment-dots icon-contact"></i><span>Contact</span></a>
+        <a href="prizes.html" class="action-card"><i class="fas fa-trophy icon-prize"></i><span>Prize Pool</span></a>
+        <a href="points.html" class="action-card"><i class="fas fa-chart-bar icon-points"></i><span>Points</span></a>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active">
-            <i class="fas fa-home"></i>
-            <span>HOME</span>
+            <i class="fas fa-home"></i><span>HOME</span>
         </a>
         <a href="earn.html" class="nav-item">
-            <i class="fas fa-wallet"></i>
-            <span>EARN</span>
+            <i class="fas fa-wallet"></i><span>EARN</span>
         </a>
         <a href="winners.html" class="nav-item">
-            <i class="fas fa-crown"></i>
-            <span>WINNERS</span>
+            <i class="fas fa-crown"></i><span>WINNERS</span>
         </a>
         <a href="profile.html" class="nav-item">
-            <i class="fas fa-user-circle"></i>
-            <span>PROFILE</span>
+            <i class="fas fa-user-circle"></i><span>PROFILE</span>
         </a>
     </nav>
 
-    <script>
-        // AAPKA MASTER SCRIPT URL (Sirf Balance Sync ke liye)
-        const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec";
+    <div class="system-nav-bar"></div>
 
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec";
         function syncBalance() {
-            // Check if user is logged in
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!userData) return;
-            
             fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(userData.name))
-            .then(res => res.text())
-            .then(bal => {
-                localStorage.setItem("rareWallet", bal);
-                document.getElementById('walletBal').innerText = "₹" + bal;
-            })
-            .catch(() => {
-                // If offline, show last saved balance
-                document.getElementById('walletBal').innerText = "₹" + (localStorage.getItem("rareWallet") || "0");
-            });
+            .then(res => res.text()).then(bal => {
+                localStorage.setItem("rareWallet", bal); document.getElementById('walletBal').innerText = "₹" + bal;
+            }).catch(() => { document.getElementById('walletBal').innerText = "₹" + (localStorage.getItem("rareWallet") || "0"); });
         }
-        
-        // Load balance on startup
         window.onload = syncBalance;
     </script>
 </body>
