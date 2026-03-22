@@ -12,12 +12,12 @@
         
         /* Top Header Area */
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .logo-text { font-size: 18px; font-weight: 800; }
+        .logo-text { font-size: 18px; font-weight: 800; text-transform: uppercase; color: #fff;}
         .back-btn { background: transparent; border: 1px solid #00f2fe; color: #00f2fe; padding: 6px 15px; border-radius: 6px; font-weight: 800; text-decoration: none; font-size: 12px; }
         
         /* Main Match Card */
         .match-card { background: #121216; border-radius: 20px; padding: 20px; border: 1px solid #1f1f25; }
-        .match-img { width: 100%; border-radius: 12px; margin-bottom: 15px; aspect-ratio: 16/9; object-fit: cover; }
+        .match-img { width: 100%; border-radius: 12px; margin-bottom: 15px; aspect-ratio: 16/9; object-fit: cover; border-bottom: 2px solid #00f2fe;}
         .match-title { font-size: 24px; font-weight: 800; text-transform: uppercase; margin: 0 0 5px 0; }
         .match-time { font-size: 12px; color: #00f2fe; margin-bottom: 20px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
         
@@ -36,57 +36,53 @@
         
         /* Register Button */
         .btn-register { width: 100%; padding: 18px; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; text-transform: uppercase; cursor: pointer; box-shadow: 0 5px 20px rgba(255,0,122,0.3); transition: 0.3s; }
-        .btn-register:disabled { background: #333; box-shadow: none; color: #888; cursor: not-allowed; }
+        .btn-register:active { transform: scale(0.98); }
 
         /* 🔥 PLAYERS LIST SECTION 🔥 */
         .players-section { background: #121216; border-radius: 20px; padding: 20px; border: 1px solid #1f1f25; margin-top: 20px; }
         .players-title { font-size: 15px; font-weight: 800; margin-bottom: 15px; border-bottom: 1px solid #2a2a30; padding-bottom: 10px; display: flex; justify-content: space-between; }
         .player-row { display: flex; align-items: center; padding: 12px; background: #1a1a20; border-radius: 10px; margin-bottom: 10px; }
         .player-row i { color: #00f2fe; margin-right: 12px; font-size: 18px; }
-        .player-name { font-size: 14px; font-weight: 600; color: #fff; }
+        .player-name { font-size: 14px; font-weight: 600; color: #fff; text-transform: uppercase;}
         .loading-text { font-size: 12px; color: #888; text-align: center; padding: 15px; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <div class="header-top">
-        <span class="logo-text">Rare Gaming</span>
-    </div>
-
-    <div>
+        <span class="logo-text">Match Info</span>
         <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> BACK</a>
     </div>
-    <br>
 
     <div class="match-card">
-        <img src="br_poster.jpg" class="match-img" id="m-img" alt="Match Poster">
+        <img src="br_poster.jpg" class="match-img" id="m-img" alt="Match Poster" onerror="this.src='https://via.placeholder.com/600x300/111/fff?text=MATCH+POSTER'">
         
-        <h2 class="match-title" id="m-title">BR SQUAD BATTLE</h2>
-        <div class="match-time"><i class="far fa-clock"></i> <span id="m-time">23 MAR | 07:00 PM</span></div>
+        <h2 class="match-title" id="m-title">LOADING...</h2>
+        <div class="match-time"><i class="far fa-clock"></i> <span id="m-time">...</span></div>
 
         <div class="info-grid">
             <div class="info-box">
                 <div class="info-label">Entry Fee</div>
-                <div class="info-value" id="m-entry">FREE</div>
+                <div class="info-value" id="m-entry">...</div>
             </div>
             <div class="info-box">
                 <div class="info-label">Map</div>
-                <div class="info-value" id="m-map">Bermuda</div>
+                <div class="info-value" id="m-map">...</div>
             </div>
         </div>
 
         <div class="prize-box">
             <div class="prize-row">
                 <span class="prize-title"><i class="fas fa-medal" style="color: #ffd700;"></i> 1st Prize</span>
-                <span class="prize-amt" id="m-prize1">₹150</span>
+                <span class="prize-amt" id="m-prize1">₹...</span>
             </div>
             <div class="prize-row">
                 <span class="prize-title"><i class="fas fa-medal" style="color: #c0c0c0;"></i> 2nd Prize</span>
-                <span class="prize-amt" id="m-prize2">₹70</span>
+                <span class="prize-amt" id="m-prize2">₹...</span>
             </div>
         </div>
 
-        <button class="btn-register" id="regBtn" onclick="registerForMatch()">REGISTER NOW</button>
+        <button class="btn-register" onclick="registerForMatch()">REGISTER NOW</button>
     </div>
 
     <div class="players-section">
@@ -100,16 +96,16 @@
     </div>
 
     <script>
-        // 🔥 AAPKA LATEST SCRIPT URL 🔥
+        // 🔥 AAPKA MASTER SCRIPT URL 🔥
         const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec"; 
         
-        // Match ka pata lagana
+        // Match ka pata lagana (URL se)
         const urlParams = new URLSearchParams(window.location.search);
         let matchName = urlParams.get('match') || 'BR';
 
-        // Match ki details (Screenshot ke hisaab se update kar di hain)
+        // Match ki details
         const matchData = {
-            "BR": { title: "BR SQUAD BATTLE", time: "23 MAR | 07:00 PM", entry: "FREE", prize1: "₹150", prize2: "₹70", map: "Bermuda", img: "br_poster.jpg" },
+            "BR": { title: "BR SQUAD BATTLE", time: "25 MAR | 07:00 PM", entry: "FREE", prize1: "₹150", prize2: "₹70", map: "Bermuda", img: "br_poster.jpg" },
             "CS": { title: "CLASH SQUAD", time: "26 MAR | 07:00 PM", entry: "₹10", prize1: "₹150", prize2: "₹50", map: "Bermuda", img: "cs_poster.jpg" },
             "LW": { title: "LONE WOLF", time: "27 MAR | 06:00 PM", entry: "₹5", prize1: "₹50", prize2: "₹10", map: "Iron Cage", img: "lw_poster.jpg" },
             "1V1": { title: "1V1 BATTLE", time: "28 MAR | 09:00 PM", entry: "₹15", prize1: "₹100", prize2: "₹0", map: "Custom", img: "1v1_poster.jpg" }
@@ -126,32 +122,16 @@
         document.getElementById('m-prize2').innerText = currentMatch.prize2;
         document.getElementById('m-img').src = currentMatch.img;
 
-        // 1. MATCH REGISTER FUNCTION
+        // 1. 🚀 NAYA MATCH REGISTER FUNCTION 🚀
         function registerForMatch() {
-            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!userData) { alert("Please login first!"); window.location.href="login.html"; return; }
-
-            const btn = document.getElementById('regBtn');
-            btn.innerText = "JOINING..."; btn.disabled = true;
-
-            const finalURL = `${scriptURL}?action=register&username=${encodeURIComponent(userData.name)}&uid=${encodeURIComponent(userData.uid || "N/A")}&match=${encodeURIComponent(currentMatch.title)}`;
-
-            fetch(finalURL, { method: 'POST', mode: 'no-cors' })
-            .then(() => {
-                alert("✅ Successfully Registered!");
-                btn.innerText = "ALREADY JOINED";
-                btn.style.background = "#00e676"; // Green ho jayega
-                
-                // 3 second baad list dubara load karo taaki naya naam dikhe
-                setTimeout(loadPlayers, 3000); 
-            }).catch(() => { alert("❌ Error!"); btn.innerText = "REGISTER NOW"; btn.disabled = false; });
+            // Seedha register page par le jao match ka naam sath lekar
+            window.location.href = "register.html?match=" + encodeURIComponent(currentMatch.title);
         }
 
-        // 2. PLAYERS LIST LAANE KA NAYA DIMAAG (JSONP/Script Tag method to avoid CORS block)
+        // 2. PLAYERS LIST FETCH KARNE KA FUNCTION (Google Sheet se)
         function loadPlayers() {
             document.getElementById('players-list').innerHTML = `<div class="loading-text"><i class="fas fa-spinner fa-spin"></i> Fetching players...</div>`;
             
-            // Standard fetch call for GET request
             const fetchURL = `${scriptURL}?action=getPlayers&match=${encodeURIComponent(currentMatch.title)}`;
             
             fetch(fetchURL)
@@ -171,7 +151,7 @@
             })
             .catch((err) => {
                 console.error(err);
-                document.getElementById('players-list').innerHTML = `<div class="loading-text" style="color: #ff007a;">Click Register to join the list!</div>`;
+                document.getElementById('players-list').innerHTML = `<div class="loading-text" style="color: #ff007a;">Unable to load players list right now.</div>`;
             });
         }
 
