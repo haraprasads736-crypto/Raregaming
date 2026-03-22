@@ -14,39 +14,37 @@
         }
 
         .reg-box { 
-            background: #111116; padding: 30px 20px; border-radius: 25px; 
+            background: #111116; padding: 25px 20px; border-radius: 25px; 
             border: 1.5px solid #ff007a; width: 100%; max-width: 350px; 
             box-shadow: 0 0 20px rgba(255, 0, 122, 0.2); text-align: center;
         }
 
-        .icon-header { font-size: 50px; color: #ffd700; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3)); }
+        .icon-header { font-size: 40px; color: #ffd700; margin-bottom: 10px; }
         
-        h2 { font-weight: 800; text-transform: uppercase; margin: 0; font-size: 22px; letter-spacing: 1px; }
-        .match-display { color: #00f2fe; font-weight: 800; font-size: 16px; margin: 10px 0 25px 0; background: rgba(0, 242, 254, 0.1); padding: 5px; border-radius: 8px; }
+        h2 { font-weight: 800; text-transform: uppercase; margin: 0; font-size: 20px; }
+        .match-display { color: #00f2fe; font-weight: 800; font-size: 14px; margin: 10px 0 20px 0; background: rgba(0, 242, 254, 0.1); padding: 5px; border-radius: 8px; }
 
-        .input-group { text-align: left; margin-bottom: 15px; }
-        label { font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase; margin-left: 5px; }
-        
+        .player-title { font-size: 12px; font-weight: 800; color: #ff007a; text-align: left; margin-top: 15px; border-bottom: 1px solid #333; padding-bottom: 5px;}
+
         input { 
-            width: 100%; padding: 14px; margin-top: 5px; background: #000; 
-            border: 1px solid #222; color: #fff; border-radius: 12px; 
-            box-sizing: border-box; font-family: 'Poppins'; font-size: 14px;
-            transition: 0.3s;
+            width: 100%; padding: 12px; margin-top: 10px; background: #000; 
+            border: 1px solid #222; color: #fff; border-radius: 10px; 
+            box-sizing: border-box; font-family: 'Poppins'; font-size: 12px;
         }
-        input:focus { border-color: #ff007a; outline: none; background: #08080a; }
 
         .btn-confirm { 
-            width: 100%; padding: 16px; margin-top: 10px;
+            width: 100%; padding: 15px; margin-top: 20px;
             background: linear-gradient(90deg, #ff007a, #7a00ff); 
-            border: none; color: white; font-weight: 800; font-size: 15px;
+            border: none; color: white; font-weight: 800; font-size: 14px;
             border-radius: 12px; cursor: pointer; text-transform: uppercase;
-            box-shadow: 0 5px 15px rgba(255, 0, 122, 0.4);
         }
-        .btn-confirm:active { transform: scale(0.98); }
+        .btn-confirm:disabled { background: #555; cursor: not-allowed; }
 
-        #msg { margin-top: 20px; font-weight: 600; font-size: 13px; min-height: 20px; }
+        #msg { margin-top: 15px; font-weight: 600; font-size: 13px; min-height: 20px; }
+        .back-link { display: inline-block; margin-top: 15px; color: #555; text-decoration: none; font-size: 12px; font-weight: 600; }
         
-        .back-link { margin-top: 20px; color: #555; text-decoration: none; font-size: 12px; font-weight: 600; }
+        /* Dynamic container for inputs */
+        #dynamic-players { text-align: left; }
     </style>
 </head>
 <body>
@@ -56,15 +54,7 @@
         <h2>Join Match</h2>
         <div class="match-display" id="matchName">Loading Match...</div>
         
-        <div class="input-group">
-            <label>In-Game UID</label>
-            <input type="number" id="gameId" placeholder="Example: 123456789">
-        </div>
-
-        <div class="input-group">
-            <label>In-Game Name</label>
-            <input type="text" id="gameName" placeholder="Example: RARE_GAMER">
-        </div>
+        <div id="dynamic-players"></div>
         
         <button class="btn-confirm" id="submitBtn" onclick="submitRegistration()">Confirm & Register</button>
         
@@ -73,35 +63,72 @@
     </div>
 
     <script>
-        // URL se Match ka naam nikalna (index.html se jo aaya hai)
+        // 1. MATCH KA NAAM AUR PLAYERS KI GINTI NIKALNA
         const urlParams = new URLSearchParams(window.location.search);
-        const match = urlParams.get('match') || "BR SQUAD BATTLE";
+        const match = urlParams.get('match') || "UNKNOWN MATCH";
         document.getElementById('matchName').innerText = match;
+
+        let totalPlayers = 1; // Default 1 player
+        const matchUpper = match.toUpperCase();
+
+        // Rules jo aapne bataye hain:
+        if (matchUpper.includes("BR")) {
+            totalPlayers = 2; // BR = 2 Players
+        } else if (matchUpper.includes("CLASH SQUAD") || matchUpper.includes("CS")) {
+            totalPlayers = 4; // CS = 4 Players
+        } else if (matchUpper.includes("LONE WOLF") || matchUpper.includes("1V1")) {
+            totalPlayers = 1; // Lone Wolf / 1V1 = 1 Player
+        }
+
+        // 2. AUTO HTML GENERATE KARNA
+        let htmlContent = "";
+        for (let i = 1; i <= totalPlayers; i++) {
+            htmlContent += `
+                <div class="player-title">PLAYER ${i} DETAILS</div>
+                <input type="number" id="p${i}Uid" placeholder="Player ${i} UID (e.g. 12345678)">
+                <input type="text" id="p${i}Name" placeholder="Player ${i} In-Game Name">
+            `;
+        }
+        document.getElementById('dynamic-players').innerHTML = htmlContent;
 
         // 🔥 AAPKA MASTER SCRIPT URL 🔥
         const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec";
 
+        // 3. SUBMIT KARNE KA FUNCTION
         function submitRegistration() {
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            const gid = document.getElementById('gameId').value;
-            const gname = document.getElementById('gameName').value;
-            const btn = document.getElementById('submitBtn');
-            const msgDiv = document.getElementById('msg');
+            if(!userData) { alert("Pehle app mein login karo!"); return; }
 
-            // Verification
-            if(!userData) { alert("Pehle login karo bhai!"); return; }
-            if(!gid || !gname) { alert("Sari details bharo!"); return; }
+            const btn = document.getElementById('submitBtn');
+            let uids = [];
+            let names = [];
+
+            // Sabhi players ka data check karna aur nikalna
+            for (let i = 1; i <= totalPlayers; i++) {
+                let uid = document.getElementById(`p${i}Uid`).value.trim();
+                let name = document.getElementById(`p${i}Name`).value.trim();
+                
+                if (!uid || !name) {
+                    alert(`Player ${i} ki details missing hai. Pura form bharo!`);
+                    return;
+                }
+                uids.push(uid);
+                names.push(name);
+            }
 
             btn.innerText = "PROCESSING...";
             btn.disabled = true;
 
-            // URLSearchParams method (Best for Google Script Apps)
+            // Data ko combine karna (Ex: "UID1 & UID2" | "NAME1 & NAME2")
+            const finalUid = uids.join(" & ");
+            const finalName = names.join(" & ");
+
             const params = new URLSearchParams();
             params.append("action", "register"); 
-            params.append("username", userData.name); // App Username
-            params.append("gameUid", gid);            // Game ID
-            params.append("gameName", gname);        // In-game Name
-            params.append("match", match);           // Match Name
+            params.append("username", userData.name); 
+            params.append("gameUid", finalUid);            
+            params.append("gameName", finalName);        
+            params.append("match", match);           
 
             fetch(scriptURL, { 
                 method: 'POST', 
@@ -109,11 +136,11 @@
                 body: params 
             })
             .then(() => {
-                msgDiv.innerHTML = "<span style='color: #00e676;'>✅ Registration Successful!</span>";
+                document.getElementById('msg').innerHTML = "<span style='color: #00e676;'>✅ Registration Successful!</span>";
                 setTimeout(() => { window.location.href = "index.html"; }, 2000);
             })
             .catch(() => {
-                alert("Network Error! Check internet connection.");
+                alert("Network Error! Try again.");
                 btn.disabled = false;
                 btn.innerText = "Confirm & Register";
             });
