@@ -3,244 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Earn & Wallet - RARE GAMING</title>
+    <title>Earn - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        
-        body { 
-            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; 
-            padding-bottom: 140px; /* Scrolling space */
-        }
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
+        .balance-card { background: linear-gradient(135deg, #ff007a22, #7a00ff22); border: 1.5px solid #ff007a; border-radius: 20px; margin: 20px; padding: 30px; text-align: center; }
+        .bal-amount { font-size: 40px; font-weight: 800; }
+        .wallet-panel { background: #111116; border-radius: 15px; padding: 20px; border: 1px solid #1f1f25; margin: 20px; }
+        input { width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; color: #fff; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; }
+        .btn-action { width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; }
+        .btn-yellow { background: #ffd700; color: #000; }
+        .btn-blue { background: #00f2fe; color: #000; }
 
-        /* Top Header */
-        .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* Main Balance Card */
-        .balance-card {
-            background: linear-gradient(135deg, rgba(255,0,122,0.1), rgba(122,0,255,0.1));
-            border: 1.5px solid #ff007a;
-            border-radius: 20px;
-            margin: 0 20px 25px 20px;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(255,0,122,0.15);
-        }
-        .bal-label { font-size: 12px; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 1px;}
-        .bal-amount { font-size: 45px; font-weight: 800; color: #fff; margin: 5px 0; text-shadow: 0 0 15px rgba(255,255,255,0.3); }
-
-        /* Wallet Sections (Redeem & Withdraw) */
-        .wallet-panel { 
-            background: #111116; border-radius: 15px; padding: 20px; 
-            border: 1px solid #1f1f25; margin: 0 20px 20px 20px; 
-        }
-        .panel-title { font-size: 14px; font-weight: 800; margin-bottom: 15px; color: #ffd700; display: flex; align-items: center; gap: 8px;}
-        .panel-title.pink { color: #00f2fe; }
-        
-        input { 
-            width: 100%; padding: 14px; background: #000; border: 1px solid #2a2a30; 
-            color: #fff; border-radius: 10px; margin-bottom: 12px; box-sizing: border-box; 
-            font-family: 'Poppins'; font-size: 13px; transition: 0.3s;
-        }
-        input:focus { border-color: #ff007a; outline: none; }
-        
-        .btn-action { 
-            width: 100%; padding: 14px; color: #000; border: none; border-radius: 10px; 
-            font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase;
-            transition: 0.3s;
-        }
-        .btn-yellow { background: #ffd700; }
-        .btn-blue { background: #00f2fe; }
-        .btn-action:active { transform: scale(0.98); }
-        .btn-action:disabled { background: #555; cursor: not-allowed; }
-
-        /* =========================================================
-           🔥 EXACT WAHI NAVIGATION BAR DESIGN
-           ========================================================= */
-
-        /* 1. Niche ki GREY Patti */
-        .system-nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 48px; 
-            background-color: #4f515e; 
-            z-index: 1001;
-        }
-
-        /* 2. Black Navigation Bar */
-        .bottom-nav { 
-            position: fixed; 
-            bottom: 48px; 
-            left: 0;
-            width: 100%; 
-            height: 70px; 
-            background: #111116; 
-            display: flex; 
-            justify-content: space-around; 
-            align-items: center; 
-            border-top: 1px solid rgba(255, 255, 255, 0.05); 
-            z-index: 1000;
-        }
-        
-        .nav-item { 
-            text-decoration: none; color: #666; font-size: 10px; font-weight: 800; 
-            display: flex; flex-direction: column; align-items: center; 
-            flex: 1; margin-top: 5px;
-        }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; color: #666; }
-        
-        /* 3. ACTIVE ITEM (White Glowing Diamond) */
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
         .nav-item.active { color: white; position: relative; }
-        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; } 
-        .nav-item.active span { z-index: 2; margin-top: 2px; }
-        
-        .nav-item.active::before { 
-            content: ''; position: absolute; top: -16px; 
-            width: 58px; height: 58px; 
-            background: #ffffff; 
-            border-radius: 16px; transform: rotate(45deg); z-index: -1;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); 
-        }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
+        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
-
-    <div class="header-top">
-        <div class="brand-name">WALLET</div>
-    </div>
-
     <div class="balance-card">
-        <div class="bal-label">Total Balance</div>
+        <div>Total Balance</div>
         <div class="bal-amount" id="mainBal">₹...</div>
     </div>
-
     <div class="wallet-panel">
-        <div class="panel-title"><i class="fas fa-gift"></i> REDEEM PROMO CODE</div>
-        <input type="text" id="promoCode" placeholder="Enter Code (e.g. WELCOME50)">
-        <button class="btn-action btn-yellow" id="btnRedeem" onclick="redeem()">REDEEM CODE</button>
+        <div style="color:#ffd700; margin-bottom:10px;">REDEEM CODE</div>
+        <input type="text" id="promoCode" placeholder="Enter Promo Code">
+        <button class="btn-action btn-yellow" onclick="redeem()">REDEEM</button>
     </div>
-
     <div class="wallet-panel">
-        <div class="panel-title pink"><i class="fas fa-money-bill-wave"></i> WITHDRAW WINNINGS</div>
-        <input type="number" id="witAmt" placeholder="Amount (Min ₹50)">
-        <input type="text" id="witUpi" placeholder="Your UPI ID (e.g. 9876543210@ybl)">
-        <button class="btn-action btn-blue" id="btnWithdraw" onclick="withdraw()">REQUEST WITHDRAW</button>
+        <div style="color:#00f2fe; margin-bottom:10px;">WITHDRAW (Min ₹50)</div>
+        <input type="number" id="witAmt" placeholder="Amount">
+        <input type="text" id="witUpi" placeholder="UPI ID">
+        <button class="btn-action btn-blue" onclick="withdraw()">WITHDRAW</button>
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i><span>HOME</span>
-        </a>
-        <a href="earn.html" class="nav-item active"> <i class="fas fa-wallet"></i><span>EARN</span>
-        </a>
-        <a href="winners.html" class="nav-item">
-            <i class="fas fa-crown"></i><span>WINNERS</span>
-        </a>
-        <a href="profile.html" class="nav-item">
-            <i class="fas fa-user-circle"></i><span>PROFILE</span>
-        </a>
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item active"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
-
     <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec";
-
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyVPA7IWkzt7njCMsq3dGhuNgc2h06maeULsvUCJsM8-WZLGepfQ4_wRLXAo1L396V2Sg/exec";
         function syncBalance() {
-            // TESTING KE LIYE: Agar user login nahi hai, toh TestUser maan lo
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            let username = userData ? userData.name : "TestUser"; 
-            
-            fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(username))
-            .then(res => res.text())
-            .then(bal => {
-                localStorage.setItem("rareWallet", bal);
-                document.getElementById('mainBal').innerText = "₹" + bal;
-            })
-            .catch(() => {
-                document.getElementById('mainBal').innerText = "₹" + (localStorage.getItem("rareWallet") || "0");
-            });
+            let user = userData ? userData.name : "TestUser";
+            fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(user))
+            .then(res => res.text()).then(bal => { document.getElementById('mainBal').innerText = "₹" + bal; });
         }
-
         function redeem() {
-            // TESTING KE LIYE DUMMY USER
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            let username = userData ? userData.name : "TestUser";
-            
-            const code = document.getElementById('promoCode').value.trim();
-            if(!code) {
-                alert("Bhai, pehle koi Promo Code toh daalo!"); 
-                return; 
-            }
-
-            const btn = document.getElementById('btnRedeem');
-            btn.innerText = "PROCESSING...";
-            btn.disabled = true;
-
-            const params = new URLSearchParams();
-            params.append("action", "redeem");
-            params.append("username", username);
-            params.append("code", code);
-
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
-            .then(() => { 
-                alert("✅ Promo Code Request Bhej Di Gayi Hai!"); 
-                btn.innerText = "REDEEM CODE"; 
-                btn.disabled = false;
-                document.getElementById('promoCode').value = ""; // Input box khali kar do
-            })
-            .catch(() => { 
-                alert("❌ Network Error! Internet check karein."); 
-                btn.innerText = "REDEEM CODE"; 
-                btn.disabled = false; 
-            });
+            let user = userData ? userData.name : "TestUser";
+            let code = document.getElementById('promoCode').value;
+            fetch(scriptURL + "?action=redeem&username="+user+"&code="+code, {method:'POST', mode:'no-cors'})
+            .then(() => { alert("Request Sent! Checking sheet..."); location.reload(); });
         }
-
         function withdraw() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            let username = userData ? userData.name : "TestUser";
-
-            const amt = document.getElementById('witAmt').value;
-            const upi = document.getElementById('witUpi').value.trim();
-            
-            if(!amt || !upi) {
-                alert("Bhai, Amount aur UPI ID dono bharna zaroori hai!"); 
-                return;
-            }
-            if(amt < 50) {
-                alert("Minimum withdrawal ₹50 hai!"); 
-                return;
-            }
-
-            const btn = document.getElementById('btnWithdraw');
-            btn.innerText = "PROCESSING...";
-            btn.disabled = true;
-
-            const params = new URLSearchParams();
-            params.append("action", "withdraw");
-            params.append("username", username);
-            params.append("amount", amt);
-            params.append("upi", upi);
-
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
-            .then(() => { 
-                alert("✅ Withdrawal Request Successful! Paise jaldi transfer ho jayenge."); 
-                btn.innerText = "REQUEST WITHDRAW"; 
-                btn.disabled = false;
-                document.getElementById('witAmt').value = "";
-                document.getElementById('witUpi').value = "";
-            })
-            .catch(() => { 
-                alert("❌ Network Error!"); 
-                btn.innerText = "REQUEST WITHDRAW"; 
-                btn.disabled = false; 
-            });
+            let user = userData ? userData.name : "TestUser";
+            let amt = document.getElementById('witAmt').value;
+            let upi = document.getElementById('witUpi').value;
+            fetch(scriptURL + "?action=withdraw&username="+user+"&amount="+amt+"&upi="+upi, {method:'POST', mode:'no-cors'})
+            .then(() => { alert("Withdraw Request Sent!"); location.reload(); });
         }
-
         window.onload = syncBalance;
     </script>
 </body>
