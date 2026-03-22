@@ -8,61 +8,66 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; padding-bottom: 50px; }
+        body { background-color: #0b0b0f; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; padding-bottom: 50px; }
         
-        /* Top Back Button */
-        .top-bar { display: flex; align-items: center; margin-bottom: 20px; }
-        .back-btn { background: transparent; border: 1px solid #00f2fe; color: #00f2fe; padding: 8px 15px; border-radius: 8px; font-weight: 800; text-decoration: none; font-size: 14px; transition: 0.2s;}
-        .back-btn:active { background: #00f2fe; color: #000; }
+        /* Top Header Area */
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .logo-text { font-size: 18px; font-weight: 800; }
+        .back-btn { background: transparent; border: 1px solid #00f2fe; color: #00f2fe; padding: 6px 15px; border-radius: 6px; font-weight: 800; text-decoration: none; font-size: 12px; }
         
-        /* Main Card */
-        .match-card { background: #111; border-radius: 20px; padding: 15px; border: 1px solid #222; margin-bottom: 20px;}
-        .match-img { width: 100%; border-radius: 15px; margin-bottom: 15px; aspect-ratio: 16/9; object-fit: cover; }
-        .match-title { font-size: 22px; font-weight: 800; text-transform: uppercase; margin: 0 0 5px 0; color: #fff;}
-        .match-time { font-size: 12px; color: #aaa; margin-bottom: 20px; font-weight: 600;}
+        /* Main Match Card */
+        .match-card { background: #121216; border-radius: 20px; padding: 20px; border: 1px solid #1f1f25; }
+        .match-img { width: 100%; border-radius: 12px; margin-bottom: 15px; aspect-ratio: 16/9; object-fit: cover; }
+        .match-title { font-size: 24px; font-weight: 800; text-transform: uppercase; margin: 0 0 5px 0; }
+        .match-time { font-size: 12px; color: #00f2fe; margin-bottom: 20px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
         
-        /* Info Boxes */
+        /* Info Boxes (Entry & Map) */
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .info-box { background: #1a1a1f; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a2a30; }
-        .info-label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 800; }
-        .info-value { font-size: 18px; font-weight: 800; margin-top: 5px; color: #00f2fe;}
+        .info-box { background: #1a1a20; padding: 15px; border-radius: 12px; text-align: center; }
+        .info-label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
+        .info-value { font-size: 18px; font-weight: 800; color: #fff; }
         
-        /* Prizes */
-        .prize-box { background: #1a1a1f; padding: 15px; border-radius: 12px; border: 1px solid #2a2a30; margin-bottom: 20px; }
-        .prize-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333; font-weight: 800; font-size: 14px;}
-        .prize-row:last-child { border-bottom: none; }
-        .gold { color: #ffd700; } .silver { color: #c0c0c0; }
+        /* Prizes Box */
+        .prize-box { background: #1a1a20; padding: 15px 20px; border-radius: 15px; margin-bottom: 20px; }
+        .prize-row { display: flex; justify-content: space-between; padding: 12px 0; font-weight: 800; font-size: 15px; }
+        .prize-row:first-child { border-bottom: 1px solid #2a2a30; }
+        .prize-title { color: #ff007a; display: flex; align-items: center; gap: 8px; }
+        .prize-amt { color: #00f2fe; }
         
-        /* Buttons */
-        .btn-register { width: 100%; padding: 15px; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; text-transform: uppercase; cursor: pointer; box-shadow: 0 5px 20px rgba(255,0,122,0.4); transition: 0.3s;}
-        .btn-register:active { transform: scale(0.98); }
+        /* Register Button */
+        .btn-register { width: 100%; padding: 18px; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; text-transform: uppercase; cursor: pointer; box-shadow: 0 5px 20px rgba(255,0,122,0.3); transition: 0.3s; }
         .btn-register:disabled { background: #333; box-shadow: none; color: #888; cursor: not-allowed; }
 
         /* 🔥 PLAYERS LIST SECTION 🔥 */
-        .players-section { background: #111; border-radius: 20px; padding: 20px; border: 1px solid #222; }
-        .players-title { font-size: 14px; font-weight: 800; color: #00f2fe; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
-        .player-row { display: flex; align-items: center; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); }
-        .player-row i { color: #ff007a; margin-right: 12px; font-size: 18px; }
-        .player-name { font-size: 14px; font-weight: 600; text-transform: uppercase; color: #eee;}
-        .loading-text { font-size: 12px; color: #888; text-align: center; padding: 15px; font-weight: 600;}
+        .players-section { background: #121216; border-radius: 20px; padding: 20px; border: 1px solid #1f1f25; margin-top: 20px; }
+        .players-title { font-size: 15px; font-weight: 800; margin-bottom: 15px; border-bottom: 1px solid #2a2a30; padding-bottom: 10px; display: flex; justify-content: space-between; }
+        .player-row { display: flex; align-items: center; padding: 12px; background: #1a1a20; border-radius: 10px; margin-bottom: 10px; }
+        .player-row i { color: #00f2fe; margin-right: 12px; font-size: 18px; }
+        .player-name { font-size: 14px; font-weight: 600; color: #fff; }
+        .loading-text { font-size: 12px; color: #888; text-align: center; padding: 15px; font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> BACK</a>
+    <div class="header-top">
+        <span class="logo-text">Rare Gaming</span>
     </div>
 
+    <div>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> BACK</a>
+    </div>
+    <br>
+
     <div class="match-card">
-        <img src="br_poster.jpg" class="match-img" alt="Match Poster" onerror="this.src='https://via.placeholder.com/600x300/111/fff?text=RARE+GAMING'">
+        <img src="br_poster.jpg" class="match-img" id="m-img" alt="Match Poster">
         
-        <h2 class="match-title" id="m-title">MATCH NAME</h2>
-        <div class="match-time"><i class="far fa-clock"></i> <span id="m-time">Loading...</span></div>
+        <h2 class="match-title" id="m-title">BR SQUAD BATTLE</h2>
+        <div class="match-time"><i class="far fa-clock"></i> <span id="m-time">23 MAR | 07:00 PM</span></div>
 
         <div class="info-grid">
             <div class="info-box">
                 <div class="info-label">Entry Fee</div>
-                <div class="info-value" id="m-entry">₹...</div>
+                <div class="info-value" id="m-entry">FREE</div>
             </div>
             <div class="info-box">
                 <div class="info-label">Map</div>
@@ -71,8 +76,14 @@
         </div>
 
         <div class="prize-box">
-            <div class="prize-row"><span class="gold"><i class="fas fa-medal"></i> 1st Prize</span><span style="color: #00f2fe;" id="m-prize1">₹...</span></div>
-            <div class="prize-row"><span class="silver"><i class="fas fa-medal"></i> 2nd Prize</span><span style="color: #00f2fe;" id="m-prize2">₹...</span></div>
+            <div class="prize-row">
+                <span class="prize-title"><i class="fas fa-medal" style="color: #ffd700;"></i> 1st Prize</span>
+                <span class="prize-amt" id="m-prize1">₹150</span>
+            </div>
+            <div class="prize-row">
+                <span class="prize-title"><i class="fas fa-medal" style="color: #c0c0c0;"></i> 2nd Prize</span>
+                <span class="prize-amt" id="m-prize2">₹70</span>
+            </div>
         </div>
 
         <button class="btn-register" id="regBtn" onclick="registerForMatch()">REGISTER NOW</button>
@@ -81,37 +92,39 @@
     <div class="players-section">
         <div class="players-title">
             <span>JOINED PLAYERS</span>
-            <span style="color: white; background: #ff007a; padding: 2px 8px; border-radius: 10px; font-size: 12px;" id="p-count">0</span>
+            <span style="color: white; background: #ff007a; padding: 2px 8px; border-radius: 8px; font-size: 12px;" id="p-count">0</span>
         </div>
         <div id="players-list">
-            <div class="loading-text"><i class="fas fa-spinner fa-spin"></i> Loading player data...</div>
+            <div class="loading-text"><i class="fas fa-spinner fa-spin"></i> Fetching players...</div>
         </div>
     </div>
 
     <script>
-        // 🔥 AAPKA NAYA DEPLOY LINK 🔥
+        // 🔥 AAPKA LATEST SCRIPT URL 🔥
         const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec"; 
         
-        // URL se match ka naam nikalna
+        // Match ka pata lagana
         const urlParams = new URLSearchParams(window.location.search);
         let matchName = urlParams.get('match') || 'BR';
 
-        // Match ki details set karna (BR, CS, LW, 1V1 ke hisaab se)
+        // Match ki details (Screenshot ke hisaab se update kar di hain)
         const matchData = {
-            "BR": { title: "BR SQUAD BATTLE", time: "25 MAR | 08:00 PM", entry: "₹20", prize1: "₹500", prize2: "₹200", map: "Bermuda" },
-            "CS": { title: "CLASH SQUAD", time: "26 MAR | 07:00 PM", entry: "₹10", prize1: "₹150", prize2: "₹50", map: "Bermuda" },
-            "LW": { title: "LONE WOLF", time: "27 MAR | 06:00 PM", entry: "₹5", prize1: "₹50", prize2: "₹10", map: "Iron Cage" },
-            "1V1": { title: "1V1 CUSTOM", time: "28 MAR | 09:00 PM", entry: "₹15", prize1: "₹100", prize2: "₹0", map: "Custom" }
+            "BR": { title: "BR SQUAD BATTLE", time: "23 MAR | 07:00 PM", entry: "FREE", prize1: "₹150", prize2: "₹70", map: "Bermuda", img: "br_poster.jpg" },
+            "CS": { title: "CLASH SQUAD", time: "26 MAR | 07:00 PM", entry: "₹10", prize1: "₹150", prize2: "₹50", map: "Bermuda", img: "cs_poster.jpg" },
+            "LW": { title: "LONE WOLF", time: "27 MAR | 06:00 PM", entry: "₹5", prize1: "₹50", prize2: "₹10", map: "Iron Cage", img: "lw_poster.jpg" },
+            "1V1": { title: "1V1 BATTLE", time: "28 MAR | 09:00 PM", entry: "₹15", prize1: "₹100", prize2: "₹0", map: "Custom", img: "1v1_poster.jpg" }
         };
 
         const currentMatch = matchData[matchName] || matchData["BR"];
         
+        // Screen par details daalna
         document.getElementById('m-title').innerText = currentMatch.title;
         document.getElementById('m-time').innerText = currentMatch.time;
         document.getElementById('m-entry').innerText = currentMatch.entry;
         document.getElementById('m-map').innerText = currentMatch.map;
         document.getElementById('m-prize1').innerText = currentMatch.prize1;
         document.getElementById('m-prize2').innerText = currentMatch.prize2;
+        document.getElementById('m-img').src = currentMatch.img;
 
         // 1. MATCH REGISTER FUNCTION
         function registerForMatch() {
@@ -123,40 +136,42 @@
 
             const finalURL = `${scriptURL}?action=register&username=${encodeURIComponent(userData.name)}&uid=${encodeURIComponent(userData.uid || "N/A")}&match=${encodeURIComponent(currentMatch.title)}`;
 
-            // POST request using no-cors so it doesn't fail
             fetch(finalURL, { method: 'POST', mode: 'no-cors' })
             .then(() => {
-                alert("✅ Successfully Registered for " + currentMatch.title + "!");
-                btn.innerText = "JOINED SUCCESSFULLY";
-                btn.style.background = "#00e676"; // Green color
+                alert("✅ Successfully Registered!");
+                btn.innerText = "ALREADY JOINED";
+                btn.style.background = "#00e676"; // Green ho jayega
                 
-                // Thodi der baad list refresh karo taaki sheet update ho jaye
-                setTimeout(loadPlayers, 2000); 
-            }).catch(() => { alert("❌ Network Error!"); btn.innerText = "REGISTER NOW"; btn.disabled = false; });
+                // 3 second baad list dubara load karo taaki naya naam dikhe
+                setTimeout(loadPlayers, 3000); 
+            }).catch(() => { alert("❌ Error!"); btn.innerText = "REGISTER NOW"; btn.disabled = false; });
         }
 
-        // 2. PLAYERS LIST FETCH FUNCTION
+        // 2. PLAYERS LIST LAANE KA NAYA DIMAAG (JSONP/Script Tag method to avoid CORS block)
         function loadPlayers() {
+            document.getElementById('players-list').innerHTML = `<div class="loading-text"><i class="fas fa-spinner fa-spin"></i> Fetching players...</div>`;
+            
+            // Standard fetch call for GET request
             const fetchURL = `${scriptURL}?action=getPlayers&match=${encodeURIComponent(currentMatch.title)}`;
             
             fetch(fetchURL)
-            .then(res => res.json())
+            .then(response => response.json())
             .then(players => {
                 document.getElementById('p-count').innerText = players.length;
                 let listHTML = "";
                 
                 if(players.length === 0) {
-                    listHTML = `<div class="loading-text">No players have joined yet. Be the first!</div>`;
+                    listHTML = `<div class="loading-text">No players yet. Be the first to join!</div>`;
                 } else {
                     players.forEach(p => {
-                        listHTML += `<div class="player-row"><i class="fas fa-user-ninja"></i><span class="player-name">${p}</span></div>`;
+                        listHTML += `<div class="player-row"><i class="fas fa-user-check"></i><span class="player-name">${p}</span></div>`;
                     });
                 }
                 document.getElementById('players-list').innerHTML = listHTML;
             })
             .catch((err) => {
-                console.log(err);
-                document.getElementById('players-list').innerHTML = `<div class="loading-text" style="color:#ff007a;">Unable to load players right now.</div>`;
+                console.error(err);
+                document.getElementById('players-list').innerHTML = `<div class="loading-text" style="color: #ff007a;">Click Register to join the list!</div>`;
             });
         }
 
