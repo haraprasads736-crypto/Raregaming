@@ -10,7 +10,8 @@
         
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 130px; 
+            margin: 0; padding: 0; overflow-x: hidden; 
+            padding-bottom: 140px; /* Scrolling space */
         }
 
         /* Top Header */
@@ -55,25 +56,54 @@
         .btn-action:active { transform: scale(0.98); }
         .btn-action:disabled { background: #555; cursor: not-allowed; }
 
-        /* GLOWING BOTTOM NAVIGATION */
-        .bottom-nav { 
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; 
-            background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            display: flex; justify-content: space-around; align-items: center; 
-            border-top: 1px solid rgba(255, 0, 122, 0.5); box-shadow: 0 -5px 25px rgba(255, 0, 122, 0.25); 
-            z-index: 1000; padding-bottom: env(safe-area-inset-bottom, 15px); 
+        /* =========================================================
+           🔥 EXACT WAHI NAVIGATION BAR DESIGN
+           ========================================================= */
+
+        /* 1. Niche ki GREY Patti */
+        .system-nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 48px; 
+            background-color: #4f515e; 
+            z-index: 1001;
         }
+
+        /* 2. Black Navigation Bar */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 48px; 
+            left: 0;
+            width: 100%; 
+            height: 70px; 
+            background: #111116; 
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center; 
+            border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000;
+        }
+        
         .nav-item { 
-            text-decoration: none; color: #555; font-size: 10px; font-weight: 800; 
-            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
+            text-decoration: none; color: #666; font-size: 10px; font-weight: 800; 
+            display: flex; flex-direction: column; align-items: center; 
             flex: 1; margin-top: 5px;
         }
-        .nav-item i { font-size: 20px; margin-bottom: 5px; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; color: #666; }
+        
+        /* 3. ACTIVE ITEM (White Glowing Diamond) */
         .nav-item.active { color: white; position: relative; }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; } 
+        .nav-item.active span { z-index: 2; margin-top: 2px; }
+        
         .nav-item.active::before { 
-            content: ''; position: absolute; top: -18px; 
-            width: 55px; height: 55px; background: linear-gradient(135deg, #ff007a, #7a00ff); 
-            border-radius: 15px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 20px rgba(255,0,122,0.6);
+            content: ''; position: absolute; top: -16px; 
+            width: 58px; height: 58px; 
+            background: #ffffff; 
+            border-radius: 16px; transform: rotate(45deg); z-index: -1;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); 
         }
     </style>
 </head>
@@ -103,27 +133,23 @@
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>HOME</span>
+            <i class="fas fa-home"></i><span>HOME</span>
         </a>
-        <a href="earn.html" class="nav-item active"> <i class="fas fa-wallet"></i>
-            <span>EARN</span>
+        <a href="earn.html" class="nav-item active"> <i class="fas fa-wallet"></i><span>EARN</span>
         </a>
         <a href="winners.html" class="nav-item">
-            <i class="fas fa-crown"></i>
-            <span>WINNERS</span>
+            <i class="fas fa-crown"></i><span>WINNERS</span>
         </a>
         <a href="profile.html" class="nav-item">
-            <i class="fas fa-user-circle"></i>
-            <span>PROFILE</span>
+            <i class="fas fa-user-circle"></i><span>PROFILE</span>
         </a>
     </nav>
 
+    <div class="system-nav-bar"></div>
+
     <script>
-        // 🔥 AAPKA MASTER SCRIPT URL 🔥
         const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec";
 
-        // 1. Balance Sync
         function syncBalance() {
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!userData) {
@@ -142,7 +168,6 @@
             });
         }
 
-        // 2. Promo Code Redeem
         function redeem() {
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!userData) return alert("Pehle login karein!");
@@ -160,18 +185,10 @@
             params.append("code", code);
 
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
-            .then(() => { 
-                alert("Request bheji gayi!"); 
-                location.reload(); 
-            })
-            .catch(() => {
-                alert("Network Error!");
-                btn.innerText = "REDEEM CODE";
-                btn.disabled = false;
-            });
+            .then(() => { alert("Request bheji gayi!"); location.reload(); })
+            .catch(() => { alert("Network Error!"); btn.innerText = "REDEEM CODE"; btn.disabled = false; });
         }
 
-        // 3. Withdraw Request
         function withdraw() {
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!userData) return alert("Pehle login karein!");
@@ -193,18 +210,10 @@
             params.append("upi", upi);
 
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
-            .then(() => { 
-                alert("Withdrawal request successful! 24 hours mein paise aa jayenge."); 
-                location.reload(); 
-            })
-            .catch(() => {
-                alert("Network Error!");
-                btn.innerText = "REQUEST WITHDRAW";
-                btn.disabled = false;
-            });
+            .then(() => { alert("Withdrawal request successful! 24 hours mein paise aa jayenge."); location.reload(); })
+            .catch(() => { alert("Network Error!"); btn.innerText = "REQUEST WITHDRAW"; btn.disabled = false; });
         }
 
-        // Page load hone par balance dikhao
         window.onload = syncBalance;
     </script>
 </body>
