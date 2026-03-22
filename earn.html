@@ -3,137 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Earn - RARE GAMING</title>
+    <title>Earn & Wallet - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; 
-            padding-bottom: 100px; /* Niche space taaki buttons na dabein */
+            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 130px; 
         }
 
-        /* 💰 WALLET CARD */
-        .wallet-card {
-            background: linear-gradient(135deg, #ff007a 0%, #7a00ff 100%);
-            margin: 20px; padding: 25px; border-radius: 20px;
-            text-align: center; box-shadow: 0 10px 20px rgba(255, 0, 122, 0.3);
+        /* Top Header */
+        .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Main Balance Card */
+        .balance-card {
+            background: linear-gradient(135deg, rgba(255,0,122,0.1), rgba(122,0,255,0.1));
+            border: 1.5px solid #ff007a;
+            border-radius: 20px;
+            margin: 0 20px 25px 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255,0,122,0.15);
         }
-        .bal-label { font-size: 12px; opacity: 0.8; text-transform: uppercase; }
-        .bal-amount { font-size: 32px; font-weight: 800; margin-top: 5px; }
+        .bal-label { font-size: 12px; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 1px;}
+        .bal-amount { font-size: 45px; font-weight: 800; color: #fff; margin: 5px 0; text-shadow: 0 0 15px rgba(255,255,255,0.3); }
 
-        /* 📥 INPUT BOXES */
-        .action-box { background: #111; margin: 15px; padding: 20px; border-radius: 15px; border: 1px solid #222; }
-        .box-title { font-size: 14px; font-weight: 800; color: #ff007a; margin-bottom: 15px; display: block; }
+        /* Wallet Sections (Redeem & Withdraw) */
+        .wallet-panel { 
+            background: #111116; border-radius: 15px; padding: 20px; 
+            border: 1px solid #1f1f25; margin: 0 20px 20px 20px; 
+        }
+        .panel-title { font-size: 14px; font-weight: 800; margin-bottom: 15px; color: #ffd700; display: flex; align-items: center; gap: 8px;}
+        .panel-title.pink { color: #00f2fe; }
         
         input { 
-            width: 100%; padding: 12px; margin-bottom: 15px; 
-            background: #000; border: 1px solid #333; color: #fff; 
-            border-radius: 10px; box-sizing: border-box; font-family: 'Poppins';
+            width: 100%; padding: 14px; background: #000; border: 1px solid #2a2a30; 
+            color: #fff; border-radius: 10px; margin-bottom: 12px; box-sizing: border-box; 
+            font-family: 'Poppins'; font-size: 13px; transition: 0.3s;
         }
-
-        .btn { 
-            width: 100%; padding: 12px; border: none; border-radius: 10px; 
-            font-weight: 800; cursor: pointer; transition: 0.3s;
+        input:focus { border-color: #ff007a; outline: none; }
+        
+        .btn-action { 
+            width: 100%; padding: 14px; color: #000; border: none; border-radius: 10px; 
+            font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase;
+            transition: 0.3s;
         }
-        .btn-redeem { background: #ffd700; color: #000; }
-        .btn-withdraw { background: #00f2fe; color: #000; }
+        .btn-yellow { background: #ffd700; }
+        .btn-blue { background: #00f2fe; }
+        .btn-action:active { transform: scale(0.98); }
+        .btn-action:disabled { background: #555; cursor: not-allowed; }
 
-        /* 🔥 FIXED BOTTOM NAV (Wahi design jo Index par hai) 🔥 */
-        .bottom-nav-container { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; background: #000; }
+        /* GLOWING BOTTOM NAVIGATION */
         .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; 
+            background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             display: flex; justify-content: space-around; align-items: center; 
-            height: 70px; padding-bottom: 20px; background: #000;
-            border-top: 1.5px solid #ff007a; 
+            border-top: 1px solid rgba(255, 0, 122, 0.5); box-shadow: 0 -5px 25px rgba(255, 0, 122, 0.25); 
+            z-index: 1000; padding-bottom: env(safe-area-inset-bottom, 15px); 
         }
         .nav-item { 
-            text-decoration: none; display: flex; flex-direction: column; align-items: center; 
-            color: #555; font-size: 10px; font-weight: 800; flex: 1; margin-top: 10px;
+            text-decoration: none; color: #555; font-size: 10px; font-weight: 800; 
+            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
+            flex: 1; margin-top: 5px;
         }
-        .nav-item.active { color: white; }
-        .nav-item .nav-icon { font-size: 22px; margin-bottom: 4px; }
+        .nav-item i { font-size: 20px; margin-bottom: 5px; }
+        .nav-item.active { color: white; position: relative; }
+        .nav-item.active::before { 
+            content: ''; position: absolute; top: -18px; 
+            width: 55px; height: 55px; background: linear-gradient(135deg, #ff007a, #7a00ff); 
+            border-radius: 15px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 20px rgba(255,0,122,0.6);
+        }
     </style>
 </head>
 <body>
 
-    <div class="wallet-card">
-        <div class="bal-label">Available Balance</div>
-        <div class="bal-amount" id="display-bal">₹...</div>
+    <div class="header-top">
+        <div class="brand-name">WALLET</div>
     </div>
 
-    <div class="action-box">
-        <span class="box-title">REDEEM PROMO CODE</span>
+    <div class="balance-card">
+        <div class="bal-label">Total Balance</div>
+        <div class="bal-amount" id="mainBal">₹...</div>
+    </div>
+
+    <div class="wallet-panel">
+        <div class="panel-title"><i class="fas fa-gift"></i> REDEEM PROMO CODE</div>
         <input type="text" id="promoCode" placeholder="Enter Code (e.g. WELCOME50)">
-        <button class="btn btn-redeem" onclick="handleRedeem()">REDEEM NOW</button>
+        <button class="btn-action btn-yellow" id="btnRedeem" onclick="redeem()">REDEEM CODE</button>
     </div>
 
-    <div class="action-box">
-        <span class="box-title">WITHDRAW MONEY</span>
-        <input type="number" id="witAmt" placeholder="Minimum ₹50">
-        <input type="text" id="witUpi" placeholder="UPI ID (e.g. name@apl)">
-        <button class="btn btn-withdraw" id="withBtn" onclick="handleWithdraw()">REQUEST WITHDRAW</button>
+    <div class="wallet-panel">
+        <div class="panel-title pink"><i class="fas fa-money-bill-wave"></i> WITHDRAW WINNINGS</div>
+        <input type="number" id="witAmt" placeholder="Amount (Min ₹50)">
+        <input type="text" id="witUpi" placeholder="Your UPI ID (e.g. 9876543210@ybl)">
+        <button class="btn-action btn-blue" id="btnWithdraw" onclick="withdraw()">REQUEST WITHDRAW</button>
     </div>
 
-    <div class="bottom-nav-container">
-        <nav class="bottom-nav">
-            <a href="index.html" class="nav-item">
-                <i class="fas fa-home nav-icon"></i><span>HOME</span>
-            </a>
-            <a href="earn.html" class="nav-item active">
-                <i class="fas fa-wallet nav-icon"></i><span>EARN</span>
-            </a>
-            <a href="winners.html" class="nav-item">
-                <i class="fas fa-crown nav-icon"></i><span>WINNERS</span>
-            </a>
-            <a href="profile.html" class="nav-item">
-                <i class="fas fa-user-circle nav-icon"></i><span>PROFILE</span>
-            </a>
-        </nav>
-    </div>
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>HOME</span>
+        </a>
+        <a href="earn.html" class="nav-item active"> <i class="fas fa-wallet"></i>
+            <span>EARN</span>
+        </a>
+        <a href="winners.html" class="nav-item">
+            <i class="fas fa-crown"></i>
+            <span>WINNERS</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user-circle"></i>
+            <span>PROFILE</span>
+        </a>
+    </nav>
 
     <script>
-        // 🚨 APNA DEPLOY URL YAHAN DAALEIN 🚨
-        const scriptURL = "https://script.google.com/macros/s/AKfycbx4CbWAB9J5kanfjHZ_odNKtuHcBInFeQWnrFjWlD2-5EBIxmxxnwlIClkbWSZ-moG4kg/exec";
-        
-        // 1. Balance dikhao jo Index ne sync kiya tha
-        const currentBal = localStorage.getItem("rareWallet") || "0";
-        document.getElementById('display-bal').innerText = "₹" + currentBal;
+        // 🔥 AAPKA MASTER SCRIPT URL 🔥
+        const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec";
 
-        // 2. Withdraw Function (No-Cors Fix ke sath)
-        function handleWithdraw() {
+        // 1. Balance Sync
+        function syncBalance() {
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            const amt = document.getElementById('witAmt').value;
-            const upi = document.getElementById('witUpi').value;
-
-            if(amt < 50) return alert("Kam se kam ₹50 likho!");
-            if(amt > parseInt(currentBal)) return alert("Sheet mein itne paise nahi hain!");
-
-            document.getElementById('withBtn').innerText = "SENDING...";
+            if(!userData) {
+                document.getElementById('mainBal').innerText = "₹0";
+                return;
+            }
             
-            // Direct URL hit for better success rate
-            const finalURL = `${scriptURL}?action=withdraw&username=${encodeURIComponent(userData.name)}&amount=${amt}&upi=${encodeURIComponent(upi)}`;
-
-            fetch(finalURL, { method: 'POST', mode: 'no-cors' })
-            .then(() => {
-                alert("✅ Request Sent! Sheet mein entry check karein.");
-                location.reload();
-            }).catch(() => alert("Network Error!"));
-        }
-
-        // 3. Redeem Function
-        function handleRedeem() {
-            const user = JSON.parse(localStorage.getItem("rareGamingUser")).name;
-            const code = document.getElementById('promoCode').value;
-            
-            const finalURL = `${scriptURL}?action=redeem&username=${encodeURIComponent(user)}&code=${encodeURIComponent(code)}`;
-            
-            fetch(finalURL, { method: 'POST', mode: 'no-cors' })
-            .then(() => {
-                alert("🎁 Code processed! Check your balance in a moment.");
-                location.href = "index.html"; // Sync karne ke liye home bhejo
+            fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(userData.name))
+            .then(res => res.text())
+            .then(bal => {
+                localStorage.setItem("rareWallet", bal);
+                document.getElementById('mainBal').innerText = "₹" + bal;
+            })
+            .catch(() => {
+                document.getElementById('mainBal').innerText = "₹" + (localStorage.getItem("rareWallet") || "0");
             });
         }
+
+        // 2. Promo Code Redeem
+        function redeem() {
+            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            if(!userData) return alert("Pehle login karein!");
+            
+            const code = document.getElementById('promoCode').value.trim();
+            if(!code) return alert("Promo code daaliye!");
+
+            const btn = document.getElementById('btnRedeem');
+            btn.innerText = "PROCESSING...";
+            btn.disabled = true;
+
+            const params = new URLSearchParams();
+            params.append("action", "redeem");
+            params.append("username", userData.name);
+            params.append("code", code);
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
+            .then(() => { 
+                alert("Request bheji gayi!"); 
+                location.reload(); 
+            })
+            .catch(() => {
+                alert("Network Error!");
+                btn.innerText = "REDEEM CODE";
+                btn.disabled = false;
+            });
+        }
+
+        // 3. Withdraw Request
+        function withdraw() {
+            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            if(!userData) return alert("Pehle login karein!");
+
+            const amt = document.getElementById('witAmt').value;
+            const upi = document.getElementById('witUpi').value.trim();
+            
+            if(!amt || !upi) return alert("Sari details bhariye!");
+            if(amt < 50) return alert("Minimum withdrawal ₹50 hai!");
+
+            const btn = document.getElementById('btnWithdraw');
+            btn.innerText = "PROCESSING...";
+            btn.disabled = true;
+
+            const params = new URLSearchParams();
+            params.append("action", "withdraw");
+            params.append("username", userData.name);
+            params.append("amount", amt);
+            params.append("upi", upi);
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
+            .then(() => { 
+                alert("Withdrawal request successful! 24 hours mein paise aa jayenge."); 
+                location.reload(); 
+            })
+            .catch(() => {
+                alert("Network Error!");
+                btn.innerText = "REQUEST WITHDRAW";
+                btn.disabled = false;
+            });
+        }
+
+        // Page load hone par balance dikhao
+        window.onload = syncBalance;
     </script>
 </body>
 </html>
