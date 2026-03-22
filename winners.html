@@ -7,113 +7,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        
-        body { 
-            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; 
-            padding-bottom: 140px; /* Scrolling space */
-            display: flex; flex-direction: column; min-height: 100vh;
-        }
-
-        /* Top Header */
-        .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; }
-        
-        /* EMPTY STATE DESIGN (Jab koi winner na ho) */
-        .empty-state {
-            flex: 1; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; 
-            padding: 20px; text-align: center; margin-top: 50px;
-        }
-        .empty-icon {
-            font-size: 80px; color: #1f1f25; margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.05);
-        }
-        .empty-title {
-            font-size: 20px; font-weight: 800; color: #888; text-transform: uppercase; margin-bottom: 10px;
-        }
-        .empty-desc {
-            font-size: 12px; color: #555; max-width: 250px; line-height: 1.5; font-weight: 600;
-        }
-
-        /* =========================================================
-           🔥 EXACT WAHI NAVIGATION BAR DESIGN
-           ========================================================= */
-
-        /* 1. Niche ki GREY Patti */
-        .system-nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 48px; 
-            background-color: #4f515e; 
-            z-index: 1001;
-        }
-
-        /* 2. Black Navigation Bar */
-        .bottom-nav { 
-            position: fixed; 
-            bottom: 48px; 
-            left: 0;
-            width: 100%; 
-            height: 70px; 
-            background: #111116; 
-            display: flex; 
-            justify-content: space-around; 
-            align-items: center; 
-            border-top: 1px solid rgba(255, 255, 255, 0.05); 
-            z-index: 1000;
-        }
-        
-        .nav-item { 
-            text-decoration: none; color: #666; font-size: 10px; font-weight: 800; 
-            display: flex; flex-direction: column; align-items: center; 
-            flex: 1; margin-top: 5px;
-        }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; color: #666; }
-        
-        /* 3. ACTIVE ITEM (White Glowing Diamond) */
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
+        .empty-state { text-align: center; margin-top: 100px; padding: 20px; }
+        .empty-icon { font-size: 80px; color: #1f1f25; margin-bottom: 20px; }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
         .nav-item.active { color: white; position: relative; }
-        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; } 
-        .nav-item.active span { z-index: 2; margin-top: 2px; }
-        
-        .nav-item.active::before { 
-            content: ''; position: absolute; top: -16px; 
-            width: 58px; height: 58px; 
-            background: #ffffff; 
-            border-radius: 16px; transform: rotate(45deg); z-index: -1;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); 
-        }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
+        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
-
-    <div class="header-top">
-        <div class="brand-name">TOP WINNERS</div>
-    </div>
-
     <div class="empty-state">
         <i class="fas fa-trophy empty-icon"></i>
-        <div class="empty-title">NO WINNERS YET</div>
-        <div class="empty-desc">Abhi tak kisi ne match nahi jeeta hai. Kheliye aur apna naam yahan laaiye!</div>
+        <h2>NO WINNERS YET</h2>
+        <p style="color:#555">Kheliye aur apna naam yahan laiye!</p>
     </div>
-
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i><span>HOME</span>
-        </a>
-        <a href="earn.html" class="nav-item">
-            <i class="fas fa-wallet"></i><span>EARN</span>
-        </a>
-        <a href="winners.html" class="nav-item active"> <i class="fas fa-crown"></i><span>WINNERS</span>
-        </a>
-        <a href="profile.html" class="nav-item">
-            <i class="fas fa-user-circle"></i><span>PROFILE</span>
-        </a>
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="winners.html" class="nav-item active"><i class="fas fa-crown"></i><span>WINNERS</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
-
     <div class="system-nav-bar"></div>
-
 </body>
 </html>
