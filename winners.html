@@ -10,61 +10,80 @@
         
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 130px; 
+            margin: 0; padding: 0; overflow-x: hidden; 
+            padding-bottom: 140px; /* Scrolling space */
+            display: flex; flex-direction: column; min-height: 100vh;
         }
 
         /* Top Header */
         .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
         .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #fff; }
         
-        .section-title { font-size: 14px; font-weight: 800; margin: 0 20px 15px 20px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        /* EMPTY STATE DESIGN (Jab koi winner na ho) */
+        .empty-state {
+            flex: 1; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; 
+            padding: 20px; text-align: center; margin-top: 50px;
+        }
+        .empty-icon {
+            font-size: 80px; color: #1f1f25; margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.05);
+        }
+        .empty-title {
+            font-size: 20px; font-weight: 800; color: #888; text-transform: uppercase; margin-bottom: 10px;
+        }
+        .empty-desc {
+            font-size: 12px; color: #555; max-width: 250px; line-height: 1.5; font-weight: 600;
+        }
 
-        /* WINNER CARDS DESIGN */
-        .winner-card {
-            background: #111116; border-radius: 15px; padding: 15px 20px;
-            border: 1px solid #1f1f25; margin: 0 20px 15px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            position: relative; overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        /* =========================================================
+           🔥 EXACT WAHI NAVIGATION BAR DESIGN
+           ========================================================= */
+
+        /* 1. Niche ki GREY Patti */
+        .system-nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 48px; 
+            background-color: #4f515e; 
+            z-index: 1001;
+        }
+
+        /* 2. Black Navigation Bar */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 48px; 
+            left: 0;
+            width: 100%; 
+            height: 70px; 
+            background: #111116; 
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center; 
+            border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000;
         }
         
-        /* Left Side: Player Info */
-        .winner-info { display: flex; flex-direction: column; z-index: 2; }
-        .match-name { font-size: 10px; color: #00f2fe; text-transform: uppercase; font-weight: 800; margin-bottom: 4px; }
-        .player-name { font-size: 16px; font-weight: 800; color: #fff; text-transform: uppercase; display: flex; align-items: center; gap: 8px;}
-        .crown-icon { color: #ff007a; font-size: 16px; }
-
-        /* Right Side: Prize Info */
-        .prize-won { text-align: right; z-index: 2; }
-        .prize-label { font-size: 9px; color: #888; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;}
-        .prize-amount { font-size: 20px; font-weight: 800; color: #ffd700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
-
-        /* Background Glow inside card */
-        .card-glow {
-            position: absolute; right: -20px; top: -20px;
-            width: 80px; height: 80px; background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
-            border-radius: 50%; z-index: 1;
-        }
-
-        /* GLOWING BOTTOM NAVIGATION */
-        .bottom-nav { 
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; 
-            background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            display: flex; justify-content: space-around; align-items: center; 
-            border-top: 1px solid rgba(255, 0, 122, 0.5); box-shadow: 0 -5px 25px rgba(255, 0, 122, 0.25); 
-            z-index: 1000; padding-bottom: env(safe-area-inset-bottom, 15px); 
-        }
         .nav-item { 
-            text-decoration: none; color: #555; font-size: 10px; font-weight: 800; 
-            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
+            text-decoration: none; color: #666; font-size: 10px; font-weight: 800; 
+            display: flex; flex-direction: column; align-items: center; 
             flex: 1; margin-top: 5px;
         }
-        .nav-item i { font-size: 20px; margin-bottom: 5px; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; color: #666; }
+        
+        /* 3. ACTIVE ITEM (White Glowing Diamond) */
         .nav-item.active { color: white; position: relative; }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; } 
+        .nav-item.active span { z-index: 2; margin-top: 2px; }
+        
         .nav-item.active::before { 
-            content: ''; position: absolute; top: -18px; 
-            width: 55px; height: 55px; background: linear-gradient(135deg, #ff007a, #7a00ff); 
-            border-radius: 15px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 20px rgba(255,0,122,0.6);
+            content: ''; position: absolute; top: -16px; 
+            width: 58px; height: 58px; 
+            background: #ffffff; 
+            border-radius: 16px; transform: rotate(45deg); z-index: -1;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); 
         }
     </style>
 </head>
@@ -74,73 +93,27 @@
         <div class="brand-name">TOP WINNERS</div>
     </div>
 
-    <div class="section-title">Recent Matches</div>
-
-    <div class="winner-card">
-        <div class="card-glow"></div>
-        <div class="winner-info">
-            <div class="match-name">BR SQUAD BATTLE</div>
-            <div class="player-name"><i class="fas fa-crown crown-icon"></i> RARE_KING</div>
-        </div>
-        <div class="prize-won">
-            <div class="prize-label">WON PRIZE</div>
-            <div class="prize-amount">₹150</div>
-        </div>
-    </div>
-
-    <div class="winner-card">
-        <div class="card-glow"></div>
-        <div class="winner-info">
-            <div class="match-name">LONE WOLF</div>
-            <div class="player-name"><i class="fas fa-crown crown-icon"></i> PRO_GAMER_99</div>
-        </div>
-        <div class="prize-won">
-            <div class="prize-label">WON PRIZE</div>
-            <div class="prize-amount">₹50</div>
-        </div>
-    </div>
-
-    <div class="winner-card">
-        <div class="card-glow"></div>
-        <div class="winner-info">
-            <div class="match-name">CLASH SQUAD</div>
-            <div class="player-name"><i class="fas fa-crown crown-icon"></i> HEADSHOT_OP</div>
-        </div>
-        <div class="prize-won">
-            <div class="prize-label">WON PRIZE</div>
-            <div class="prize-amount">₹100</div>
-        </div>
-    </div>
-    
-    <div class="winner-card">
-        <div class="card-glow"></div>
-        <div class="winner-info">
-            <div class="match-name">BR SQUAD BATTLE</div>
-            <div class="player-name"><i class="fas fa-crown crown-icon"></i> VIP_SQUAD</div>
-        </div>
-        <div class="prize-won">
-            <div class="prize-label">WON PRIZE</div>
-            <div class="prize-amount">₹70</div>
-        </div>
+    <div class="empty-state">
+        <i class="fas fa-trophy empty-icon"></i>
+        <div class="empty-title">NO WINNERS YET</div>
+        <div class="empty-desc">Abhi tak kisi ne match nahi jeeta hai. Kheliye aur apna naam yahan laaiye!</div>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>HOME</span>
+            <i class="fas fa-home"></i><span>HOME</span>
         </a>
         <a href="earn.html" class="nav-item">
-            <i class="fas fa-wallet"></i>
-            <span>EARN</span>
+            <i class="fas fa-wallet"></i><span>EARN</span>
         </a>
-        <a href="winners.html" class="nav-item active"> <i class="fas fa-crown"></i>
-            <span>WINNERS</span>
+        <a href="winners.html" class="nav-item active"> <i class="fas fa-crown"></i><span>WINNERS</span>
         </a>
         <a href="profile.html" class="nav-item">
-            <i class="fas fa-user-circle"></i>
-            <span>PROFILE</span>
+            <i class="fas fa-user-circle"></i><span>PROFILE</span>
         </a>
     </nav>
+
+    <div class="system-nav-bar"></div>
 
 </body>
 </html>
