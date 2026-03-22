@@ -10,7 +10,9 @@
         
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 120px;
+            margin: 0; padding: 0; overflow-x: hidden; 
+            /* Thodi extra padding taaki scroll karne par nav bar ke peeche content na dabe */
+            padding-bottom: 130px; 
         }
 
         /* Top Header */
@@ -61,16 +63,27 @@
         .icon-prize { color: #ffd700; }
         .icon-points { color: #ffffff; }
 
-        /* 3. GLOWING BOTTOM NAVIGATION */
+        /* 3. GLOWING BOTTOM NAVIGATION (Safe Area ke sath) */
         .bottom-nav { 
-            position: fixed; bottom: 0; width: 100%; height: 80px; 
-            background: #000; display: flex; justify-content: space-around; 
-            align-items: center; border-top: 1.5px solid rgba(255,0,122,0.2); z-index: 1000;
+            position: fixed; 
+            bottom: 0; 
+            left: 0;
+            width: 100%; 
+            height: 70px; /* Base height */
+            background: #000; 
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center; 
+            border-top: 1.5px solid rgba(255,0,122,0.2); 
+            z-index: 1000;
+            /* 🔥 YAHI HAI SAFE AREA KA JAADU 🔥 */
+            padding-bottom: env(safe-area-inset-bottom, 20px); 
         }
+        
         .nav-item { 
             text-decoration: none; color: #555; font-size: 10px; font-weight: 800; 
             display: flex; flex-direction: column; align-items: center; transition: 0.3s;
-            flex: 1;
+            flex: 1; margin-top: 5px;
         }
         .nav-item i { font-size: 20px; margin-bottom: 5px; }
         
@@ -93,7 +106,7 @@
     <div class="section-title">E-sports Matches</div>
     <div class="match-grid">
         <a href="match_details.html?match=BR" class="match-card">
-            <img src="br_poster.jpg" alt="BR Squad">
+            <img src="br_poster.jpg" alt="BR Squad" onerror="this.src='https://via.placeholder.com/300x400/111/fff?text=BR+SQUAD'">
             <div class="card-overlay">
                 <p class="match-name">BR SQUAD</p>
                 <div class="match-status status-open">OPEN</div>
@@ -101,7 +114,7 @@
         </a>
 
         <a href="match_details.html?match=CS" class="match-card">
-            <img src="cs_poster.jpg" alt="CS Squad">
+            <img src="cs_poster.jpg" alt="CS Squad" onerror="this.src='https://via.placeholder.com/300x400/111/fff?text=CLASH+SQUAD'">
             <div class="card-overlay">
                 <p class="match-name">CLASH SQUAD</p>
                 <div class="match-status status-soon">SOON</div>
@@ -109,7 +122,7 @@
         </a>
         
         <a href="match_details.html?match=LW" class="match-card">
-            <img src="lw_poster.jpg" alt="Lone Wolf">
+            <img src="lw_poster.jpg" alt="Lone Wolf" onerror="this.src='https://via.placeholder.com/300x400/111/fff?text=LONE+WOLF'">
             <div class="card-overlay">
                 <p class="match-name">LONE WOLF</p>
                 <div class="match-status status-soon">SOON</div>
@@ -117,7 +130,7 @@
         </a>
 
         <a href="match_details.html?match=1V1" class="match-card">
-            <img src="1v1_poster.jpg" alt="1v1">
+            <img src="1v1_poster.jpg" alt="1v1" onerror="this.src='https://via.placeholder.com/300x400/111/fff?text=1V1+BATTLE'">
             <div class="card-overlay">
                 <p class="match-name">1V1 BATTLE</p>
                 <div class="match-status status-soon">SOON</div>
