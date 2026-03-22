@@ -151,13 +151,11 @@
         const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec";
 
         function syncBalance() {
-            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!userData) {
-                document.getElementById('mainBal').innerText = "₹0";
-                return;
-            }
+            // TESTING KE LIYE: Agar user login nahi hai, toh TestUser maan lo
+            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            let username = userData ? userData.name : "TestUser"; 
             
-            fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(userData.name))
+            fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(username))
             .then(res => res.text())
             .then(bal => {
                 localStorage.setItem("rareWallet", bal);
@@ -169,11 +167,15 @@
         }
 
         function redeem() {
-            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!userData) return alert("Pehle login karein!");
+            // TESTING KE LIYE DUMMY USER
+            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            let username = userData ? userData.name : "TestUser";
             
             const code = document.getElementById('promoCode').value.trim();
-            if(!code) return alert("Promo code daaliye!");
+            if(!code) {
+                alert("Bhai, pehle koi Promo Code toh daalo!"); 
+                return; 
+            }
 
             const btn = document.getElementById('btnRedeem');
             btn.innerText = "PROCESSING...";
@@ -181,23 +183,38 @@
 
             const params = new URLSearchParams();
             params.append("action", "redeem");
-            params.append("username", userData.name);
+            params.append("username", username);
             params.append("code", code);
 
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
-            .then(() => { alert("Request bheji gayi!"); location.reload(); })
-            .catch(() => { alert("Network Error!"); btn.innerText = "REDEEM CODE"; btn.disabled = false; });
+            .then(() => { 
+                alert("✅ Promo Code Request Bhej Di Gayi Hai!"); 
+                btn.innerText = "REDEEM CODE"; 
+                btn.disabled = false;
+                document.getElementById('promoCode').value = ""; // Input box khali kar do
+            })
+            .catch(() => { 
+                alert("❌ Network Error! Internet check karein."); 
+                btn.innerText = "REDEEM CODE"; 
+                btn.disabled = false; 
+            });
         }
 
         function withdraw() {
-            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!userData) return alert("Pehle login karein!");
+            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            let username = userData ? userData.name : "TestUser";
 
             const amt = document.getElementById('witAmt').value;
             const upi = document.getElementById('witUpi').value.trim();
             
-            if(!amt || !upi) return alert("Sari details bhariye!");
-            if(amt < 50) return alert("Minimum withdrawal ₹50 hai!");
+            if(!amt || !upi) {
+                alert("Bhai, Amount aur UPI ID dono bharna zaroori hai!"); 
+                return;
+            }
+            if(amt < 50) {
+                alert("Minimum withdrawal ₹50 hai!"); 
+                return;
+            }
 
             const btn = document.getElementById('btnWithdraw');
             btn.innerText = "PROCESSING...";
@@ -205,13 +222,23 @@
 
             const params = new URLSearchParams();
             params.append("action", "withdraw");
-            params.append("username", userData.name);
+            params.append("username", username);
             params.append("amount", amt);
             params.append("upi", upi);
 
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
-            .then(() => { alert("Withdrawal request successful! 24 hours mein paise aa jayenge."); location.reload(); })
-            .catch(() => { alert("Network Error!"); btn.innerText = "REQUEST WITHDRAW"; btn.disabled = false; });
+            .then(() => { 
+                alert("✅ Withdrawal Request Successful! Paise jaldi transfer ho jayenge."); 
+                btn.innerText = "REQUEST WITHDRAW"; 
+                btn.disabled = false;
+                document.getElementById('witAmt').value = "";
+                document.getElementById('witUpi').value = "";
+            })
+            .catch(() => { 
+                alert("❌ Network Error!"); 
+                btn.innerText = "REQUEST WITHDRAW"; 
+                btn.disabled = false; 
+            });
         }
 
         window.onload = syncBalance;
