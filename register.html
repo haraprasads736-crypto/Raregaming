@@ -2,116 +2,120 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration - RARE GAMING</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Register Match - RARE GAMING</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         
-        .bg-orb-1 { position: fixed; top: -10%; left: -20%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 0, 122, 0.2) 0%, transparent 70%); filter: blur(40px); z-index: -1; }
-        .bg-orb-2 { position: fixed; bottom: -10%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(122, 0, 255, 0.2) 0%, transparent 70%); filter: blur(50px); z-index: -1; }
+        body { 
+            background: #050508; color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
+        }
 
-        .status-bar { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(0, 242, 254, 0.2); margin: 15px; padding: 12px; border-radius: 15px; display: flex; justify-content: space-between; }
-        .fee-tag { font-weight: 800; color: #ff007a; }
-        .wallet-tag { font-weight: 800; color: #00f2fe; }
+        .reg-box { 
+            background: #111116; padding: 30px 20px; border-radius: 25px; 
+            border: 1.5px solid #ff007a; width: 100%; max-width: 350px; 
+            box-shadow: 0 0 20px rgba(255, 0, 122, 0.2); text-align: center;
+        }
 
-        .container { padding: 15px; max-width: 450px; margin: auto; }
-        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
-
-        h2 { text-align: center; color: #fff; text-transform: uppercase; font-size: 18px; margin-bottom: 20px; font-weight: 800; }
-        .match-label { background: #ff007a; color: white; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 15px; }
-
-        label { display: block; font-size: 10px; color: #a0aab2; margin-top: 15px; text-transform: uppercase; font-weight: 600; }
-        input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: white; font-family: 'Poppins'; box-sizing: border-box; margin-top: 5px; font-size: 14px; margin-bottom: 8px; }
-
-        .player-box { border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-top: 15px; background: rgba(255,255,255,0.02); }
-        .box-title { color: #00f2fe; font-size: 12px; font-weight: 800; margin-bottom: 10px; display: block; }
-
-        .submit-btn { width: 100%; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; padding: 18px; border: none; border-radius: 15px; font-weight: 800; font-size: 15px; text-transform: uppercase; cursor: pointer; margin-top: 25px; box-shadow: 0 5px 20px rgba(255, 0, 122, 0.4); }
+        .icon-header { font-size: 50px; color: #ffd700; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3)); }
         
-        #msg { text-align: center; margin-top: 20px; font-weight: 700; }
+        h2 { font-weight: 800; text-transform: uppercase; margin: 0; font-size: 22px; letter-spacing: 1px; }
+        .match-display { color: #00f2fe; font-weight: 800; font-size: 16px; margin: 10px 0 25px 0; background: rgba(0, 242, 254, 0.1); padding: 5px; border-radius: 8px; }
+
+        .input-group { text-align: left; margin-bottom: 15px; }
+        label { font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase; margin-left: 5px; }
+        
+        input { 
+            width: 100%; padding: 14px; margin-top: 5px; background: #000; 
+            border: 1px solid #222; color: #fff; border-radius: 12px; 
+            box-sizing: border-box; font-family: 'Poppins'; font-size: 14px;
+            transition: 0.3s;
+        }
+        input:focus { border-color: #ff007a; outline: none; background: #08080a; }
+
+        .btn-confirm { 
+            width: 100%; padding: 16px; margin-top: 10px;
+            background: linear-gradient(90deg, #ff007a, #7a00ff); 
+            border: none; color: white; font-weight: 800; font-size: 15px;
+            border-radius: 12px; cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(255, 0, 122, 0.4);
+        }
+        .btn-confirm:active { transform: scale(0.98); }
+
+        #msg { margin-top: 20px; font-weight: 600; font-size: 13px; min-height: 20px; }
+        
+        .back-link { margin-top: 20px; color: #555; text-decoration: none; font-size: 12px; font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <div class="bg-orb-1"></div><div class="bg-orb-2"></div>
-
-    <div class="status-bar">
-        <div>FEE: <span class="fee-tag" id="feeDisplay">₹0</span></div>
-        <div>WALLET: <span class="wallet-tag" id="walletDisplay">₹0</span></div>
-    </div>
-
-    <div class="container">
-        <div class="glass-card">
-            <div class="match-label" id="mType">BR MATCH</div>
-            <h2>DUO REGISTRATION</h2>
-            
-            <label>TEAM NAME</label>
-            <input type="text" id="teamName" placeholder="Enter Team Name">
-
-            <div class="player-box">
-                <span class="box-title">PLAYER 1 (LEADER)</span>
-                <input type="text" id="p1Name" placeholder="In-game Name">
-                <input type="text" id="p1Uid" placeholder="GAME UID (Number)">
-            </div>
-
-            <div class="player-box">
-                <span class="box-title">PLAYER 2</span>
-                <input type="text" id="p2Name" placeholder="In-game Name">
-                <input type="text" id="p2Uid" placeholder="GAME UID (Number)">
-            </div>
-
-            <button class="submit-btn" id="regBtn" onclick="confirmJoin()">CONFIRM REGISTRATION</button>
-            <div id="msg"></div>
+    <div class="reg-box">
+        <i class="fas fa-trophy icon-header"></i>
+        <h2>Join Match</h2>
+        <div class="match-display" id="matchName">Loading Match...</div>
+        
+        <div class="input-group">
+            <label>In-Game UID</label>
+            <input type="number" id="gameId" placeholder="Example: 123456789">
         </div>
+
+        <div class="input-group">
+            <label>In-Game Name</label>
+            <input type="text" id="gameName" placeholder="Example: RARE_GAMER">
+        </div>
+        
+        <button class="btn-confirm" id="submitBtn" onclick="submitRegistration()">Confirm & Register</button>
+        
+        <div id="msg"></div>
+        <a href="index.html" class="back-link">Cancel and Go Back</a>
     </div>
 
     <script>
+        // URL se Match ka naam nikalna (index.html se jo aaya hai)
         const urlParams = new URLSearchParams(window.location.search);
-        const matchID = urlParams.get('match') || 'BR';
-        
-        let entryFee = 0;
-        if (matchID === "BR") entryFee = 0;
-        else if (matchID === "CS") entryFee = 50;
-        else if (matchID === "LW") entryFee = 15;
-        else entryFee = 30;
+        const match = urlParams.get('match') || "BR SQUAD BATTLE";
+        document.getElementById('matchName').innerText = match;
 
-        document.getElementById('mType').innerText = matchID + " MATCH";
-        document.getElementById('feeDisplay').innerText = entryFee === 0 ? "FREE" : "₹" + entryFee;
-        document.getElementById('walletDisplay').innerText = "₹" + (localStorage.getItem("rareWallet") || 0);
+        // 🔥 AAPKA MASTER SCRIPT URL 🔥
+        const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec";
 
-        function confirmJoin() {
-            const btn = document.getElementById('regBtn');
-            const team = document.getElementById('teamName').value;
-            const p1 = document.getElementById('p1Name').value;
-            const p1u = document.getElementById('p1Uid').value;
-            const p2 = document.getElementById('p2Name').value;
-            const p2u = document.getElementById('p2Uid').value;
+        function submitRegistration() {
+            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            const gid = document.getElementById('gameId').value;
+            const gname = document.getElementById('gameName').value;
+            const btn = document.getElementById('submitBtn');
+            const msgDiv = document.getElementById('msg');
 
-            if(!team || !p1 || !p1u || !p2 || !p2u) return alert("Bhai, dono players ka UID bharna zaroori hai!");
+            // Verification
+            if(!userData) { alert("Pehle login karo bhai!"); return; }
+            if(!gid || !gname) { alert("Sari details bharo!"); return; }
 
+            btn.innerText = "PROCESSING...";
             btn.disabled = true;
-            btn.innerText = "⏳ REGISTERING...";
 
-            const user = JSON.parse(localStorage.getItem("rareGamingUser"));
-            // Saara data packing
-            const duoInfo = `DUO | Team: ${team} | P1: ${p1}(${p1u}) | P2: ${p2}(${p2u})`;
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbx2z4GZ8uIyKH9yTQqD_n3XBYEQe3_3k2YyQobq5ucoguHkYu3kwCZer3qYlOR1bstAlA/exec';
+            // URLSearchParams method (Best for Google Script Apps)
+            const params = new URLSearchParams();
+            params.append("action", "register"); 
+            params.append("username", userData.name); // App Username
+            params.append("gameUid", gid);            // Game ID
+            params.append("gameName", gname);        // In-game Name
+            params.append("match", match);           // Match Name
 
-            fetch(`${scriptURL}?action=joinMatch&username=${encodeURIComponent(user.name)}&matchName=${encodeURIComponent(matchID)}&fee=${entryFee}&squad=${encodeURIComponent(duoInfo)}`)
-            .then(res => res.text())
-            .then(status => {
-                const msgBox = document.getElementById('msg');
-                if(status === "Success") {
-                    msgBox.innerHTML = "✅ SUCCESS! Duo Registered.";
-                    msgBox.style.color = "#00e676";
-                    setTimeout(() => { window.location.href = "index.html"; }, 2000);
-                } else {
-                    msgBox.innerHTML = "❌ Error: " + status;
-                    msgBox.style.color = "#ff4b2b";
-                    btn.disabled = false;
-                    btn.innerText = "CONFIRM REGISTRATION";
-                }
+            fetch(scriptURL, { 
+                method: 'POST', 
+                mode: 'no-cors', 
+                body: params 
+            })
+            .then(() => {
+                msgDiv.innerHTML = "<span style='color: #00e676;'>✅ Registration Successful!</span>";
+                setTimeout(() => { window.location.href = "index.html"; }, 2000);
+            })
+            .catch(() => {
+                alert("Network Error! Check internet connection.");
+                btn.disabled = false;
+                btn.innerText = "Confirm & Register";
             });
         }
     </script>
