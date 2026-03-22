@@ -30,7 +30,7 @@
         .match-card { 
             position: relative; border-radius: 20px; overflow: hidden; 
             aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1);
-            text-decoration: none; display: block; cursor: pointer;
+            text-decoration: none; display: block;
         }
         .match-card img { width: 100%; height: 100%; object-fit: cover; }
         .card-overlay { 
@@ -38,7 +38,7 @@
             background: linear-gradient(transparent, rgba(0,0,0,0.95));
             padding: 15px 10px; text-align: center; box-sizing: border-box;
         }
-        .match-name { font-size: 12px; font-weight: 800; color: #fff; text-transform: uppercase; margin: 0; }
+        .match-name { font-size: 13px; font-weight: 800; color: #fff; text-transform: uppercase; margin: 0; }
         .match-status { font-size: 10px; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
         .status-open { color: #00e676; }
         .status-soon { color: #ff007a; }
@@ -52,7 +52,7 @@
             padding: 20px 10px; text-align: center; text-decoration: none;
             transition: 0.3s; display: block;
         }
-        .action-card:active { transform: scale(0.95); }
+        .action-card:active { transform: scale(0.95); background: #1a1a20; }
         .action-card i { font-size: 28px; margin-bottom: 10px; display: block; }
         .action-card span { font-size: 11px; font-weight: 800; color: #00f2fe; text-transform: uppercase; }
         
@@ -61,7 +61,7 @@
         .icon-prize { color: #ffd700; }
         .icon-points { color: #ffffff; }
 
-        /* 3. GLOWING NAVIGATION */
+        /* 3. GLOWING BOTTOM NAVIGATION */
         .bottom-nav { 
             position: fixed; bottom: 0; width: 100%; height: 80px; 
             background: #000; display: flex; justify-content: space-around; 
@@ -69,7 +69,8 @@
         }
         .nav-item { 
             text-decoration: none; color: #555; font-size: 10px; font-weight: 800; 
-            display: flex; flex-direction: column; align-items: center; flex: 1; margin-top: 10px;
+            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
+            flex: 1;
         }
         .nav-item i { font-size: 20px; margin-bottom: 5px; }
         
@@ -91,37 +92,37 @@
 
     <div class="section-title">E-sports Matches</div>
     <div class="match-grid">
-        <div class="match-card" onclick="joinMatch('BR SQUAD')">
+        <a href="match_details.html?match=BR" class="match-card">
             <img src="br_poster.jpg" alt="BR Squad">
             <div class="card-overlay">
                 <p class="match-name">BR SQUAD</p>
                 <div class="match-status status-open">OPEN</div>
             </div>
-        </div>
+        </a>
 
-        <div class="match-card" onclick="joinMatch('CLASH SQUAD')">
+        <a href="match_details.html?match=CS" class="match-card">
             <img src="cs_poster.jpg" alt="CS Squad">
             <div class="card-overlay">
                 <p class="match-name">CLASH SQUAD</p>
                 <div class="match-status status-soon">SOON</div>
             </div>
-        </div>
+        </a>
         
-        <div class="match-card" onclick="joinMatch('LONE WOLF')">
+        <a href="match_details.html?match=LW" class="match-card">
             <img src="lw_poster.jpg" alt="Lone Wolf">
             <div class="card-overlay">
                 <p class="match-name">LONE WOLF</p>
                 <div class="match-status status-soon">SOON</div>
             </div>
-        </div>
+        </a>
 
-        <div class="match-card" onclick="joinMatch('1V1 BATTLE')">
+        <a href="match_details.html?match=1V1" class="match-card">
             <img src="1v1_poster.jpg" alt="1v1">
             <div class="card-overlay">
                 <p class="match-name">1V1 BATTLE</p>
                 <div class="match-status status-soon">SOON</div>
             </div>
-        </div>
+        </a>
     </div>
 
     <div class="section-title">Quick Actions</div>
@@ -146,30 +147,29 @@
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active">
-            <i class="fas fa-home"></i><span>HOME</span>
+            <i class="fas fa-home"></i>
+            <span>HOME</span>
         </a>
         <a href="earn.html" class="nav-item">
-            <i class="fas fa-wallet"></i><span>EARN</span>
+            <i class="fas fa-wallet"></i>
+            <span>EARN</span>
         </a>
         <a href="winners.html" class="nav-item">
-            <i class="fas fa-crown"></i><span>WINNERS</span>
+            <i class="fas fa-crown"></i>
+            <span>WINNERS</span>
         </a>
         <a href="profile.html" class="nav-item">
-            <i class="fas fa-user-circle"></i><span>PROFILE</span>
+            <i class="fas fa-user-circle"></i>
+            <span>PROFILE</span>
         </a>
     </nav>
 
     <script>
-        // 🔥 AAPKA SCRIPT URL 🔥
+        // AAPKA MASTER SCRIPT URL (Sirf Balance Sync ke liye)
         const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec";
 
-        // 1. ASLI FIX: Registration Page par bhejna
-        function joinMatch(mName) {
-            window.location.href = "register.html?match=" + encodeURIComponent(mName);
-        }
-
-        // 2. Balance Sync
         function syncBalance() {
+            // Check if user is logged in
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!userData) return;
             
@@ -180,10 +180,12 @@
                 document.getElementById('walletBal').innerText = "₹" + bal;
             })
             .catch(() => {
+                // If offline, show last saved balance
                 document.getElementById('walletBal').innerText = "₹" + (localStorage.getItem("rareWallet") || "0");
             });
         }
         
+        // Load balance on startup
         window.onload = syncBalance;
     </script>
 </body>
