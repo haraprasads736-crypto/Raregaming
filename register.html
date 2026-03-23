@@ -25,7 +25,6 @@
             border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase;
         }
 
-        /* Closed Message Style */
         .closed-box { text-align: center; padding: 40px 20px; background: #111116; border: 1px solid #ff007a; border-radius: 15px; }
         .closed-box i { font-size: 50px; color: #ff007a; margin-bottom: 15px; }
 
@@ -52,13 +51,13 @@
     <div class="system-nav-bar"></div>
 
     <script>
+        // AAPKI SMART NAYI DEPLOY ID
         const scriptURL = "https://script.google.com/macros/s/AKfycbwND_rIFJw-9MwiRGhOP0_j4mauz8ICSro5e3GbNpWfUW9zDGEHFS8VHeB5Ac35IWQMDw/exec";
         const urlParams = new URLSearchParams(window.location.search);
-        const match = urlParams.get('match') || ""; // URL se match name liya
+        const match = urlParams.get('match') || "";
 
         const container = document.getElementById('mainContainer');
 
-        // 🔥 FIX: Check agar match name mein "BR" likha hai (chahe BR ho ya BR SQUAD)
         if (match.includes("BR")) {
             container.innerHTML = `
                 <div class="section-header">BR DUO REGISTRATION</div>
@@ -68,13 +67,13 @@
                     <input type="text" id="whatsapp" placeholder="WhatsApp Number">
                 </div>
                 <div class="form-card">
-                    <div class="player-title"><i class="fas fa-user"></i> PLAYER 1 (Leader)</div>
-                    <input type="text" id="p1Name" placeholder="IGN (Name)">
+                    <div class="player-title"><i class="fas fa-user"></i> PLAYER 1</div>
+                    <input type="text" id="p1Name" placeholder="IGN Name">
                     <input type="text" id="p1Uid" placeholder="Game UID">
                 </div>
                 <div class="form-card">
                     <div class="player-title"><i class="fas fa-user"></i> PLAYER 2</div>
-                    <input type="text" id="p2Name" placeholder="IGN (Name)">
+                    <input type="text" id="p2Name" placeholder="IGN Name">
                     <input type="text" id="p2Uid" placeholder="Game UID">
                 </div>
                 <button class="btn-submit" id="regBtn" onclick="submitReg()">JOIN MATCH</button>
@@ -109,11 +108,11 @@
 
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
             .then(() => {
-                alert("✅ Registration Done for BR Duo!");
+                alert("✅ Registration Successful!");
                 window.location.href = "index.html";
             })
             .catch(() => {
-                alert("Error!");
+                alert("Error! Network check karein.");
                 btn.innerText = "JOIN MATCH";
                 btn.disabled = false;
             });
