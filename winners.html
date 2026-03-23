@@ -8,22 +8,119 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
-        .empty-state { text-align: center; margin-top: 100px; padding: 20px; }
-        .empty-icon { font-size: 80px; color: #1f1f25; margin-bottom: 20px; }
+        
+        .header { padding: 25px 20px 10px 20px; text-align: center; }
+        .header h1 { font-size: 24px; font-weight: 800; color: #ffd700; text-transform: uppercase; margin: 0; }
+        .header p { font-size: 11px; color: #666; font-weight: 600; margin-top: 5px; }
+
+        .winner-list { padding: 0 20px; }
+        
+        /* Rank Cards */
+        .winner-card { 
+            background: #111116; border: 1px solid #1f1f25; border-radius: 12px; 
+            padding: 15px; margin-bottom: 12px; display: flex; align-items: center; 
+            justify-content: space-between; border-left: 4px solid #333;
+        }
+        
+        .rank-1 { 
+            border-left-color: #ffd700; 
+            background: linear-gradient(90deg, rgba(255,215,0,0.08), transparent); 
+            margin-bottom: 20px; /* Thoda gap next patti ke liye */
+        }
+        .rank-2 { border-left-color: #c0c0c0; }
+        .rank-3 { border-left-color: #cd7f32; }
+
+        /* 🔥 BETTER LUCK MESSAGE STRIP 🔥 */
+        .luck-msg { 
+            background: linear-gradient(90deg, #ff007a22, #00f2fe22); 
+            padding: 10px; text-align: center; font-weight: 800; color: #00f2fe; 
+            font-size: 12px; border-radius: 8px; margin-bottom: 15px; letter-spacing: 1px;
+            border: 1px solid rgba(0, 242, 254, 0.1);
+        }
+
+        .rank-num { font-size: 16px; font-weight: 800; width: 30px; color: #444; }
+        .rank-1 .rank-num { color: #ffd700; }
+
+        .player-info { flex: 1; margin-left: 10px; }
+        .player-name { font-size: 14px; font-weight: 700; color: #fff; text-transform: uppercase; }
+        .kill-count { font-size: 11px; color: #888; font-weight: 600; }
+
+        .prize-tag { font-weight: 800; font-size: 13px; text-transform: uppercase; }
+
+        /* NAVIGATION */
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: white; position: relative; }
         .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
         .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
-    <div class="empty-state">
-        <i class="fas fa-trophy empty-icon"></i>
-        <h2>NO WINNERS YET</h2>
-        <p style="color:#555">Kheliye aur apna naam yahan laiye!</p>
+
+    <div class="header">
+        <h1>LEADERBOARD</h1>
+        <p>LAST MATCH RESULTS (23 MARCH)</p>
     </div>
+
+    <div class="winner-list">
+        <div class="winner-card rank-1">
+            <div class="rank-num">#1</div>
+            <div class="player-info">
+                <div class="player-name">VILLIAN / SWADHIN</div>
+                <div class="kill-count">Total Eliminations: 6</div>
+            </div>
+            <div class="prize-tag" style="color: #ffd700;">WINNER</div>
+        </div>
+
+        <div class="luck-msg">
+            BETTER LUCK FOR NEXT TIME 👍
+        </div>
+
+        <div class="winner-card rank-2">
+            <div class="rank-num">#2</div>
+            <div class="player-info">
+                <div class="player-name">MJ(BADRI) / MJ(ALOK)</div>
+                <div class="kill-count">Total Eliminations: 3</div>
+            </div>
+            <div class="prize-tag" style="color: #c0c0c0;">2nd PLACE</div>
+        </div>
+
+        <div class="winner-card rank-3">
+            <div class="rank-num">#3</div>
+            <div class="player-info">
+                <div class="player-name">IAMSUKUNA / MJ(MAJHI)</div>
+                <div class="kill-count">Total Eliminations: 1</div>
+            </div>
+            <div class="prize-tag" style="color: #cd7f32;">3rd PLACE</div>
+        </div>
+
+        <div class="winner-card">
+            <div class="rank-num">#4</div>
+            <div class="player-info">
+                <div class="player-name">143JUNGLI.FF</div>
+                <div class="kill-count">Eliminations: 0</div>
+            </div>
+        </div>
+
+        <div class="winner-card">
+            <div class="rank-num">#5</div>
+            <div class="player-info">
+                <div class="player-name">BADMAN / FLAXY</div>
+                <div class="kill-count">Eliminations: 2</div>
+            </div>
+        </div>
+
+        <div class="winner-card">
+            <div class="rank-num">#6</div>
+            <div class="player-info">
+                <div class="player-name">NEON / PRIME_GOD</div>
+                <div class="kill-count">Eliminations: 4</div>
+            </div>
+        </div>
+    </div>
+
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
@@ -31,5 +128,6 @@
         <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
+
 </body>
 </html>
