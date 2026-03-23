@@ -39,8 +39,7 @@
 </head>
 <body>
 
-    <div class="reg-container" id="mainContainer">
-        </div>
+    <div class="reg-container" id="mainContainer"></div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
@@ -51,7 +50,6 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // AAPKI SMART NAYI DEPLOY ID
         const scriptURL = "https://script.google.com/macros/s/AKfycbwND_rIFJw-9MwiRGhOP0_j4mauz8ICSro5e3GbNpWfUW9zDGEHFS8VHeB5Ac35IWQMDw/exec";
         const urlParams = new URLSearchParams(window.location.search);
         const match = urlParams.get('match') || "";
@@ -83,7 +81,6 @@
                 <div class="closed-box">
                     <i class="fas fa-lock"></i>
                     <h2>REGISTRATION CLOSED</h2>
-                    <p style="color: #666; font-size: 13px;">Is match ka registration abhi band hai.</p>
                     <button class="btn-submit" style="margin-top:20px; background:#444; color:#fff;" onclick="window.location.href='index.html'">GO BACK</button>
                 </div>
             `;
@@ -112,9 +109,8 @@
                 window.location.href = "index.html";
             })
             .catch(() => {
-                alert("Error! Network check karein.");
-                btn.innerText = "JOIN MATCH";
-                btn.disabled = false;
+                alert("Error! Check internet.");
+                btn.innerText = "JOIN MATCH"; btn.disabled = false;
             });
         }
     </script>
