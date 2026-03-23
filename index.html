@@ -10,86 +10,126 @@
         
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding-bottom: 140px; overflow-x: hidden;
+            margin: 0; padding: 0; overflow-x: hidden; 
+            padding-bottom: 140px; 
         }
 
-        /* Header Section */
-        .app-header { padding: 25px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .logo-text { font-size: 24px; font-weight: 800; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
-        .logo-text span { color: #ff007a; }
+        /* Top Header */
+        .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .wallet-pill { 
+            background: rgba(0, 242, 254, 0.1); border: 1.5px solid #00f2fe; 
+            padding: 6px 15px; border-radius: 10px; color: #00f2fe; font-weight: 800; font-size: 14px;
+        }
 
-        /* Match Cards Container */
-        .container { padding: 0 15px; }
-        .section-title { font-size: 14px; font-weight: 800; color: #888; text-transform: uppercase; margin: 20px 0 15px 5px; letter-spacing: 1px; }
+        .section-title { font-size: 18px; font-weight: 800; margin: 15px 20px; text-transform: uppercase; }
 
+        /* 🔥 MATCH GRID (Aapka Favourite Style) 🔥 */
+        .match-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; 
+        }
         .match-card { 
-            position: relative; width: 100%; height: 180px; border-radius: 15px; 
-            overflow: hidden; margin-bottom: 20px; border: 1px solid #1f1f25; cursor: pointer;
+            position: relative; border-radius: 20px; overflow: hidden; 
+            aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1);
+            text-decoration: none; display: block;
         }
-        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.3s; }
-        .match-overlay { 
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; 
-            background: linear-gradient(to top, rgba(5,5,8,1), transparent);
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; box-sizing: border-box;
+        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .card-overlay { 
+            position: absolute; bottom: 0; width: 100%; 
+            background: linear-gradient(transparent, rgba(0,0,0,0.95));
+            padding: 15px 10px; text-align: center; box-sizing: border-box;
         }
-        .match-title { font-size: 20px; font-weight: 800; color: #fff; text-transform: uppercase; }
-        .match-status { font-size: 12px; letter-spacing: 1px; margin-top: 5px; }
-
-        /* 🔥 NAVIGATION SYSTEM 🔥 */
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; transition: 0.3s; }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; color: #666; }
+        .match-name { font-size: 13px; font-weight: 800; color: #fff; text-transform: uppercase; margin: 0; }
+        .match-status { font-size: 10px; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
         
-        /* White Diamond Active State */
+        /* Status Colors */
+        .status-closed { color: #ff007a; } /* Pink for Closed */
+        .status-soon { color: #888; }
+
+        /* QUICK ACTIONS GRID */
+        .action-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px;
+        }
+        .action-card {
+            background: #111116; border: 1px solid #1f1f25; border-radius: 15px;
+            padding: 20px 10px; text-align: center; text-decoration: none;
+            transition: 0.3s; display: block;
+        }
+        .action-card i { font-size: 28px; margin-bottom: 10px; display: block; }
+        .action-card span { font-size: 11px; font-weight: 800; color: #00f2fe; text-transform: uppercase; }
+        
+        .icon-teams { color: #a2b2c8; }
+        .icon-contact { color: #ffffff; }
+        .icon-prize { color: #ffd700; }
+        .icon-points { color: #ffffff; }
+
+        /* 🔥 NAVIGATION SYSTEM (White Diamond) 🔥 */
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
+        .bottom-nav { 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; 
+            background: #111116; display: flex; justify-content: space-around; 
+            align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
+        }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: white; position: relative; }
         .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
         .nav-item.active::before { 
-            content: ''; position: absolute; top: -16px; width: 58px; height: 58px; 
-            background: #ffffff; border-radius: 16px; transform: rotate(45deg); 
-            z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); 
+            content: ''; position: absolute; top: -16px; 
+            width: 58px; height: 58px; background: #ffffff; 
+            border-radius: 16px; transform: rotate(45deg); z-index: -1; 
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); 
         }
     </style>
 </head>
 <body>
 
-    <div class="app-header">
-        <div class="logo-text">RARE<span>GAMING</span></div>
-        <i class="fas fa-bell" style="font-size: 20px; color: #444;"></i>
+    <div class="header-top">
+        <div class="brand-name">RARE GAMING</div>
+        <div class="wallet-pill" id="walletBal">₹...</div>
     </div>
 
-    <div class="container">
-        <div class="section-title">Active Tournaments</div>
-
-        <div class="match-card" onclick="window.location.href='match_detail.html?match=BR'">
-            <img src="br_poster.jpg" alt="BR Squad">
-            <div class="match-overlay">
-                <div class="match-info">
-                    <div class="match-title">BR SQUAD</div>
-                    <div class="match-status" style="color: #ff007a; font-weight: 800;">CLOSED</div>
-                </div>
+    <div class="section-title">E-sports Matches</div>
+    <div class="match-grid">
+        <a href="match_detail.html?match=BR" class="match-card">
+            <img src="br_poster.jpg" alt="BR SQUAD">
+            <div class="card-overlay">
+                <p class="match-name">BR SQUAD</p>
+                <div class="match-status status-closed">CLOSED</div>
             </div>
-        </div>
+        </a>
 
-        <div class="match-card" onclick="window.location.href='match_detail.html?match=CS'">
-            <img src="cs_poster.jpg" alt="CS Squad">
-            <div class="match-overlay">
-                <div class="match-info">
-                    <div class="match-title">CS SQUAD</div>
-                    <div class="match-status" style="color: #ff007a; font-weight: 800;">CLOSED</div>
-                </div>
+        <a href="match_detail.html?match=CS" class="match-card">
+            <img src="cs_poster.jpg" alt="CLASH SQUAD">
+            <div class="card-overlay">
+                <p class="match-name">CLASH SQUAD</p>
+                <div class="match-status status-soon">SOON</div>
             </div>
-        </div>
+        </a>
+        
+        <a href="match_detail.html?match=LW" class="match-card">
+            <img src="lw_poster.jpg" alt="LONE WOLF">
+            <div class="card-overlay">
+                <p class="match-name">LONE WOLF</p>
+                <div class="match-status status-soon">SOON</div>
+            </div>
+        </a>
 
-        <div class="match-card" onclick="window.location.href='match_detail.html?match=1V1'">
-            <img src="1v1_poster.jpg" alt="1V1 Battle">
-            <div class="match-overlay">
-                <div class="match-info">
-                    <div class="match-title">1V1 BATTLE</div>
-                    <div class="match-status" style="color: #ff007a; font-weight: 800;">CLOSED</div>
-                </div>
+        <a href="match_detail.html?match=1V1" class="match-card">
+            <img src="1v1_poster.jpg" alt="1V1 BATTLE">
+            <div class="card-overlay">
+                <p class="match-name">1V1 BATTLE</p>
+                <div class="match-status status-soon">SOON</div>
             </div>
-        </div>
+        </a>
+    </div>
+
+    <div class="section-title">Quick Actions</div>
+    <div class="action-grid">
+        <a href="teams.html" class="action-card"><i class="fas fa-shield-alt icon-teams"></i><span>Teams Info</span></a>
+        <a href="https://wa.me/917008170291" class="action-card"><i class="fas fa-comment-dots icon-contact"></i><span>Contact</span></a>
+        <a href="prizes.html" class="action-card"><i class="fas fa-trophy icon-prize"></i><span>Prize Pool</span></a>
+        <a href="points.html" class="action-card"><i class="fas fa-chart-bar icon-points"></i><span>Points</span></a>
     </div>
 
     <nav class="bottom-nav">
@@ -100,5 +140,17 @@
     </nav>
     <div class="system-nav-bar"></div>
 
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyxyEAjkJ1iHvxrv-OQbx_W0m3czutHE5ufhunAn1CkF1KtQ9X_7G58kxfJSBFLOe9WjQ/exec";
+        function syncBalance() {
+            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            let user = userData ? userData.name : "TestUser";
+            fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(user))
+            .then(res => res.text()).then(bal => { 
+                document.getElementById('walletBal').innerText = "₹" + bal; 
+            });
+        }
+        window.onload = syncBalance;
+    </script>
 </body>
 </html>
