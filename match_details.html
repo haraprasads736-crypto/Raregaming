@@ -7,156 +7,105 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
         
-        body { background-color: #0b0b0f; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; padding-bottom: 50px; }
-        
-        /* Top Header Area */
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .logo-text { font-size: 18px; font-weight: 800; text-transform: uppercase; color: #fff;}
-        .back-btn { background: transparent; border: 1px solid #00f2fe; color: #00f2fe; padding: 6px 15px; border-radius: 6px; font-weight: 800; text-decoration: none; font-size: 12px; }
-        
-        /* Main Match Card */
-        .match-card { background: #121216; border-radius: 20px; padding: 20px; border: 1px solid #1f1f25; }
-        .match-img { width: 100%; border-radius: 12px; margin-bottom: 15px; aspect-ratio: 16/9; object-fit: cover; border-bottom: 2px solid #00f2fe;}
-        .match-title { font-size: 24px; font-weight: 800; text-transform: uppercase; margin: 0 0 5px 0; }
-        .match-time { font-size: 12px; color: #00f2fe; margin-bottom: 20px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-        
-        /* Info Boxes (Entry & Map) */
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .info-box { background: #1a1a20; padding: 15px; border-radius: 12px; text-align: center; }
-        .info-label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }
-        .info-value { font-size: 18px; font-weight: 800; color: #fff; }
-        
-        /* Prizes Box */
-        .prize-box { background: #1a1a20; padding: 15px 20px; border-radius: 15px; margin-bottom: 20px; }
-        .prize-row { display: flex; justify-content: space-between; padding: 12px 0; font-weight: 800; font-size: 15px; }
-        .prize-row:first-child { border-bottom: 1px solid #2a2a30; }
-        .prize-title { color: #ff007a; display: flex; align-items: center; gap: 8px; }
-        .prize-amt { color: #00f2fe; }
-        
-        /* Register Button */
-        .btn-register { width: 100%; padding: 18px; background: linear-gradient(90deg, #ff007a, #7a00ff); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; text-transform: uppercase; cursor: pointer; box-shadow: 0 5px 20px rgba(255,0,122,0.3); transition: 0.3s; }
-        .btn-register:active { transform: scale(0.98); }
+        .match-header { position: relative; width: 100%; height: 250px; }
+        .match-header img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .header-text { position: absolute; bottom: 20px; left: 20px; }
+        .match-title { font-size: 24px; font-weight: 800; text-transform: uppercase; color: #00f2fe; }
 
-        /* 🔥 PLAYERS LIST SECTION 🔥 */
-        .players-section { background: #121216; border-radius: 20px; padding: 20px; border: 1px solid #1f1f25; margin-top: 20px; }
-        .players-title { font-size: 15px; font-weight: 800; margin-bottom: 15px; border-bottom: 1px solid #2a2a30; padding-bottom: 10px; display: flex; justify-content: space-between; }
-        .player-row { display: flex; align-items: center; padding: 12px; background: #1a1a20; border-radius: 10px; margin-bottom: 10px; }
-        .player-row i { color: #00f2fe; margin-right: 12px; font-size: 18px; }
-        .player-name { font-size: 14px; font-weight: 600; color: #fff; text-transform: uppercase;}
-        .loading-text { font-size: 12px; color: #888; text-align: center; padding: 15px; font-weight: 600; }
+        .details-container { padding: 20px; }
+        .info-card { 
+            background: #111116; border: 1px solid #1f1f25; border-radius: 15px; 
+            padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;
+        }
+        .info-item { text-align: left; }
+        .info-label { font-size: 11px; color: #888; text-transform: uppercase; font-weight: 600; }
+        .info-value { font-size: 15px; font-weight: 800; color: #fff; margin-top: 5px; }
+
+        .btn-join { 
+            width: 100%; padding: 16px; background: #00f2fe; color: #000; border: none; 
+            border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; text-transform: uppercase;
+        }
+        .btn-closed { background: #333; color: #888; cursor: not-allowed; }
+
+        /* 🔥 NAVIGATION 🔥 */
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; }
+        .nav-item.active { color: white; position: relative; }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
+        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
 
-    <div class="header-top">
-        <span class="logo-text">Match Info</span>
-        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> BACK</a>
+    <div class="match-header">
+        <img id="matchImg" src="br_poster.jpg" alt="Match Poster">
+        <div class="header-text">
+            <div id="matchNameDisplay" class="match-title">BR SQUAD</div>
+            <div style="font-size: 12px; color: #00e676; font-weight: 800;">STATUS: OPEN</div>
+        </div>
     </div>
 
-    <div class="match-card">
-        <img src="br_poster.jpg" class="match-img" id="m-img" alt="Match Poster" onerror="this.src='https://via.placeholder.com/600x300/111/fff?text=MATCH+POSTER'">
-        
-        <h2 class="match-title" id="m-title">LOADING...</h2>
-        <div class="match-time"><i class="far fa-clock"></i> <span id="m-time">...</span></div>
-
-        <div class="info-grid">
-            <div class="info-box">
+    <div class="details-container">
+        <div class="info-card">
+            <div class="info-item">
+                <div class="info-label">Date</div>
+                <div class="info-value">23 March 2026</div> </div>
+            <div class="info-item">
+                <div class="info-label">Time</div>
+                <div class="info-value">09:00 PM</div> </div>
+            <div class="info-item">
                 <div class="info-label">Entry Fee</div>
-                <div class="info-value" id="m-entry">...</div>
+                <div class="info-value">₹20 (Per Head)</div>
             </div>
-            <div class="info-box">
+            <div class="info-item">
                 <div class="info-label">Map</div>
-                <div class="info-value" id="m-map">...</div>
+                <div class="info-value">Bermuda</div>
             </div>
         </div>
 
-        <div class="prize-box">
-            <div class="prize-row">
-                <span class="prize-title"><i class="fas fa-medal" style="color: #ffd700;"></i> 1st Prize</span>
-                <span class="prize-amt" id="m-prize1">₹...</span>
+        <div id="actionButtonContainer">
             </div>
-            <div class="prize-row">
-                <span class="prize-title"><i class="fas fa-medal" style="color: #c0c0c0;"></i> 2nd Prize</span>
-                <span class="prize-amt" id="m-prize2">₹...</span>
-            </div>
-        </div>
-
-        <button class="btn-register" onclick="registerForMatch()">REGISTER NOW</button>
     </div>
 
-    <div class="players-section">
-        <div class="players-title">
-            <span>JOINED PLAYERS</span>
-            <span style="color: white; background: #ff007a; padding: 2px 8px; border-radius: 8px; font-size: 12px;" id="p-count">0</span>
-        </div>
-        <div id="players-list">
-            <div class="loading-text"><i class="fas fa-spinner fa-spin"></i> Fetching players...</div>
-        </div>
-    </div>
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+    </nav>
+    <div class="system-nav-bar"></div>
 
     <script>
-        // 🔥 AAPKA MASTER SCRIPT URL 🔥
-        const scriptURL = "https://script.google.com/macros/s/AKfycbytPupu39uc5DU1CgPi4dDTp30pGyplUR4kDGAvmKfwLhlIhoptQsPgrKzIYzJpFpir2Q/exec"; 
-        
-        // Match ka pata lagana (URL se)
         const urlParams = new URLSearchParams(window.location.search);
-        let matchName = urlParams.get('match') || 'BR';
+        const match = urlParams.get('match') || "BR";
 
-        // Match ki details
-        const matchData = {
-            "BR": { title: "BR SQUAD BATTLE", time: "25 MAR | 07:00 PM", entry: "FREE", prize1: "₹150", prize2: "₹70", map: "Bermuda", img: "br_poster.jpg" },
-            "CS": { title: "CLASH SQUAD", time: "26 MAR | 07:00 PM", entry: "₹10", prize1: "₹150", prize2: "₹50", map: "Bermuda", img: "cs_poster.jpg" },
-            "LW": { title: "LONE WOLF", time: "27 MAR | 06:00 PM", entry: "₹5", prize1: "₹50", prize2: "₹10", map: "Iron Cage", img: "lw_poster.jpg" },
-            "1V1": { title: "1V1 BATTLE", time: "28 MAR | 09:00 PM", entry: "₹15", prize1: "₹100", prize2: "₹0", map: "Custom", img: "1v1_poster.jpg" }
-        };
+        const btnContainer = document.getElementById('actionButtonContainer');
+        const matchDisplay = document.getElementById('matchNameDisplay');
+        const matchImg = document.getElementById('matchImg');
 
-        const currentMatch = matchData[matchName] || matchData["BR"];
-        
-        // Screen par details daalna
-        document.getElementById('m-title').innerText = currentMatch.title;
-        document.getElementById('m-time').innerText = currentMatch.time;
-        document.getElementById('m-entry').innerText = currentMatch.entry;
-        document.getElementById('m-map').innerText = currentMatch.map;
-        document.getElementById('m-prize1').innerText = currentMatch.prize1;
-        document.getElementById('m-prize2').innerText = currentMatch.prize2;
-        document.getElementById('m-img').src = currentMatch.img;
+        matchDisplay.innerText = match + " MATCH";
 
-        // 1. 🚀 NAYA MATCH REGISTER FUNCTION 🚀
-        function registerForMatch() {
-            // Seedha register page par le jao match ka naam sath lekar
-            window.location.href = "register.html?match=" + encodeURIComponent(currentMatch.title);
+        // 🔥 MATCH LOGIC: Sirf BR open baaki sab close
+        if (match.includes("BR")) {
+            matchImg.src = "br_poster.jpg";
+            btnContainer.innerHTML = `<button class="btn-join" onclick="join()">JOIN NOW</button>`;
+        } else {
+            // CS, LW, 1V1 ke liye posters aur closed button
+            if(match.includes("CS")) matchImg.src = "cs_poster.jpg";
+            if(match.includes("LW")) matchImg.src = "lw_poster.jpg";
+            if(match.includes("1V1")) matchImg.src = "1v1_poster.jpg";
+            
+            btnContainer.innerHTML = `<button class="btn-join btn-closed" disabled>REGISTRATION CLOSED</button>`;
         }
 
-        // 2. PLAYERS LIST FETCH KARNE KA FUNCTION (Google Sheet se)
-        function loadPlayers() {
-            document.getElementById('players-list').innerHTML = `<div class="loading-text"><i class="fas fa-spinner fa-spin"></i> Fetching players...</div>`;
-            
-            const fetchURL = `${scriptURL}?action=getPlayers&match=${encodeURIComponent(currentMatch.title)}`;
-            
-            fetch(fetchURL)
-            .then(response => response.json())
-            .then(players => {
-                document.getElementById('p-count').innerText = players.length;
-                let listHTML = "";
-                
-                if(players.length === 0) {
-                    listHTML = `<div class="loading-text">No players yet. Be the first to join!</div>`;
-                } else {
-                    players.forEach(p => {
-                        listHTML += `<div class="player-row"><i class="fas fa-user-check"></i><span class="player-name">${p}</span></div>`;
-                    });
-                }
-                document.getElementById('players-list').innerHTML = listHTML;
-            })
-            .catch((err) => {
-                console.error(err);
-                document.getElementById('players-list').innerHTML = `<div class="loading-text" style="color: #ff007a;">Unable to load players list right now.</div>`;
-            });
+        function join() {
+            // Registration page par bhejo match name ke sath
+            window.location.href = "registration.html?match=" + encodeURIComponent(match);
         }
-
-        // Page load hote hi list mangwao
-        window.onload = loadPlayers;
     </script>
 </body>
 </html>
