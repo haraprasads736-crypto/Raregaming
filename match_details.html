@@ -8,80 +8,54 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
-        
-        /* Header Poster Area */
         .match-header { position: relative; width: 100%; height: 250px; }
         .match-header img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .header-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, #050508, transparent); }
-        .header-text { position: absolute; bottom: 30px; left: 20px; z-index: 2; }
-        .match-title { font-size: 28px; font-weight: 800; text-transform: uppercase; color: #00f2fe; margin: 0; }
-        .status-text { font-size: 12px; color: #00e676; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .header-text { position: absolute; bottom: 30px; left: 20px; }
+        .match-title { font-size: 28px; font-weight: 800; text-transform: uppercase; color: #00f2fe; }
+        .status-text { font-size: 12px; color: #ff007a; font-weight: 800; text-transform: uppercase; }
 
-        /* Match Details Info */
         .details-container { padding: 20px; }
         .info-card { 
             background: #111116; border: 1px solid #1f1f25; border-radius: 20px; 
             padding: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px;
         }
         .info-item { text-align: left; }
-        .info-label { font-size: 11px; color: #666; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
+        .info-label { font-size: 11px; color: #666; text-transform: uppercase; font-weight: 600; }
         .info-value { font-size: 16px; font-weight: 800; color: #fff; margin-top: 5px; }
 
-        /* Action Button */
         .btn-join { 
-            width: 100%; padding: 18px; background: #00f2fe; color: #000; border: none; 
-            border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3); transition: 0.3s;
+            width: 100%; padding: 18px; background: #333; color: #666; border: none; 
+            border-radius: 12px; font-size: 16px; font-weight: 800; text-transform: uppercase;
+            cursor: not-allowed;
         }
-        .btn-join:active { transform: scale(0.98); }
-        .btn-closed { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
 
-        /* 🔥 NAVIGATION SYSTEM 🔥 */
+        /* NAVIGATION SYSTEM */
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; color: #666; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: white; position: relative; }
         .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
         .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
-
     <div class="match-header">
-        <img id="matchImg" src="br_poster.jpg" alt="Match Poster">
-        <div class="header-overlay"></div>
+        <img id="matchImg" src="br_poster.jpg" alt="Poster">
         <div class="header-text">
             <div id="matchNameDisplay" class="match-title">BR MATCH</div>
-            <div id="statusLabel" class="status-text">STATUS: OPEN</div>
+            <div class="status-text">STATUS: CLOSED</div>
         </div>
     </div>
-
     <div class="details-container">
         <div class="info-card">
-            <div class="info-item">
-                <div class="info-label">Date</div>
-                <div class="info-value">23 March 2026</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Time</div>
-                <div class="info-value">09:00 PM</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Entry Fee</div>
-                <div class="info-value">₹20</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Map</div>
-                <div class="info-value">Bermuda</div>
-            </div>
+            <div class="info-item"><div class="info-label">Date</div><div class="info-value">23 March 2026</div></div>
+            <div class="info-item"><div class="info-label">Time</div><div class="info-value">09:00 PM</div></div>
+            <div class="info-item"><div class="info-label">Entry Fee</div><div class="info-value">₹20</div></div>
+            <div class="info-item"><div class="info-label">Map</div><div class="info-value">Bermuda</div></div>
         </div>
-
-        <div id="btnArea">
-            <button id="mainBtn" class="btn-join" onclick="join()">JOIN NOW</button>
-        </div>
+        <button class="btn-join" disabled>REGISTRATION CLOSED</button>
     </div>
-
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
@@ -89,39 +63,5 @@
         <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
-
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const match = urlParams.get('match') || "BR";
-        
-        const matchNameDisplay = document.getElementById('matchNameDisplay');
-        const statusLabel = document.getElementById('statusLabel');
-        const mainBtn = document.getElementById('mainBtn');
-        const matchImg = document.getElementById('matchImg');
-
-        matchNameDisplay.innerText = match + " MATCH";
-
-        // 🔥 LOGIC: Check Open/Closed
-        if (match.includes("BR")) {
-            matchImg.src = "br_poster.jpg";
-            statusLabel.innerText = "STATUS: OPEN";
-            statusLabel.style.color = "#00e676";
-        } else {
-            // CS, LW, 1V1 ke liye posters badlo aur band karo
-            if(match.includes("CS")) matchImg.src = "cs_poster.jpg";
-            if(match.includes("LW")) matchImg.src = "lw_poster.jpg";
-            
-            statusLabel.innerText = "STATUS: CLOSED";
-            statusLabel.style.color = "#ff007a";
-            mainBtn.innerText = "REGISTRATION CLOSED";
-            mainBtn.classList.add("btn-closed");
-            mainBtn.disabled = true;
-        }
-
-        function join() {
-            // ✅ UPDATED: Ab ye seedha register.html par jayega
-            window.location.href = "register.html?match=" + encodeURIComponent(match);
-        }
-    </script>
 </body>
 </html>
