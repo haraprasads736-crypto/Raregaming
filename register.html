@@ -39,7 +39,8 @@
 </head>
 <body>
 
-    <div class="reg-container" id="mainContainer"></div>
+    <div class="reg-container" id="mainContainer">
+        </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
@@ -56,62 +57,73 @@
 
         const container = document.getElementById('mainContainer');
 
-        if (match.includes("BR")) {
-            container.innerHTML = `
-                <div class="section-header">BR DUO REGISTRATION</div>
-                <div class="form-card">
-                    <div class="player-title"><i class="fas fa-users"></i> TEAM INFO</div>
-                    <input type="text" id="teamName" placeholder="Team Name">
-                    <input type="text" id="whatsapp" placeholder="WhatsApp Number">
-                </div>
-                <div class="form-card">
-                    <div class="player-title"><i class="fas fa-user"></i> PLAYER 1</div>
-                    <input type="text" id="p1Name" placeholder="IGN Name">
-                    <input type="text" id="p1Uid" placeholder="Game UID">
-                </div>
-                <div class="form-card">
-                    <div class="player-title"><i class="fas fa-user"></i> PLAYER 2</div>
-                    <input type="text" id="p2Name" placeholder="IGN Name">
-                    <input type="text" id="p2Uid" placeholder="Game UID">
-                </div>
-                <button class="btn-submit" id="regBtn" onclick="submitReg()">JOIN MATCH</button>
-            `;
+        // 🔥 CONFIG: Yahan se Control karo kaunsa match khula hai (true = Open, false = Closed)
+        const isBrOpen = false; 
+        const isCsOpen = false;
+        const is1v1Open = false;
+
+        let formHtml = "";
+
+        if (match.includes("BR") && isBrOpen) {
+            formHtml = createForm("BR DUO", 2);
+        } else if (match.includes("CS") && isCsOpen) {
+            formHtml = createForm("CS SQUAD", 4);
+        } else if (match.includes("1V1") && is1v1Open) {
+            formHtml = createForm("1V1 BATTLE", 1);
         } else {
-            container.innerHTML = `
-                <div class="closed-box">
-                    <i class="fas fa-lock"></i>
-                    <h2>REGISTRATION CLOSED</h2>
-                    <button class="btn-submit" style="margin-top:20px; background:#444; color:#fff;" onclick="window.location.href='index.html'">GO BACK</button>
-                </div>
-            `;
+            formHtml = `<div class="closed-box"><i class="fas fa-lock"></i><h2>REGISTRATION CLOSED</h2><button class="btn-submit" style="margin-top:20px; background:#444; color:#fff;" onclick="window.location.href='index.html'">GO BACK</button></div>`;
         }
 
-        function submitReg() {
+        container.innerHTML = formHtml;
+
+        function createForm(title, players) {
+            let playersHtml = "";
+            for(let i=1; i<=players; i++) {
+                playersHtml += `<div class="form-card"><div class="player-title"><i class="fas fa-user"></i> PLAYER ${i}</div>
+                <input type="text" id="p${i}Name" placeholder="IGN Name"><input type="text" id="p${i}Uid" placeholder="Game UID"></div>`;
+            }
+            return `<div class="section-header">${title}</div>
+                    <div class="form-card"><div class="player-title"><i class="fas fa-users"></i> TEAM INFO</div>
+                    <input type="text" id="teamName" placeholder="Team Name"><input type="text" id="whatsapp" placeholder="WhatsApp"></div>
+                    ${playersHtml}
+                    <button class="btn-submit" id="regBtn" onclick="submitReg(${players})">PAY ₹20 & JOIN</button>`;
+        }
+
+        async function submitReg(playerCount) {
+            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            const user = userData ? userData.name : "";
+            
+            // 🛑 Step 1: Check Balance
+            const balRes = await fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(user));
+            const currentBal = Number(await balRes.text());
+
+            if (currentBal < 20) {
+                alert("❌ Error: Aapke Wallet mein ₹20 nahi hain! Pehle Deposit karein.");
+                return;
+            }
+
             const btn = document.getElementById('regBtn');
-            btn.innerText = "PROCESSING...";
-            btn.disabled = true;
+            btn.innerText = "PROCESSING..."; btn.disabled = true;
 
             const params = new URLSearchParams();
             params.append("action", "register");
-            params.append("match", match); 
+            params.append("match", match);
+            params.append("username", user); // For balance deduction
             params.append("teamName", document.getElementById('teamName').value);
             params.append("whatsapp", document.getElementById('whatsapp').value);
-            params.append("p1Name", document.getElementById('p1Name').value);
-            params.append("p1Uid", document.getElementById('p1Uid').value);
-            params.append("p2Name", document.getElementById('p2Name').value);
-            params.append("p2Uid", document.getElementById('p2Uid').value);
-            params.append("p3Name", ""); params.append("p3Uid", "");
-            params.append("p4Name", ""); params.append("p4Uid", "");
 
+            for(let i=1; i<=4; i++) {
+                params.append(`p${i}Name`, document.getElementById(`p${i}Name`) ? document.getElementById(`p${i}Name`).value : "");
+                params.append(`p${i}Uid`, document.getElementById(`p${i}Uid`) ? document.getElementById(`p${i}Uid`).value : "");
+            }
+
+            // 🛑 Step 2: Send to Sheet (Sheet will deduct ₹20)
             fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
             .then(() => {
-                alert("✅ Registration Successful!");
+                alert("✅ ₹20 Cut & Registered Successfully!");
                 window.location.href = "index.html";
             })
-            .catch(() => {
-                alert("Error! Check internet.");
-                btn.innerText = "JOIN MATCH"; btn.disabled = false;
-            });
+            .catch(() => { alert("Error!"); btn.innerText = "JOIN"; btn.disabled = false; });
         }
     </script>
 </body>
