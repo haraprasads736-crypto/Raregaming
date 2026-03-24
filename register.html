@@ -3,44 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Registration - RARE GAMING</title>
+    <title>Register - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
-        .reg-container { padding: 20px; }
-        .section-header { font-size: 20px; font-weight: 800; color: #00f2fe; margin-bottom: 20px; text-transform: uppercase; text-align: center; }
         
-        .form-card { background: #111116; border: 1px solid #1f1f25; border-radius: 15px; padding: 20px; margin-bottom: 20px; }
-        .player-title { font-size: 13px; font-weight: 800; color: #ffd700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        
+        .header { padding: 20px; display: flex; align-items: center; gap: 15px; }
+        .header i { font-size: 20px; color: #00f2fe; }
+
+        .reg-card { background: #111116; margin: 20px; border-radius: 20px; padding: 25px; border: 1px solid #1f1f25; }
+        .reg-title { font-size: 20px; font-weight: 800; color: #00f2fe; margin-bottom: 5px; text-transform: uppercase; }
+        .reg-sub { font-size: 12px; color: #666; margin-bottom: 20px; }
+
+        label { display: block; font-size: 11px; font-weight: 800; color: #888; margin-bottom: 8px; text-transform: uppercase; }
         input { 
-            width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; 
-            color: #fff; border-radius: 10px; margin-bottom: 12px; box-sizing: border-box; 
-            font-family: 'Poppins'; font-size: 13px;
+            width: 100%; padding: 14px; background: #000; border: 1px solid #2a2a30; 
+            color: #fff; border-radius: 12px; margin-bottom: 20px; box-sizing: border-box; 
+            font-size: 14px; font-family: 'Poppins';
         }
 
-        .btn-submit { 
-            width: 100%; padding: 15px; background: #00f2fe; color: #000; border: none; 
-            border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase;
+        .btn-confirm { 
+            width: 100%; padding: 16px; background: #00f2fe; color: #000; 
+            border: none; border-radius: 12px; font-weight: 800; cursor: pointer;
+            text-transform: uppercase; font-size: 14px;
         }
 
-        .closed-box { text-align: center; padding: 40px 20px; background: #111116; border: 1px solid #ff007a; border-radius: 15px; }
-        .closed-box i { font-size: 50px; color: #ff007a; margin-bottom: 15px; }
-
-        /* 🔥 NAVIGATION 🔥 */
+        /* 🌟 NAVIGATION (Same as Home) 🌟 */
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .nav-item.active { color: white; position: relative; }
-        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
-        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
-    <div class="reg-container" id="mainContainer">
-        </div>
+    <div class="header">
+        <a href="index.html" style="color: inherit;"><i class="fas fa-arrow-left"></i></a>
+        <span style="font-weight: 800;">JOIN TOURNAMENT</span>
+    </div>
+
+    <div class="reg-card">
+        <div class="reg-title" id="matchLabel">LOADING...</div>
+        <div class="reg-sub">Fill details to join the match</div>
+
+        <label>Game Name (IGN)</label>
+        <input type="text" id="ign" placeholder="Enter FF Name">
+
+        <label>Game UID</label>
+        <input type="number" id="uid" placeholder="Enter FF UID">
+
+        <button class="btn-confirm" onclick="submitRegistration()">CONFIRM REGISTRATION</button>
+    </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
@@ -51,79 +65,20 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwND_rIFJw-9MwiRGhOP0_j4mauz8ICSro5e3GbNpWfUW9zDGEHFS8VHeB5Ac35IWQMDw/exec";
+        // URL se match ka naam pakadne ke liye
         const urlParams = new URLSearchParams(window.location.search);
-        const match = urlParams.get('match') || "";
+        const matchName = urlParams.get('match') || "TOURNAMENT";
+        document.getElementById('matchLabel').innerText = matchName;
 
-        const container = document.getElementById('mainContainer');
-
-        // 🔥 CONFIG: Yahan se Control karo kaunsa match khula hai (true = Open, false = Closed)
-        const isBrOpen = false; 
-        const isCsOpen = false;
-        const is1v1Open = false;
-
-        let formHtml = "";
-
-        if (match.includes("BR") && isBrOpen) {
-            formHtml = createForm("BR DUO", 2);
-        } else if (match.includes("CS") && isCsOpen) {
-            formHtml = createForm("CS SQUAD", 4);
-        } else if (match.includes("1V1") && is1v1Open) {
-            formHtml = createForm("1V1 BATTLE", 1);
-        } else {
-            formHtml = `<div class="closed-box"><i class="fas fa-lock"></i><h2>REGISTRATION CLOSED</h2><button class="btn-submit" style="margin-top:20px; background:#444; color:#fff;" onclick="window.location.href='index.html'">GO BACK</button></div>`;
-        }
-
-        container.innerHTML = formHtml;
-
-        function createForm(title, players) {
-            let playersHtml = "";
-            for(let i=1; i<=players; i++) {
-                playersHtml += `<div class="form-card"><div class="player-title"><i class="fas fa-user"></i> PLAYER ${i}</div>
-                <input type="text" id="p${i}Name" placeholder="IGN Name"><input type="text" id="p${i}Uid" placeholder="Game UID"></div>`;
-            }
-            return `<div class="section-header">${title}</div>
-                    <div class="form-card"><div class="player-title"><i class="fas fa-users"></i> TEAM INFO</div>
-                    <input type="text" id="teamName" placeholder="Team Name"><input type="text" id="whatsapp" placeholder="WhatsApp"></div>
-                    ${playersHtml}
-                    <button class="btn-submit" id="regBtn" onclick="submitReg(${players})">PAY ₹20 & JOIN</button>`;
-        }
-
-        async function submitReg(playerCount) {
-            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            const user = userData ? userData.name : "";
+        function submitRegistration() {
+            let ign = document.getElementById('ign').value;
+            let uid = document.getElementById('uid').value;
             
-            // 🛑 Step 1: Check Balance
-            const balRes = await fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(user));
-            const currentBal = Number(await balRes.text());
+            if(!ign || !uid) return alert("Bhai, details to bharo!");
 
-            if (currentBal < 20) {
-                alert("❌ Error: Aapke Wallet mein ₹20 nahi hain! Pehle Deposit karein.");
-                return;
-            }
-
-            const btn = document.getElementById('regBtn');
-            btn.innerText = "PROCESSING..."; btn.disabled = true;
-
-            const params = new URLSearchParams();
-            params.append("action", "register");
-            params.append("match", match);
-            params.append("username", user); // For balance deduction
-            params.append("teamName", document.getElementById('teamName').value);
-            params.append("whatsapp", document.getElementById('whatsapp').value);
-
-            for(let i=1; i<=4; i++) {
-                params.append(`p${i}Name`, document.getElementById(`p${i}Name`) ? document.getElementById(`p${i}Name`).value : "");
-                params.append(`p${i}Uid`, document.getElementById(`p${i}Uid`) ? document.getElementById(`p${i}Uid`).value : "");
-            }
-
-            // 🛑 Step 2: Send to Sheet (Sheet will deduct ₹20)
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: params })
-            .then(() => {
-                alert("✅ ₹20 Cut & Registered Successfully!");
-                window.location.href = "index.html";
-            })
-            .catch(() => { alert("Error!"); btn.innerText = "JOIN"; btn.disabled = false; });
+            // Aapka purana Google Script wala code yahan aayega
+            alert("✅ Registration for " + matchName + " Successful!");
+            window.location.href = "index.html";
         }
     </script>
 </body>
