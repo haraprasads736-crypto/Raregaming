@@ -7,25 +7,108 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
-        .profile-header { text-align: center; padding: 40px 20px; background: #111116; border-bottom: 1px solid #1f1f25; }
-        .user-avatar { font-size: 70px; color: #00f2fe; margin-bottom: 15px; }
-        .logout-btn { background: #ff007a; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: 800; margin-top: 30px; cursor: pointer; }
+        
+        body { 
+            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; padding-bottom: 140px; 
+        }
+
+        /* 👤 User Header 👤 */
+        .profile-header {
+            background: linear-gradient(to bottom, #111116, #050508);
+            padding: 40px 20px; text-align: center; border-bottom: 1px solid #1f1f25;
+        }
+        .avatar {
+            width: 90px; height: 90px; background: #00f2fe; 
+            border-radius: 50%; margin: 0 auto 15px; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 40px; color: #000; box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+        }
+        .user-name { font-size: 22px; font-weight: 800; text-transform: uppercase; }
+        .user-id { font-size: 12px; color: #666; letter-spacing: 1px; }
+
+        /* 📊 Stats Section 📊 */
+        .stats-container {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; 
+            gap: 10px; padding: 20px;
+        }
+        .stat-card {
+            background: #111116; padding: 15px 5px; border-radius: 12px;
+            text-align: center; border: 1px solid #1f1f25;
+        }
+        .stat-num { font-size: 18px; font-weight: 800; color: #00f2fe; }
+        .stat-label { font-size: 10px; color: #555; text-transform: uppercase; margin-top: 5px; }
+
+        /* ⚙️ Menu List ⚙️ */
+        .menu-list { padding: 10px 20px; }
+        .menu-item {
+            background: #111116; padding: 15px; border-radius: 12px;
+            margin-bottom: 10px; display: flex; align-items: center;
+            text-decoration: none; color: white; border: 1px solid #1f1f25;
+        }
+        .menu-item i { width: 30px; font-size: 18px; color: #00f2fe; }
+        .menu-item span { flex: 1; font-size: 14px; font-weight: 600; }
+        .menu-item .fa-chevron-right { font-size: 12px; color: #333; }
+
+        /* 🔴 Logout Button 🔴 */
+        .btn-logout {
+            margin: 20px; padding: 15px; background: rgba(255, 0, 122, 0.1);
+            border: 1px solid #ff007a; color: #ff007a; border-radius: 12px;
+            text-align: center; font-weight: 800; cursor: pointer; font-size: 14px;
+        }
+
+        /* 🌟 NAVIGATION (White Diamond Style) 🌟 */
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: white; position: relative; }
         .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
         .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
+
     <div class="profile-header">
-        <i class="fas fa-user-circle user-avatar"></i>
-        <h2 id="userName">Gamer</h2>
-        <p style="color:#888">Tournament Player</p>
-        <button class="logout-btn" onclick="logout()">LOGOUT</button>
+        <div class="avatar"><i class="fas fa-user"></i></div>
+        <div class="user-name" id="userName">GAMER</div>
+        <div class="user-id">UID: <span id="userUid">00000000</span></div>
     </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-num">12</div>
+            <div class="stat-label">Matches</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">04</div>
+            <div class="stat-label">Won</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">85</div>
+            <div class="stat-label">Kills</div>
+        </div>
+    </div>
+
+    <div class="menu-list">
+        <a href="earn.html" class="menu-item">
+            <i class="fas fa-wallet"></i>
+            <span>My Wallet</span>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="winners.html" class="menu-item">
+            <i class="fas fa-trophy"></i>
+            <span>Leaderboard</span>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="https://wa.me/917008170291" class="menu-item">
+            <i class="fas fa-headset"></i>
+            <span>Support & Help</span>
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+
+    <div class="btn-logout" onclick="logout()">LOGOUT ACCOUNT</div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
@@ -36,15 +119,23 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        window.onload = function() {
+        // LocalStorage se data load karna
+        function loadProfile() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(userData) { document.getElementById('userName').innerText = userData.name; }
+            if(userData) {
+                document.getElementById('userName').innerText = userData.name;
+                document.getElementById('userUid').innerText = userData.uid || "Not Set";
+            }
         }
+
         function logout() {
-            localStorage.removeItem("rareGamingUser");
-            alert("Logged Out!");
-            window.location.href = "login.html"; // Agar login page hai toh
+            if(confirm("Bhai, logout karna hai?")) {
+                localStorage.removeItem("rareGamingUser");
+                window.location.href = "login.html"; // Login page ka link
+            }
         }
+
+        window.onload = loadProfile;
     </script>
 </body>
 </html>
