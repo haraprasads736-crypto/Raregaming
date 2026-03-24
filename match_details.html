@@ -7,131 +7,118 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 100px; }
         
-        .header { padding: 20px; display: flex; align-items: center; gap: 15px; }
-        .header i { font-size: 20px; color: #00f2fe; }
-        .header span { font-size: 18px; font-weight: 800; text-transform: uppercase; }
+        body { 
+            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; padding-bottom: 160px; /* Space for Bottom Nav */
+        }
+        
+        /* Header */
+        .header { padding: 20px; display: flex; align-items: center; gap: 15px; background: #111116; border-bottom: 1px solid #1f1f25; }
+        .header a { color: #00f2fe; text-decoration: none; font-size: 20px; }
+        .header span { font-size: 16px; font-weight: 800; text-transform: uppercase; }
 
-        .banner-container { width: 100%; height: 200px; position: relative; overflow: hidden; }
-        .banner-container img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+        /* Banner */
+        .match-banner { width: 100%; height: 220px; position: relative; overflow: hidden; }
+        .match-banner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
         
-        .info-card { 
-            background: #111116; margin: -30px 20px 20px 20px; border-radius: 20px; 
+        /* Info Card */
+        .details-card { 
+            background: #111116; margin: -40px 20px 20px 20px; border-radius: 20px; 
             padding: 20px; border: 1px solid #1f1f25; position: relative; z-index: 10;
         }
+        .match-type-title { font-size: 24px; font-weight: 800; color: #00f2fe; margin-bottom: 5px; }
+        .map-name { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
 
-        .match-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; color: #00f2fe; }
-        
+        /* Stats Grid */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .stat-box { background: #000; padding: 10px; border-radius: 10px; text-align: center; border: 1px solid #2a2a30; }
-        .stat-label { font-size: 10px; color: #888; text-transform: uppercase; }
+        .stat-box { background: #000; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #2a2a30; }
+        .stat-label { font-size: 9px; color: #666; text-transform: uppercase; margin-bottom: 4px; }
         .stat-val { font-size: 14px; font-weight: 800; color: #fff; }
 
-        .rules-panel { padding: 20px; }
-        .rules-title { font-size: 14px; font-weight: 800; margin-bottom: 10px; color: #ffd700; }
-        .rule-item { font-size: 12px; color: #aaa; margin-bottom: 8px; display: flex; gap: 10px; }
-
-        .btn-join { 
-            position: fixed; bottom: 30px; left: 20px; right: 20px; 
-            background: #00f2fe; color: #000; padding: 15px; text-align: center;
-            border-radius: 15px; font-weight: 800; text-decoration: none; text-transform: uppercase;
-            box-shadow: 0 5px 20px rgba(0, 242, 254, 0.4);
+        /* Join Button */
+        .btn-join-match { 
+            display: block; margin: 20px; background: #00f2fe; color: #000; 
+            padding: 16px; text-align: center; border-radius: 15px; 
+            font-weight: 800; text-decoration: none; text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
         }
+
+        /* 🌟 NAVIGATION SYSTEM 🌟 */
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
+        .bottom-nav { 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; 
+            background: #111116; display: flex; justify-content: space-around; 
+            align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
+        }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <a href="index.html" style="color: inherit;"><i class="fas fa-arrow-left"></i></a>
-        <span id="headerTitle">MATCH DETAILS</span>
+        <a href="index.html"><i class="fas fa-arrow-left"></i></a>
+        <span>Match Information</span>
     </div>
 
-    <div class="banner-container">
-        <img id="matchBanner" src="br_poster.jpg" alt="Poster">
+    <div class="match-banner">
+        <img id="mImg" src="br_poster.jpg" alt="Poster">
     </div>
 
-    <div class="info-card">
-        <div class="match-title" id="displayMatchTitle">LOADING...</div>
-        <div id="matchMap" style="font-size: 12px; color: #888;">Map: Bermuda</div>
+    <div class="details-card">
+        <div class="match-type-title" id="mTitle">LOADING...</div>
+        <div class="map-name" id="mMap">Map: Loading...</div>
 
         <div class="stats-grid">
             <div class="stat-box">
                 <div class="stat-label">Win Prize</div>
-                <div class="stat-val" id="winPrize">₹--</div>
+                <div class="stat-val" id="mPrize">₹--</div>
             </div>
             <div class="stat-box">
                 <div class="stat-label">Per Kill</div>
-                <div class="stat-val" id="perKill">₹--</div>
+                <div class="stat-val" id="mKill">₹--</div>
             </div>
             <div class="stat-box">
                 <div class="stat-label">Entry Fee</div>
-                <div class="stat-val" id="entryFee">₹--</div>
+                <div class="stat-val" id="mFee">₹--</div>
             </div>
         </div>
     </div>
 
-    <div class="rules-panel">
-        <div class="rules-title">MATCH RULES & INFO</div>
-        <div class="rule-item"><i class="fas fa-check-circle"></i> No hacking allowed.</div>
-        <div class="rule-item"><i class="fas fa-check-circle"></i> Room ID & Pass will be sent via WhatsApp.</div>
-        <div class="rule-item"><i class="fas fa-check-circle"></i> Match starts on time. Be ready.</div>
-    </div>
+    <a href="#" class="btn-join-match" id="joinLink">JOIN NOW</a>
 
-    <a href="register.html" class="btn-join" id="joinBtn">JOIN MATCH</a>
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+    </nav>
+    <div class="system-nav-bar"></div>
 
     <script>
-        // URL se Match Name nikalna
-        const urlParams = new URLSearchParams(window.location.search);
-        const matchType = urlParams.get('match');
+        // URL se data pakadne ke liye
+        const params = new URLSearchParams(window.location.search);
+        const match = params.get('match') || "BR SQUAD";
 
-        // Match ki list aur unka data
-        const matchData = {
-            "BR SQUAD": {
-                prize: "₹100",
-                kill: "₹5",
-                fee: "₹20",
-                map: "Bermuda",
-                img: "br_poster.jpg"
-            },
-            "CS SQUAD": {
-                prize: "₹80",
-                kill: "₹0",
-                fee: "₹30",
-                map: "Nextra (4v4)",
-                img: "cs_poster.jpg"
-            },
-            "LONE WOLF": {
-                prize: "₹20",
-                kill: "₹0",
-                fee: "₹10",
-                map: "Iron Cage",
-                img: "lw_poster.jpg"
-            },
-            "1V1 BATTLE": {
-                prize: "₹50",
-                kill: "₹0",
-                fee: "₹25",
-                map: "Custom Map",
-                img: "1v1_poster.jpg"
-            }
+        // Match ki details list
+        const info = {
+            "BR SQUAD": { p: "₹100", k: "₹5", f: "₹20", m: "Bermuda", img: "br_poster.jpg" },
+            "CS SQUAD": { p: "₹80", k: "₹0", f: "₹30", m: "Nextra (4v4)", img: "cs_poster.jpg" },
+            "LONE WOLF": { p: "₹20", k: "₹0", f: "₹10", m: "Iron Cage", img: "lw_poster.jpg" },
+            "1V1 BATTLE": { p: "₹50", k: "₹0", f: "₹25", m: "Custom Map", img: "1v1_poster.jpg" }
         };
 
-        // Page ko update karna
-        if (matchType && matchData[matchType]) {
-            const data = matchData[matchType];
-            document.getElementById('displayMatchTitle').innerText = matchType;
-            document.getElementById('headerTitle').innerText = matchType;
-            document.getElementById('winPrize').innerText = data.prize;
-            document.getElementById('perKill').innerText = data.kill;
-            document.getElementById('entryFee').innerText = data.fee;
-            document.getElementById('matchMap').innerText = "Map: " + data.map;
-            document.getElementById('matchBanner').src = data.img;
-            
-            // Join link mein bhi naam pass karna
-            document.getElementById('joinBtn').href = "register.html?match=" + encodeURIComponent(matchType);
-        } else {
-            document.getElementById('displayMatchTitle').innerText = "Match Not Found";
+        // UI Update logic
+        if(info[match]) {
+            const d = info[match];
+            document.getElementById('mTitle').innerText = match;
+            document.getElementById('mPrize').innerText = d.p;
+            document.getElementById('mKill').innerText = d.k;
+            document.getElementById('mFee').innerText = d.f;
+            document.getElementById('mMap').innerText = "Map: " + d.m;
+            document.getElementById('mImg').src = d.img;
+            document.getElementById('joinLink').href = "register.html?match=" + encodeURIComponent(match);
         }
     </script>
 </body>
