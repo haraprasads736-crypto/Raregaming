@@ -14,46 +14,49 @@
 
         .reg-card { background: #111116; margin: 20px; border-radius: 20px; padding: 25px; border: 1px solid #1f1f25; }
         .reg-title { font-size: 20px; font-weight: 800; color: #00f2fe; margin-bottom: 5px; text-transform: uppercase; }
-        .reg-sub { font-size: 12px; color: #666; margin-bottom: 20px; }
+        .reg-sub { font-size: 11px; color: #666; margin-bottom: 20px; }
 
-        label { display: block; font-size: 11px; font-weight: 800; color: #888; margin-bottom: 8px; text-transform: uppercase; }
+        label { display: block; font-size: 10px; font-weight: 800; color: #888; margin-top: 15px; margin-bottom: 5px; text-transform: uppercase; }
         input { 
             width: 100%; padding: 14px; background: #000; border: 1px solid #2a2a30; 
-            color: #fff; border-radius: 12px; margin-bottom: 20px; box-sizing: border-box; 
-            font-size: 14px; font-family: 'Poppins';
+            color: #fff; border-radius: 12px; margin-bottom: 10px; box-sizing: border-box; 
+            font-size: 13px; font-family: 'Poppins';
         }
 
         .btn-confirm { 
             width: 100%; padding: 16px; background: #00f2fe; color: #000; 
             border: none; border-radius: 12px; font-weight: 800; cursor: pointer;
-            text-transform: uppercase; font-size: 14px;
+            text-transform: uppercase; font-size: 14px; margin-top: 20px;
         }
 
-        /* 🌟 NAVIGATION (Same as Home) 🌟 */
+        /* 🌟 NAVIGATION SYSTEM 🌟 */
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
         .nav-item i { font-size: 22px; margin-bottom: 5px; }
+        .nav-item.active { color: white; position: relative; }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
+        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
 
     <div class="header">
         <a href="index.html" style="color: inherit;"><i class="fas fa-arrow-left"></i></a>
-        <span style="font-weight: 800;">JOIN TOURNAMENT</span>
+        <span style="font-weight: 800;">TOURNAMENT ENTRY</span>
     </div>
 
     <div class="reg-card">
         <div class="reg-title" id="matchLabel">LOADING...</div>
-        <div class="reg-sub">Fill details to join the match</div>
+        <div class="reg-sub" id="matchRules">Please fill your game details</div>
 
-        <label>Game Name (IGN)</label>
-        <input type="text" id="ign" placeholder="Enter FF Name">
+        <div id="playerInputs">
+            </div>
 
-        <label>Game UID</label>
-        <input type="number" id="uid" placeholder="Enter FF UID">
+        <label>Game UID (Leader)</label>
+        <input type="number" id="mainUid" placeholder="Enter FF UID">
 
-        <button class="btn-confirm" onclick="submitRegistration()">CONFIRM REGISTRATION</button>
+        <button class="btn-confirm" onclick="submitRegistration()">CONFIRM JOIN</button>
     </div>
 
     <nav class="bottom-nav">
@@ -65,18 +68,50 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // URL se match ka naam pakadne ke liye
         const urlParams = new URLSearchParams(window.location.search);
         const matchName = urlParams.get('match') || "TOURNAMENT";
         document.getElementById('matchLabel').innerText = matchName;
 
-        function submitRegistration() {
-            let ign = document.getElementById('ign').value;
-            let uid = document.getElementById('uid').value;
-            
-            if(!ign || !uid) return alert("Bhai, details to bharo!");
+        const inputArea = document.getElementById('playerInputs');
 
-            // Aapka purana Google Script wala code yahan aayega
+        // 🔥 MATCH LOGIC 🔥
+        if (matchName.includes("CS")) {
+            // 4 Players Logic
+            document.getElementById('matchRules').innerText = "Squad Entry: 4 Players required";
+            inputArea.innerHTML = `
+                <label>Team Name</label>
+                <input type="text" id="teamName" placeholder="Enter Team Name">
+                <label>Players IGN</label>
+                <input type="text" id="p1" placeholder="Player 1 (Leader) Name">
+                <input type="text" id="p2" placeholder="Player 2 Name">
+                <input type="text" id="p3" placeholder="Player 3 Name">
+                <input type="text" id="p4" placeholder="Player 4 Name">
+            `;
+        } else if (matchName.includes("BR")) {
+            // 2 Players Logic (Duo)
+            document.getElementById('matchRules').innerText = "Duo Entry: 2 Players required";
+            inputArea.innerHTML = `
+                <label>Team Name (Optional)</label>
+                <input type="text" id="teamName" placeholder="Enter Duo Name">
+                <label>Players IGN</label>
+                <input type="text" id="p1" placeholder="Player 1 (Leader) Name">
+                <input type="text" id="p2" placeholder="Player 2 Name">
+            `;
+        } else {
+            // Solo Logic (Lawn Wolf & 1v1)
+            document.getElementById('matchRules').innerText = "Solo Entry: Individual Player";
+            inputArea.innerHTML = `
+                <label>In-Game Name (IGN)</label>
+                <input type="text" id="p1" placeholder="Your FF Name">
+            `;
+        }
+
+        function submitRegistration() {
+            const uid = document.getElementById('mainUid').value;
+            const p1 = document.getElementById('p1').value;
+            
+            if(!uid || !p1) return alert("Bhai, Details dalo!");
+
             alert("✅ Registration for " + matchName + " Successful!");
             window.location.href = "index.html";
         }
