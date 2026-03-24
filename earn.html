@@ -9,51 +9,56 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
-        .header-top { padding: 15px; text-align: center; }
-        .brand-name { font-size: 20px; font-weight: 800; text-transform: uppercase; color: #fff; }
         
+        .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
         .balance-card {
-            background: linear-gradient(135deg, rgba(255,0,122,0.1), rgba(122,0,255,0.1));
-            border: 1.5px solid #ff007a; border-radius: 15px;
-            margin: 0 20px 15px 20px; padding: 20px; text-align: center;
+            background: linear-gradient(135deg, rgba(0,242,254,0.1), rgba(122,0,255,0.1));
+            border: 1.5px solid #00f2fe; border-radius: 20px;
+            margin: 0 20px 20px 20px; padding: 25px; text-align: center;
         }
-        .bal-label { font-size: 10px; font-weight: 800; color: #888; }
-        .bal-amount { font-size: 35px; font-weight: 800; color: #fff; }
+        .bal-label { font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase; }
+        .bal-amount { font-size: 40px; font-weight: 800; color: #fff; margin-top: 5px; }
 
         .wallet-panel { 
-            background: #111116; border-radius: 12px; padding: 15px; 
-            border: 1px solid #1f1f25; margin: 0 20px 15px 20px; 
+            background: #111116; border-radius: 15px; padding: 15px; 
+            border: 1px solid #1f1f25; margin: 0 20px 20px 20px; 
         }
         .panel-title { font-size: 13px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
         
         input { 
-            width: 100%; padding: 10px; background: #000; border: 1px solid #2a2a30; 
-            color: #fff; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; font-size: 12px;
+            width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; 
+            color: #fff; border-radius: 10px; margin-bottom: 12px; box-sizing: border-box; 
+            font-size: 13px; font-family: 'Poppins';
         }
         
         .btn-action { 
-            width: 100%; padding: 10px; border: none; border-radius: 8px; 
+            width: 100%; padding: 14px; border: none; border-radius: 10px; 
             font-size: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase;
+            transition: 0.3s;
         }
 
-        .btn-yellow { background: #ffd700; color: #000; }
         .btn-blue { background: #00f2fe; color: #000; }
-        
-        /* 🔥 CHOTA QR & BUTTON 🔥 */
-        .qr-img { width: 110px; height: 110px; border-radius: 8px; border: 3px solid #fff; margin: 5px 0; }
+        .btn-yellow { background: #ffd700; color: #000; }
+        .btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* QR Section */
+        .qr-img { width: 120px; height: 120px; border-radius: 10px; border: 3px solid #fff; margin: 10px 0; }
         .btn-wa-small { 
             background: #25d366; color: #fff; text-decoration: none; display: inline-flex; 
-            align-items: center; justify-content: center; gap: 5px; 
-            padding: 8px 15px; width: auto; min-width: 160px; font-size: 11px;
+            align-items: center; justify-content: center; gap: 8px; padding: 10px 20px;
+            font-size: 11px; border-radius: 8px; font-weight: 800;
         }
 
-        /* NAVIGATION SYSTEM */
+        /* NAVIGATION */
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: white; position: relative; }
-        .nav-item.active i { color: #000; z-index: 2; font-size: 22px; }
-        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 54px; height: 54px; background: #ffffff; border-radius: 15px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
+        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
@@ -63,32 +68,30 @@
     </div>
 
     <div class="balance-card">
-        <div class="bal-label">BALANCE</div>
+        <div class="bal-label">Total Balance</div>
         <div class="bal-amount" id="mainBal">₹...</div>
     </div>
 
-    <div class="wallet-panel" style="border: 1.5px dashed #ffd700; text-align: center; padding: 12px;">
-        <div class="panel-title" style="color:#ffd700; justify-content: center; margin-bottom: 5px;"><i class="fas fa-university"></i> DEPOSIT</div>
-        <p style="font-size: 10px; color: #888; margin-bottom: 5px;">Scan & send screenshot</p>
-        
+    <div class="wallet-panel" style="border: 2px dashed #ffd700; text-align: center;">
+        <div class="panel-title" style="color:#ffd700; justify-content: center;"><i class="fas fa-university"></i> DEPOSIT</div>
         <img src="my_qr.jpg" class="qr-img" alt="QR">
         <br>
-        <a href="https://wa.me/917008170291?text=Bhai, payment done. Add balance." class="btn-action btn-wa-small">
+        <a href="https://wa.me/917008170291?text=Bhai, payment kar diya hai. Add balance." class="btn-wa-small">
             <i class="fab fa-whatsapp"></i> SEND SCREENSHOT
         </a>
     </div>
 
     <div class="wallet-panel">
         <div class="panel-title" style="color:#00f2fe;"><i class="fas fa-money-bill-wave"></i> WITHDRAW</div>
-        <input type="number" id="witAmt" placeholder="Amount">
-        <input type="text" id="witUpi" placeholder="UPI ID">
-        <button class="btn-action btn-blue" id="btnWithdraw" onclick="withdraw()">WITHDRAW</button>
+        <input type="number" id="witAmt" placeholder="Amount (Min ₹50)">
+        <input type="text" id="witUpi" placeholder="UPI ID (e.g. name@upi)">
+        <button class="btn-action btn-blue" id="btnWithdraw" onclick="withdraw()">WITHDRAW NOW</button>
     </div>
 
     <div class="wallet-panel">
-        <div class="panel-title" style="color:#ffd700;"><i class="fas fa-gift"></i> REDEEM CODE</div>
+        <div class="panel-title" style="color:#ffd700;"><i class="fas fa-gift"></i> REDEEM</div>
         <input type="text" id="promoCode" placeholder="Enter Promo Code">
-        <button class="btn-action btn-yellow" onclick="redeem()">REDEEM</button>
+        <button class="btn-action btn-yellow" id="btnRedeem" onclick="redeem()">REDEEM CODE</button>
     </div>
 
     <nav class="bottom-nav">
@@ -100,7 +103,10 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwND_rIFJw-9MwiRGhOP0_j4mauz8ICSro5e3GbNpWfUW9zDGEHFS8VHeB5Ac35IWQMDw/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyxyEAjkJ1iHvxrv-OQbx_W0m3czutHE5ufhunAn1CkF1KtQ9X_7G58kxfJSBFLOe9WjQ/exec";
+        
+        // 🔒 Global Lock Variable
+        let isProcessing = false;
 
         function syncBalance() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
@@ -111,28 +117,65 @@
             });
         }
 
-        function withdraw() {
+        async function withdraw() {
+            if (isProcessing) return; // Block double click
+
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             let user = userData ? userData.name : "TestUser";
             let amt = Number(document.getElementById('witAmt').value);
             let upi = document.getElementById('witUpi').value.trim();
             let currentBal = Number(document.getElementById('mainBal').innerText.replace('₹', ''));
 
-            if(!amt || !upi) return alert("Fill details!");
-            if(amt < 50) return alert("Min ₹50!");
-            if(amt > currentBal) return alert("No Balance!");
+            if(!amt || !upi) return alert("Pura details bharo!");
+            if(amt < 50) return alert("Min ₹50 nikal sakte hain!");
+            if(amt > currentBal) return alert("❌ Balance kam hai!");
+
+            // 🛡️ LOCK START
+            isProcessing = true;
+            const btn = document.getElementById('btnWithdraw');
+            btn.innerText = "SENDING REQUEST..."; 
+            btn.disabled = true;
 
             fetch(scriptURL + "?action=withdraw&username="+encodeURIComponent(user)+"&amount="+amt+"&upi="+encodeURIComponent(upi), {method:'POST', mode:'no-cors'})
-            .then(() => { alert("Sent!"); location.reload(); });
+            .then(() => { 
+                alert("✅ Success! Request received."); 
+                location.reload(); 
+            })
+            .catch(() => {
+                alert("Network error!");
+                isProcessing = false;
+                btn.innerText = "WITHDRAW NOW";
+                btn.disabled = false;
+            });
         }
 
-        function redeem() {
+        async function redeem() {
+            if (isProcessing) return; // Block double click
+
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             let user = userData ? userData.name : "TestUser";
-            let code = document.getElementById('promoCode').value;
+            let code = document.getElementById('promoCode').value.trim();
+            
+            if(!code) return alert("Promo code dalo!");
+
+            isProcessing = true;
+            const btn = document.getElementById('btnRedeem');
+            btn.innerText = "PROCESSING..."; 
+            btn.disabled = true;
+
             fetch(scriptURL + "?action=redeem&username="+encodeURIComponent(user)+"&code="+encodeURIComponent(code), {method:'POST', mode:'no-cors'})
-            .then(() => { alert("Done!"); location.reload(); });
+            .then(() => { 
+                alert("✅ Redeem Request Sent!"); 
+                location.reload(); 
+            })
+            .catch(() => {
+                alert("Network error!");
+                isProcessing = false;
+                btn.innerText = "REDEEM CODE";
+                btn.disabled = false;
+            });
         }
+
         window.onload = syncBalance;
     </script>
 </body>
