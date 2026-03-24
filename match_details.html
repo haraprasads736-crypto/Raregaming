@@ -7,61 +7,132 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
-        .match-header { position: relative; width: 100%; height: 250px; }
-        .match-header img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .header-text { position: absolute; bottom: 30px; left: 20px; }
-        .match-title { font-size: 28px; font-weight: 800; text-transform: uppercase; color: #00f2fe; }
-        .status-text { font-size: 12px; color: #ff007a; font-weight: 800; text-transform: uppercase; }
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 100px; }
+        
+        .header { padding: 20px; display: flex; align-items: center; gap: 15px; }
+        .header i { font-size: 20px; color: #00f2fe; }
+        .header span { font-size: 18px; font-weight: 800; text-transform: uppercase; }
 
-        .details-container { padding: 20px; }
+        .banner-container { width: 100%; height: 200px; position: relative; overflow: hidden; }
+        .banner-container img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+        
         .info-card { 
-            background: #111116; border: 1px solid #1f1f25; border-radius: 20px; 
-            padding: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px;
+            background: #111116; margin: -30px 20px 20px 20px; border-radius: 20px; 
+            padding: 20px; border: 1px solid #1f1f25; position: relative; z-index: 10;
         }
-        .info-item { text-align: left; }
-        .info-label { font-size: 11px; color: #666; text-transform: uppercase; font-weight: 600; }
-        .info-value { font-size: 16px; font-weight: 800; color: #fff; margin-top: 5px; }
+
+        .match-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; color: #00f2fe; }
+        
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .stat-box { background: #000; padding: 10px; border-radius: 10px; text-align: center; border: 1px solid #2a2a30; }
+        .stat-label { font-size: 10px; color: #888; text-transform: uppercase; }
+        .stat-val { font-size: 14px; font-weight: 800; color: #fff; }
+
+        .rules-panel { padding: 20px; }
+        .rules-title { font-size: 14px; font-weight: 800; margin-bottom: 10px; color: #ffd700; }
+        .rule-item { font-size: 12px; color: #aaa; margin-bottom: 8px; display: flex; gap: 10px; }
 
         .btn-join { 
-            width: 100%; padding: 18px; background: #333; color: #666; border: none; 
-            border-radius: 12px; font-size: 16px; font-weight: 800; text-transform: uppercase;
-            cursor: not-allowed;
+            position: fixed; bottom: 30px; left: 20px; right: 20px; 
+            background: #00f2fe; color: #000; padding: 15px; text-align: center;
+            border-radius: 15px; font-weight: 800; text-decoration: none; text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(0, 242, 254, 0.4);
         }
-
-        /* NAVIGATION SYSTEM */
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; }
-        .nav-item.active { color: white; position: relative; }
-        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
-        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
-    <div class="match-header">
-        <img id="matchImg" src="br_poster.jpg" alt="Poster">
-        <div class="header-text">
-            <div id="matchNameDisplay" class="match-title">BR MATCH</div>
-            <div class="status-text">STATUS: CLOSED</div>
+
+    <div class="header">
+        <a href="index.html" style="color: inherit;"><i class="fas fa-arrow-left"></i></a>
+        <span id="headerTitle">MATCH DETAILS</span>
+    </div>
+
+    <div class="banner-container">
+        <img id="matchBanner" src="br_poster.jpg" alt="Poster">
+    </div>
+
+    <div class="info-card">
+        <div class="match-title" id="displayMatchTitle">LOADING...</div>
+        <div id="matchMap" style="font-size: 12px; color: #888;">Map: Bermuda</div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">Win Prize</div>
+                <div class="stat-val" id="winPrize">₹--</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Per Kill</div>
+                <div class="stat-val" id="perKill">₹--</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Entry Fee</div>
+                <div class="stat-val" id="entryFee">₹--</div>
+            </div>
         </div>
     </div>
-    <div class="details-container">
-        <div class="info-card">
-            <div class="info-item"><div class="info-label">Date</div><div class="info-value">23 March 2026</div></div>
-            <div class="info-item"><div class="info-label">Time</div><div class="info-value">09:00 PM</div></div>
-            <div class="info-item"><div class="info-label">Entry Fee</div><div class="info-value">₹20</div></div>
-            <div class="info-item"><div class="info-label">Map</div><div class="info-value">Bermuda</div></div>
-        </div>
-        <button class="btn-join" disabled>REGISTRATION CLOSED</button>
+
+    <div class="rules-panel">
+        <div class="rules-title">MATCH RULES & INFO</div>
+        <div class="rule-item"><i class="fas fa-check-circle"></i> No hacking allowed.</div>
+        <div class="rule-item"><i class="fas fa-check-circle"></i> Room ID & Pass will be sent via WhatsApp.</div>
+        <div class="rule-item"><i class="fas fa-check-circle"></i> Match starts on time. Be ready.</div>
     </div>
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
-    </nav>
-    <div class="system-nav-bar"></div>
+
+    <a href="register.html" class="btn-join" id="joinBtn">JOIN MATCH</a>
+
+    <script>
+        // URL se Match Name nikalna
+        const urlParams = new URLSearchParams(window.location.search);
+        const matchType = urlParams.get('match');
+
+        // Match ki list aur unka data
+        const matchData = {
+            "BR SQUAD": {
+                prize: "₹100",
+                kill: "₹5",
+                fee: "₹20",
+                map: "Bermuda",
+                img: "br_poster.jpg"
+            },
+            "CS SQUAD": {
+                prize: "₹80",
+                kill: "₹0",
+                fee: "₹30",
+                map: "Nextra (4v4)",
+                img: "cs_poster.jpg"
+            },
+            "LONE WOLF": {
+                prize: "₹20",
+                kill: "₹0",
+                fee: "₹10",
+                map: "Iron Cage",
+                img: "lw_poster.jpg"
+            },
+            "1V1 BATTLE": {
+                prize: "₹50",
+                kill: "₹0",
+                fee: "₹25",
+                map: "Custom Map",
+                img: "1v1_poster.jpg"
+            }
+        };
+
+        // Page ko update karna
+        if (matchType && matchData[matchType]) {
+            const data = matchData[matchType];
+            document.getElementById('displayMatchTitle').innerText = matchType;
+            document.getElementById('headerTitle').innerText = matchType;
+            document.getElementById('winPrize').innerText = data.prize;
+            document.getElementById('perKill').innerText = data.kill;
+            document.getElementById('entryFee').innerText = data.fee;
+            document.getElementById('matchMap').innerText = "Map: " + data.map;
+            document.getElementById('matchBanner').src = data.img;
+            
+            // Join link mein bhi naam pass karna
+            document.getElementById('joinBtn').href = "register.html?match=" + encodeURIComponent(matchType);
+        } else {
+            document.getElementById('displayMatchTitle').innerText = "Match Not Found";
+        }
+    </script>
 </body>
 </html>
