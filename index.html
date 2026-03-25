@@ -22,7 +22,7 @@
 
         .section-title { font-size: 18px; font-weight: 800; margin: 15px 20px; text-transform: uppercase; }
 
-        /* 🔥 COLORFUL MATCH GRID 🔥 */
+        /* 🔥 MATCH GRID 🔥 */
         .match-grid { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; 
         }
@@ -30,8 +30,8 @@
             position: relative; border-radius: 20px; overflow: hidden; 
             aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1);
             text-decoration: none; display: block;
+            cursor: default;
         }
-        /* ✨ Isse images wapas colorful ho gayi ✨ */
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         
         .card-overlay { 
@@ -40,7 +40,19 @@
             padding: 15px 10px; text-align: center; box-sizing: border-box;
         }
         .match-name { font-size: 13px; font-weight: 800; color: #fff; text-transform: uppercase; margin: 0; }
-        .status-closed { color: #ff007a; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
+        
+        /* Registration Closed Style */
+        .status-closed { 
+            color: #ff007a; 
+            font-size: 9px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            margin-top: 5px;
+            background: rgba(255, 0, 122, 0.1);
+            padding: 2px 5px;
+            border-radius: 4px;
+            display: inline-block;
+        }
 
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
         .action-card {
@@ -77,37 +89,37 @@
 
     <div class="section-title">E-sports Matches</div>
     <div class="match-grid">
-        <a href="match_details.html?match=BR SQUAD" class="match-card">
+        <div class="match-card">
             <img src="br_poster.jpg" alt="BR SQUAD">
             <div class="card-overlay">
                 <p class="match-name">BR SQUAD</p>
-                <div class="status-closed">CLOSED</div>
+                <div class="status-closed">REGISTRATION CLOSED</div>
             </div>
-        </a>
+        </div>
 
-        <a href="match_details.html?match=CS SQUAD" class="match-card">
+        <div class="match-card">
             <img src="cs_poster.jpg" alt="CLASH SQUAD">
             <div class="card-overlay">
                 <p class="match-name">CS SQUAD</p>
-                <div class="status-closed">CLOSED</div>
+                <div class="status-closed">REGISTRATION CLOSED</div>
             </div>
-        </a>
+        </div>
         
-        <a href="match_details.html?match=LONE WOLF" class="match-card">
+        <div class="match-card">
             <img src="lw_poster.jpg" alt="LONE WOLF">
             <div class="card-overlay">
                 <p class="match-name">LONE WOLF</p>
-                <div class="status-closed">CLOSED</div>
+                <div class="status-closed">REGISTRATION CLOSED</div>
             </div>
-        </a>
+        </div>
 
-        <a href="match_details.html?match=1V1 BATTLE" class="match-card">
+        <div class="match-card">
             <img src="1v1_poster.jpg" alt="1V1 BATTLE">
             <div class="card-overlay">
                 <p class="match-name">1V1 BATTLE</p>
-                <div class="status-closed">CLOSED</div>
+                <div class="status-closed">REGISTRATION CLOSED</div>
             </div>
-        </a>
+        </div>
     </div>
 
     <div class="section-title">Quick Actions</div>
