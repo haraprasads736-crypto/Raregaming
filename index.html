@@ -11,12 +11,11 @@
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 0; overflow-x: hidden; 
-            /* 📱 Safe Area space taaki content bar ke niche na dabe */
-            padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); 
+            padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px)); 
         }
 
         .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #00f2fe; }
+        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; color: #00f2fe; }
         .wallet-pill { 
             background: rgba(0, 242, 254, 0.1); border: 1.5px solid #00f2fe; 
             padding: 6px 15px; border-radius: 10px; color: #00f2fe; font-weight: 800; font-size: 14px;
@@ -25,61 +24,41 @@
         .section-title { font-size: 18px; font-weight: 800; margin: 15px 20px; text-transform: uppercase; }
 
         /* 🔥 MATCH GRID 🔥 */
-        .match-grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; 
-        }
-        .match-card { 
-            position: relative; border-radius: 20px; overflow: hidden; 
-            aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1);
-            text-decoration: none; display: block;
-            cursor: default;
-        }
+        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
+        .match-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1); }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-        
-        .card-overlay { 
-            position: absolute; bottom: 0; width: 100%; 
-            background: linear-gradient(transparent, rgba(0,0,0,0.95));
-            padding: 15px 10px; text-align: center; box-sizing: border-box;
-        }
-        .match-name { font-size: 13px; font-weight: 800; color: #fff; text-transform: uppercase; margin: 0; }
-        
-        .status-closed { 
-            color: #ff007a; font-size: 9px; font-weight: 800; text-transform: uppercase; 
-            margin-top: 5px; background: rgba(255, 0, 122, 0.1); padding: 2px 5px; border-radius: 4px; display: inline-block;
-        }
+        .card-overlay { position: absolute; bottom: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); padding: 15px 10px; text-align: center; }
+        .status-closed { color: #ff007a; font-size: 9px; font-weight: 800; text-transform: uppercase; margin-top: 5px; background: rgba(255, 0, 122, 0.1); padding: 2px 5px; border-radius: 4px; display: inline-block; }
 
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
-        .action-card {
-            background: #111116; border: 1px solid #1f1f25; border-radius: 15px;
-            padding: 20px 10px; text-align: center; text-decoration: none; display: block;
-        }
+        .action-card { background: #111116; border: 1px solid #1f1f25; border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; display: block; }
         .action-card i { font-size: 28px; margin-bottom: 10px; display: block; color: #00f2fe; }
         .action-card span { font-size: 11px; font-weight: 800; color: #fff; text-transform: uppercase; }
 
-        /* 🌟 FIXED NAVIGATION (Universal for all phones) 🌟 */
+        /* 🌟 GRAY NAVIGATION LOOK (Fixed) 🌟 */
         .bottom-nav { 
             position: fixed; 
             bottom: 0; 
             left: 0; 
             width: 100%; 
-            /* 👇 Safe Area padding for buttons/notches */
-            padding-bottom: env(safe-area-inset-bottom, 0px); 
-            height: calc(70px + env(safe-area-inset-bottom, 0px)); 
-            background: #111116; 
+            /* Gray Background with extra height for safety area */
+            background: #4f515e; 
             display: flex; 
             justify-content: space-around; 
             align-items: center; 
-            border-top: 1px solid rgba(255, 255, 255, 0.05); 
             z-index: 1000; 
+            height: calc(75px + env(safe-area-inset-bottom, 0px));
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+        .nav-item { text-decoration: none; color: #ccc; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
         .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: white; }
         .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
         .nav-item.active::before { 
-            content: ''; position: absolute; top: -16px; width: 58px; height: 58px; 
+            content: ''; position: absolute; top: -18px; width: 58px; height: 58px; 
             background: #ffffff; border-radius: 16px; transform: rotate(45deg); 
-            z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); 
+            z-index: -1; box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); 
         }
     </style>
 </head>
@@ -87,50 +66,23 @@
 
     <div class="header-top">
         <div class="brand-name">RARE GAMING</div>
-        <div class="wallet-pill" id="walletBal">₹...</div>
+        <div class="wallet-pill" id="walletBal">₹0</div>
     </div>
 
     <div class="section-title">E-sports Matches</div>
     <div class="match-grid">
-        <div class="match-card">
-            <img src="br_poster.jpg" alt="BR SQUAD">
-            <div class="card-overlay">
-                <p class="match-name">BR SQUAD</p>
-                <div class="status-closed">REGISTRATION CLOSED</div>
-            </div>
-        </div>
-
-        <div class="match-card">
-            <img src="cs_poster.jpg" alt="CLASH SQUAD">
-            <div class="card-overlay">
-                <p class="match-name">CS SQUAD</p>
-                <div class="status-closed">REGISTRATION CLOSED</div>
-            </div>
-        </div>
-        
-        <div class="match-card">
-            <img src="lw_poster.jpg" alt="LONE WOLF">
-            <div class="card-overlay">
-                <p class="match-name">LONE WOLF</p>
-                <div class="status-closed">REGISTRATION CLOSED</div>
-            </div>
-        </div>
-
-        <div class="match-card">
-            <img src="1v1_poster.jpg" alt="1V1 BATTLE">
-            <div class="card-overlay">
-                <p class="match-name">1V1 BATTLE</p>
-                <div class="status-closed">REGISTRATION CLOSED</div>
-            </div>
-        </div>
+        <div class="match-card"><img src="br_poster.jpg"><div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">BR SQUAD</p><div class="status-closed">CLOSED</div></div></div>
+        <div class="match-card"><img src="cs_poster.jpg"><div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">CS SQUAD</p><div class="status-closed">CLOSED</div></div></div>
+        <div class="match-card"><img src="lw_poster.jpg"><div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">LONE WOLF</p><div class="status-closed">CLOSED</div></div></div>
+        <div class="match-card"><img src="1v1_poster.jpg"><div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">1V1 BATTLE</p><div class="status-closed">CLOSED</div></div></div>
     </div>
 
     <div class="section-title">Quick Actions</div>
     <div class="action-grid">
-        <a href="teams.html" class="action-card"><i class="fas fa-shield-alt"></i><span>Teams Info</span></a>
-        <a href="https://wa.me/917008170291" class="action-card"><i class="fas fa-comment-dots"></i><span>Contact</span></a>
-        <a href="prizes.html" class="action-card"><i class="fas fa-trophy"></i><span>Prize Pool</span></a>
-        <a href="points.html" class="action-card"><i class="fas fa-chart-bar"></i><span>Points</span></a>
+        <a href="#" class="action-card"><i class="fas fa-shield-alt"></i><span>Teams Info</span></a>
+        <a href="#" class="action-card"><i class="fas fa-comment-dots"></i><span>Contact</span></a>
+        <a href="#" class="action-card"><i class="fas fa-trophy"></i><span>Prize Pool</span></a>
+        <a href="#" class="action-card"><i class="fas fa-chart-bar"></i><span>Points</span></a>
     </div>
 
     <nav class="bottom-nav">
@@ -144,11 +96,7 @@
         const scriptURL = "https://script.google.com/macros/s/AKfycbyxyEAjkJ1iHvxrv-OQbx_W0m3czutHE5ufhunAn1CkF1KtQ9X_7G58kxfJSBFLOe9WjQ/exec";
         function syncBalance() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            // 🛡️ TestUser wala lafda fix
-            if (!userData) {
-                document.getElementById('walletBal').innerText = "₹0";
-                return;
-            }
+            if (!userData) { document.getElementById('walletBal').innerText = "₹0"; return; }
             fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(userData.name))
             .then(res => res.text()).then(bal => { 
                 document.getElementById('walletBal').innerText = "₹" + (bal || 0); 
