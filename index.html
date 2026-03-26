@@ -10,7 +10,9 @@
         
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 100px; 
+            margin: 0; padding: 0; overflow-x: hidden; 
+            /* 📱 Safe Area space taaki content bar ke niche na dabe */
+            padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); 
         }
 
         .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -30,6 +32,7 @@
             position: relative; border-radius: 20px; overflow: hidden; 
             aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1);
             text-decoration: none; display: block;
+            cursor: default;
         }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         
@@ -53,15 +56,25 @@
         .action-card i { font-size: 28px; margin-bottom: 10px; display: block; color: #00f2fe; }
         .action-card span { font-size: 11px; font-weight: 800; color: #fff; text-transform: uppercase; }
 
-        /* 🌟 NAVIGATION SYSTEM (Fixed for All Phones) 🌟 */
+        /* 🌟 FIXED NAVIGATION (Universal for all phones) 🌟 */
         .bottom-nav { 
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; 
-            background: #111116; display: flex; justify-content: space-around; 
-            align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            /* 👇 Safe Area padding for buttons/notches */
+            padding-bottom: env(safe-area-inset-bottom, 0px); 
+            height: calc(70px + env(safe-area-inset-bottom, 0px)); 
+            background: #111116; 
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center; 
+            border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000; 
         }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
         .nav-item i { font-size: 22px; margin-bottom: 5px; }
-        .nav-item.active { color: white; position: relative; }
+        .nav-item.active { color: white; }
         .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
         .nav-item.active::before { 
             content: ''; position: absolute; top: -16px; width: 58px; height: 58px; 
@@ -74,7 +87,7 @@
 
     <div class="header-top">
         <div class="brand-name">RARE GAMING</div>
-        <div class="wallet-pill" id="walletBal">₹0</div>
+        <div class="wallet-pill" id="walletBal">₹...</div>
     </div>
 
     <div class="section-title">E-sports Matches</div>
@@ -86,13 +99,15 @@
                 <div class="status-closed">REGISTRATION CLOSED</div>
             </div>
         </div>
+
         <div class="match-card">
-            <img src="cs_poster.jpg" alt="CS SQUAD">
+            <img src="cs_poster.jpg" alt="CLASH SQUAD">
             <div class="card-overlay">
                 <p class="match-name">CS SQUAD</p>
                 <div class="status-closed">REGISTRATION CLOSED</div>
             </div>
         </div>
+        
         <div class="match-card">
             <img src="lw_poster.jpg" alt="LONE WOLF">
             <div class="card-overlay">
@@ -100,6 +115,7 @@
                 <div class="status-closed">REGISTRATION CLOSED</div>
             </div>
         </div>
+
         <div class="match-card">
             <img src="1v1_poster.jpg" alt="1V1 BATTLE">
             <div class="card-overlay">
@@ -128,7 +144,11 @@
         const scriptURL = "https://script.google.com/macros/s/AKfycbyxyEAjkJ1iHvxrv-OQbx_W0m3czutHE5ufhunAn1CkF1KtQ9X_7G58kxfJSBFLOe9WjQ/exec";
         function syncBalance() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!userData) return;
+            // 🛡️ TestUser wala lafda fix
+            if (!userData) {
+                document.getElementById('walletBal').innerText = "₹0";
+                return;
+            }
             fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(userData.name))
             .then(res => res.text()).then(bal => { 
                 document.getElementById('walletBal').innerText = "₹" + (bal || 0); 
