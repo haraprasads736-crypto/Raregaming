@@ -14,11 +14,10 @@
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 0; overflow-x: hidden; 
-            /* Puraane code jaisa padding */
             padding-bottom: 140px; 
         }
 
-        /* 🌟 DOUBLE WALLET HEADER 🌟 */
+        /* 🌟 HEADER 🌟 */
         .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
         .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; color: #00f2fe; }
         
@@ -32,12 +31,12 @@
 
         .section-title { font-size: 18px; font-weight: 800; margin: 25px 20px 15px 20px; text-transform: uppercase; border-left: 4px solid #00f2fe; padding-left: 10px; }
 
-        /* 🔥 MATCH GRID 🔥 */
+        /* 🔥 MATCH GRID (4 Matches Fix) 🔥 */
         .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
         .match-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1); }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         .card-overlay { position: absolute; bottom: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); padding: 15px 10px; text-align: center; }
-        .status-closed { color: #ff007a; font-size: 9px; font-weight: 800; text-transform: uppercase; margin-top: 5px; background: rgba(255, 0, 122, 0.1); padding: 2px 5px; border-radius: 4px; display: inline-block; }
+        .status-closed { color: #ff007a; font-size: 9px; font-weight: 800; text-transform: uppercase; margin-top: 5px; background: rgba(255, 0, 122, 0.1); padding: 2px 2px; border-radius: 4px; display: inline-block; }
 
         /* 💰 REWARD CARD 💰 */
         .reward-card { background: linear-gradient(135deg, #111116 0%, #1a1a24 100%); border: 1px solid #ffaa00; border-radius: 15px; padding: 20px; margin: 20px; text-align: center; }
@@ -51,29 +50,13 @@
         .action-card i { font-size: 28px; margin-bottom: 10px; display: block; color: #00f2fe; }
         .action-card span { font-size: 11px; font-weight: 800; color: #fff; text-transform: uppercase; }
 
-        /* 🌟 NAVIGATION BAR (PURANA LOOK) 🌟 */
-        .bottom-nav { 
-            position: fixed; 
-            bottom: 48px; /* Purana gap */
-            left: 0; 
-            width: 100%; 
-            height: 70px; /* Purani height */
-            background: #111116; /* Purana black background */
-            display: flex; justify-content: space-around; align-items: center; 
-            border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
-        }
-        
+        /* 🌟 NAVIGATION BAR 🌟 */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
         .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: white; position: relative; }
         .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
-        .nav-item.active::before { 
-            content: ''; position: absolute; top: -16px; width: 58px; height: 58px; 
-            background: #ffffff; border-radius: 16px; transform: rotate(45deg); 
-            z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); 
-        }
-        
-        /* Gray Patti in system space */
+        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
     </style>
 </head>
@@ -125,32 +108,21 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">
-            <i class="fas fa-home"></i>
-            <span>HOME</span>
-        </a>
-        <a href="earn.html" class="nav-item">
-            <i class="fas fa-wallet"></i>
-            <span>EARN</span>
-        </a>
-        <a href="winners.html" class="nav-item">
-            <i class="fas fa-crown"></i>
-            <span>WINNERS</span>
-        </a>
-        <a href="profile.html" class="nav-item">
-            <i class="fas fa-user-circle"></i>
-            <span>PROFILE</span>
-        </a>
+        <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
-    <div class="system-nav-bar"></div> <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbylJ8ulyiJip3dfIb3ZnamvV0w6sdMN5j2oaIZfzwnDK5HwWQT3V8SkVGs1r5TzOxEUKg/exec";
+    <div class="system-nav-bar"></div>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxav2f0FIc_pmd-ntNG7szqzECf_MXkDSYa0OO5JhTyijFTMEgVgff5cxpBMm8Z9C3H/exec";
         let isAdLoading = false;
 
         function syncData() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if (!userData) {
-                document.getElementById('walletBal').innerText = "₹0";
-                document.getElementById('rareCoins').innerText = "0";
+                window.location.href = "login.html";
                 return;
             }
             fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(userData.name))
@@ -190,6 +162,7 @@
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-play-circle"></i> Watch Video & Earn';
         }
+
         window.onload = syncData;
     </script>
 </body>
