@@ -2,45 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
-        .profile-header { padding: 40px 20px; text-align: center; background: linear-gradient(to bottom, #111116, #050508); }
-        .user-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #00f2fe; margin-bottom: 15px; }
-        .user-name { font-size: 20px; font-weight: 800; text-transform: uppercase; color: #00f2fe; }
-        .wallet-card { background: #111116; margin: 20px; border-radius: 20px; padding: 20px; border: 1px solid #1f1f25; display: flex; justify-content: space-between; align-items: center; }
-        .bal-label { font-size: 12px; color: #888; font-weight: 600; }
-        .bal-amount { font-size: 24px; font-weight: 800; color: #fff; }
-        .stats-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 0 20px; }
-        .stat-card { background: #111116; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #1f1f25; }
-        .stat-num { font-size: 18px; font-weight: 800; color: #00f2fe; }
-        .stat-label { font-size: 10px; color: #666; text-transform: uppercase; margin-top: 5px; }
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; padding-bottom: 140px; }
+        
+        .profile-card { background: #111116; border: 1px solid #00f2fe; border-radius: 20px; padding: 30px 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 0 20px rgba(0, 242, 254, 0.1); }
+        .user-avatar { font-size: 60px; color: #00f2fe; margin-bottom: 15px; }
+        
+        .promo-box { background: #1a1a24; border: 1px dashed #ffaa00; border-radius: 15px; padding: 20px; margin-bottom: 20px; text-align: center; }
+        input { width: 90%; background: #050508; border: 1px solid #333; color: white; padding: 12px; border-radius: 10px; margin: 10px 0; text-align: center; font-weight: 600; outline: none; }
+        input:focus { border-color: #ffaa00; }
+        
+        .btn-apply { background: #ffaa00; color: black; border: none; padding: 12px 30px; border-radius: 25px; font-weight: 800; cursor: pointer; width: 100%; text-transform: uppercase; }
+        .btn-logout { background: #ff007a; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; width: 100%; margin-top: 20px; cursor: pointer; }
+
+        /* Navigation Bar */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: white; position: relative; }
-        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255,255,255,0.9); }
-        .nav-item.active i { color: #000; }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
+        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; }
     </style>
 </head>
 <body>
-    <div class="profile-header">
-        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="user-img">
-        <div class="user-name" id="uName">LOADING...</div>
+
+    <div class="profile-card">
+        <i class="fas fa-user-circle user-avatar"></i>
+        <h2 id="pName" style="margin: 0; text-transform: uppercase; letter-spacing: 1px;">User</h2>
+        <p style="color: #666; font-size: 14px;">Member of RARE GAMING</p>
     </div>
-    <div class="wallet-card">
-        <div><div class="bal-label">TOTAL BALANCE</div><div class="bal-amount" id="uBal">₹0</div></div>
-        <button style="background:#00f2fe; border:none; padding:10px 20px; border-radius:10px; font-weight:800;">WITHDRAW</button>
+
+    <div class="promo-box">
+        <h3 style="color: #ffaa00; margin: 0; font-size: 16px; text-transform: uppercase;">Apply Promo Code</h3>
+        <p style="font-size: 11px; color: #ccc; margin-top: 5px;">Enter a code to get instant balance!</p>
+        <input type="text" id="promoInput" placeholder="ENTER CODE HERE">
+        <button class="btn-apply" onclick="applyPromo()">Apply Now</button>
     </div>
-    <div class="stats-container">
-        <div class="stat-card"><div class="stat-num">00</div><div class="stat-label">Matches</div></div>
-        <div class="stat-card"><div class="stat-num">00</div><div class="stat-label">Won</div></div>
-        <div class="stat-card"><div class="stat-num">00</div><div class="stat-label">Kills</div></div>
-    </div>
+
+    <button class="btn-logout" onclick="logout()">Logout Account</button>
+
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
@@ -48,16 +52,46 @@
         <a href="profile.html" class="nav-item active"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
+
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyxyEAjkJ1iHvxrv-OQbx_W0m3czutHE5ufhunAn1CkF1KtQ9X_7G58kxfJSBFLOe9WjQ/exec";
-        function loadProfile() {
-            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if (!userData) return window.location.href="login.html";
-            document.getElementById('uName').innerText = userData.name;
-            fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(userData.name))
-            .then(res => res.text()).then(bal => { document.getElementById('uBal').innerText = "₹" + (bal || 0); });
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxav2f0FIc_pmd-ntNG7szqzECf_MXkDSYa0OO5JhTyijFTMEgVgff5cxpBMm8Z9C3H/exec";
+        
+        // Login status check
+        let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+        if(!userData) {
+            window.location.href = "login.html";
+        } else {
+            document.getElementById('pName').innerText = userData.name;
         }
-        window.onload = loadProfile;
+
+        function applyPromo() {
+            let code = document.getElementById('promoInput').value;
+            if(!code) return alert("Please enter a promo code!");
+
+            let btn = document.querySelector('.btn-apply');
+            btn.innerText = "CHECKING...";
+            btn.disabled = true;
+
+            fetch(scriptURL + "?action=applyPromo&username=" + encodeURIComponent(userData.name) + "&promo=" + encodeURIComponent(code))
+            .then(res => res.text())
+            .then(resp => {
+                alert(resp);
+                document.getElementById('promoInput').value = "";
+                btn.innerText = "APPLY NOW";
+                btn.disabled = false;
+            })
+            .catch(e => {
+                alert("Error connecting to server!");
+                btn.disabled = false;
+            });
+        }
+
+        function logout() {
+            if(confirm("Are you sure you want to logout?")) {
+                localStorage.clear();
+                window.location.href = "login.html";
+            }
+        }
     </script>
 </body>
 </html>
