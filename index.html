@@ -14,8 +14,8 @@
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 0; overflow-x: hidden; 
-            /* Niche se extra space taki navigation saaf dikhe */
-            padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); 
+            /* Puraane code jaisa padding */
+            padding-bottom: 140px; 
         }
 
         /* 🌟 DOUBLE WALLET HEADER 🌟 */
@@ -30,9 +30,9 @@
         }
         .coin-pill { border-color: #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1); }
 
-        .section-title { font-size: 18px; font-weight: 800; margin: 15px 20px; text-transform: uppercase; }
+        .section-title { font-size: 18px; font-weight: 800; margin: 25px 20px 15px 20px; text-transform: uppercase; border-left: 4px solid #00f2fe; padding-left: 10px; }
 
-        /* 🔥 MATCH GRID - ALL 4 MATCHES 🔥 */
+        /* 🔥 MATCH GRID 🔥 */
         .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
         .match-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1); }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
@@ -42,43 +42,39 @@
         /* 💰 REWARD CARD 💰 */
         .reward-card { background: linear-gradient(135deg, #111116 0%, #1a1a24 100%); border: 1px solid #ffaa00; border-radius: 15px; padding: 20px; margin: 20px; text-align: center; }
         .reward-title { font-size: 16px; font-weight: 800; color: #ffaa00; margin-bottom: 5px; text-transform: uppercase;}
-        .btn-reward { background: linear-gradient(90deg, #ff8a00, #e52e71); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; text-transform: uppercase; width: 100%; }
+        .btn-reward { background: linear-gradient(90deg, #ff8a00, #e52e71); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; text-transform: uppercase; width: 100%; box-shadow: 0 4px 15px rgba(229, 46, 113, 0.3); }
 
-        /* 🌟 NAVIGATION BAR (VISIBLE GRAY) 🌟 */
+        /* 🌟 QUICK ACTIONS 🌟 */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 20px 20px; }
+        .action-card { background: #111116; border: 1px solid #1f1f25; border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; display: block; transition: 0.3s; }
+        .action-card:active { transform: scale(0.95); background: #1a1a24; }
+        .action-card i { font-size: 28px; margin-bottom: 10px; display: block; color: #00f2fe; }
+        .action-card span { font-size: 11px; font-weight: 800; color: #fff; text-transform: uppercase; }
+
+        /* 🌟 NAVIGATION BAR (PURANA LOOK) 🌟 */
         .bottom-nav { 
             position: fixed; 
-            bottom: 0; 
+            bottom: 48px; /* Purana gap */
             left: 0; 
             width: 100%; 
-            background: #2c2e3a; /* Thoda gehra gray taki black se alag dikhe */
-            display: flex; 
-            justify-content: space-around; 
-            align-items: center; 
-            z-index: 2000; 
-            height: calc(80px + env(safe-area-inset-bottom, 0px));
-            padding-bottom: env(safe-area-inset-bottom, 0px);
-            border-top: 2px solid rgba(0, 242, 254, 0.3); /* Cyan line for premium look */
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+            height: 70px; /* Purani height */
+            background: #111116; /* Purana black background */
+            display: flex; justify-content: space-around; align-items: center; 
+            border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
         }
-        .nav-item { text-decoration: none; color: #888fb1; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
-        .nav-item i { font-size: 24px; margin-bottom: 4px; }
         
-        /* Active State (White Diamond) */
-        .nav-item.active { color: #ffffff; }
-        .nav-item.active i { color: #000; z-index: 5; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; }
+        .nav-item.active { color: white; position: relative; }
+        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
         .nav-item.active::before { 
-            content: ''; 
-            position: absolute; 
-            top: -12px; 
-            width: 55px; 
-            height: 55px; 
-            background: #ffffff; 
-            border-radius: 14px; 
-            transform: rotate(45deg); 
-            z-index: 1; 
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6); 
+            content: ''; position: absolute; top: -16px; width: 58px; height: 58px; 
+            background: #ffffff; border-radius: 16px; transform: rotate(45deg); 
+            z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); 
         }
-        .nav-item span { z-index: 5; margin-top: 2px; }
+        
+        /* Gray Patti in system space */
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
     </style>
 </head>
 <body>
@@ -113,10 +109,19 @@
         </div>
     </div>
 
+    <div class="section-title">Rewards Center</div>
     <div class="reward-card">
         <div class="reward-title"><i class="fas fa-gift"></i> Free Rare Coins</div>
         <p style="font-size: 11px; color: #ccc; margin-bottom: 15px;">Watch a short video ad and earn 10 Rare Coins!</p>
         <button class="btn-reward" id="adBtn" onclick="playRareAd()"><i class="fas fa-play-circle"></i> Watch Video & Earn</button>
+    </div>
+
+    <div class="section-title">Quick Actions</div>
+    <div class="action-grid">
+        <a href="teams.html" class="action-card"><i class="fas fa-shield-alt"></i><span>Teams Info</span></a>
+        <a href="https://wa.me/917008170291" class="action-card"><i class="fas fa-comment-dots"></i><span>Contact</span></a>
+        <a href="prizes.html" class="action-card"><i class="fas fa-trophy"></i><span>Prize Pool</span></a>
+        <a href="points.html" class="action-card"><i class="fas fa-chart-bar"></i><span>Points</span></a>
     </div>
 
     <nav class="bottom-nav">
@@ -137,8 +142,7 @@
             <span>PROFILE</span>
         </a>
     </nav>
-
-    <script>
+    <div class="system-nav-bar"></div> <script>
         const scriptURL = "https://script.google.com/macros/s/AKfycbylJ8ulyiJip3dfIb3ZnamvV0w6sdMN5j2oaIZfzwnDK5HwWQT3V8SkVGs1r5TzOxEUKg/exec";
         let isAdLoading = false;
 
