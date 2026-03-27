@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Wallet - RARE GAMING</title>
+    <title>Wallet & Earn - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
@@ -11,87 +11,95 @@
         body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
         
         .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #ffd700; }
 
-        .balance-card {
-            background: linear-gradient(135deg, rgba(0,242,254,0.1), rgba(122,0,255,0.1));
-            border: 1.5px solid #00f2fe; border-radius: 20px;
-            margin: 0 20px 20px 20px; padding: 25px; text-align: center;
+        /* Balance Cards */
+        .balance-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px 20px; }
+        .bal-card { 
+            background: #111116; border: 1.5px solid #ffd700; border-radius: 15px; 
+            padding: 15px; text-align: center; box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
         }
-        .bal-label { font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase; }
-        .bal-amount { font-size: 40px; font-weight: 800; color: #fff; margin-top: 5px; }
+        .bal-label { font-size: 10px; font-weight: 800; color: #888; text-transform: uppercase; }
+        .bal-amount { font-size: 22px; font-weight: 800; color: #fff; margin-top: 5px; }
 
         .wallet-panel { 
             background: #111116; border-radius: 15px; padding: 15px; 
             border: 1px solid #1f1f25; margin: 0 20px 20px 20px; 
         }
-        .panel-title { font-size: 13px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .panel-title { font-size: 13px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
         
         input { 
             width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; 
             color: #fff; border-radius: 10px; margin-bottom: 12px; box-sizing: border-box; 
-            font-size: 13px; font-family: 'Poppins';
+            font-size: 13px; font-family: 'Poppins'; outline: none;
         }
+        input:focus { border-color: #ffd700; }
         
         .btn-action { 
             width: 100%; padding: 14px; border: none; border-radius: 10px; 
             font-size: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase;
             transition: 0.3s;
         }
-
-        .btn-blue { background: #00f2fe; color: #000; }
         .btn-yellow { background: #ffd700; color: #000; }
-        .btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-blue { background: #00f2fe; color: #000; }
+        .btn-action:disabled { opacity: 0.5; }
 
         /* QR Section */
-        .qr-img { width: 120px; height: 120px; border-radius: 10px; border: 3px solid #fff; margin: 10px 0; }
+        .qr-img { width: 120px; height: 120px; border-radius: 10px; border: 2px solid #ffd700; margin: 10px 0; }
         .btn-wa-small { 
             background: #25d366; color: #fff; text-decoration: none; display: inline-flex; 
             align-items: center; justify-content: center; gap: 8px; padding: 10px 20px;
-            font-size: 11px; border-radius: 8px; font-weight: 800;
+            font-size: 11px; border-radius: 8px; font-weight: 800; width: 100%; box-sizing: border-box;
         }
 
         /* NAVIGATION */
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
         .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: white; position: relative; }
         .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
         .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
     </style>
 </head>
 <body>
 
     <div class="header-top">
-        <div class="brand-name">RARE WALLET</div>
+        <div class="brand-name">RARE EARN</div>
     </div>
 
-    <div class="balance-card">
-        <div class="bal-label">Total Balance</div>
-        <div class="bal-amount" id="mainBal">₹...</div>
+    <div class="balance-container">
+        <div class="bal-card">
+            <div class="bal-label">Main Wallet</div>
+            <div class="bal-amount" id="mainBal">₹...</div>
+        </div>
+        <div class="bal-card" style="border-color: #ffaa00;">
+            <div class="bal-label">Rare Coins</div>
+            <div class="bal-amount" id="rareCoins" style="color: #ffaa00;">0</div>
+        </div>
     </div>
 
     <div class="wallet-panel" style="border: 2px dashed #ffd700; text-align: center;">
-        <div class="panel-title" style="color:#ffd700; justify-content: center;"><i class="fas fa-university"></i> DEPOSIT</div>
-        <img src="my_qr.jpg" class="qr-img" alt="QR">
+        <div class="panel-title" style="color:#ffd700; justify-content: center;"><i class="fas fa-university"></i> DEPOSIT MONEY</div>
+        <p style="font-size: 10px; color: #aaa; margin: 0;">Scan QR & Send Payment Screenshot</p>
+        <img src="my_qr.jpg" class="qr-img" alt="QR Code">
         <br>
         <a href="https://wa.me/917008170291?text=Bhai, payment kar diya hai. Add balance." class="btn-wa-small">
-            <i class="fab fa-whatsapp"></i> SEND SCREENSHOT
+            <i class="fab fa-whatsapp"></i> SEND SCREENSHOT TO ADMIN
         </a>
     </div>
 
     <div class="wallet-panel">
-        <div class="panel-title" style="color:#00f2fe;"><i class="fas fa-money-bill-wave"></i> WITHDRAW</div>
+        <div class="panel-title" style="color:#00f2fe;"><i class="fas fa-money-bill-wave"></i> WITHDRAW CASH</div>
         <input type="number" id="witAmt" placeholder="Amount (Min ₹50)">
         <input type="text" id="witUpi" placeholder="UPI ID (e.g. name@upi)">
         <button class="btn-action btn-blue" id="btnWithdraw" onclick="withdraw()">WITHDRAW NOW</button>
     </div>
 
-    <div class="wallet-panel">
-        <div class="panel-title" style="color:#ffd700;"><i class="fas fa-gift"></i> REDEEM</div>
-        <input type="text" id="promoCode" placeholder="Enter Promo Code">
-        <button class="btn-action btn-yellow" id="btnRedeem" onclick="redeem()">REDEEM CODE</button>
+    <div class="wallet-panel" style="border: 1px solid #ffaa00;">
+        <div class="panel-title" style="color:#ffaa00;"><i class="fas fa-exchange-alt"></i> COIN REDEEM</div>
+        <p style="font-size: 11px; color: #ccc; margin-bottom: 12px;">Convert 100 Rare Coins = ₹2 Cash</p>
+        <button class="btn-action btn-yellow" id="btnRedeem" onclick="redeemCoins()">REDEEM 100 COINS</button>
     </div>
 
     <nav class="bottom-nav">
@@ -103,80 +111,55 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyxyEAjkJ1iHvxrv-OQbx_W0m3czutHE5ufhunAn1CkF1KtQ9X_7G58kxfJSBFLOe9WjQ/exec";
-        
-        // 🔒 Global Lock Variable
+        // AAPKA MASTER DEPLOY LINK
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzl9NAjn01CoX7CtWjx9qbNPHcjZfUilCSh8T1u4KmsX6fWK3c219cgTk1r4lhL20w2uQ/exec";
         let isProcessing = false;
 
-        function syncBalance() {
+        function syncData() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            let user = userData ? userData.name : "TestUser";
-            fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(user))
-            .then(res => res.text()).then(bal => {
-                document.getElementById('mainBal').innerText = "₹" + bal;
+            if(!userData) return window.location.href = "login.html";
+
+            fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(userData.name))
+            .then(res => res.json()).then(data => {
+                document.getElementById('mainBal').innerText = "₹" + (data.cash || 0);
+                document.getElementById('rareCoins').innerText = (data.coins || 0);
             });
         }
 
-        async function withdraw() {
-            if (isProcessing) return; // Block double click
-
-            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            let user = userData ? userData.name : "TestUser";
-            let amt = Number(document.getElementById('witAmt').value);
-            let upi = document.getElementById('witUpi').value.trim();
-            let currentBal = Number(document.getElementById('mainBal').innerText.replace('₹', ''));
-
-            if(!amt || !upi) return alert("Pura details bharo!");
-            if(amt < 50) return alert("Min ₹50 nikal sakte hain!");
-            if(amt > currentBal) return alert("❌ Balance kam hai!");
-
-            // 🛡️ LOCK START
-            isProcessing = true;
-            const btn = document.getElementById('btnWithdraw');
-            btn.innerText = "SENDING REQUEST..."; 
-            btn.disabled = true;
-
-            fetch(scriptURL + "?action=withdraw&username="+encodeURIComponent(user)+"&amount="+amt+"&upi="+encodeURIComponent(upi), {method:'POST', mode:'no-cors'})
-            .then(() => { 
-                alert("✅ Success! Request received."); 
-                location.reload(); 
-            })
-            .catch(() => {
-                alert("Network error!");
-                isProcessing = false;
-                btn.innerText = "WITHDRAW NOW";
-                btn.disabled = false;
-            });
-        }
-
-        async function redeem() {
-            if (isProcessing) return; // Block double click
-
-            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            let user = userData ? userData.name : "TestUser";
-            let code = document.getElementById('promoCode').value.trim();
+        function withdraw() {
+            if(isProcessing) return;
+            let amt = document.getElementById('witAmt').value;
+            let upi = document.getElementById('witUpi').value;
+            if(!amt || !upi) return alert("Pura details dalo!");
             
-            if(!code) return alert("Promo code dalo!");
+            alert("Withdraw request sent! Admin will check.");
+            // Yahan aap apna withdraw logic add kar sakte hain
+        }
 
+        function redeemCoins() {
+            if(isProcessing) return;
+            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            
             isProcessing = true;
-            const btn = document.getElementById('btnRedeem');
-            btn.innerText = "PROCESSING..."; 
+            let btn = document.getElementById('btnRedeem');
+            btn.innerText = "PROCESSING...";
             btn.disabled = true;
 
-            fetch(scriptURL + "?action=redeem&username="+encodeURIComponent(user)+"&code="+encodeURIComponent(code), {method:'POST', mode:'no-cors'})
-            .then(() => { 
-                alert("✅ Redeem Request Sent!"); 
-                location.reload(); 
-            })
-            .catch(() => {
-                alert("Network error!");
+            fetch(scriptURL + "?action=redeemCoins&username=" + encodeURIComponent(userData.name))
+            .then(res => res.text()).then(resp => {
+                alert(resp);
                 isProcessing = false;
-                btn.innerText = "REDEEM CODE";
+                btn.innerText = "REDEEM 100 COINS";
+                btn.disabled = false;
+                syncData(); // Balance refresh karne ke liye
+            }).catch(e => {
+                alert("Error connecting!");
+                isProcessing = false;
                 btn.disabled = false;
             });
         }
 
-        window.onload = syncBalance;
+        window.onload = syncData;
     </script>
 </body>
 </html>
