@@ -6,19 +6,20 @@
     <title>Home - RARE GAMING</title>
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5695800911065486" crossorigin="anonymous"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 140px; 
+            margin: 0; padding: 0; overflow-x: hidden; 
+            padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px)); 
         }
 
         /* 🌟 DOUBLE WALLET HEADER 🌟 */
         .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; color: #00f2fe; }
         
         .wallet-container { display: flex; gap: 8px; }
         .wallet-pill { 
@@ -26,35 +27,46 @@
             padding: 6px 12px; border-radius: 10px; color: #00f2fe; font-weight: 800; font-size: 12px;
             display: flex; align-items: center; gap: 5px;
         }
-        .coin-pill { border-color: #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1); transition: 0.3s; }
+        .coin-pill { border-color: #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1); }
 
-        .section-title { font-size: 18px; font-weight: 800; margin: 15px 20px; text-transform: uppercase; }
+        .section-title { font-size: 18px; font-weight: 800; margin: 25px 20px 15px 20px; text-transform: uppercase; border-left: 4px solid #00f2fe; padding-left: 10px; }
 
-        /* MATCH GRID */
+        /* 🔥 MATCH GRID 🔥 */
         .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
         .match-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1); }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         .card-overlay { position: absolute; bottom: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); padding: 15px 10px; text-align: center; }
-        .match-name { font-size: 13px; font-weight: 800; color: #fff; text-transform: uppercase; margin: 0; }
         .status-closed { color: #ff007a; font-size: 9px; font-weight: 800; text-transform: uppercase; margin-top: 5px; background: rgba(255, 0, 122, 0.1); padding: 2px 5px; border-radius: 4px; display: inline-block; }
 
         /* 💰 REWARD CARD 💰 */
-        .reward-card { background: linear-gradient(135deg, #111116 0%, #1a1a24 100%); border: 1px solid #ffaa00; border-radius: 15px; padding: 20px; margin: 20px; text-align: center; box-shadow: 0 4px 15px rgba(255, 170, 0, 0.1); }
+        .reward-card { background: linear-gradient(135deg, #111116 0%, #1a1a24 100%); border: 1px solid #ffaa00; border-radius: 15px; padding: 20px; margin: 20px; text-align: center; }
         .reward-title { font-size: 16px; font-weight: 800; color: #ffaa00; margin-bottom: 5px; text-transform: uppercase;}
-        .btn-reward { background: linear-gradient(90deg, #ff8a00, #e52e71); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; text-transform: uppercase; width: 100%; transition: 0.3s; }
-        .btn-reward:disabled { background: #333; cursor: not-allowed; opacity: 0.6; }
+        .btn-reward { background: linear-gradient(90deg, #ff8a00, #e52e71); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; text-transform: uppercase; width: 100%; box-shadow: 0 4px 15px rgba(229, 46, 113, 0.3); }
 
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
-        .action-card { background: #111116; border: 1px solid #1f1f25; border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; display: block; }
+        /* 🌟 QUICK ACTIONS (Wapas Add Kiya) 🌟 */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 20px 20px; }
+        .action-card { background: #111116; border: 1px solid #1f1f25; border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; display: block; transition: 0.3s; }
+        .action-card:active { transform: scale(0.95); background: #1a1a24; }
         .action-card i { font-size: 28px; margin-bottom: 10px; display: block; color: #00f2fe; }
         .action-card span { font-size: 11px; font-weight: 800; color: #fff; text-transform: uppercase; }
 
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .nav-item.active { color: white; position: relative; }
-        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
-        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
+        /* 🌟 NAVIGATION BAR 🌟 */
+        .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; width: 100%; 
+            background: #2c2e3a; 
+            display: flex; justify-content: space-around; align-items: center; 
+            z-index: 2000; 
+            height: calc(80px + env(safe-area-inset-bottom, 0px));
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            border-top: 2px solid rgba(0, 242, 254, 0.3);
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+        }
+        .nav-item { text-decoration: none; color: #888fb1; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+        .nav-item i { font-size: 24px; margin-bottom: 4px; }
+        .nav-item.active { color: #ffffff; }
+        .nav-item.active i { color: #000; z-index: 5; }
+        .nav-item.active::before { content: ''; position: absolute; top: -12px; width: 55px; height: 55px; background: #ffffff; border-radius: 14px; transform: rotate(45deg); z-index: 1; box-shadow: 0 0 20px rgba(255, 255, 255, 0.6); }
+        .nav-item span { z-index: 5; margin-top: 2px; }
     </style>
 </head>
 <body>
@@ -73,22 +85,23 @@
     <div class="match-grid">
         <div class="match-card">
             <img src="br_poster.jpg" alt="BR SQUAD">
-            <div class="card-overlay"><p class="match-name">BR SQUAD</p><div class="status-closed">REGISTRATION CLOSED</div></div>
+            <div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">BR SQUAD</p><div class="status-closed">CLOSED</div></div>
         </div>
         <div class="match-card">
-            <img src="cs_poster.jpg" alt="CLASH SQUAD">
-            <div class="card-overlay"><p class="match-name">CS SQUAD</p><div class="status-closed">REGISTRATION CLOSED</div></div>
+            <img src="cs_poster.jpg" alt="CS SQUAD">
+            <div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">CS SQUAD</p><div class="status-closed">CLOSED</div></div>
         </div>
         <div class="match-card">
             <img src="lw_poster.jpg" alt="LONE WOLF">
-            <div class="card-overlay"><p class="match-name">LONE WOLF</p><div class="status-closed">REGISTRATION CLOSED</div></div>
+            <div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">LONE WOLF</p><div class="status-closed">CLOSED</div></div>
         </div>
         <div class="match-card">
             <img src="1v1_poster.jpg" alt="1V1 BATTLE">
-            <div class="card-overlay"><p class="match-name">1V1 BATTLE</p><div class="status-closed">REGISTRATION CLOSED</div></div>
+            <div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">1V1 BATTLE</p><div class="status-closed">CLOSED</div></div>
         </div>
     </div>
 
+    <div class="section-title">Rewards Center</div>
     <div class="reward-card">
         <div class="reward-title"><i class="fas fa-gift"></i> Free Rare Coins</div>
         <p style="font-size: 11px; color: #ccc; margin-bottom: 15px;">Watch a short video ad and earn 10 Rare Coins!</p>
@@ -109,66 +122,47 @@
         <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
-    <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyxyEAjkJ1iHvxrv-OQbx_W0m3czutHE5ufhunAn1CkF1KtQ9X_7G58kxfJSBFLOe9WjQ/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbylJ8ulyiJip3dfIb3ZnamvV0w6sdMN5j2oaIZfzwnDK5HwWQT3V8SkVGs1r5TzOxEUKg/exec";
         let isAdLoading = false;
 
-        function syncBalance() {
+        function syncData() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            let user = userData ? userData.name : "TestUser";
-            fetch(scriptURL + "?action=getBal&username=" + encodeURIComponent(user))
-            .then(res => res.text()).then(bal => { 
-                document.getElementById('walletBal').innerText = "₹" + (bal || 0); 
-            });
+            if (!userData) {
+                document.getElementById('walletBal').innerText = "₹0";
+                document.getElementById('rareCoins').innerText = "0";
+                return;
+            }
+            fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(userData.name))
+            .then(res => res.json())
+            .then(data => { 
+                document.getElementById('walletBal').innerText = "₹" + (data.cash || 0); 
+                document.getElementById('rareCoins').innerText = (data.coins || 0);
+            }).catch(e => console.log("Sync Error"));
         }
 
-        // 🛡️ VERIFIED AD LOGIC 🛡️
         function playRareAd() {
             if(isAdLoading) return;
             isAdLoading = true;
-            
             let btn = document.getElementById('adBtn');
-            btn.innerText = "VERIFYING AD...";
+            btn.innerText = "LOADING AD (10s)...";
             btn.disabled = true;
-
-            // Webento/APK में असली रिवॉर्ड चेक
-            try {
-                if (typeof rewardedInterstitialAd !== 'undefined') {
-                    rewardedInterstitialAd.show().then(() => {
-                        giveRareCoins();
-                    }).catch((err) => {
-                        alert("Ad Signal Busy! 24 घंटे इंतज़ार करें (app-ads.txt अपडेट हो रहा है)");
-                        resetAdButton();
-                    });
-                } else if (window.Android && window.Android.showRewardVideo) {
-                    window.Android.showRewardVideo();
-                    giveRareCoins();
-                } else {
-                    // अगर SDK लोड होने में टाइम ले रहा है (Hacker Protection)
-                    alert("Ad System Preparing... 10 सेकंड वेट करें (Security Check)");
-                    setTimeout(() => {
-                        giveRareCoins();
-                    }, 10000);
-                }
-            } catch (e) {
-                resetAdButton();
-            }
+            setTimeout(() => { giveRareCoinsPermanent(); }, 10000);
         }
 
-        function giveRareCoins() {
-            alert("Success! 10 Rare Coins Added! 🪙");
-            let coinElement = document.getElementById('rareCoins');
-            let currentCoins = parseInt(coinElement.innerText) || 0;
-            coinElement.innerText = currentCoins + 10;
-            
-            // एनीमेशन इफेक्ट
-            let box = document.getElementById('coinBox');
-            box.style.transform = "scale(1.2)";
-            setTimeout(() => { box.style.transform = "scale(1)"; }, 200);
-
-            resetAdButton();
+        function giveRareCoinsPermanent() {
+            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            if(!userData) return alert("Please Login First!");
+            fetch(scriptURL + "?action=updateCoins&username=" + encodeURIComponent(userData.name))
+            .then(res => res.text())
+            .then(resp => {
+                if(resp === "Success") {
+                    alert("🎉 Success! 10 Rare Coins Added!");
+                    syncData();
+                } else { alert("Error saving coins!"); }
+                resetAdButton();
+            });
         }
 
         function resetAdButton() {
@@ -177,8 +171,7 @@
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-play-circle"></i> Watch Video & Earn';
         }
-
-        window.onload = syncBalance;
+        window.onload = syncData;
     </script>
 </body>
 </html>
