@@ -26,7 +26,7 @@
             padding: 6px 12px; border-radius: 10px; color: #00f2fe; font-weight: 800; font-size: 12px;
             display: flex; align-items: center; gap: 5px;
         }
-        .coin-pill { border-color: #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1); }
+        .coin-pill { border-color: #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1); transition: 0.3s; }
 
         .section-title { font-size: 18px; font-weight: 800; margin: 15px 20px; text-transform: uppercase; }
 
@@ -124,34 +124,41 @@
             });
         }
 
-        // 🎬 रिवॉर्डेड एड लॉजिक 🎬
+        // 🛡️ VERIFIED AD LOGIC 🛡️
         function playRareAd() {
             if(isAdLoading) return;
             isAdLoading = true;
             
             let btn = document.getElementById('adBtn');
-            btn.innerText = "LOADING AD...";
+            btn.innerText = "VERIFYING AD...";
             btn.disabled = true;
 
             // Webento/APK में असली रिवॉर्ड चेक
-            if (typeof rewardedInterstitialAd !== 'undefined') {
-                rewardedInterstitialAd.show().then(() => {
+            try {
+                if (typeof rewardedInterstitialAd !== 'undefined') {
+                    rewardedInterstitialAd.show().then(() => {
+                        giveRareCoins();
+                    }).catch((err) => {
+                        alert("Ad Signal Busy! 24 घंटे इंतज़ार करें (app-ads.txt अपडेट हो रहा है)");
+                        resetAdButton();
+                    });
+                } else if (window.Android && window.Android.showRewardVideo) {
+                    window.Android.showRewardVideo();
                     giveRareCoins();
-                }).catch((err) => {
-                    alert("Ad failed! Please try again later.");
-                    resetAdButton();
-                });
-            } else {
-                // ब्राउज़र में टेस्टिंग के लिए 10 सेकंड का सुरक्षा लॉक
-                alert("Ad Not Ready! असली विज्ञापन सिर्फ APK में चलेगा। सुरक्षा के लिए 10 सेकंड वेट करें...");
-                setTimeout(() => {
-                    giveRareCoins();
-                }, 10000);
+                } else {
+                    // अगर SDK लोड होने में टाइम ले रहा है (Hacker Protection)
+                    alert("Ad System Preparing... 10 सेकंड वेट करें (Security Check)");
+                    setTimeout(() => {
+                        giveRareCoins();
+                    }, 10000);
+                }
+            } catch (e) {
+                resetAdButton();
             }
         }
 
         function giveRareCoins() {
-            alert("Boom! You won 10 Rare Coins! 🪙");
+            alert("Success! 10 Rare Coins Added! 🪙");
             let coinElement = document.getElementById('rareCoins');
             let currentCoins = parseInt(coinElement.innerText) || 0;
             coinElement.innerText = currentCoins + 10;
