@@ -4,124 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Home - RARE GAMING</title>
-    
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5695800911065486" crossorigin="anonymous"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; 
-            padding-bottom: 200px; /* Ad space ke liye zyada padding */
+            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 140px; 
         }
 
-        /* 🌟 HEADER & WALLETS 🌟 */
+        /* HEADER */
         .header-top { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; color: #00f2fe; text-shadow: 0 0 10px rgba(0, 242, 254, 0.5); }
+        .brand-name { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #ffd700; }
         
-        .wallet-container { display: flex; gap: 8px; }
         .wallet-pill { 
             background: rgba(0, 242, 254, 0.1); border: 1.5px solid #00f2fe; 
-            padding: 6px 12px; border-radius: 10px; color: #00f2fe; font-weight: 800; font-size: 12px;
-            display: flex; align-items: center; gap: 5px; box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+            padding: 8px 15px; border-radius: 12px; color: #00f2fe; font-weight: 800; font-size: 14px;
+            display: flex; align-items: center; gap: 8px;
         }
-        .coin-pill { border-color: #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1); box-shadow: 0 0 10px rgba(255, 170, 0, 0.1); }
 
-        .section-title { font-size: 18px; font-weight: 800; margin: 25px 20px 15px 20px; text-transform: uppercase; border-left: 4px solid #00f2fe; padding-left: 10px; }
+        .section-title { font-size: 18px; font-weight: 800; margin: 15px 20px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* 🔥 MATCH GRID 🔥 */
+        /* MATCH GRID */
         .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
-        .match-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; }
-        .match-card:active { transform: scale(0.95); border-color: #00f2fe; }
-        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-        .card-overlay { position: absolute; bottom: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); padding: 15px 10px; text-align: center; }
-
-        /* 🛑 MATCH JOIN MODAL (POPUP) 🛑 */
-        #matchModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: #111116; border: 2px solid #00f2fe; border-radius: 20px; width: 80%; padding: 25px; text-align: center; box-shadow: 0 0 30px rgba(0, 242, 254, 0.3); animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .match-card { 
+            position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; 
+            border: 1px solid rgba(255,255,255,0.1); text-decoration: none; display: block;
+            pointer-events: none; /* Registration closed hai isliye click band hai */
+        }
+        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: grayscale(80%); }
         
-        .modal-content input { width: 90%; background: #050508; border: 1px solid #333; color: white; padding: 12px; border-radius: 10px; margin: 15px 0; outline: none; text-align: center; font-weight: 600; font-size: 14px; }
-        .modal-content input:focus { border-color: #00f2fe; }
-        .btn-join { background: #00f2fe; color: black; border: none; padding: 12px 30px; border-radius: 25px; font-weight: 800; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 14px; }
-        .btn-close { color: #ff007a; margin-top: 15px; font-size: 12px; cursor: pointer; font-weight: 600; text-transform: uppercase; }
+        .card-overlay { 
+            position: absolute; bottom: 0; width: 100%; 
+            background: linear-gradient(transparent, rgba(0,0,0,0.95)); 
+            padding: 15px 10px; text-align: center; box-sizing: border-box; 
+        }
+        .match-name { font-size: 13px; font-weight: 800; color: #fff; text-transform: uppercase; margin: 0; }
+        
+        .status-closed { 
+            color: #ff3131; font-size: 9px; font-weight: 800; 
+            text-transform: uppercase; margin-top: 5px; 
+            background: rgba(255, 49, 49, 0.1); border: 1px solid #ff3131;
+            padding: 3px 6px; border-radius: 4px; display: inline-block;
+        }
 
-        /* 💰 REWARD CARD 💰 */
-        .reward-card { background: linear-gradient(135deg, #111116 0%, #1a1a24 100%); border: 1px solid #ffaa00; border-radius: 15px; padding: 20px; margin: 20px; text-align: center; box-shadow: 0 0 15px rgba(255, 170, 0, 0.1); }
-        .reward-title { font-size: 16px; font-weight: 800; color: #ffaa00; margin-bottom: 5px; text-transform: uppercase;}
-        .btn-reward { background: linear-gradient(90deg, #ff8a00, #e52e71); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; text-transform: uppercase; width: 100%; box-shadow: 0 4px 15px rgba(229, 46, 113, 0.3); }
+        /* QUICK ACTIONS */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; }
+        .action-card { background: #111116; border: 1px solid #1f1f25; border-radius: 15px; padding: 15px 10px; text-align: center; text-decoration: none; display: block; }
+        .action-card i { font-size: 24px; margin-bottom: 8px; display: block; color: #ffd700; }
+        .action-card span { font-size: 10px; font-weight: 800; color: #fff; text-transform: uppercase; }
 
-        /* 🌟 NAVIGATION BAR 🌟 */
+        /* NAV BAR */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; transition: 0.3s; }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
         .nav-item.active { color: white; position: relative; }
         .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
         .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
-
-        /* 📈 AD UNIT (Fixed Bottom) 📈 */
-        .ad-unit { position: fixed; bottom: 118px; /* Nav bar ke upar */ left: 0; width: 100%; height: 60px; background: #000; display: flex; align-items: center; justify-content: center; z-index: 999; border-top: 1px solid #1f1f25; }
     </style>
 </head>
 <body>
 
     <div class="header-top">
         <div class="brand-name">RARE GAMING</div>
-        <div class="wallet-container">
-            <div class="wallet-pill" id="walletBal">₹...</div>
-            <div class="wallet-pill coin-pill"><i class="fas fa-coins"></i> <span id="rareCoins">0</span></div>
-        </div>
+        <div class="wallet-pill" id="walletBal">₹...</div>
     </div>
 
-    <div class="section-title">E-sports Matches (Fee: ₹20)</div>
+    <div class="section-title">E-sports Matches</div>
     <div class="match-grid">
-        <div class="match-card" onclick="openJoinModal('BR SQUAD')">
+        <div class="match-card">
             <img src="br_poster.jpg" alt="BR SQUAD">
-            <div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">BR SQUAD</p></div>
+            <div class="card-overlay">
+                <p class="match-name">BR SQUAD (₹20)</p>
+                <div class="status-closed">CLOSED</div>
+            </div>
         </div>
-        <div class="match-card" onclick="openJoinModal('CS SQUAD')">
-            <img src="cs_poster.jpg" alt="CS SQUAD">
-            <div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">CS SQUAD</p></div>
+        <div class="match-card">
+            <img src="cs_poster.jpg" alt="CLASH SQUAD">
+            <div class="card-overlay">
+                <p class="match-name">CS SQUAD (₹20)</p>
+                <div class="status-closed">CLOSED</div>
+            </div>
         </div>
-        <div class="match-card" onclick="openJoinModal('LONE WOLF')">
+        <div class="match-card">
             <img src="lw_poster.jpg" alt="LONE WOLF">
-            <div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">LONE WOLF</p></div>
+            <div class="card-overlay">
+                <p class="match-name">LONE WOLF (₹10)</p>
+                <div class="status-closed">CLOSED</div>
+            </div>
         </div>
-        <div class="match-card" onclick="openJoinModal('1V1 BATTLE')">
+        <div class="match-card">
             <img src="1v1_poster.jpg" alt="1V1 BATTLE">
-            <div class="card-overlay"><p style="font-size:12px; font-weight:800; margin:0;">1V1 BATTLE</p></div>
+            <div class="card-overlay">
+                <p class="match-name">1V1 BATTLE (₹50)</p>
+                <div class="status-closed">CLOSED</div>
+            </div>
         </div>
     </div>
 
-    <div id="matchModal">
-        <div class="modal-content">
-            <h3 id="modalTitle" style="color:#00f2fe; margin-top:0; text-transform:uppercase;">JOIN MATCH</h3>
-            <p style="font-size:12px; color:#ccc; margin: 5px 0 15px 0;">Entry Fee: ₹20 (Deducted from Wallet)</p>
-            <input type="text" id="ffidInput" placeholder="ENTER FREE FIRE UID">
-            <button class="btn-join" onclick="confirmRegistration()">Confirm Join</button>
-            <div class="btn-close" onclick="closeModal()">Cancel</div>
-        </div>
-    </div>
-
-    <div class="section-title">Rewards Center</div>
-    <div class="reward-card">
-        <div class="reward-title"><i class="fas fa-gift"></i> Free Rare Coins</div>
-        <p style="font-size: 11px; color: #ccc; margin-bottom: 15px;">Watch a short video ad and earn 10 Rare Coins!</p>
-        <button class="btn-reward" id="adBtn" onclick="playRareAd()"><i class="fas fa-play-circle"></i> Watch Video & Earn</button>
-    </div>
-
-    <div class="ad-unit">
-        <ins class="adsbygoogle"
-             style="display:inline-block;width:320px;height:50px"
-             data-ad-client="ca-pub-5695800911065486"
-             data-ad-slot="9604104712"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+    <div class="section-title">Quick Actions</div>
+    <div class="action-grid">
+        <a href="teams.html" class="action-card"><i class="fas fa-shield-alt"></i><span>Teams</span></a>
+        <a href="https://wa.me/917008170291" class="action-card"><i class="fab fa-whatsapp"></i><span>Contact</span></a>
+        <a href="prizes.html" class="action-card"><i class="fas fa-trophy"></i><span>Prizes</span></a>
+        <a href="profile.html" class="action-card"><i class="fas fa-user-circle"></i><span>Profile</span></a>
     </div>
 
     <nav class="bottom-nav">
@@ -133,82 +119,19 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // AAPKA MASTER DEPLOY LINK (HARD LOGIC)
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzl9NAjn01CoX7CtWjx9qbNPHcjZfUilCSh8T1u4KmsX6fWK3c219cgTk1r4lhL20w2uQ/exec";
-        let isAdLoading = false;
-        let selectedMatch = "";
-
-        function syncData() {
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzPZrXEmFzQYiABm5xeGuRmGfWcZzfe4_YOOKc-WVMDf-fsQs39YhiQAWopkFmvGQSDbw/exec";
+        
+        function syncBalance() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if (!userData) { window.location.href = "login.html"; return; }
+            if(!userData) return window.location.href = "login.html";
+
             fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(userData.name))
-            .then(res => res.json())
-            .then(data => { 
+            .then(res => res.json()).then(data => { 
                 document.getElementById('walletBal').innerText = "₹" + (data.cash || 0); 
-                document.getElementById('rareCoins').innerText = (data.coins || 0);
-            }).catch(e => console.log("Sync Error"));
+            }).catch(e => console.log("Balance Sync Error"));
         }
 
-        // 🛑 MODAL FUNCTIONS 🛑
-        function openJoinModal(match) {
-            selectedMatch = match;
-            document.getElementById('modalTitle').innerText = "JOIN " + match;
-            document.getElementById('matchModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('ffidInput').value = ""; // Clear input
-            document.getElementById('matchModal').style.display = 'none';
-        }
-
-        function confirmRegistration() {
-            let ffid = document.getElementById('ffidInput').value;
-            let user = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!ffid) return alert("Please enter FF UID!");
-
-            let btn = document.querySelector('.btn-join');
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-
-            fetch(scriptURL + "?action=registerMatch&username=" + encodeURIComponent(user.name) + "&ffid=" + encodeURIComponent(ffid) + "&matchType=" + encodeURIComponent(selectedMatch) + "&fee=20")
-            .then(res => res.text()).then(resp => {
-                alert(resp);
-                closeModal();
-                syncData(); // Balance update karne ke liye
-                btn.innerText = "Confirm Join";
-                btn.disabled = false;
-            });
-        }
-
-        // 💰 REWARD AD FUNCTIONS 💰
-        function playRareAd() {
-            if(isAdLoading) return;
-            isAdLoading = true;
-            let btn = document.getElementById('adBtn');
-            btn.innerText = "LOADING AD (10s)...";
-            btn.disabled = true;
-            setTimeout(() => { giveRareCoinsPermanent(); }, 10000);
-        }
-
-        function giveRareCoinsPermanent() {
-            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            fetch(scriptURL + "?action=updateCoins&username=" + encodeURIComponent(userData.name))
-            .then(res => res.text())
-            .then(resp => {
-                if(resp === "Success") { alert("🎉 Success! 10 Rare Coins Added!"); syncData(); } 
-                else { alert("Error saving coins!"); }
-                resetAdButton();
-            });
-        }
-
-        function resetAdButton() {
-            isAdLoading = false;
-            let btn = document.getElementById('adBtn');
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-play-circle"></i> Watch Video & Earn';
-        }
-
-        window.onload = syncData;
+        window.onload = syncBalance;
     </script>
 </body>
 </html>
