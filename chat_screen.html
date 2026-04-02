@@ -3,121 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rare Chat - Pro</title>
+    <title>Chats - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; }
+        .header { padding: 20px; background: #111116; border-bottom: 1px solid #1f1f25; display: flex; justify-content: space-between; align-items: center; }
+        .header h2 { font-size: 20px; margin: 0; color: #ffd700; text-transform: uppercase; }
         
-        body { background: #0b141a; color: white; font-family: 'Poppins', sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        .section-label { padding: 10px 20px; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* 📱 Modern Header */
-        .chat-header { background: #111b21; padding: 15px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #222d34; z-index: 10; }
-        .chat-header i.back-btn { font-size: 20px; color: #00f2fe; cursor: pointer; }
-        .user-meta b { font-size: 15px; display: block; letter-spacing: 0.5px; text-transform: uppercase; }
-        .status-dot { font-size: 10px; color: #8696a0; font-weight: 400; }
-        .status-dot.online { color: #00e676; font-weight: 600; }
+        .add-box { padding: 15px; background: #111116; margin: 15px; border-radius: 15px; border: 1px solid #1f1f25; }
+        input { width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; color: #fff; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; outline: none; }
+        .btn-add { width: 100%; padding: 12px; background: #00f2fe; color: #000; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        
+        .contact-list { padding: 0 15px; }
+        .contact-card { background: #111116; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: white; position: relative; }
+        .contact-card i { font-size: 35px; color: #ffd700; }
+        .contact-info b { font-size: 14px; display: block; text-transform: uppercase; }
+        .contact-info span { font-size: 10px; color: #888; }
+        .new-msg-tag { position: absolute; right: 15px; background: #00a884; color: white; font-size: 9px; padding: 2px 8px; border-radius: 10px; font-weight: 800; }
 
-        /* 💬 Chat Area */
-        .chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; background: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-attachment: fixed; }
-        
-        .msg { max-width: 80%; padding: 8px 12px; border-radius: 15px; font-size: 14px; position: relative; animation: fadeIn 0.3s ease; line-height: 1.4; word-wrap: break-word; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .sent { align-self: flex-end; background: #005c4b; border-bottom-right-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-        .received { align-self: flex-start; background: #202c33; border-bottom-left-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-        .time { font-size: 9px; color: rgba(255,255,255,0.5); display: block; text-align: right; margin-top: 4px; }
-
-        /* ⌨️ Input Area */
-        .input-wrapper { background: #111b21; padding: 10px 15px; display: flex; align-items: center; gap: 10px; }
-        .input-wrapper input { flex: 1; background: #2a3942; border: none; padding: 12px 18px; border-radius: 25px; color: white; outline: none; font-size: 14px; font-family: 'Poppins'; }
-        .send-btn { width: 45px; height: 45px; background: #00a884; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.3); cursor: pointer; }
-
-        /* 🛡️ Grey System Protection Bar */
-        .system-nav-bar { width: 100%; height: 48px; background-color: #4f515e; display: flex; justify-content: center; align-items: center; font-size: 10px; color: #ccc; font-weight: 600; letter-spacing: 1.5px; border-top: 1px solid rgba(255,255,255,0.1); }
+        /* Nav Bar Niche ka fixed */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1f1f25; z-index: 1000; padding: 0 5px; }
+        .nav-item { text-decoration: none; color: #666; font-size: 9px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .nav-item.active { color: white; }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; display: flex; justify-content: center; align-items: center; font-size: 10px; color: #ccc; }
     </style>
 </head>
 <body>
 
-    <div class="chat-header">
-        <i class="fas fa-arrow-left back-btn" onclick="history.back()"></i>
-        <div class="user-meta">
-            <b id="chatTitle">Rare Player</b>
-            <span id="statusText" class="status-dot">Checking...</span>
-        </div>
+    <div class="header">
+        <h2>Rare Chat</h2>
+        <i class="fas fa-comments" style="color: #00f2fe;"></i>
     </div>
 
-    <div class="chat-container" id="chatBox"></div>
-
-    <div class="input-wrapper">
-        <input type="text" id="msgInput" placeholder="Type a message...">
-        <button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+    <div class="add-box">
+        <input type="text" id="newUID" placeholder="Enter Friend's UID (RGXXXXXX)">
+        <button class="btn-add" onclick="addNewChat()">Start Chatting</button>
     </div>
 
+    <div class="section-label">Recent Messages</div>
+    <div class="contact-list" id="contactList">
+        <p style='text-align:center;color:#666;padding:20px;'>Fetching chats...</p>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comments"></i><span>CHAT</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+    </nav>
     <div class="system-nav-bar">RARE GAMING PROTECTION ACTIVE</div>
 
     <script>
-        // Naya Master Link
-        const scriptURL = "https://script.google.com/macros/s/AKfycbw2X1-jnAsO5-ofyEMQvmcyIvRwvYV2bwy36showQvxnGKP5ByWpXYmfNZfYJnDXbxDpg/exec";
-        
-        const urlParams = new URLSearchParams(window.location.search);
-        const targetUID = urlParams.get('uid');
-        const targetName = urlParams.get('name');
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyVD1mbzYVVY0gyv5fai_i2ST744bYOTvb_s2AvxGibfpvMkCM-4iz3IebpeTLPWfxuJw/exec";
         let user = JSON.parse(localStorage.getItem("rareGamingUser"));
-        
-        document.getElementById('chatTitle').innerText = targetName;
 
-        // 🟢 Online Status Fetcher & Updater
-        function checkOnline() {
-            if(!targetName) return;
-            // Target ka status check karo
-            fetch(`${scriptURL}?action=getStatus&username=${encodeURIComponent(targetName)}`)
-            .then(res => res.text()).then(status => {
-                const sText = document.getElementById('statusText');
-                sText.innerText = status;
-                sText.className = "status-dot " + (status === "Online" ? "online" : "");
+        // 1. Naya Chat Start Karna
+        function addNewChat() {
+            let uid = document.getElementById('newUID').value.trim().toUpperCase();
+            if(uid.length < 5) return alert("Sahi UID dalo!");
+            
+            // Name fetch karna server se
+            fetch(`${scriptURL}?action=checkUID&uid=${uid}`)
+            .then(res => res.text()).then(name => {
+                if(name === "Not Found") return alert("UID galat hai!");
+                window.location.href = `chat_screen.html?uid=${uid}&name=${encodeURIComponent(name)}`;
             });
-            // Khud ka status update karo (Server ko batao main active hoon)
-            if(user) {
-                fetch(`${scriptURL}?action=updateStatus&username=${encodeURIComponent(user.name)}`);
-            }
         }
 
-        function fetchMessages() {
-            if(!user || !targetUID) return;
-            fetch(`${scriptURL}?action=getMessages&user1=${user.uid}&user2=${targetUID}`)
+        // 2. SMART FETCH: Jo messages aaye hain unke contacts dikhana
+        function loadRecentChats() {
+            if(!user) return;
+            // Hum saare messages mangwayenge ye dekhne ke liye ki kisne msg bheja hai
+            fetch(`${scriptURL}?action=getMessages&user1=${user.uid}&user2=ALL`)
             .then(res => res.json()).then(data => {
-                const box = document.getElementById('chatBox');
-                box.innerHTML = "";
+                let list = document.getElementById('contactList');
+                list.innerHTML = "";
+                
+                let uniqueContacts = {};
+                // Messages se contacts nikalna
                 data.forEach(m => {
-                    let type = (m.sender == user.uid) ? 'sent' : 'received';
-                    box.innerHTML += `<div class="msg ${type}">${m.text}<span class="time">${new Date(m.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>`;
+                    let otherUser = (m.sender == user.uid) ? m.receiver : m.sender;
+                    uniqueContacts[otherUser] = true;
                 });
-                box.scrollTop = box.scrollHeight;
-            }).catch(e => console.log("Fetch Error"));
+
+                let contactArray = Object.keys(uniqueContacts);
+                if(contactArray.length === 0) {
+                    list.innerHTML = "<p style='text-align:center;color:#666;padding:20px;'>No chats found.</p>";
+                    return;
+                }
+
+                contactArray.forEach(uid => {
+                    fetch(`${scriptURL}?action=checkUID&uid=${uid}`)
+                    .then(res => res.text()).then(name => {
+                        list.innerHTML += `
+                            <a href="chat_screen.html?uid=${uid}&name=${encodeURIComponent(name)}" class="contact-card">
+                                <i class="fas fa-user-circle"></i>
+                                <div class="contact-info">
+                                    <b>${name}</b>
+                                    <span>UID: ${uid}</span>
+                                </div>
+                                <div class="new-msg-tag">Message</div>
+                            </a>
+                        `;
+                    });
+                });
+            });
         }
 
-        function sendMsg() {
-            let text = document.getElementById('msgInput').value;
-            if(!text || !user) return;
-            document.getElementById('msgInput').value = "";
-            fetch(`${scriptURL}?action=sendMessage&sender=${user.uid}&receiver=${targetUID}&msg=${encodeURIComponent(text)}`)
-            .then(() => fetchMessages());
-        }
-
-        // Enter key se send karne ke liye
-        document.getElementById('msgInput').addEventListener("keyup", function(e) {
-            if (e.keyCode === 13) sendMsg();
-        });
-
-        // Intervals
-        setInterval(fetchMessages, 4000); // 4 Seconds for messages
-        setInterval(checkOnline, 10000); // 10 Seconds for status check
-        
-        window.onload = () => { 
-            if(!user) window.location.href = "login.html";
-            fetchMessages(); 
-            checkOnline(); 
-        };
+        window.onload = loadRecentChats;
     </script>
 </body>
 </html>
