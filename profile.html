@@ -36,12 +36,23 @@
         .btn-blue:disabled { background: #333; color: #666; box-shadow: none; }
 
         /* Navigation */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #1f1f25; z-index: 1000; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; }
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
         .nav-item i { font-size: 22px; margin-bottom: 4px; }
         .nav-item.active { color: white; }
+
+        /* 🌟 GREY PROTECTION BAR (SYSTEM NAV) 🌟 */
+        .system-nav-bar { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 48px; 
+            background-color: #4f515e; 
+            z-index: 1001; 
+        }
         
-        #verifyName { font-weight: 600; margin-bottom: 10px; min-height: 18px; }
+        #verifyName { font-weight: 600; margin-bottom: 10px; min-height: 18px; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -54,7 +65,7 @@
 
     <div class="wallet-panel" style="border-color: #ffd700;">
         <div class="panel-label" style="color: #ffd700;">Your Unique ID</div>
-        <div id="playerUID">LOADING...</div>
+        <div id="playerUID">FETCHING...</div>
         <p style="font-size: 9px; color: #666; text-align: center; margin: 0;">Share this ID with friends to receive money</p>
     </div>
 
@@ -76,6 +87,7 @@
         <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
         <a href="profile.html" class="nav-item active"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
+    <div class="system-nav-bar"></div>
 
     <script>
         // 🔗 APNA MASTER SCRIPT LINK
@@ -87,7 +99,7 @@
             if(!user) return window.location.href = "login.html";
             document.getElementById('displayUser').innerText = user.name;
 
-            // Sheet se UID khinch kar laao
+            // Sheet se UID fetch kar rahe hain
             fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(user.name))
             .then(res => res.json())
             .then(data => {
