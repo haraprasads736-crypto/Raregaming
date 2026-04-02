@@ -41,16 +41,8 @@
         .nav-item i { font-size: 22px; margin-bottom: 4px; }
         .nav-item.active { color: white; }
 
-        /* 🌟 GREY PROTECTION BAR (SYSTEM NAV) 🌟 */
-        .system-nav-bar { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 48px; 
-            background-color: #4f515e; 
-            z-index: 1001; 
-        }
+        /* 🌟 GREY PROTECTION BAR 🌟 */
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
         
         #verifyName { font-weight: 600; margin-bottom: 10px; min-height: 18px; font-size: 12px; }
     </style>
@@ -66,12 +58,11 @@
     <div class="wallet-panel" style="border-color: #ffd700;">
         <div class="panel-label" style="color: #ffd700;">Your Unique ID</div>
         <div id="playerUID">FETCHING...</div>
-        <p style="font-size: 9px; color: #666; text-align: center; margin: 0;">Share this ID with friends to receive money</p>
     </div>
 
     <div class="wallet-panel">
         <div class="panel-label" style="color: #00f2fe;">Quick Transfer</div>
-        <input type="text" id="targetUID" placeholder="Friend's UID (e.g. RG123456)" oninput="verifyPlayer()">
+        <input type="text" id="targetUID" placeholder="Friend's UID (RGXXXXXX)" oninput="verifyPlayer()">
         <div id="verifyName"></div>
         <input type="number" id="sendAmt" placeholder="Amount (₹)">
         <button class="btn-action btn-blue" id="btnSend" onclick="transferNow()" disabled>SEND MONEY</button>
@@ -90,27 +81,25 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // 🔗 APNA MASTER SCRIPT LINK
         const scriptURL = "https://script.google.com/macros/s/AKfycby34-2K5DnslQpxs0_nRw_ZPtsWVLYKJkuZ6RJnqvuzbi6gpmH9kuAI2BsosdkVOVaTLw/exec";
-        
         let user = JSON.parse(localStorage.getItem("rareGamingUser"));
 
         function loadProfile() {
             if(!user) return window.location.href = "login.html";
             document.getElementById('displayUser').innerText = user.name;
 
-            // Sheet se UID fetch kar rahe hain
+            // Debugging fetch for UID
             fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(user.name))
-            .then(res => res.json())
-            .then(data => {
-                if(data.uid && data.uid !== "N/A") {
-                    document.getElementById('playerUID').innerText = data.uid;
-                } else {
-                    document.getElementById('playerUID').innerText = "RG-ERROR";
+            .then(res => res.text()) // Use text() first to avoid JSON crash
+            .then(text => {
+                try {
+                    const data = JSON.parse(text);
+                    document.getElementById('playerUID').innerText = data.uid || "N/A";
+                } catch (e) {
+                    document.getElementById('playerUID').innerText = "DATA ERROR";
                 }
             })
             .catch(err => {
-                console.error(err);
                 document.getElementById('playerUID').innerText = "OFFLINE";
             });
         }
@@ -122,24 +111,18 @@
 
             if(uid.length >= 8) {
                 nameBox.innerText = "Checking...";
-                nameBox.style.color = "#888";
-                
                 fetch(scriptURL + "?action=checkUID&uid=" + uid)
-                .then(res => res.text())
-                .then(name => {
+                .then(res => res.text()).then(name => {
                     if(name !== "Not Found") {
                         nameBox.innerText = "Target: " + name;
                         nameBox.style.color = "#00ff00";
                         btn.disabled = false;
                     } else {
-                        nameBox.innerText = "Player not found!";
+                        nameBox.innerText = "Invalid UID!";
                         nameBox.style.color = "#ff3131";
                         btn.disabled = true;
                     }
-                });
-            } else {
-                nameBox.innerText = "";
-                btn.disabled = true;
+                }).catch(() => { nameBox.innerText = "Error!"; });
             }
         }
 
@@ -149,25 +132,17 @@
             let btn = document.getElementById('btnSend');
 
             if(!amt || amt <= 0) return alert("Sahi amount dalo!");
-
-            btn.innerText = "SENDING...";
-            btn.disabled = true;
+            btn.innerText = "SENDING..."; btn.disabled = true;
 
             fetch(scriptURL + "?action=transferMoney&senderName=" + encodeURIComponent(user.name) + "&targetUID=" + target + "&amount=" + amt)
-            .then(res => res.text())
-            .then(resp => {
+            .then(res => res.text()).then(resp => {
                 alert(resp);
                 location.reload();
-            })
-            .catch(err => {
-                alert("Transfer Failed!");
-                btn.innerText = "SEND MONEY";
-                btn.disabled = false;
-            });
+            }).catch(() => { alert("Failed!"); btn.innerText = "SEND MONEY"; btn.disabled = false; });
         }
 
         function logout() {
-            if(confirm("Logout karna hai?")) {
+            if(confirm("Logout?")) {
                 localStorage.removeItem("rareGamingUser");
                 window.location.href = "login.html";
             }
