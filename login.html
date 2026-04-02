@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RARE GAMING - Player Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
@@ -24,6 +25,8 @@
         
         .submit-btn { width: 100%; background: #66fcf1; color: #000; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; transition: 0.3s; box-shadow: 0 4px 10px rgba(102, 252, 241, 0.3); }
         .submit-btn:disabled { background: #444; color: #888; cursor: not-allowed; box-shadow: none; }
+        
+        .footer-text { margin-top: 20px; font-size: 12px; color: #66fcf1; cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -38,21 +41,23 @@
     <div class="login-box">
         <form id="customLoginForm">
             <div class="input-group">
-                <label>Username (IGN)</label>
+                <label>In-Game Name (IGN)</label>
                 <input type="text" id="playerName" placeholder="Enter your username" required>
             </div>
             <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="playerPass" placeholder="Enter your password" required>
+                <label>Password / Game UID</label>
+                <input type="password" id="playerPass" placeholder="Enter password" required>
             </div>
             <button type="submit" class="submit-btn" id="loginBtn">ENTER DASHBOARD</button>
         </form>
+        <div class="footer-text" onclick="alert('Admin se contact karein password ke liye!')">Forgot Password?</div>
     </div>
 
     <script>
-        // 🔗 APNA NAYA MASTER SCRIPT LINK
+        // 🔗 APNA SABSE NAYA MASTER SCRIPT LINK
         const scriptURL = "https://script.google.com/macros/s/AKfycby34-2K5DnslQpxs0_nRw_ZPtsWVLYKJkuZ6RJnqvuzbi6gpmH9kuAI2BsosdkVOVaTLw/exec";
 
+        // Check if already logged in
         window.onload = function() {
             if (localStorage.getItem("rareGamingUser")) {
                 window.location.href = "index.html";
@@ -66,29 +71,31 @@
             const pass = document.getElementById('playerPass').value.trim();
             const btn = document.getElementById('loginBtn');
 
+            // Button ko loading state mein lao
             btn.innerText = "VERIFYING...";
             btn.disabled = true;
 
-            // 💸 Google Sheet se check kar rahe hain ki user sahi hai ya nahi
-            fetch(scriptURL + "?action=login&username=" + encodeURIComponent(user) + "&password=" + encodeURIComponent(pass))
+            // Google Script ko request bhejo
+            const finalURL = scriptURL + "?action=login&username=" + encodeURIComponent(user) + "&password=" + encodeURIComponent(pass);
+
+            fetch(finalURL)
             .then(res => res.text())
             .then(resp => {
                 if(resp === "Success") {
-                    // Agar login successful hai, toh data save karo
-                    const userData = {
-                        name: user,
-                        picture: "logo.jpg" 
-                    };
+                    // Data save karo aur andar bhej do
+                    const userData = { name: user, picture: "logo.jpg" };
                     localStorage.setItem("rareGamingUser", JSON.stringify(userData));
                     window.location.href = "index.html";
                 } else {
-                    alert("❌ Invalid Username or Password!");
+                    // Agar password galat hai toh wapas normal button
+                    alert("❌ Invalid Login! Check Username/Password.");
                     btn.innerText = "ENTER DASHBOARD";
                     btn.disabled = false;
                 }
             })
             .catch(err => {
-                alert("Network Error! Check Internet.");
+                console.error(err);
+                alert("Network Error! Try again.");
                 btn.innerText = "ENTER DASHBOARD";
                 btn.disabled = false;
             });
