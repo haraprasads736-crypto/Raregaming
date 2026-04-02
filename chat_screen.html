@@ -8,7 +8,8 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
         
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body { 
             background: #07080a; color: white; font-family: 'Poppins', sans-serif; 
             margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; 
@@ -19,17 +20,14 @@
             background: rgba(17, 27, 33, 0.95); backdrop-filter: blur(10px);
             padding: 15px 20px; display: flex; align-items: center; gap: 15px; 
             border-bottom: 1px solid rgba(0, 242, 254, 0.2); z-index: 100;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-        .chat-header i.back-btn { font-size: 18px; color: #00f2fe; cursor: pointer; transition: 0.3s; }
-        .chat-header i.back-btn:active { transform: scale(0.8); }
+        .chat-header i.back-btn { font-size: 18px; color: #00f2fe; cursor: pointer; }
         
         .header-info { flex: 1; }
-        .header-info b { font-size: 14px; display: block; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
+        .header-info b { font-size: 14px; display: block; letter-spacing: 1px; text-transform: uppercase; }
         .status-dot { font-size: 10px; color: #8696a0; display: flex; align-items: center; gap: 5px; }
-        .status-dot::before { content: ''; width: 6px; height: 6px; background: #8696a0; border-radius: 50%; display: inline-block; }
         .status-dot.online { color: #00e676; font-weight: 600; }
-        .status-dot.online::before { background: #00e676; box-shadow: 0 0 5px #00e676; }
+        .status-dot.online::before { content: ''; width: 6px; height: 6px; background: #00e676; border-radius: 50%; box-shadow: 0 0 5px #00e676; }
 
         /* 💬 Modern Chat Area */
         .chat-container { 
@@ -37,40 +35,27 @@
             background: radial-gradient(circle at top, #111b21 0%, #07080a 100%);
             scrollbar-width: none;
         }
-        .chat-container::-webkit-scrollbar { display: none; }
         
-        /* Message Bubbles */
+        /* Message Bubbles - FIX: user-select none taaki copy na ho */
         .msg { 
             max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 13.5px; 
-            position: relative; animation: slideIn 0.3s ease-out; line-height: 1.5;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            position: relative; animation: slideIn 0.3s ease-out; line-height: 1.4;
+            user-select: none; -webkit-user-select: none; /* Text selection band */
         }
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .sent { 
-            align-self: flex-end; background: linear-gradient(135deg, #005c4b, #00a884); 
-            border-bottom-right-radius: 2px; color: #fff;
-        }
-        .received { 
-            align-self: flex-start; background: #202c33; 
-            border-bottom-left-radius: 2px; color: #e9edef;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
+        .sent { align-self: flex-end; background: linear-gradient(135deg, #005c4b, #00a884); border-bottom-right-radius: 2px; }
+        .received { align-self: flex-start; background: #202c33; border-bottom-left-radius: 2px; border: 1px solid rgba(255,255,255,0.05); }
         
-        .deleted-msg { font-style: italic; opacity: 0.6; font-size: 12px; }
+        .deleted-msg { font-style: italic; opacity: 0.5; font-size: 12px; }
         .time { font-size: 9px; opacity: 0.6; display: block; text-align: right; margin-top: 5px; }
 
         /* ⌨️ Futuristic Input Area */
-        .input-wrapper { 
-            background: #111b21; padding: 12px 15px; display: flex; align-items: center; gap: 10px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+        .input-wrapper { background: #111b21; padding: 12px 15px; display: flex; align-items: center; gap: 10px; }
         .input-container {
-            flex: 1; background: #2a3942; border-radius: 25px; display: flex; align-items: center;
-            padding: 0 15px; border: 1px solid transparent; transition: 0.3s;
+            flex: 1; background: #2a3942; border-radius: 25px; padding: 0 15px; 
+            border: 1px solid transparent; display: flex; align-items: center;
         }
-        .input-container:focus-within { border-color: #00f2fe; background: #32444f; }
-        
         .input-container input { 
             flex: 1; background: none; border: none; padding: 12px 0; color: white; 
             outline: none; font-size: 14px; font-family: 'Poppins';
@@ -79,17 +64,11 @@
         .send-btn { 
             width: 48px; height: 48px; background: #00f2fe; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; border: none; 
-            color: #000; font-size: 18px; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            color: #000; font-size: 18px; cursor: pointer; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
         }
-        .send-btn:active { transform: scale(0.9) rotate(-15deg); box-shadow: 0 0 5px rgba(0, 242, 254, 0.5); }
 
         /* 🛡️ System Bar */
-        .system-nav-bar { 
-            height: 48px; background-color: #4f515e; display: flex; 
-            justify-content: center; align-items: center; font-size: 10px; 
-            color: #ccc; font-weight: 600; letter-spacing: 2px;
-        }
+        .system-nav-bar { height: 48px; background-color: #4f515e; display: flex; justify-content: center; align-items: center; font-size: 10px; color: #ccc; font-weight: 600; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -97,10 +76,9 @@
     <div class="chat-header">
         <i class="fas fa-chevron-left back-btn" onclick="history.back()"></i>
         <div class="header-info">
-            <b id="chatTitle">Loading...</b>
+            <b id="chatTitle">Rare Player</b>
             <span id="statusText" class="status-dot">Offline</span>
         </div>
-        <i class="fas fa-ellipsis-v" style="color: #8696a0; font-size: 14px;"></i>
     </div>
 
     <div class="chat-container" id="chatBox"></div>
@@ -124,7 +102,7 @@
         const targetName = urlParams.get('name');
         let user = JSON.parse(localStorage.getItem("rareGamingUser"));
         
-        document.getElementById('chatTitle').innerText = targetName || "Unknown Player";
+        document.getElementById('chatTitle').innerText = targetName || "Unknown";
 
         function checkOnline() {
             if(!targetName) return;
@@ -148,7 +126,9 @@
                     let isDeleted = m.text.includes("🚫 This message was deleted");
                     let msgContent = isDeleted ? `<span class="deleted-msg">${m.text}</span>` : m.text;
                     
-                    let deleteAction = (type === 'sent' && !isDeleted) ? `onclick="confirmDelete('${new Date(m.time).getTime()}')"` : "";
+                    // Click ya Long Press se Delete confirm hoga
+                    let deleteAction = (type === 'sent' && !isDeleted) ? 
+                        `onclick="confirmDelete('${new Date(m.time).getTime()}')" oncontextmenu="event.preventDefault(); confirmDelete('${new Date(m.time).getTime()}')"` : "";
                     
                     box.innerHTML += `
                         <div class="msg ${type}" ${deleteAction}>
@@ -170,16 +150,14 @@
         }
 
         function sendMsg() {
-            let text = document.getElementById('msgInput').value;
-            if(!text.trim() || !user) return;
+            let text = document.getElementById('msgInput').value.trim();
+            if(!text || !user) return;
             document.getElementById('msgInput').value = "";
             fetch(`${scriptURL}?action=sendMessage&sender=${user.uid}&receiver=${targetUID}&msg=${encodeURIComponent(text)}`)
             .then(() => fetchMessages());
         }
 
-        document.getElementById('msgInput').addEventListener("keyup", function(e) {
-            if (e.keyCode === 13) sendMsg();
-        });
+        document.getElementById('msgInput').addEventListener("keyup", (e) => { if (e.keyCode === 13) sendMsg(); });
 
         setInterval(fetchMessages, 4000);
         setInterval(checkOnline, 10000);
