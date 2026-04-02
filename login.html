@@ -23,7 +23,7 @@
         .input-group input:focus { border-color: #66fcf1; box-shadow: 0 0 8px rgba(102, 252, 241, 0.3); }
         
         .submit-btn { width: 100%; background: #66fcf1; color: #000; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; transition: 0.3s; box-shadow: 0 4px 10px rgba(102, 252, 241, 0.3); }
-        .submit-btn:active { transform: scale(0.97); background: #4de2d6; }
+        .submit-btn:disabled { background: #444; color: #888; cursor: not-allowed; box-shadow: none; }
     </style>
 </head>
 <body>
@@ -38,45 +38,60 @@
     <div class="login-box">
         <form id="customLoginForm">
             <div class="input-group">
-                <label>In-Game Name (IGN)</label>
-                <input type="text" id="playerName" placeholder="Enter your game name" required>
+                <label>Username (IGN)</label>
+                <input type="text" id="playerName" placeholder="Enter your username" required>
             </div>
             <div class="input-group">
-                <label>Game UID</label>
-                <input type="number" id="playerUid" placeholder="Enter your UID" required>
+                <label>Password</label>
+                <input type="password" id="playerPass" placeholder="Enter your password" required>
             </div>
-            <button type="submit" class="submit-btn">ENTER DASHBOARD</button>
+            <button type="submit" class="submit-btn" id="loginBtn">ENTER DASHBOARD</button>
         </form>
     </div>
 
     <script>
-        // Check karo ki player pehle se login toh nahi hai?
+        // 🔗 APNA NAYA MASTER SCRIPT LINK
+        const scriptURL = "https://script.google.com/macros/s/AKfycby34-2K5DnslQpxs0_nRw_ZPtsWVLYKJkuZ6RJnqvuzbi6gpmH9kuAI2BsosdkVOVaTLw/exec";
+
         window.onload = function() {
             if (localStorage.getItem("rareGamingUser")) {
-                // Agar login hai, toh direct andar bhej do
                 window.location.href = "index.html";
             }
         };
 
-        // Form submit hone par jadoo
         document.getElementById('customLoginForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Page refresh hone se rokna
+            e.preventDefault();
             
-            const ign = document.getElementById('playerName').value;
-            const uid = document.getElementById('playerUid').value;
+            const user = document.getElementById('playerName').value.trim();
+            const pass = document.getElementById('playerPass').value.trim();
+            const btn = document.getElementById('loginBtn');
 
-            // Player ka data save karna (Sath mein logo.jpg ko profile pic set kar diya)
-            const userData = {
-                name: ign,
-                uid: uid,
-                picture: "logo.jpg" 
-            };
+            btn.innerText = "VERIFYING...";
+            btn.disabled = true;
 
-            // Phone ki memory mein save kar diya
-            localStorage.setItem("rareGamingUser", JSON.stringify(userData));
-
-            // Dashboard par teleport!
-            window.location.href = "index.html";
+            // 💸 Google Sheet se check kar rahe hain ki user sahi hai ya nahi
+            fetch(scriptURL + "?action=login&username=" + encodeURIComponent(user) + "&password=" + encodeURIComponent(pass))
+            .then(res => res.text())
+            .then(resp => {
+                if(resp === "Success") {
+                    // Agar login successful hai, toh data save karo
+                    const userData = {
+                        name: user,
+                        picture: "logo.jpg" 
+                    };
+                    localStorage.setItem("rareGamingUser", JSON.stringify(userData));
+                    window.location.href = "index.html";
+                } else {
+                    alert("❌ Invalid Username or Password!");
+                    btn.innerText = "ENTER DASHBOARD";
+                    btn.disabled = false;
+                }
+            })
+            .catch(err => {
+                alert("Network Error! Check Internet.");
+                btn.innerText = "ENTER DASHBOARD";
+                btn.disabled = false;
+            });
         });
     </script>
 </body>
