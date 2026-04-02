@@ -10,7 +10,7 @@
         
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 140px; 
+            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 160px; 
         }
 
         /* HEADER */
@@ -30,7 +30,7 @@
         .match-card { 
             position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/5; 
             border: 1px solid rgba(255,255,255,0.1); text-decoration: none; display: block;
-            pointer-events: none; /* Registration closed hai isliye click band hai */
+            pointer-events: none; 
         }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: grayscale(80%); }
         
@@ -54,13 +54,39 @@
         .action-card i { font-size: 24px; margin-bottom: 8px; display: block; color: #ffd700; }
         .action-card span { font-size: 10px; font-weight: 800; color: #fff; text-transform: uppercase; }
 
-        /* NAV BAR */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .nav-item.active { color: white; position: relative; }
-        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
-        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
+        /* 🌟 NEW 5-BUTTON NAV SYSTEM 🌟 */
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
+        
+        .bottom-nav { 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; 
+            background: #111116; display: flex; justify-content: space-between; 
+            align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
+            padding: 0 5px;
+        }
+
+        .nav-item { 
+            text-decoration: none; color: #666; font-size: 9px; font-weight: 800; 
+            display: flex; flex-direction: column; align-items: center; flex: 1; 
+        }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+
+        /* Active Class (Except Center Button) */
+        .nav-item.active:not(.center-btn) { color: white; position: relative; }
+        .nav-item.active:not(.center-btn) i { color: #000; z-index: 2; font-size: 22px; }
+        .nav-item.active:not(.center-btn)::before { 
+            content: ''; position: absolute; top: -16px; width: 55px; height: 55px; 
+            background: #ffffff; border-radius: 16px; transform: rotate(45deg); 
+            z-index: -1; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); 
+        }
+
+        /* Special Center Button (Transfer) */
+        .nav-item.center-btn { position: relative; color: #666; margin-top: -30px; }
+        .nav-item.center-btn .icon-circle { 
+            width: 55px; height: 55px; background: #222; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 4px solid #050508; transition: 0.3s; 
+        }
+        .nav-item.center-btn i { color: white; font-size: 22px; margin: 0; }
     </style>
 </head>
 <body>
@@ -72,54 +98,32 @@
 
     <div class="section-title">E-sports Matches</div>
     <div class="match-grid">
-        <div class="match-card">
-            <img src="br_poster.jpg" alt="BR SQUAD">
-            <div class="card-overlay">
-                <p class="match-name">BR SQUAD (₹20)</p>
-                <div class="status-closed">CLOSED</div>
-            </div>
-        </div>
-        <div class="match-card">
-            <img src="cs_poster.jpg" alt="CLASH SQUAD">
-            <div class="card-overlay">
-                <p class="match-name">CS SQUAD (₹20)</p>
-                <div class="status-closed">CLOSED</div>
-            </div>
-        </div>
-        <div class="match-card">
-            <img src="lw_poster.jpg" alt="LONE WOLF">
-            <div class="card-overlay">
-                <p class="match-name">LONE WOLF (₹10)</p>
-                <div class="status-closed">CLOSED</div>
-            </div>
-        </div>
-        <div class="match-card">
-            <img src="1v1_poster.jpg" alt="1V1 BATTLE">
-            <div class="card-overlay">
-                <p class="match-name">1V1 BATTLE (₹50)</p>
-                <div class="status-closed">CLOSED</div>
-            </div>
-        </div>
+        <div class="match-card"><img src="br_poster.jpg"><div class="card-overlay"><p class="match-name">BR SQUAD (₹20)</p><div class="status-closed">CLOSED</div></div></div>
+        <div class="match-card"><img src="cs_poster.jpg"><div class="card-overlay"><p class="match-name">CS SQUAD (₹20)</p><div class="status-closed">CLOSED</div></div></div>
     </div>
 
     <div class="section-title">Quick Actions</div>
     <div class="action-grid">
         <a href="teams.html" class="action-card"><i class="fas fa-shield-alt"></i><span>Teams</span></a>
         <a href="https://wa.me/917008170291" class="action-card"><i class="fab fa-whatsapp"></i><span>Contact</span></a>
-        <a href="prizes.html" class="action-card"><i class="fas fa-trophy"></i><span>Prizes</span></a>
-        <a href="profile.html" class="action-card"><i class="fas fa-user-circle"></i><span>Profile</span></a>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        
+        <a href="transfer.html" class="nav-item center-btn">
+            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
+            <span style="margin-top: 5px;">TRANSFER</span>
+        </a>
+
         <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzPZrXEmFzQYiABm5xeGuRmGfWcZzfe4_YOOKc-WVMDf-fsQs39YhiQAWopkFmvGQSDbw/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycby34-2K5DnslQpxs0_nRw_ZPtsWVLYKJkuZ6RJnqvuzbi6gpmH9kuAI2BsosdkVOVaTLw/exec";
         
         function syncBalance() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
