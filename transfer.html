@@ -8,7 +8,10 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 150px; }
+        body { 
+            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 160px; 
+        }
         
         /* Header */
         .header { padding: 30px 20px; text-align: center; background: #111116; border-bottom: 1px solid #1f1f25; }
@@ -34,18 +37,38 @@
 
         #verifyName { font-weight: 600; margin-bottom: 10px; min-height: 18px; font-size: 12px; }
 
-        /* 🌟 5-BUTTON NAVIGATION SYSTEM 🌟 */
+        /* 🌟 NAVIGATION BAR SYSTEM 🌟 */
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1f1f25; z-index: 1000; padding: 0 5px; }
-        .nav-item { text-decoration: none; color: #666; font-size: 9px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        
+        .bottom-nav { 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; 
+            background: #111116; display: flex; justify-content: space-between; 
+            align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
+            padding: 0 5px;
+        }
+
+        .nav-item { 
+            text-decoration: none; color: #666; font-size: 9px; font-weight: 800; 
+            display: flex; flex-direction: column; align-items: center; flex: 1; 
+        }
         .nav-item i { font-size: 20px; margin-bottom: 4px; }
 
-        /* Center Button (Special) */
+        /* Transfer Active Effect (Center Button) */
         .nav-item.center-btn { position: relative; color: white; margin-top: -35px; }
-        .nav-item.center-btn .icon-circle { width: 60px; height: 60px; background: #00f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0, 242, 254, 0.5); border: 5px solid #050508; }
+        .nav-item.center-btn .icon-circle { 
+            width: 60px; height: 60px; background: #00f2fe; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.5); border: 5px solid #050508; 
+        }
         .nav-item.center-btn i { color: #000; font-size: 24px; margin: 0; }
         
-        .nav-item.active:not(.center-btn) { color: white; }
+        .nav-item.active:not(.center-btn) { color: white; position: relative; }
+        .nav-item.active:not(.center-btn) i { color: #000; z-index: 2; font-size: 22px; }
+        .nav-item.active:not(.center-btn)::before { 
+            content: ''; position: absolute; top: -16px; width: 55px; height: 55px; 
+            background: #ffffff; border-radius: 16px; transform: rotate(45deg); 
+            z-index: -1; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); 
+        }
     </style>
 </head>
 <body>
@@ -75,13 +98,14 @@
             <span style="margin-top: 5px;">TRANSFER</span>
         </a>
 
-        <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
+        <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycby34-2K5DnslQpxs0_nRw_ZPtsWVLYKJkuZ6RJnqvuzbi6gpmH9kuAI2BsosdkVOVaTLw/exec";
+        // Naya Link Jo Aapne Diya Tha
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxkNQ1Zc4mrOV3oAT-FEW7yJbp2c1WL5T80hHa5lTth5K1I5OloyJ3ddbc-pDAl1JHSeQ/exec";
         let user = JSON.parse(localStorage.getItem("rareGamingUser"));
 
         if(!user) window.location.href = "login.html";
