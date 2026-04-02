@@ -35,8 +35,6 @@
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
         .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: white; position: relative; }
-        .nav-item.active i { color: #000; z-index: 2; font-size: 24px; }
-        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 58px; height: 58px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 25px rgba(255, 255, 255, 0.9); }
     </style>
 </head>
 <body>
@@ -50,13 +48,12 @@
         <div class="reg-title" id="matchLabel">LOADING...</div>
         <div class="reg-sub" id="matchRules">Please fill your game details</div>
 
-        <div id="playerInputs">
-            </div>
+        <div id="playerInputs"></div>
 
         <label>Game UID (Leader)</label>
         <input type="number" id="mainUid" placeholder="Enter FF UID">
 
-        <button class="btn-confirm" onclick="submitRegistration()">CONFIRM JOIN</button>
+        <button class="btn-confirm" id="btnConfirm" onclick="submitRegistration()">CONFIRM JOIN</button>
     </div>
 
     <nav class="bottom-nav">
@@ -68,52 +65,70 @@
     <div class="system-nav-bar"></div>
 
     <script>
+        // 🔗 APNA MASTER SCRIPT LINK
+        const scriptURL = "https://script.google.com/macros/s/AKfycby34-2K5DnslQpxs0_nRw_ZPtsWVLYKJkuZ6RJnqvuzbi6gpmH9kuAI2BsosdkVOVaTLw/exec";
+        
         const urlParams = new URLSearchParams(window.location.search);
         const matchName = urlParams.get('match') || "TOURNAMENT";
+        const entryFee = urlParams.get('fee') || 10; // Default ₹10 fee
+        
         document.getElementById('matchLabel').innerText = matchName;
-
         const inputArea = document.getElementById('playerInputs');
+        const user = JSON.parse(localStorage.getItem("rareGamingUser"));
+
+        if(!user) window.location.href = "login.html";
 
         // 🔥 MATCH LOGIC 🔥
         if (matchName.includes("CS")) {
-            // 4 Players Logic
-            document.getElementById('matchRules').innerText = "Squad Entry: 4 Players required";
+            document.getElementById('matchRules').innerText = "Squad Entry: ₹" + entryFee + " required";
             inputArea.innerHTML = `
                 <label>Team Name</label>
                 <input type="text" id="teamName" placeholder="Enter Team Name">
-                <label>Players IGN</label>
-                <input type="text" id="p1" placeholder="Player 1 (Leader) Name">
-                <input type="text" id="p2" placeholder="Player 2 Name">
-                <input type="text" id="p3" placeholder="Player 3 Name">
-                <input type="text" id="p4" placeholder="Player 4 Name">
+                <label>Players IGN (Comma separated)</label>
+                <input type="text" id="p_all" placeholder="P1, P2, P3, P4">
             `;
         } else if (matchName.includes("BR")) {
-            // 2 Players Logic (Duo)
-            document.getElementById('matchRules').innerText = "Duo Entry: 2 Players required";
+            document.getElementById('matchRules').innerText = "Duo Entry: ₹" + entryFee + " required";
             inputArea.innerHTML = `
-                <label>Team Name (Optional)</label>
+                <label>Team Name</label>
                 <input type="text" id="teamName" placeholder="Enter Duo Name">
                 <label>Players IGN</label>
-                <input type="text" id="p1" placeholder="Player 1 (Leader) Name">
-                <input type="text" id="p2" placeholder="Player 2 Name">
+                <input type="text" id="p_all" placeholder="Player 1, Player 2">
             `;
         } else {
-            // Solo Logic (Lawn Wolf & 1v1)
-            document.getElementById('matchRules').innerText = "Solo Entry: Individual Player";
+            document.getElementById('matchRules').innerText = "Solo Entry: ₹" + entryFee + " required";
             inputArea.innerHTML = `
                 <label>In-Game Name (IGN)</label>
-                <input type="text" id="p1" placeholder="Your FF Name">
+                <input type="text" id="p_all" placeholder="Your FF Name">
             `;
         }
 
         function submitRegistration() {
             const uid = document.getElementById('mainUid').value;
-            const p1 = document.getElementById('p1').value;
+            const players = document.getElementById('p_all').value;
+            const btn = document.getElementById('btnConfirm');
             
-            if(!uid || !p1) return alert("Bhai, Details dalo!");
+            if(!uid || !players) return alert("Bhai, saari details dalo!");
 
-            alert("✅ Registration for " + matchName + " Successful!");
-            window.location.href = "index.html";
+            btn.innerText = "PROCESSING...";
+            btn.disabled = true;
+
+            // 💸 SCRIPT KO REQUEST BHEJ RAHE HAIN PAISA KAATNE KE LIYE
+            fetch(scriptURL + "?action=registerMatch&username=" + encodeURIComponent(user.name) + "&matchType=" + encodeURIComponent(matchName + " - " + players) + "&fee=" + entryFee)
+            .then(res => res.text()).then(resp => {
+                if(resp === "Success") {
+                    alert("✅ " + matchName + " Joined Successfully!");
+                    window.location.href = "index.html";
+                } else {
+                    alert("❌ Error: " + resp); // Low Balance ya koi aur error
+                    btn.innerText = "CONFIRM JOIN";
+                    btn.disabled = false;
+                }
+            })
+            .catch(err => {
+                alert("Network Error!");
+                btn.disabled = false;
+            });
         }
     </script>
 </body>
