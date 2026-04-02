@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Chats - RARE GAMING</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; }
+        .header { padding: 20px; background: #111116; border-bottom: 1px solid #1f1f25; display: flex; justify-content: space-between; align-items: center; }
+        .header h2 { font-size: 20px; margin: 0; color: #ffd700; text-transform: uppercase; }
+        .add-box { padding: 20px; background: #111116; margin: 15px; border-radius: 15px; border: 1px solid #1f1f25; }
+        input { width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; color: #fff; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; outline: none; }
+        .btn-add { width: 100%; padding: 12px; background: #00f2fe; color: #000; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .contact-list { padding: 0 15px; }
+        .contact-card { background: #111116; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: white; }
+        .contact-card i { font-size: 40px; color: #00f2fe; }
+        .contact-info b { font-size: 16px; display: block; text-transform: uppercase; }
+        .contact-info span { font-size: 11px; color: #888; }
+        
+        /* Nav Bar */
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1f1f25; z-index: 1000; padding: 0 5px; }
+        .nav-item { text-decoration: none; color: #666; font-size: 9px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .nav-item.active { color: white; position: relative; }
+        .nav-item.active i { color: #000; z-index: 2; }
+        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 55px; height: 55px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+        .nav-item.center-btn { position: relative; color: #666; margin-top: -30px; }
+        .nav-item.center-btn .icon-circle { width: 55px; height: 55px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #050508; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Rare Chat</h2>
+        <i class="fas fa-comments" style="color: #00f2fe;"></i>
+    </div>
+
+    <div class="add-box">
+        <input type="text" id="newUID" placeholder="Friend's UID (RGXXXXXX)">
+        <input type="text" id="newName" placeholder="Friend's Name">
+        <button class="btn-add" onclick="saveContact()">Add Contact</button>
+    </div>
+
+    <div class="contact-list" id="contactList"></div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span style="margin-top: 5px;">TRANSFER</span></a>
+        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comments"></i><span>CHAT</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+    </nav>
+    <div class="system-nav-bar"></div>
+
+    <script>
+        function saveContact() {
+            let uid = document.getElementById('newUID').value.trim().toUpperCase();
+            let name = document.getElementById('newName').value.trim();
+            if(!uid || !name) return alert("Pura detail dalo!");
+
+            let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
+            contacts.push({uid: uid, name: name});
+            localStorage.setItem("rareContacts", JSON.stringify(contacts));
+            
+            document.getElementById('newUID').value = "";
+            document.getElementById('newName').value = "";
+            renderContacts();
+        }
+
+        function renderContacts() {
+            let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
+            let list = document.getElementById('contactList');
+            list.innerHTML = contacts.length ? "" : "<p style='text-align:center;color:#666'>No contacts yet.</p>";
+            
+            contacts.forEach(c => {
+                list.innerHTML += `
+                    <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" class="contact-card">
+                        <i class="fas fa-user-circle"></i>
+                        <div class="contact-info">
+                            <b>${c.name}</b>
+                            <span>${c.uid}</span>
+                        </div>
+                    </a>
+                `;
+            });
+        }
+        window.onload = renderContacts;
+    </script>
+</body>
+</html>
