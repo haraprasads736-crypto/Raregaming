@@ -2,24 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Profile - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px; padding-bottom: 140px; }
         
-        .profile-card { background: #111116; border: 1px solid #00f2fe; border-radius: 20px; padding: 30px 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 0 20px rgba(0, 242, 254, 0.1); }
-        .user-avatar { font-size: 60px; color: #00f2fe; margin-bottom: 15px; }
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 140px; }
         
-        .promo-box { background: #1a1a24; border: 1px dashed #ffaa00; border-radius: 15px; padding: 20px; margin-bottom: 20px; text-align: center; }
-        input { width: 90%; background: #050508; border: 1px solid #333; color: white; padding: 12px; border-radius: 10px; margin: 10px 0; text-align: center; font-weight: 600; outline: none; }
-        input:focus { border-color: #ffaa00; }
-        
-        .btn-apply { background: #ffaa00; color: black; border: none; padding: 12px 30px; border-radius: 25px; font-weight: 800; cursor: pointer; width: 100%; text-transform: uppercase; }
-        .btn-logout { background: #ff007a; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; width: 100%; margin-top: 20px; cursor: pointer; }
+        .header-top { padding: 30px 20px; text-align: center; background: linear-gradient(to bottom, #111116, transparent); }
+        .user-icon { font-size: 60px; color: #ffd700; margin-bottom: 10px; }
+        .username { font-size: 24px; font-weight: 800; text-transform: uppercase; }
 
-        /* Navigation Bar */
+        .wallet-panel { 
+            background: #111116; border-radius: 20px; padding: 20px; 
+            border: 1px solid #1f1f25; margin: 0 20px 20px 20px; 
+        }
+        .panel-title { font-size: 13px; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+        
+        /* UID Styling */
+        #playerUID { font-size: 22px; font-weight: 800; color: #ffd700; letter-spacing: 2px; text-align: center; margin: 10px 0; }
+
+        input { 
+            width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; 
+            color: #fff; border-radius: 10px; margin-bottom: 12px; box-sizing: border-box; 
+            font-size: 14px; font-family: 'Poppins'; outline: none;
+        }
+        input:focus { border-color: #00f2fe; }
+        
+        /* Verification Name */
+        #verifyName { font-size: 12px; font-weight: 800; margin-top: -5px; margin-bottom: 15px; min-height: 18px; }
+
+        .btn-action { 
+            width: 100%; padding: 14px; border: none; border-radius: 12px; 
+            font-size: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .btn-blue { background: #00f2fe; color: #000; }
+        .btn-red { background: #ff3131; color: #fff; margin-top: 10px; }
+        .btn-action:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* Navigation */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
         .nav-item.active { color: white; position: relative; }
@@ -30,20 +53,28 @@
 </head>
 <body>
 
-    <div class="profile-card">
-        <i class="fas fa-user-circle user-avatar"></i>
-        <h2 id="pName" style="margin: 0; text-transform: uppercase; letter-spacing: 1px;">User</h2>
-        <p style="color: #666; font-size: 14px;">Member of RARE GAMING</p>
+    <div class="header-top">
+        <i class="fas fa-user-circle user-icon"></i>
+        <div class="username" id="displayUser">PLAYER</div>
     </div>
 
-    <div class="promo-box">
-        <h3 style="color: #ffaa00; margin: 0; font-size: 16px; text-transform: uppercase;">Apply Promo Code</h3>
-        <p style="font-size: 11px; color: #ccc; margin-top: 5px;">Enter a code to get instant balance!</p>
-        <input type="text" id="promoInput" placeholder="ENTER CODE HERE">
-        <button class="btn-apply" onclick="applyPromo()">Apply Now</button>
+    <div class="wallet-panel" style="border-color: #ffd700;">
+        <div class="panel-title" style="color:#ffd700;"><i class="fas fa-id-badge"></i> Your Unique ID (UID)</div>
+        <div id="playerUID">RG000000</div>
+        <p style="font-size: 9px; color: #666; text-align: center; margin: 0;">Share this UID to receive money from friends.</p>
     </div>
 
-    <button class="btn-logout" onclick="logout()">Logout Account</button>
+    <div class="wallet-panel">
+        <div class="panel-title" style="color:#00f2fe;"><i class="fas fa-paper-plane"></i> Send Money to Friend</div>
+        <input type="text" id="targetUID" placeholder="Enter Friend's UID" oninput="verifyPlayer()">
+        <div id="verifyName"></div>
+        <input type="number" id="sendAmt" placeholder="Amount (₹)">
+        <button class="btn-action btn-blue" id="btnSend" onclick="transferNow()" disabled>SEND MONEY</button>
+    </div>
+
+    <div style="padding: 0 20px;">
+        <button class="btn-action btn-red" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
@@ -54,44 +85,70 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxav2f0FIc_pmd-ntNG7szqzECf_MXkDSYa0OO5JhTyijFTMEgVgff5cxpBMm8Z9C3H/exec";
-        
-        // Login status check
-        let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-        if(!userData) {
-            window.location.href = "login.html";
-        } else {
-            document.getElementById('pName').innerText = userData.name;
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzPZrXEmFzQYiABm5xeGuRmGfWcZzfe4_YOOKc-WVMDf-fsQs39YhiQAWopkFmvGQSDbw/exec";
+        let user = JSON.parse(localStorage.getItem("rareGamingUser"));
+
+        function loadProfile() {
+            if(!user) return window.location.href = "login.html";
+            document.getElementById('displayUser').innerText = user.name;
+
+            fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(user.name))
+            .then(res => res.json()).then(data => {
+                document.getElementById('playerUID').innerText = data.uid || "RG ERROR";
+            });
         }
 
-        function applyPromo() {
-            let code = document.getElementById('promoInput').value;
-            if(!code) return alert("Please enter a promo code!");
+        // 🔍 USERNAME VERIFICATION LOGIC
+        function verifyPlayer() {
+            let uid = document.getElementById('targetUID').value.trim().toUpperCase();
+            let nameBox = document.getElementById('verifyName');
+            let btn = document.getElementById('btnSend');
 
-            let btn = document.querySelector('.btn-apply');
-            btn.innerText = "CHECKING...";
+            if(uid.length >= 8) {
+                nameBox.innerText = "Checking...";
+                nameBox.style.color = "#888";
+
+                fetch(scriptURL + "?action=checkUID&uid=" + uid)
+                .then(res => res.text()).then(name => {
+                    if(name !== "Not Found") {
+                        nameBox.innerHTML = "<i class='fas fa-check-circle'></i> Transfer to: " + name;
+                        nameBox.style.color = "#00ff00";
+                        btn.disabled = false;
+                    } else {
+                        nameBox.innerText = "Invalid UID! Player not found.";
+                        nameBox.style.color = "#ff3131";
+                        btn.disabled = true;
+                    }
+                });
+            } else {
+                nameBox.innerText = "";
+                btn.disabled = true;
+            }
+        }
+
+        function transferNow() {
+            let target = document.getElementById('targetUID').value.trim();
+            let amt = document.getElementById('sendAmt').value;
+            let btn = document.getElementById('btnSend');
+
+            if(!amt || amt <= 0) return alert("Sahi amount dalo bhai!");
+
+            btn.innerText = "TRANSFERRING...";
             btn.disabled = true;
 
-            fetch(scriptURL + "?action=applyPromo&username=" + encodeURIComponent(userData.name) + "&promo=" + encodeURIComponent(code))
-            .then(res => res.text())
-            .then(resp => {
+            fetch(scriptURL + "?action=transferMoney&senderName=" + encodeURIComponent(user.name) + "&targetUID=" + target + "&amount=" + amt)
+            .then(res => res.text()).then(resp => {
                 alert(resp);
-                document.getElementById('promoInput').value = "";
-                btn.innerText = "APPLY NOW";
-                btn.disabled = false;
-            })
-            .catch(e => {
-                alert("Error connecting to server!");
-                btn.disabled = false;
+                location.reload();
             });
         }
 
         function logout() {
-            if(confirm("Are you sure you want to logout?")) {
-                localStorage.clear();
-                window.location.href = "login.html";
-            }
+            localStorage.removeItem("rareGamingUser");
+            window.location.href = "login.html";
         }
+
+        window.onload = loadProfile;
     </script>
 </body>
 </html>
