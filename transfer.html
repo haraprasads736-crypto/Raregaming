@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Transfer - RARE GAMING</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        
+        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 150px; }
+        
+        /* Header */
+        .header { padding: 30px 20px; text-align: center; background: #111116; border-bottom: 1px solid #1f1f25; }
+        .header h2 { color: #00f2fe; margin: 0; text-transform: uppercase; font-size: 20px; letter-spacing: 1px; }
+
+        /* Transfer Card */
+        .wallet-panel { background: #111116; border-radius: 20px; padding: 25px; border: 1px solid #1f1f25; margin: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .panel-label { font-size: 11px; font-weight: 800; color: #888; margin-bottom: 10px; text-transform: uppercase; }
+        
+        input { 
+            width: 100%; padding: 14px; background: #000; border: 1px solid #2a2a30; 
+            color: #fff; border-radius: 12px; margin-bottom: 12px; box-sizing: border-box; 
+            font-family: 'Poppins'; font-size: 14px; outline: none;
+        }
+        input:focus { border-color: #00f2fe; }
+
+        .btn-blue { 
+            width: 100%; padding: 16px; background: #00f2fe; color: #000; border: none; 
+            border-radius: 12px; font-weight: 800; text-transform: uppercase; font-size: 14px;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-blue:disabled { background: #333; color: #666; }
+
+        #verifyName { font-weight: 600; margin-bottom: 10px; min-height: 18px; font-size: 12px; }
+
+        /* 🌟 5-BUTTON NAVIGATION SYSTEM 🌟 */
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1f1f25; z-index: 1000; padding: 0 5px; }
+        .nav-item { text-decoration: none; color: #666; font-size: 9px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+
+        /* Center Button (Special) */
+        .nav-item.center-btn { position: relative; color: white; margin-top: -35px; }
+        .nav-item.center-btn .icon-circle { width: 60px; height: 60px; background: #00f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0, 242, 254, 0.5); border: 5px solid #050508; }
+        .nav-item.center-btn i { color: #000; font-size: 24px; margin: 0; }
+        
+        .nav-item.active:not(.center-btn) { color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Money Transfer</h2>
+    </div>
+
+    <div class="wallet-panel">
+        <div class="panel-label">Friend's Unique ID</div>
+        <input type="text" id="targetUID" placeholder="RGXXXXXX" oninput="verifyPlayer()">
+        <div id="verifyName"></div>
+
+        <div class="panel-label">Amount (₹)</div>
+        <input type="number" id="sendAmt" placeholder="0.00">
+        
+        <button class="btn-blue" id="btnSend" onclick="transferNow()" disabled>CONFIRM TRANSFER</button>
+        <p style="font-size: 10px; color: #666; text-align: center; margin-top: 15px;">Paisa bhejne ke baad wapas nahi milega, dhyan se bhejein!</p>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        
+        <a href="transfer.html" class="nav-item center-btn active">
+            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
+            <span style="margin-top: 5px;">TRANSFER</span>
+        </a>
+
+        <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+    </nav>
+    <div class="system-nav-bar"></div>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycby34-2K5DnslQpxs0_nRw_ZPtsWVLYKJkuZ6RJnqvuzbi6gpmH9kuAI2BsosdkVOVaTLw/exec";
+        let user = JSON.parse(localStorage.getItem("rareGamingUser"));
+
+        if(!user) window.location.href = "login.html";
+
+        function verifyPlayer() {
+            let uid = document.getElementById('targetUID').value.trim().toUpperCase();
+            let nameBox = document.getElementById('verifyName');
+            let btn = document.getElementById('btnSend');
+
+            if(uid.length >= 8) {
+                nameBox.innerText = "Checking...";
+                nameBox.style.color = "#888";
+                
+                fetch(scriptURL + "?action=checkUID&uid=" + uid)
+                .then(res => res.text())
+                .then(name => {
+                    if(name !== "Not Found") {
+                        nameBox.innerText = "Target: " + name;
+                        nameBox.style.color = "#00ff00";
+                        btn.disabled = false;
+                    } else {
+                        nameBox.innerText = "Invalid UID!";
+                        nameBox.style.color = "#ff3131";
+                        btn.disabled = true;
+                    }
+                });
+            } else {
+                nameBox.innerText = "";
+                btn.disabled = true;
+            }
+        }
+
+        function transferNow() {
+            let target = document.getElementById('targetUID').value.trim().toUpperCase();
+            let amt = document.getElementById('sendAmt').value;
+            let btn = document.getElementById('btnSend');
+
+            if(!amt || amt <= 0) return alert("Sahi amount dalo!");
+
+            btn.innerText = "SENDING...";
+            btn.disabled = true;
+
+            fetch(scriptURL + "?action=transferMoney&senderName=" + encodeURIComponent(user.name) + "&targetUID=" + target + "&amount=" + amt)
+            .then(res => res.text())
+            .then(resp => {
+                alert(resp);
+                location.reload();
+            })
+            .catch(err => {
+                alert("Transfer Failed!");
+                btn.innerText = "CONFIRM TRANSFER";
+                btn.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
