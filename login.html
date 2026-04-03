@@ -3,125 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Rare Gaming</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>RARE GAMING - Player Login</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         
-        body { 
-            background: #000; color: white; font-family: 'Poppins', sans-serif; 
-            display: flex; align-items: center; justify-content: center; 
-            height: 100vh; margin: 0; overflow: hidden;
-        }
+        body { background-color: #0c0e12; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; overflow: hidden; }
         
-        .box { 
-            background: #111; padding: 35px 25px; border-radius: 25px; 
-            width: 90%; max-width: 360px; text-align: center; 
-            border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+        .logo-container { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #66fcf1; overflow: hidden; margin-bottom: 15px; box-shadow: 0 0 15px rgba(102, 252, 241, 0.4); }
+        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .app-title { font-weight: 800; font-size: 24px; color: #66fcf1; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .subtitle { font-size: 11px; color: #a0aab2; margin-bottom: 20px; font-weight: 600; letter-spacing: 1px; }
 
-        h2 { font-size: 24px; margin-bottom: 5px; color: #fff; letter-spacing: 1px; }
-        p.subtitle { color: #888; font-size: 12px; margin-bottom: 25px; }
-
+        .login-box { background: #1a1d24; padding: 25px; border-radius: 12px; border: 1.5px solid #2b303b; box-shadow: 0 5px 15px rgba(0,0,0,0.5); width: 85%; max-width: 320px; }
+        
         .input-group { margin-bottom: 15px; text-align: left; }
-        label { font-size: 11px; color: #555; margin-left: 10px; text-transform: uppercase; font-weight: 600; }
+        .input-group label { display: block; font-size: 11px; font-weight: 600; color: #a0aab2; margin-bottom: 5px; text-transform: uppercase; }
+        .input-group input { width: 100%; padding: 12px; background: #15181e; border: 1px solid #2b303b; border-radius: 8px; color: white; font-family: 'Poppins', sans-serif; font-size: 13px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        .input-group input:focus { border-color: #66fcf1; }
         
-        input { 
-            width: 100%; padding: 14px; margin-top: 5px; background: #000; 
-            border: 1px solid #333; color: white; border-radius: 12px; 
-            box-sizing: border-box; outline: none; font-family: 'Poppins';
-            transition: 0.3s;
-        }
-        input:focus { border-color: #3797f0; }
+        .submit-btn { width: 100%; background: #66fcf1; color: #000; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .submit-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
 
-        button { 
-            width: 100%; padding: 14px; background: #3797f0; border: none; 
-            color: white; border-radius: 12px; font-weight: 600; 
-            cursor: pointer; margin-top: 10px; transition: 0.3s;
-        }
-        button:active { transform: scale(0.98); }
-
-        .toggle-link { color: #888; font-size: 13px; margin-top: 20px; display: block; cursor: pointer; }
-        .toggle-link span { color: #3797f0; font-weight: 600; }
-
-        /* Welcome Alert Box */
-        #customAlert {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #222; padding: 25px; border-radius: 20px; border: 1px solid #3797f0;
-            z-index: 1000; width: 80%; max-width: 300px; text-align: center;
-        }
+        .register-link { margin-top: 15px; font-size: 12px; color: #888; cursor: pointer; }
+        .register-link span { color: #66fcf1; font-weight: 800; }
+        
+        /* Success Alert Box */
+        #regAlert { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1d24; padding: 25px; border-radius: 15px; border: 2px solid #66fcf1; z-index: 1000; width: 280px; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2 id="title">Rare Gaming</h2>
-    <p class="subtitle" id="subtitle">Enter your details to continue</p>
-    
-    <div class="input-group">
-        <label id="label1">Your Rare ID</label>
-        <input type="text" id="val1" placeholder="RGXXXX">
+    <div class="logo-container">
+        <img src="logo.jpg" alt="Rare Gaming Logo">
     </div>
     
-    <div class="input-group">
-        <label>Password</label>
-        <input type="password" id="val2" placeholder="••••••••">
+    <div class="app-title" id="mainTitle">RARE GAMING</div>
+    <div class="subtitle" id="mainSubtitle">PLAYER AUTHENTICATION</div>
+
+    <div class="login-box">
+        <form id="customLoginForm">
+            <div class="input-group">
+                <label id="label1">Rare UID (RGXXXXXX)</label>
+                <input type="text" id="userInput" placeholder="Enter UID" required>
+            </div>
+            <div class="input-group">
+                <label>Security Password</label>
+                <input type="password" id="userPass" placeholder="Enter Password" required>
+            </div>
+            <button type="submit" class="submit-btn" id="actionBtn">ENTER DASHBOARD</button>
+            <div class="register-link" id="toggleMode" onclick="toggleMode()">
+                Don't have an account? <span>Sign Up</span>
+            </div>
+        </form>
     </div>
 
-    <button onclick="handleAction()" id="mainBtn">Login Now</button>
-    
-    <p class="toggle-link" id="toggleText" onclick="toggleMode()">
-        Don't have an account? <span>Sign Up</span>
-    </p>
-</div>
+    <div id="regAlert">
+        <h3 style="color:#66fcf1; margin-top:0;">Account Created!</h3>
+        <p style="font-size:12px; color:#ccc;">Take a screenshot of your Rare ID:</p>
+        <h2 id="newIdShow" style="color:white; letter-spacing:2px; background:#000; padding:10px; border-radius:8px;">RG123456</h2>
+        <button onclick="location.reload()" style="width:100%; padding:10px; background:#66fcf1; border:none; border-radius:5px; font-weight:800; cursor:pointer;">GOT IT! LOGIN NOW</button>
+    </div>
 
-<div id="customAlert">
-    <h3 style="color: #00e676; margin-top: 0;">Success!</h3>
-    <p style="font-size: 13px; color: #ccc;">Account created. Your Rare ID is:</p>
-    <h1 id="newIDDisplay" style="color: #fff; margin: 10px 0;">RG0000</h1>
-    <p style="font-size: 11px; color: #888;">Please take a screenshot of this ID!</p>
-    <button onclick="location.reload()" style="background: #333;">Login Now</button>
-</div>
+    <script>
+        // ⚠️ APNA NAYA DEPLOY URL YAHAN DALO
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzGe-aPxYAJCCu6gdB2TYsjyaqhyb_Z_f3fjXsFVWQ0IeH5do-mASoJlcsGVOhhqi0mzw/exec";
+        
+        let isLogin = true;
 
-<script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxeFzlXtyA4jEOvOIQG20kMvsa0pab51QcOA7qQadk39a8zAeIh6oMgdXhAlkYEo2Bbww/exec";
-    let isLoginMode = true;
-
-    function toggleMode() {
-        isLoginMode = !isLoginMode;
-        document.getElementById('title').innerText = isLoginMode ? "Rare Gaming" : "Join Community";
-        document.getElementById('subtitle').innerText = isLoginMode ? "Enter your details to continue" : "Create a new account for free";
-        document.getElementById('mainBtn').innerText = isLoginMode ? "Login Now" : "Register Now";
-        document.getElementById('label1').innerText = isLoginMode ? "Your Rare ID" : "Full Name";
-        document.getElementById('val1').placeholder = isLoginMode ? "RGXXXX" : "Enter Name";
-        document.getElementById('toggleText').innerHTML = isLoginMode ? 
-            "Don't have an account? <span>Sign Up</span>" : "Already have an account? <span>Login</span>";
-    }
-
-    function handleAction() {
-        let v1 = document.getElementById('val1').value.trim();
-        let v2 = document.getElementById('val2').value.trim();
-
-        if(!v1 || !v2) return alert("Fill all details!");
-
-        if(isLoginMode) {
-            // --- LOGIN SYSTEM ---
-            fetch(`${scriptURL}?action=login&uid=${v1}&pass=${v2}`)
-            .then(res => res.text()).then(name => {
-                if(name === "Wrong" || name === "Not Found") return alert("Wrong ID or Password!");
-                localStorage.setItem("rareGamingUser", JSON.stringify({uid: v1, name: name}));
-                window.location.href = "index.html";
-            });
-        } else {
-            // --- REGISTER SYSTEM (For New Users) ---
-            document.getElementById('mainBtn').innerText = "Registering...";
-            fetch(`${scriptURL}?action=register&name=${encodeURIComponent(v1)}&pass=${v2}`)
-            .then(res => res.text()).then(newID => {
-                document.getElementById('newIDDisplay').innerText = newID;
-                document.getElementById('customAlert').style.display = 'block';
-            });
+        function toggleMode() {
+            isLogin = !isLogin;
+            document.getElementById('mainTitle').innerText = isLogin ? "RARE GAMING" : "JOIN COMMUNITY";
+            document.getElementById('actionBtn').innerText = isLogin ? "ENTER DASHBOARD" : "CREATE ACCOUNT";
+            document.getElementById('label1').innerText = isLogin ? "Rare UID (RGXXXXXX)" : "Your Full Name";
+            document.getElementById('userInput').placeholder = isLogin ? "Enter UID" : "Enter Your Name";
+            document.getElementById('toggleMode').innerHTML = isLogin ? "Don't have an account? <span>Sign Up</span>" : "Already a player? <span>Login</span>";
         }
-    }
-</script>
+
+        document.getElementById('customLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const val1 = document.getElementById('userInput').value.trim();
+            const pass = document.getElementById('userPass').value.trim();
+            const btn = document.getElementById('actionBtn');
+
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            let finalURL = isLogin ? 
+                `${scriptURL}?action=login&uid=${encodeURIComponent(val1)}&pass=${encodeURIComponent(pass)}` :
+                `${scriptURL}?action=register&name=${encodeURIComponent(val1)}&pass=${encodeURIComponent(pass)}`;
+
+            fetch(finalURL)
+            .then(res => res.text())
+            .then(data => {
+                btn.disabled = false;
+                btn.innerText = isLogin ? "ENTER DASHBOARD" : "CREATE ACCOUNT";
+
+                if (isLogin) {
+                    if (data === "Failed" || data === "Wrong") {
+                        alert("Bhai, UID ya Password galat hai!");
+                    } else {
+                        // Success: Save both Name and UID
+                        localStorage.setItem("rareGamingUser", JSON.stringify({
+                            name: data, 
+                            uid: val1,
+                            picture: "logo.jpg"
+                        }));
+                        window.location.href = "index.html";
+                    }
+                } else {
+                    // Register Success: Show New UID
+                    if (data === "User Exists") {
+                        alert("Bhai, ye naam pehle se hai!");
+                    } else {
+                        document.getElementById('newIdShow').innerText = data;
+                        document.getElementById('regAlert').style.display = 'block';
+                    }
+                }
+            })
+            .catch(err => {
+                alert("Network Error! Check your data.");
+                btn.disabled = false;
+                btn.innerText = "RETRY";
+            });
+        });
+
+        window.onload = function() {
+            if (localStorage.getItem("rareGamingUser")) {
+                window.location.href = "index.html";
+            }
+        };
+    </script>
 </body>
 </html>
