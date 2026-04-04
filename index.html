@@ -40,7 +40,7 @@
             font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 10px;
         }
 
-        /* 🤖 RARE AI SMART BANNER (Active on Front Page) */
+        /* 🤖 RARE AI SMART BANNER */
         .ai-banner {
             margin: 15px 20px 25px 20px; padding: 20px;
             background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
@@ -69,7 +69,7 @@
         .match-fee { font-size: 10px; color: #00f2fe; font-weight: 600; margin-bottom: 4px; }
         .match-status { background: rgba(255, 49, 49, 0.1); border: 1px solid #ff3131; color: #ff3131; font-size: 9px; padding: 4px 10px; border-radius: 50px; display: inline-block; font-weight: 700; }
 
-        /* NAVIGATION (Middle Button: Transfer/Transaction) */
+        /* NAVIGATION */
         .bottom-nav { 
             position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
             background: rgba(10, 10, 15, 0.95); display: flex; 
@@ -158,11 +158,13 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwOkgiMlegqp1-dU4JLLk7oOjMxpQhweDVjLfr3ETbuEuvKlZs41KMQJei_6JAb5ctC6A/exec";
+        // ✅ AAPKA NAYA UPDATED DEPLOY URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwAG7grJdIMIl0ONqkfUGK0saY8gndcCuno06BVccjWp1l6jT0fP12DHEWTQmBOrnqMDQ/exec";
         
         function syncBalance() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!userData) { window.location.href = "login.html"; return; }
+            if(!userData || !userData.name) { window.location.href = "login.html"; return; }
+            
             fetch(`${scriptURL}?action=getUserData&username=${encodeURIComponent(userData.name)}`)
             .then(res => res.json())
             .then(data => { 
