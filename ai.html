@@ -133,7 +133,6 @@
             box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
         }
 
-        /* NAVIGATION PROTECTION BAR */
         .system-nav-bar {
             position: fixed;
             bottom: 0;
@@ -155,7 +154,7 @@
 
     <div class="chat-container" id="chatBox">
         <div class="msg ai-msg">
-            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Odisha ka sabse smart gaming assistant. Aaj hum dhoom machane ke liye taiyaar hain! Puchiye, kya madad karu?
+            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon, Rare Gaming ka official assistant. Aaj hum Odisha ke gaming scene mein aag laga denge! Puchiye, kya madad karun?
         </div>
     </div>
 
@@ -171,8 +170,8 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ✅ AAPKA SABSE NAYA FIXED DEPLOY URL
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxu5iddXg-gBYrt99fFhj2YzMU514EKETHnlNQWZFR7iXA1YPUzj69Ff9SeEzRlfz5TiQ/exec";
+        // ✅ AAPKA FINAL STABLE DEPLOY URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyzxwIJK97HhkeSQi0nyFiwsDk7SQk99RPHgJSIlPg6bhfimjvMW6YbZ47WLPogYH7GXQ/exec";
 
         async function sendToAI() {
             const input = document.getElementById('userInput');
@@ -182,27 +181,27 @@
 
             if (!question) return;
 
-            // User Message Show Karo
+            // User ka message dikhao
             chatBox.innerHTML += `<div class="msg user-msg">${question}</div>`;
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Typing Animation Dikhao
+            // Typing animation start
             typing.style.display = "block";
 
             try {
-                // Fetch Request to Google Script
+                // Fetch request to Google Apps Script
                 const response = await fetch(`${scriptURL}?action=askAI&q=${encodeURIComponent(question)}`);
                 const reply = await response.text();
                 
                 typing.style.display = "none";
                 
-                // AI Ka Jawab Show Karo
+                // AI ka jawab dikhao
                 chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> ${reply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) {
                 typing.style.display = "none";
-                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai connection mein thodi dikkat hai. Ek baar refresh karke phir puchiye!</div>`;
+                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai server thoda slow hai, ek baar phir se puchiye!</div>`;
             }
         }
     </script>
