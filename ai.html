@@ -155,14 +155,14 @@
 
     <div class="chat-container" id="chatBox">
         <div class="msg ai-msg">
-            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Odisha ka sabse smart gaming assistant. Free Fire ki tips chahiye ya Rare Gaming app mein help? Puchiye...
+            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Rare Gaming app ka official assistant. Bataiye main aapki kya madad kar sakta hoon?
         </div>
     </div>
 
     <div id="typingArea" class="typing">Rare AI soch raha hai...</div>
 
     <div class="input-wrapper">
-        <input type="text" id="userInput" placeholder="Rare AI se pucho..." onkeypress="if(event.key==='Enter') sendToAI()">
+        <input type="text" id="userInput" placeholder="Kuch puchiye..." onkeypress="if(event.key==='Enter') sendToAI()">
         <button class="send-btn" onclick="sendToAI()">
             <i class="fas fa-paper-plane"></i>
         </button>
@@ -171,8 +171,8 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ✅ AAPKA NAYA FIXED DEPLOY URL
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzdgKutseBj3DFnl_czjKFGEwzStY42tDbXdVRZcDI7wtYPLs3Br0_E2RS3_UH_w_-gRg/exec";
+        // ✅ AAPKA NAYA FIXED URL (V1 STABLE)
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxvnUGMSQLr854Zfs7dggvSlxUjktN2ESdfuWDtvpIn-19glGhGlggD9wAzYy3y_spq0A/exec";
 
         async function sendToAI() {
             const input = document.getElementById('userInput');
@@ -191,7 +191,7 @@
             typing.style.display = "block";
 
             try {
-                // Connecting to Gemini via Google Script
+                // Connecting to Google Script API
                 const response = await fetch(`${scriptURL}?action=askAI&q=${encodeURIComponent(question)}`);
                 const reply = await response.text();
                 
@@ -202,7 +202,7 @@
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) {
                 typing.style.display = "none";
-                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai connection mein thodi dikkat hai, ek baar phir try karna!</div>`;
+                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai connection thoda weak hai, ek baar phir se puchiye!</div>`;
             }
         }
     </script>
