@@ -49,7 +49,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            padding-bottom: 100px; /* Space for input box */
+            padding-bottom: 120px; /* Input box ke liye jagah */
         }
         .chat-container::-webkit-scrollbar { display: none; }
 
@@ -90,12 +90,13 @@
             margin-left: 20px;
             margin-bottom: 10px;
             display: none;
+            font-weight: 600;
         }
 
         /* INPUT AREA */
         .input-wrapper {
             position: fixed;
-            bottom: 48px; /* Fixed above Grey Bar */
+            bottom: 48px; /* Grey bar ke upar */
             left: 0;
             width: 100%;
             padding: 15px 20px;
@@ -154,14 +155,14 @@
 
     <div class="chat-container" id="chatBox">
         <div class="msg ai-msg">
-            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Free Fire ki pro tips chahiye ya app mein koi help? Poochiye...
+            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Odisha ka sabse smart assistant. Free Fire ki tips chahiye ya app mein koi help? Poochiye...
         </div>
     </div>
 
     <div id="typingArea" class="typing">Rare AI is thinking...</div>
 
     <div class="input-wrapper">
-        <input type="text" id="userInput" placeholder="Ask anything..." onkeypress="if(event.key==='Enter') sendToAI()">
+        <input type="text" id="userInput" placeholder="Type your question..." onkeypress="if(event.key==='Enter') sendToAI()">
         <button class="send-btn" onclick="sendToAI()">
             <i class="fas fa-paper-plane"></i>
         </button>
@@ -170,35 +171,38 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ✅ AAPKA UPDATED DEPLOY URL
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyvIr-fckUzdUyGaV8-BplR446tSLE04UX8WeWNnD27zsrU6Oj_EJOw84eMtkNKI0f58A/exec";
+        // ✅ AAPKA NAYA UPDATED DEPLOY URL FIXED
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxf_OIovH9UIIxEA-20sagy6FVfD-X09fvTpJVA_GC1D8SNEKTVkWwdLkRe1UgkGRZJ/exec";
 
         async function sendToAI() {
             const input = document.getElementById('userInput');
             const chatBox = document.getElementById('chatBox');
             const typing = document.getElementById('typingArea');
-            const q = input.value.trim();
+            const question = input.value.trim();
 
-            if (!q) return;
+            if (!question) return;
 
-            // User message
-            chatBox.innerHTML += `<div class="msg user-msg">${q}</div>`;
+            // User Message Display
+            chatBox.innerHTML += `<div class="msg user-msg">${question}</div>`;
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Show Loader
+            // Show Thinking Loader
             typing.style.display = "block";
 
             try {
-                const response = await fetch(`${scriptURL}?action=askAI&q=${encodeURIComponent(q)}`);
+                // Sending Request to Google Script
+                const response = await fetch(`${scriptURL}?action=askAI&q=${encodeURIComponent(question)}`);
                 const reply = await response.text();
                 
                 typing.style.display = "none";
+                
+                // AI Response Display
                 chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> ${reply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) {
                 typing.style.display = "none";
-                chatBox.innerHTML += `<div class="msg ai-msg">Bhai connection error hai!</div>`;
+                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai connection error aa raha hai!</div>`;
             }
         }
     </script>
