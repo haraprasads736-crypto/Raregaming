@@ -155,7 +155,7 @@
 
     <div class="chat-container" id="chatBox">
         <div class="msg ai-msg">
-            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Rare Gaming app ka official assistant. Puchiye, main aapki kya madad kar sakta hoon?
+            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Odisha ka sabse smart gaming assistant. Aaj hum dhoom machane ke liye taiyaar hain! Puchiye, kya madad karu?
         </div>
     </div>
 
@@ -171,8 +171,8 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ✅ AAPKA NAYA FIXED DEPLOY URL
-        const scriptURL = "https://script.google.com/macros/s/AKfycbymcQ0oPAM6W4ruHqGga2wSKYjpGQFZH-UH8fz2UT_d4aPM-yVDOQVlb7dFMdlxcC4scQ/exec";
+        // ✅ AAPKA SABSE NAYA FIXED DEPLOY URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxu5iddXg-gBYrt99fFhj2YzMU514EKETHnlNQWZFR7iXA1YPUzj69Ff9SeEzRlfz5TiQ/exec";
 
         async function sendToAI() {
             const input = document.getElementById('userInput');
@@ -182,27 +182,27 @@
 
             if (!question) return;
 
-            // User Message Display
+            // User Message Show Karo
             chatBox.innerHTML += `<div class="msg user-msg">${question}</div>`;
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Show Typing Animation
+            // Typing Animation Dikhao
             typing.style.display = "block";
 
             try {
-                // Connecting to Gemini via Google Script
+                // Fetch Request to Google Script
                 const response = await fetch(`${scriptURL}?action=askAI&q=${encodeURIComponent(question)}`);
                 const reply = await response.text();
                 
                 typing.style.display = "none";
                 
-                // AI Response Display
+                // AI Ka Jawab Show Karo
                 chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> ${reply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) {
                 typing.style.display = "none";
-                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai server se connection nahi ho pa raha hai. Link update karke check karo!</div>`;
+                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai connection mein thodi dikkat hai. Ek baar refresh karke phir puchiye!</div>`;
             }
         }
     </script>
