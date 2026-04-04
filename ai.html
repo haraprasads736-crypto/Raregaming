@@ -155,14 +155,14 @@
 
     <div class="chat-container" id="chatBox">
         <div class="msg ai-msg">
-            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Odisha ka sabse smart assistant. Free Fire ki tips chahiye ya app mein koi help? Poochiye...
+            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Odisha ka sabse smart gaming assistant. Free Fire ki tips chahiye ya Rare Gaming app mein help? Puchiye...
         </div>
     </div>
 
-    <div id="typingArea" class="typing">Rare AI is thinking...</div>
+    <div id="typingArea" class="typing">Rare AI soch raha hai...</div>
 
     <div class="input-wrapper">
-        <input type="text" id="userInput" placeholder="Kuch bhi pucho..." onkeypress="if(event.key==='Enter') sendToAI()">
+        <input type="text" id="userInput" placeholder="Rare AI se pucho..." onkeypress="if(event.key==='Enter') sendToAI()">
         <button class="send-btn" onclick="sendToAI()">
             <i class="fas fa-paper-plane"></i>
         </button>
@@ -171,8 +171,8 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ✅ NAYA UPDATED DEPLOY URL FIXED
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxfKnt19OHcfL_VCi2wKb-4wSVseQtJbEht_hv11FoS1fEB6Y5jUyv5h_9eSxBTPl8x0Q/exec";
+        // ✅ AAPKA NAYA FIXED DEPLOY URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzdgKutseBj3DFnl_czjKFGEwzStY42tDbXdVRZcDI7wtYPLs3Br0_E2RS3_UH_w_-gRg/exec";
 
         async function sendToAI() {
             const input = document.getElementById('userInput');
@@ -187,11 +187,11 @@
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Show Typing Loader
+            // Show Typing Animation
             typing.style.display = "block";
 
             try {
-                // Request to Google Script
+                // Connecting to Gemini via Google Script
                 const response = await fetch(`${scriptURL}?action=askAI&q=${encodeURIComponent(question)}`);
                 const reply = await response.text();
                 
@@ -202,7 +202,7 @@
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) {
                 typing.style.display = "none";
-                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai server down lag raha hai ya URL galat hai!</div>`;
+                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai connection mein thodi dikkat hai, ek baar phir try karna!</div>`;
             }
         }
     </script>
