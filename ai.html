@@ -49,7 +49,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            padding-bottom: 120px; /* Input box ke liye jagah */
+            padding-bottom: 120px; /* Space for input & nav bar */
         }
         .chat-container::-webkit-scrollbar { display: none; }
 
@@ -96,7 +96,7 @@
         /* INPUT AREA */
         .input-wrapper {
             position: fixed;
-            bottom: 48px; /* Grey bar ke upar */
+            bottom: 48px; /* Fixed above Navigation Bar */
             left: 0;
             width: 100%;
             padding: 15px 20px;
@@ -162,7 +162,7 @@
     <div id="typingArea" class="typing">Rare AI is thinking...</div>
 
     <div class="input-wrapper">
-        <input type="text" id="userInput" placeholder="Type your question..." onkeypress="if(event.key==='Enter') sendToAI()">
+        <input type="text" id="userInput" placeholder="Kuch bhi pucho..." onkeypress="if(event.key==='Enter') sendToAI()">
         <button class="send-btn" onclick="sendToAI()">
             <i class="fas fa-paper-plane"></i>
         </button>
@@ -171,8 +171,8 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ✅ AAPKA NAYA UPDATED DEPLOY URL FIXED
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxf_OIovH9UIIxEA-20sagy6FVfD-X09fvTpJVA_GC1D8SNEKTVkWwdLkRe1UgkGRZJ/exec";
+        // ✅ AAPKA NAYA DEPLOY URL (Fixed with Permissions)
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzpDCH2xjM_MDu8_qGcIONJKZcBM1H2IWvCfo_2oOp1FH-dW6x_zWT_kZZ2_CkTrYZq/exec";
 
         async function sendToAI() {
             const input = document.getElementById('userInput');
@@ -182,27 +182,26 @@
 
             if (!question) return;
 
-            // User Message Display
+            // User Message
             chatBox.innerHTML += `<div class="msg user-msg">${question}</div>`;
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Show Thinking Loader
+            // Show Typing
             typing.style.display = "block";
 
             try {
-                // Sending Request to Google Script
                 const response = await fetch(`${scriptURL}?action=askAI&q=${encodeURIComponent(question)}`);
                 const reply = await response.text();
                 
                 typing.style.display = "none";
                 
-                // AI Response Display
+                // AI Response
                 chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> ${reply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) {
                 typing.style.display = "none";
-                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai connection error aa raha hai!</div>`;
+                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai connection error aa raha hai! Naya deploy URL check karo.</div>`;
             }
         }
     </script>
