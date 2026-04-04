@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rare AI - Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+        :root {
+            --neon-blue: #00f2fe;
+            --neon-purple: #9d00ff;
+            --bg-dark: #030305;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, #030305 70%);
+            overflow: hidden;
+        }
+
+        /* Header Neon Style */
+        .ai-header {
+            padding: 20px;
+            text-align: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        .ai-header h2 {
+            margin: 0;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(to right, #fff, var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.5));
+        }
+
+        /* Chat Area */
+        .chat-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            scrollbar-width: none;
+        }
+        .chat-container::-webkit-scrollbar { display: none; }
+
+        .msg {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ai-msg {
+            align-self: flex-start;
+            background: var(--glass);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-bottom-left-radius: 2px;
+            color: #e0faff;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.05);
+        }
+
+        .user-msg {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--neon-purple), #6a00ff);
+            border-bottom-right-radius: 2px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.2);
+        }
+
+        /* Typing Indicator */
+        .typing {
+            font-size: 11px;
+            color: var(--neon-blue);
+            margin-left: 10px;
+            display: none;
+        }
+
+        /* Input Area Fix */
+        .input-wrapper {
+            padding: 20px;
+            background: rgba(10, 10, 15, 0.95);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding-bottom: 40px; /* Space for system nav */
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            background: #000;
+            border: 1px solid #333;
+            padding: 15px 20px;
+            border-radius: 15px;
+            color: white;
+            outline: none;
+            font-family: 'Poppins';
+            transition: 0.3s;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        }
+
+        .send-btn {
+            background: var(--neon-blue);
+            color: #000;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        .send-btn:active { transform: scale(0.9); }
+
+        /* Floating Glows */
+        .glow-1 { position: absolute; top: 10%; left: -50px; width: 150px; height: 150px; background: var(--neon-blue); filter: blur(100px); opacity: 0.1; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <div class="glow-1"></div>
+
+    <div class="ai-header">
+        <h2><i class="fas fa-robot"></i> RARE AI</h2>
+    </div>
+
+    <div class="chat-container" id="chatBox">
+        <div class="msg ai-msg">
+            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Free Fire ki pro tips chahiye ya app mein koi help? Puchiye...
+        </div>
+    </div>
+
+    <div id="typingArea" class="typing">Rare AI is thinking...</div>
+
+    <div class="input-wrapper">
+        <input type="text" id="userInput" placeholder="Type your question..." onkeypress="handleKey(event)">
+        <button class="send-btn" onclick="sendToAI()">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+
+    <script>
+        // ✅ AAPKA DEPLOY URL YAHAN DALEIN
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwOkgiMlegqp1-dU4JLLk7oOjMxpQhweDVjLfr3ETbuEuvKlZs41KMQJei_6JAb5ctC6A/exec";
+
+        function handleKey(e) {
+            if (e.key === 'Enter') sendToAI();
+        }
+
+        function sendToAI() {
+            let input = document.getElementById('userInput');
+            let box = document.getElementById('chatBox');
+            let typing = document.getElementById('typingArea');
+            
+            if(!input.value.trim()) return;
+
+            let userQ = input.value.trim();
+            
+            // User Message
+            box.innerHTML += `<div class="msg user-msg">${userQ}</div>`;
+            input.value = "";
+            box.scrollTop = box.scrollHeight;
+
+            // Show Typing
+            typing.style.display = "block";
+
+            // Fetch AI Response
+            fetch(`${scriptURL}?action=askAI&q=${encodeURIComponent(userQ)}`)
+            .then(res => res.text())
+            .then(reply => {
+                typing.style.display = "none";
+                box.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> ${reply}</div>`;
+                box.scrollTop = box.scrollHeight;
+            })
+            .catch(err => {
+                typing.style.display = "none";
+                box.innerHTML += `<div class="msg ai-msg">Bhai server down hai, thodi der baad try karo.</div>`;
+            });
+        }
+    </script>
+</body>
+</html>
