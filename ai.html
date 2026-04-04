@@ -133,6 +133,7 @@
             box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
         }
 
+        /* NAVIGATION PROTECTION BAR */
         .system-nav-bar {
             position: fixed;
             bottom: 0;
@@ -154,14 +155,14 @@
 
     <div class="chat-container" id="chatBox">
         <div class="msg ai-msg">
-            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon, Rare Gaming ka official assistant. Aaj hum Odisha ke gaming scene mein aag laga denge! Puchiye, kya madad karun?
+            <b>Rare AI:</b> Salaam Bhai! Main Rare AI hoon. Rare Gaming ka official assistant. Puchiye, aaj Odisha ke maidan mein kya dhamaal karna hai?
         </div>
     </div>
 
     <div id="typingArea" class="typing">Rare AI soch raha hai...</div>
 
     <div class="input-wrapper">
-        <input type="text" id="userInput" placeholder="Rare AI se pucho..." onkeypress="if(event.key==='Enter') sendToAI()">
+        <input type="text" id="userInput" placeholder="Kuch puchiye..." onkeypress="if(event.key==='Enter') sendToAI()">
         <button class="send-btn" onclick="sendToAI()">
             <i class="fas fa-paper-plane"></i>
         </button>
@@ -170,8 +171,8 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ✅ AAPKA FINAL STABLE DEPLOY URL
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyzxwIJK97HhkeSQi0nyFiwsDk7SQk99RPHgJSIlPg6bhfimjvMW6YbZ47WLPogYH7GXQ/exec";
+        // ✅ AAPKA SABSE NAYA DEPLOY URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwUrtyYYUo13zsb_9IVAx9QW4-S4eogxPskfYS-HaKmutBbHQDPq5uquAxEXLz9hDeH6g/exec";
 
         async function sendToAI() {
             const input = document.getElementById('userInput');
@@ -181,27 +182,27 @@
 
             if (!question) return;
 
-            // User ka message dikhao
+            // User Message Display
             chatBox.innerHTML += `<div class="msg user-msg">${question}</div>`;
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Typing animation start
+            // Show Typing Animation
             typing.style.display = "block";
 
             try {
-                // Fetch request to Google Apps Script
+                // Connecting to Google Script API
                 const response = await fetch(`${scriptURL}?action=askAI&q=${encodeURIComponent(question)}`);
                 const reply = await response.text();
                 
                 typing.style.display = "none";
                 
-                // AI ka jawab dikhao
+                // AI Response Display
                 chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> ${reply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) {
                 typing.style.display = "none";
-                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai server thoda slow hai, ek baar phir se puchiye!</div>`;
+                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai connection thoda weak hai, ek baar phir se puchiye!</div>`;
             }
         }
     </script>
