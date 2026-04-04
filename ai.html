@@ -49,7 +49,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            padding-bottom: 120px; /* Space for input & nav bar */
+            padding-bottom: 120px; 
         }
         .chat-container::-webkit-scrollbar { display: none; }
 
@@ -96,7 +96,7 @@
         /* INPUT AREA */
         .input-wrapper {
             position: fixed;
-            bottom: 48px; /* Fixed above Navigation Bar */
+            bottom: 48px; 
             left: 0;
             width: 100%;
             padding: 15px 20px;
@@ -133,7 +133,7 @@
             box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
         }
 
-        /* 🌟 NAVIGATION PROTECTION BAR 🌟 */
+        /* NAVIGATION PROTECTION BAR */
         .system-nav-bar {
             position: fixed;
             bottom: 0;
@@ -171,8 +171,8 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ✅ AAPKA NAYA DEPLOY URL (Fixed with Permissions)
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzpDCH2xjM_MDu8_qGcIONJKZcBM1H2IWvCfo_2oOp1FH-dW6x_zWT_kZZ2_CkTrYZq/exec";
+        // ✅ NAYA UPDATED DEPLOY URL FIXED
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxfKnt19OHcfL_VCi2wKb-4wSVseQtJbEht_hv11FoS1fEB6Y5jUyv5h_9eSxBTPl8x0Q/exec";
 
         async function sendToAI() {
             const input = document.getElementById('userInput');
@@ -182,26 +182,27 @@
 
             if (!question) return;
 
-            // User Message
+            // User Message Display
             chatBox.innerHTML += `<div class="msg user-msg">${question}</div>`;
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Show Typing
+            // Show Typing Loader
             typing.style.display = "block";
 
             try {
+                // Request to Google Script
                 const response = await fetch(`${scriptURL}?action=askAI&q=${encodeURIComponent(question)}`);
                 const reply = await response.text();
                 
                 typing.style.display = "none";
                 
-                // AI Response
+                // AI Response Display
                 chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> ${reply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) {
                 typing.style.display = "none";
-                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai connection error aa raha hai! Naya deploy URL check karo.</div>`;
+                chatBox.innerHTML += `<div class="msg ai-msg"><b>Rare AI:</b> Bhai server down lag raha hai ya URL galat hai!</div>`;
             }
         }
     </script>
