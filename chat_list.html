@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rare Chat - Pro</title>
+    <title>Rare Chat - Ultimate</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
 
         :root {
             --neon-cyan: #00f2fe;
+            --neon-red: #ff4444;
             --dark-bg: #050508;
-            --glass: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(0, 242, 254, 0.15);
+            --glass: rgba(255, 255, 255, 0.05);
+            --card-grad: linear-gradient(135deg, rgba(17, 17, 22, 0.9), rgba(5, 5, 8, 0.9));
         }
 
         body { 
@@ -20,146 +21,153 @@
             color: white; 
             font-family: 'Rajdhani', sans-serif; 
             margin: 0; 
-            padding-bottom: 150px; 
-            letter-spacing: 0.5px;
+            padding-bottom: 160px; 
+            letter-spacing: 0.8px;
+            overflow-x: hidden;
         }
 
-        /* 🛡️ Header Upgrade */
+        /* ✨ Cyber Background Effect */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, rgba(0, 242, 254, 0.05), transparent);
+            z-index: -1;
+        }
+
+        /* 🛡️ Header Pro */
         .header { 
-            padding: 25px 20px; 
-            background: linear-gradient(180deg, #111116 0%, transparent 100%); 
+            padding: 30px 20px; 
+            background: #111116; 
             display: flex; 
             justify-content: space-between; 
             align-items: center;
-            border-bottom: 1px solid var(--card-border);
+            border-bottom: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
         }
         .header h2 { 
             font-family: 'Orbitron', sans-serif;
-            font-size: 18px; 
+            font-size: 20px; 
             margin: 0; 
+            font-weight: 900;
             color: var(--neon-cyan); 
-            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+            text-transform: uppercase;
         }
 
-        /* ➕ Add Contact Section (Professional) */
+        /* ➕ Add Connection (Modernized) */
         .add-box { 
-            padding: 20px; 
+            padding: 25px; 
             background: var(--glass); 
             margin: 20px 15px; 
-            border-radius: 12px; 
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(10px);
+            border-radius: 15px; 
+            border: 1px solid rgba(0, 242, 254, 0.1);
+            backdrop-filter: blur(15px);
         }
+        .add-box h3 { font-size: 14px; color: #888; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        
         input { 
             width: 100%; 
-            padding: 14px; 
-            background: rgba(0,0,0,0.4); 
-            border: 1px solid #222; 
+            padding: 15px; 
+            background: rgba(0,0,0,0.6); 
+            border: 1px solid #333; 
             color: #fff; 
-            border-radius: 8px; 
+            border-radius: 10px; 
             margin-bottom: 12px; 
-            font-size: 14px;
+            font-size: 15px;
             outline: none;
-            transition: 0.3s;
+            transition: 0.4s;
         }
-        input:focus { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0,242,254,0.2); }
+        input:focus { border-color: var(--neon-cyan); background: #000; box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.1); }
         
         .btn-add { 
             width: 100%; 
-            padding: 14px; 
+            padding: 15px; 
             background: var(--neon-cyan); 
             color: #000; 
             border: none; 
-            border-radius: 8px; 
-            font-weight: 700; 
+            border-radius: 10px; 
+            font-weight: 900; 
             font-family: 'Orbitron', sans-serif;
             cursor: pointer; 
             text-transform: uppercase;
-            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3);
         }
-        .btn-add:active { transform: scale(0.98); }
 
-        /* 👥 Contact List UI (No Cartoon) */
+        /* 👥 Contact List (Advanced) */
         .contact-list { padding: 0 15px; }
         .contact-card { 
-            background: rgba(20, 20, 25, 0.8); 
-            padding: 15px; 
-            border-radius: 12px; 
-            margin-bottom: 12px; 
+            background: var(--card-grad);
+            padding: 18px; 
+            border-radius: 15px; 
+            margin-bottom: 15px; 
             display: flex; 
             align-items: center; 
             gap: 15px; 
-            border: 1px solid rgba(255,255,255,0.05); 
-            text-decoration: none; 
-            color: white; 
+            border: 1px solid rgba(255,255,255,0.03); 
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
-            transition: 0.3s;
         }
-        .contact-card:hover { border-color: var(--neon-cyan); background: rgba(25, 25, 30, 1); }
+        .contact-card:active { transform: scale(0.97); }
+        .contact-card:hover { border-color: var(--neon-cyan); }
         
         .user-icon { 
-            width: 50px; height: 50px; 
-            background: rgba(0, 242, 254, 0.1); 
-            border-radius: 50%; 
+            width: 55px; height: 55px; 
+            background: rgba(0, 242, 254, 0.05); 
+            border-radius: 12px; 
             display: flex; align-items: center; justify-content: center;
-            border: 1px solid var(--neon-cyan);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            color: var(--neon-cyan);
+            font-size: 24px;
         }
-        .user-icon i { font-size: 24px; color: var(--neon-cyan); }
         
         .contact-info { flex-grow: 1; }
-        .contact-info b { font-size: 17px; display: block; color: #eee; font-family: 'Orbitron', sans-serif; }
-        .contact-info span { font-size: 12px; color: #777; letter-spacing: 1px; }
+        .contact-info b { font-size: 18px; display: block; font-family: 'Orbitron', sans-serif; color: #fff; margin-bottom: 2px; }
+        .contact-info span { font-size: 12px; color: var(--neon-cyan); opacity: 0.6; font-weight: 600; }
 
-        /* 🗑️ DELETE OPTION */
+        /* 🗑️ Delete Button (Modern) */
         .delete-btn {
             background: rgba(255, 68, 68, 0.1);
-            color: #ff4444;
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: var(--neon-red);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             transition: 0.3s;
-            z-index: 10;
         }
-        .delete-btn:hover { background: #ff4444; color: #000; }
+        .delete-btn:hover { background: var(--neon-red); color: white; }
 
-        /* 🧭 Bottom Nav Protection */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: #0c0c12; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1f1f25; z-index: 1000; padding: 0 10px; }
-        .nav-item { text-decoration: none; color: #555; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; flex: 1; transition: 0.3s; }
-        .nav-item i { font-size: 20px; margin-bottom: 5px; }
+        /* 🧭 System Navigation Fix */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: #0c0c12; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #1f1f25; z-index: 1000; }
+        .nav-item { text-decoration: none; color: #555; font-size: 9px; font-weight: 700; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
+        .nav-item i { font-size: 22px; margin-bottom: 5px; }
         .nav-item.active { color: var(--neon-cyan); }
+        
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; border-top: 1px solid #333; }
         
-        /* Empty State */
-        .empty-text { text-align: center; color: #444; margin-top: 50px; font-style: italic; }
+        .empty-text { text-align: center; color: #444; margin-top: 40px; font-style: italic; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>RARE CHAT PRO</h2>
-        <i class="fas fa-satellite-dish" style="color: var(--neon-cyan);"></i>
+        <h2>Rare Chat Pro</h2>
+        <div style="width: 10px; height: 10px; background: var(--neon-cyan); border-radius: 50%; box-shadow: 0 0 10px var(--neon-cyan);"></div>
     </div>
 
     <div class="add-box">
-        <input type="text" id="newUID" placeholder="FRIEND UID (e.g. RG123456)">
-        <input type="text" id="newName" placeholder="FRIEND NAME">
+        <h3>Add Secure Link</h3>
+        <input type="text" id="newUID" placeholder="PLAYER UID (RG123456)">
+        <input type="text" id="newName" placeholder="PLAYER NAME">
         <button class="btn-add" onclick="saveContact()">Connect Player</button>
     </div>
 
     <div class="contact-list" id="contactList"></div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-th-large"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-coins"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item"><i class="fas fa-shield-alt"></i><span>SECURE</span></a>
-        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comment-dots"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-astronaut"></i><span>PROFILE</span></a>
+        <a href="index.html" class="nav-item"><i class="fas fa-grid-2"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-bolt"></i><span>EARN</span></a>
+        <a href="transfer.html" class="nav-item"><i class="fas fa-random"></i><span>SECURE</span></a>
+        <a href="chat_list.html" class="nav-item active"><i class="fas fa-message"></i><span>CHAT</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-gear"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
 
@@ -178,9 +186,9 @@
             renderContacts();
         }
 
-        // 🔥 DELETE FUNCTION
+        // 🔥 DELETE WITH SPECIFIC MESSAGE
         function deleteContact(index) {
-            if(confirm("Ye contact hamesha ke liye delete karein?")) {
+            if(confirm("are you sure for delete")) {
                 let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
                 contacts.splice(index, 1);
                 localStorage.setItem("rareContacts", JSON.stringify(contacts));
@@ -191,22 +199,22 @@
         function renderContacts() {
             let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
             let list = document.getElementById('contactList');
-            list.innerHTML = contacts.length ? "" : "<p class='empty-text'>No secure connections found.</p>";
+            list.innerHTML = contacts.length ? "" : "<p class='empty-text'>NO ACTIVE CONNECTIONS FOUND.</p>";
             
             contacts.forEach((c, index) => {
                 list.innerHTML += `
                     <div class="contact-card">
                         <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" style="text-decoration:none; display:flex; align-items:center; gap:15px; flex-grow:1;">
                             <div class="user-icon">
-                                <i class="fas fa-user-shield"></i>
+                                <i class="fas fa-shield-halved"></i>
                             </div>
                             <div class="contact-info">
                                 <b>${c.name}</b>
-                                <span>ID: ${c.uid}</span>
+                                <span>ONLINE ID: ${c.uid}</span>
                             </div>
                         </a>
                         <button class="delete-btn" onclick="deleteContact(${index})">
-                            <i class="fas fa-trash-alt"></i>
+                            <i class="fas fa-xmark"></i>
                         </button>
                     </div>
                 `;
