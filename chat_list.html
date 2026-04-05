@@ -3,55 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Chats - RARE GAMING</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Rare Chat - Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; }
-        .header { padding: 20px; background: #111116; border-bottom: 1px solid #1f1f25; display: flex; justify-content: space-between; align-items: center; }
-        .header h2 { font-size: 20px; margin: 0; color: #ffd700; text-transform: uppercase; }
-        .add-box { padding: 20px; background: #111116; margin: 15px; border-radius: 15px; border: 1px solid #1f1f25; }
-        input { width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; color: #fff; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; outline: none; }
-        .btn-add { width: 100%; padding: 12px; background: #00f2fe; color: #000; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
-        .contact-list { padding: 0 15px; }
-        .contact-card { background: #111116; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: white; }
-        .contact-card i { font-size: 40px; color: #00f2fe; }
-        .contact-info b { font-size: 16px; display: block; text-transform: uppercase; }
-        .contact-info span { font-size: 11px; color: #888; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap');
+
+        :root {
+            --neon-cyan: #00f2fe;
+            --dark-bg: #050508;
+            --glass: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(0, 242, 254, 0.15);
+        }
+
+        body { 
+            background-color: var(--dark-bg); 
+            color: white; 
+            font-family: 'Rajdhani', sans-serif; 
+            margin: 0; 
+            padding-bottom: 150px; 
+            letter-spacing: 0.5px;
+        }
+
+        /* 🛡️ Header Upgrade */
+        .header { 
+            padding: 25px 20px; 
+            background: linear-gradient(180deg, #111116 0%, transparent 100%); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .header h2 { 
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px; 
+            margin: 0; 
+            color: var(--neon-cyan); 
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        }
+
+        /* ➕ Add Contact Section (Professional) */
+        .add-box { 
+            padding: 20px; 
+            background: var(--glass); 
+            margin: 20px 15px; 
+            border-radius: 12px; 
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+        }
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            background: rgba(0,0,0,0.4); 
+            border: 1px solid #222; 
+            color: #fff; 
+            border-radius: 8px; 
+            margin-bottom: 12px; 
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0,242,254,0.2); }
         
-        /* Nav Bar */
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; background: #111116; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1f1f25; z-index: 1000; padding: 0 5px; }
-        .nav-item { text-decoration: none; color: #666; font-size: 9px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
-        .nav-item.active { color: white; position: relative; }
-        .nav-item.active i { color: #000; z-index: 2; }
-        .nav-item.active::before { content: ''; position: absolute; top: -16px; width: 55px; height: 55px; background: #ffffff; border-radius: 16px; transform: rotate(45deg); z-index: -1; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
-        .nav-item.center-btn { position: relative; color: #666; margin-top: -30px; }
-        .nav-item.center-btn .icon-circle { width: 55px; height: 55px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #050508; }
+        .btn-add { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--neon-cyan); 
+            color: #000; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer; 
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .btn-add:active { transform: scale(0.98); }
+
+        /* 👥 Contact List UI (No Cartoon) */
+        .contact-list { padding: 0 15px; }
+        .contact-card { 
+            background: rgba(20, 20, 25, 0.8); 
+            padding: 15px; 
+            border-radius: 12px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            text-decoration: none; 
+            color: white; 
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .contact-card:hover { border-color: var(--neon-cyan); background: rgba(25, 25, 30, 1); }
+        
+        .user-icon { 
+            width: 50px; height: 50px; 
+            background: rgba(0, 242, 254, 0.1); 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--neon-cyan);
+        }
+        .user-icon i { font-size: 24px; color: var(--neon-cyan); }
+        
+        .contact-info { flex-grow: 1; }
+        .contact-info b { font-size: 17px; display: block; color: #eee; font-family: 'Orbitron', sans-serif; }
+        .contact-info span { font-size: 12px; color: #777; letter-spacing: 1px; }
+
+        /* 🗑️ DELETE OPTION */
+        .delete-btn {
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff4444;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .delete-btn:hover { background: #ff4444; color: #000; }
+
+        /* 🧭 Bottom Nav Protection */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: #0c0c12; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1f1f25; z-index: 1000; padding: 0 10px; }
+        .nav-item { text-decoration: none; color: #555; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; flex: 1; transition: 0.3s; }
+        .nav-item i { font-size: 20px; margin-bottom: 5px; }
+        .nav-item.active { color: var(--neon-cyan); }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; border-top: 1px solid #333; }
+        
+        /* Empty State */
+        .empty-text { text-align: center; color: #444; margin-top: 50px; font-style: italic; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>Rare Chat</h2>
-        <i class="fas fa-comments" style="color: #00f2fe;"></i>
+        <h2>RARE CHAT PRO</h2>
+        <i class="fas fa-satellite-dish" style="color: var(--neon-cyan);"></i>
     </div>
 
     <div class="add-box">
-        <input type="text" id="newUID" placeholder="Friend's UID (RGXXXXXX)">
-        <input type="text" id="newName" placeholder="Friend's Name">
-        <button class="btn-add" onclick="saveContact()">Add Contact</button>
+        <input type="text" id="newUID" placeholder="FRIEND UID (e.g. RG123456)">
+        <input type="text" id="newName" placeholder="FRIEND NAME">
+        <button class="btn-add" onclick="saveContact()">Connect Player</button>
     </div>
 
     <div class="contact-list" id="contactList"></div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span style="margin-top: 5px;">TRANSFER</span></a>
-        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comments"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+        <a href="index.html" class="nav-item"><i class="fas fa-th-large"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-coins"></i><span>EARN</span></a>
+        <a href="transfer.html" class="nav-item"><i class="fas fa-shield-alt"></i><span>SECURE</span></a>
+        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comment-dots"></i><span>CHAT</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-astronaut"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
 
@@ -59,7 +167,7 @@
         function saveContact() {
             let uid = document.getElementById('newUID').value.trim().toUpperCase();
             let name = document.getElementById('newName').value.trim();
-            if(!uid || !name) return alert("Pura detail dalo!");
+            if(!uid || !name) return;
 
             let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
             contacts.push({uid: uid, name: name});
@@ -70,20 +178,37 @@
             renderContacts();
         }
 
+        // 🔥 DELETE FUNCTION
+        function deleteContact(index) {
+            if(confirm("Ye contact hamesha ke liye delete karein?")) {
+                let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
+                contacts.splice(index, 1);
+                localStorage.setItem("rareContacts", JSON.stringify(contacts));
+                renderContacts();
+            }
+        }
+
         function renderContacts() {
             let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
             let list = document.getElementById('contactList');
-            list.innerHTML = contacts.length ? "" : "<p style='text-align:center;color:#666'>No contacts yet.</p>";
+            list.innerHTML = contacts.length ? "" : "<p class='empty-text'>No secure connections found.</p>";
             
-            contacts.forEach(c => {
+            contacts.forEach((c, index) => {
                 list.innerHTML += `
-                    <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" class="contact-card">
-                        <i class="fas fa-user-circle"></i>
-                        <div class="contact-info">
-                            <b>${c.name}</b>
-                            <span>${c.uid}</span>
-                        </div>
-                    </a>
+                    <div class="contact-card">
+                        <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" style="text-decoration:none; display:flex; align-items:center; gap:15px; flex-grow:1;">
+                            <div class="user-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <div class="contact-info">
+                                <b>${c.name}</b>
+                                <span>ID: ${c.uid}</span>
+                            </div>
+                        </a>
+                        <button class="delete-btn" onclick="deleteContact(${index})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
                 `;
             });
         }
