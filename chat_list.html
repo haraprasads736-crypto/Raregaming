@@ -6,53 +6,54 @@
     <title>Rare Chat - Pro Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
 
         :root {
-            --neon-cyan: #00f2fe;
+            --bg-color: #030305;
+            --neon-blue: #00f2fe;
             --neon-red: #ff4444;
-            --dark-bg: #050508;
-            --card-bg: #111116;
-            --glass: rgba(255, 255, 255, 0.05);
+            --rare-gold: #ffd700;
+            --transfer-green: #39ff14;
         }
 
         body { 
-            background-color: var(--dark-bg); 
+            background-color: var(--bg-color); 
             color: white; 
-            font-family: 'Rajdhani', sans-serif; 
+            font-family: 'Poppins', sans-serif; 
             margin: 0; 
             padding-bottom: 160px; 
-            letter-spacing: 0.8px;
             overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
         }
 
         /* 🛡️ Header */
         .header { 
             padding: 25px 20px; 
-            background: var(--card-bg); 
+            background: rgba(3, 3, 5, 0.9);
+            backdrop-filter: blur(10px);
             display: flex; 
             justify-content: space-between; 
             align-items: center;
-            border-bottom: 2px solid var(--neon-cyan);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            position: sticky; top: 0; z-index: 999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         .header h2 { 
-            font-family: 'Orbitron', sans-serif;
-            font-size: 19px; 
+            font-size: 22px; 
             margin: 0; 
-            color: var(--neon-cyan); 
+            color: var(--rare-gold); 
             text-transform: uppercase;
-            font-weight: 900;
+            font-weight: 800;
+            letter-spacing: 1px;
         }
 
         /* ➕ Add Contact Section */
         .add-box { 
             padding: 20px; 
-            background: var(--glass); 
-            margin: 20px 15px; 
-            border-radius: 12px; 
-            border: 1px solid rgba(0, 242, 254, 0.15);
-            backdrop-filter: blur(10px);
+            background: #0a0a0f; 
+            margin: 20px; 
+            border-radius: 20px; 
+            border: 1px solid rgba(0, 242, 254, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         input { 
             width: 100%; 
@@ -60,34 +61,35 @@
             background: #000; 
             border: 1px solid #2a2a30; 
             color: #fff; 
-            border-radius: 10px; 
+            border-radius: 12px; 
             margin-bottom: 10px; 
-            font-size: 15px;
+            font-size: 14px;
             outline: none;
             box-sizing: border-box;
+            transition: 0.3s;
         }
-        input:focus { border-color: var(--neon-cyan); }
+        input:focus { border-color: var(--neon-blue); }
         
         .btn-add { 
             width: 100%; 
             padding: 14px; 
-            background: var(--neon-cyan); 
+            background: var(--neon-blue); 
             color: #000; 
             border: none; 
-            border-radius: 10px; 
+            border-radius: 12px; 
             font-weight: 800; 
-            font-family: 'Orbitron', sans-serif;
             cursor: pointer; 
             text-transform: uppercase;
+            transition: 0.3s;
         }
 
         /* 👥 Contact List */
-        .contact-list { padding: 0 15px; }
+        .contact-list { padding: 0 20px; }
         .contact-card { 
-            background: var(--card-bg);
-            padding: 16px; 
-            border-radius: 15px; 
-            margin-bottom: 12px; 
+            background: #0a0a0f;
+            padding: 18px; 
+            border-radius: 20px; 
+            margin-bottom: 15px; 
             display: flex; 
             align-items: center; 
             gap: 15px; 
@@ -97,78 +99,65 @@
         .contact-card:active { transform: scale(0.98); }
         
         .user-icon { 
-            width: 50px; height: 50px; 
-            background: rgba(0, 242, 254, 0.1); 
+            width: 45px; height: 45px; 
+            background: rgba(0, 242, 254, 0.05); 
             border-radius: 50%; 
             display: flex; align-items: center; justify-content: center;
-            color: var(--neon-cyan);
-            font-size: 24px;
-            border: 1px solid var(--neon-cyan);
+            color: var(--neon-blue);
+            font-size: 22px;
+            border: 1px solid var(--neon-blue);
         }
         
         .contact-info { flex-grow: 1; }
-        .contact-info b { font-size: 17px; display: block; font-family: 'Orbitron', sans-serif; color: #fff; text-transform: uppercase; }
-        .contact-info span { font-size: 11px; color: #888; }
+        .contact-info b { font-size: 16px; display: block; color: #fff; text-transform: uppercase; }
+        .contact-info span { font-size: 10px; color: #666; font-weight: 600; }
 
         /* 🗑️ Delete Button */
         .delete-btn {
             background: rgba(255, 68, 68, 0.1);
             color: var(--neon-red);
             border: none;
-            width: 38px; height: 38px;
+            width: 35px; height: 35px;
             border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 16px;
         }
 
-        /* 🧭 FIXED BOTTOM NAVIGATION (Icon Fix) */
+        /* 🧭 NAVIGATION BAR SYSTEM (Matching All Pages) */
         .bottom-nav { 
-            position: fixed; 
-            bottom: 48px; 
-            left: 0; 
-            width: 100%; 
-            height: 70px; 
-            background: #111116; 
-            display: flex; 
-            justify-content: space-around; 
-            align-items: center; 
-            border-top: 1px solid #1f1f25; 
-            z-index: 1000; 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
+            background: rgba(10, 10, 15, 0.95); display: flex; 
+            justify-content: space-around; align-items: center; 
+            backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000; border-radius: 20px 20px 0 0;
         }
         .nav-item { 
-            text-decoration: none; 
-            color: #666; 
-            font-size: 10px; 
-            font-weight: 800; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            transition: 0.3s; 
+            text-decoration: none; color: #666; font-size: 10px; 
+            font-weight: 700; display: flex; flex-direction: column; 
+            align-items: center; gap: 4px; flex: 1;
         }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
-        .nav-item.active { color: white; }
-        .nav-item.active i { color: var(--neon-cyan); }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--neon-blue); }
         
-        /* Protection Bar */
-        .system-nav-bar { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 48px; 
-            background-color: #4f515e; /* Wahi Grey Color Jo Aapne Manga Tha */
-            z-index: 1001; 
+        /* Green Center Button: Transfer */
+        .center-btn .icon-circle { 
+            width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 4px solid #050508; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
+            margin-top: -35px;
         }
-        
-        .empty-text { text-align: center; color: #444; margin-top: 40px; font-style: italic; }
+        .center-btn i { color: #000 !important; font-size: 22px; }
+
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+        .empty-text { text-align: center; color: #444; margin-top: 40px; font-style: italic; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>Rare Chat Pro</h2>
-        <i class="fas fa-comments" style="color: var(--neon-cyan);"></i>
+        <h2>Rare Chat</h2>
+        <i class="fas fa-comments" style="color: var(--neon-blue);"></i>
     </div>
 
     <div class="add-box">
@@ -182,10 +171,16 @@
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item"><i class="fas fa-exchange-alt"></i><span>TRANSFER</span></a>
+        
+        <a href="transfer.html" class="nav-item center-btn">
+            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
+            <span style="margin-top: 5px; color: #fff;">SEND</span>
+        </a>
+
         <a href="chat_list.html" class="nav-item active"><i class="fas fa-comments"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
+    
     <div class="system-nav-bar"></div>
 
     <script>
@@ -203,9 +198,8 @@
             renderContacts();
         }
 
-        // 🔥 DELETE WITH YOUR MESSAGE
         function deleteContact(index) {
-            if(confirm("are you sure for delete")) {
+            if(confirm("Are you sure for delete?")) {
                 let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
                 contacts.splice(index, 1);
                 localStorage.setItem("rareContacts", JSON.stringify(contacts));
@@ -223,7 +217,7 @@
                     <div class="contact-card">
                         <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" style="text-decoration:none; display:flex; align-items:center; gap:15px; flex-grow:1;">
                             <div class="user-icon">
-                                <i class="fas fa-user-circle"></i>
+                                <i class="fas fa-user-astronaut"></i>
                             </div>
                             <div class="contact-info">
                                 <b>${c.name}</b>
