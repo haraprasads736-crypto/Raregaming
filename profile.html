@@ -3,85 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Profile - RARE GAMING</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Rare Chat - Pro Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+
+        :root {
+            --bg-color: #030305;
+            --neon-blue: #00f2fe;
+            --neon-red: #ff4444;
+            --rare-gold: #ffd700;
+            --transfer-green: #39ff14;
+        }
+
         body { 
-            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 160px; 
+            background-color: var(--bg-color); 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding-bottom: 160px; 
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
+        }
+
+        /* 🛡️ Header */
+        .header { 
+            padding: 25px 20px; 
+            background: rgba(3, 3, 5, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            position: sticky; top: 0; z-index: 999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .header h2 { 
+            font-size: 22px; 
+            margin: 0; 
+            color: var(--rare-gold); 
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        /* ➕ Add Contact Section */
+        .add-box { 
+            padding: 20px; 
+            background: #0a0a0f; 
+            margin: 20px; 
+            border-radius: 20px; 
+            border: 1px solid rgba(0, 242, 254, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            background: #000; 
+            border: 1px solid #2a2a30; 
+            color: #fff; 
+            border-radius: 12px; 
+            margin-bottom: 10px; 
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--neon-blue); }
+        
+        .btn-add { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--neon-blue); 
+            color: #000; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        /* 👥 Contact List */
+        .contact-list { padding: 0 20px; }
+        .contact-card { 
+            background: #0a0a0f;
+            padding: 18px; 
+            border-radius: 20px; 
+            margin-bottom: 15px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            transition: 0.3s;
+        }
+        .contact-card:active { transform: scale(0.98); }
+        
+        .user-icon { 
+            width: 45px; height: 45px; 
+            background: rgba(0, 242, 254, 0.05); 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center;
+            color: var(--neon-blue);
+            font-size: 22px;
+            border: 1px solid var(--neon-blue);
         }
         
-        /* Header Section */
-        .header-top { padding: 40px 20px; text-align: center; background: #111116; border-bottom: 1px solid #1f1f25; }
-        .user-icon { font-size: 70px; color: #ffd700; margin-bottom: 10px; text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
-        #displayUser { font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+        .contact-info { flex-grow: 1; }
+        .contact-info b { font-size: 16px; display: block; color: #fff; text-transform: uppercase; }
+        .contact-info span { font-size: 10px; color: #666; font-weight: 600; }
 
-        /* Wallet & UID Card */
-        .wallet-panel { background: #111116; border-radius: 20px; padding: 25px; border: 1px solid #1f1f25; margin: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .panel-label { font-size: 11px; font-weight: 800; color: #888; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        #playerUID { font-size: 26px; font-weight: 800; color: #ffd700; text-align: center; letter-spacing: 3px; margin: 10px 0; }
-        
-        /* 🌟 NAVIGATION BAR SYSTEM 🌟 */
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
-        
+        /* 🗑️ Delete Button */
+        .delete-btn {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--neon-red);
+            border: none;
+            width: 35px; height: 35px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* 🧭 NAVIGATION BAR SYSTEM (Matching All Pages) */
         .bottom-nav { 
-            position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; 
-            background: #111116; display: flex; justify-content: space-between; 
-            align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
-            padding: 0 5px;
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
+            background: rgba(10, 10, 15, 0.95); display: flex; 
+            justify-content: space-around; align-items: center; 
+            backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000; border-radius: 20px 20px 0 0;
         }
-
         .nav-item { 
-            text-decoration: none; color: #666; font-size: 9px; font-weight: 800; 
-            display: flex; flex-direction: column; align-items: center; flex: 1; 
+            text-decoration: none; color: #666; font-size: 10px; 
+            font-weight: 700; display: flex; flex-direction: column; 
+            align-items: center; gap: 4px; flex: 1;
         }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
-
-        /* Profile Active Effect */
-        .nav-item.active:not(.center-btn) { color: white; position: relative; }
-        .nav-item.active:not(.center-btn) i { color: #000; z-index: 2; font-size: 22px; }
-        .nav-item.active:not(.center-btn)::before { 
-            content: ''; position: absolute; top: -16px; width: 55px; height: 55px; 
-            background: #ffffff; border-radius: 16px; transform: rotate(45deg); 
-            z-index: -1; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); 
-        }
-
-        /* Center Transfer Button */
-        .nav-item.center-btn { position: relative; color: #666; margin-top: -30px; }
-        .nav-item.center-btn .icon-circle { 
-            width: 55px; height: 55px; background: #222; border-radius: 50%; 
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--neon-blue); }
+        
+        /* Green Center Button: Transfer */
+        .center-btn .icon-circle { 
+            width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
-            border: 4px solid #050508; transition: 0.3s; 
+            border: 4px solid #050508; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
+            margin-top: -35px;
         }
-        .nav-item.center-btn i { color: white; font-size: 22px; margin: 0; }
+        .center-btn i { color: #000 !important; font-size: 22px; }
 
-        .logout-btn { 
-            width: calc(100% - 40px); margin: 0 20px; padding: 14px; 
-            background: none; border: 1.5px solid #ff3131; color: #ff3131; 
-            border-radius: 12px; font-weight: 800; text-transform: uppercase; 
-            font-size: 13px; cursor: pointer; transition: 0.3s;
-        }
-        .logout-btn:active { background: rgba(255, 49, 49, 0.1); }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+        .empty-text { text-align: center; color: #444; margin-top: 40px; font-style: italic; font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <div class="header-top">
-        <i class="fas fa-user-circle user-icon"></i>
-        <div id="displayUser">PLAYER</div>
-        <div style="font-size: 10px; color: #00f2fe; margin-top: 5px;">RARE GAMING VERIFIED</div>
+    <div class="header">
+        <h2>Rare Chat</h2>
+        <i class="fas fa-comments" style="color: var(--neon-blue);"></i>
     </div>
 
-    <div class="wallet-panel" style="border-color: #ffd700;">
-        <div class="panel-label" style="color: #ffd700;">Your Unique ID</div>
-        <div id="playerUID">FETCHING...</div>
-        <p style="font-size: 9px; color: #666; text-align: center; margin-top: 10px;">Unique ID use karein money transfer ke liye.</p>
+    <div class="add-box">
+        <input type="text" id="newUID" placeholder="Friend's UID (RGXXXXXX)">
+        <input type="text" id="newName" placeholder="Friend's Name">
+        <button class="btn-add" onclick="saveContact()">Add Contact</button>
     </div>
 
-    <button class="logout-btn" onclick="logout()">Logout Account</button>
+    <div class="contact-list" id="contactList"></div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
@@ -89,41 +174,64 @@
         
         <a href="transfer.html" class="nav-item center-btn">
             <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
-            <span style="margin-top: 5px;">TRANSFER</span>
+            <span style="margin-top: 5px; color: #fff;">SEND</span>
         </a>
 
-        <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item active"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comments"></i><span>CHAT</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
+    
     <div class="system-nav-bar"></div>
 
     <script>
-        // Naya URL Jo Aapne Diya Tha
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxkNQ1Zc4mrOV3oAT-FEW7yJbp2c1WL5T80hHa5lTth5K1I5OloyJ3ddbc-pDAl1JHSeQ/exec";
-        let user = JSON.parse(localStorage.getItem("rareGamingUser"));
+        function saveContact() {
+            let uid = document.getElementById('newUID').value.trim().toUpperCase();
+            let name = document.getElementById('newName').value.trim();
+            if(!uid || !name) return alert("Details bhariye!");
 
-        function loadProfile() {
-            if(!user) return window.location.href = "login.html";
-            document.getElementById('displayUser').innerText = user.name;
-
-            fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(user.name))
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('playerUID').innerText = data.uid || "N/A";
-            })
-            .catch(err => {
-                document.getElementById('playerUID').innerText = "OFFLINE";
-            });
+            let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
+            contacts.push({uid: uid, name: name});
+            localStorage.setItem("rareContacts", JSON.stringify(contacts));
+            
+            document.getElementById('newUID').value = "";
+            document.getElementById('newName').value = "";
+            renderContacts();
         }
 
-        function logout() {
-            if(confirm("Logout karna hai?")) {
-                localStorage.removeItem("rareGamingUser");
-                window.location.href = "login.html";
+        function deleteContact(index) {
+            if(confirm("Are you sure for delete?")) {
+                let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
+                contacts.splice(index, 1);
+                localStorage.setItem("rareContacts", JSON.stringify(contacts));
+                renderContacts();
             }
         }
 
-        window.onload = loadProfile;
+        function renderContacts() {
+            let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
+            let list = document.getElementById('contactList');
+            list.innerHTML = contacts.length ? "" : "<p class='empty-text'>No contacts yet.</p>";
+            
+            contacts.forEach((c, index) => {
+                list.innerHTML += `
+                    <div class="contact-card">
+                        <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" style="text-decoration:none; display:flex; align-items:center; gap:15px; flex-grow:1;">
+                            <div class="user-icon">
+                                <i class="fas fa-user-astronaut"></i>
+                            </div>
+                            <div class="contact-info">
+                                <b>${c.name}</b>
+                                <span>${c.uid}</span>
+                            </div>
+                        </a>
+                        <button class="delete-btn" onclick="deleteContact(${index})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+        window.onload = renderContacts;
     </script>
 </body>
 </html>
