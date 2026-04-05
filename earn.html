@@ -3,151 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Earn & Wallet - RARE GAMING</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Earn - RARE GAMING</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Montserrat:wght@400;700&display=swap');
+        
+        :root { 
+            --glow: #ffffff; 
+            --bg: #000; 
+            --accent: #00f2fe;
+            --gold: #ffd700;
+            --shield-grey: #0a0a0a;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; }
         
         body { 
-            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 160px; 
-        }
-        
-        .header-top { padding: 20px; text-align: center; color: #ffd700; font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* Balance Cards */
-        .balance-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px 20px; }
-        .bal-card { background: #111116; border: 1.5px solid #ffd700; border-radius: 15px; padding: 15px; text-align: center; box-shadow: 0 0 10px rgba(255, 215, 0, 0.1); }
-        .bal-label { font-size: 10px; color: #888; text-transform: uppercase; }
-        .bal-amount { font-size: 20px; font-weight: 800; margin-top: 5px; }
-
-        .wallet-panel { background: #111116; border-radius: 15px; padding: 20px; border: 1px solid #1f1f25; margin: 0 20px 20px 20px; }
-        .panel-title { font-size: 13px; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
-        
-        input { width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; color: #fff; border-radius: 10px; margin-bottom: 12px; box-sizing: border-box; font-family: 'Poppins'; outline: none; }
-        input:focus { border-color: #00f2fe; }
-        
-        .btn-action { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-blue { background: #00f2fe; color: #000; }
-        .btn-yellow { background: #ffd700; color: #000; }
-        .btn-action:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        /* 🌟 NAVIGATION BAR SYSTEM 🌟 */
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
-        
-        .bottom-nav { 
-            position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; 
-            background: #111116; display: flex; justify-content: space-between; 
-            align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
-            padding: 0 5px;
+            background: var(--bg); 
+            color: #fff; 
+            height: 100vh; 
+            overflow-x: hidden;
+            padding-bottom: 120px;
+            background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 70%);
         }
 
-        .nav-item { 
-            text-decoration: none; color: #666; font-size: 9px; font-weight: 800; 
-            display: flex; flex-direction: column; align-items: center; flex: 1; 
-        }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
-
-        /* Earn Active Effect */
-        .nav-item.active:not(.center-btn) { color: white; position: relative; }
-        .nav-item.active:not(.center-btn) i { color: #000; z-index: 2; font-size: 22px; }
-        .nav-item.active:not(.center-btn)::before { 
-            content: ''; position: absolute; top: -16px; width: 55px; height: 55px; 
-            background: #ffffff; border-radius: 16px; transform: rotate(45deg); 
-            z-index: -1; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); 
+        /* --- TOP HEADER --- */
+        .header-top { 
+            padding: 30px 20px; 
+            text-align: center; 
+            font-family: 'Syncopate', sans-serif;
+            font-size: 14px;
+            letter-spacing: 5px;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
 
-        /* Center Transfer Button */
-        .nav-item.center-btn { position: relative; color: #666; margin-top: -30px; }
-        .nav-item.center-btn .icon-circle { 
-            width: 55px; height: 55px; background: #222; border-radius: 50%; 
+        /* --- BALANCE CARDS (SHADOW STYLE) --- */
+        .balance-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 30px 20px; }
+        
+        .bal-card { 
+            background: var(--shield-grey); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 4px; 
+            padding: 20px 10px; 
+            text-align: center;
+            transition: 0.3s;
+        }
+        
+        .bal-label { font-size: 8px; color: #555; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; }
+        .bal-amount { font-family: 'Syncopate', sans-serif; font-size: 16px; font-weight: 900; }
+
+        /* --- INPUTS & PANELS --- */
+        .wallet-panel { 
+            margin: 0 20px 20px 20px; 
+            padding: 25px; 
+            background: rgba(255,255,255,0.02);
+            border-radius: 2px;
+            border-left: 2px solid var(--accent);
+        }
+
+        .panel-title { 
+            font-size: 10px; 
+            font-weight: 700; 
+            margin-bottom: 20px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            text-transform: uppercase; 
+            color: var(--accent);
+            letter-spacing: 2px;
+        }
+        
+        input { 
+            width: 100%; padding: 15px; 
+            background: transparent; 
+            border: none; 
+            border-bottom: 1px solid #222; 
+            color: #fff; 
+            margin-bottom: 20px; 
+            font-size: 12px;
+            outline: none;
+            transition: 0.3s;
+        }
+        input:focus { border-bottom-color: var(--accent); }
+        
+        .btn-action { 
+            width: 100%; padding: 16px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            background: transparent;
+            color: #fff; 
+            font-size: 10px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            letter-spacing: 3px;
+            transition: 0.4s; 
+        }
+        .btn-action:hover { background: #fff; color: #000; }
+        .btn-action:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* --- NAVIGATION BAR (SAME AS INDEX) --- */
+        .nav-protection {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 75px;
+            background: var(--shield-grey);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 100;
+        }
+
+        .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.4; transition: 0.3s; }
+        .nav-item i { font-size: 18px; color: #fff; }
+        .nav-item span { font-size: 7px; color: #fff; font-weight: 700; text-transform: uppercase; }
+        .nav-item.active { opacity: 1; }
+        .nav-item.active i { color: var(--accent); }
+
+        .center-btn { margin-top: -40px; opacity: 1; }
+        .center-btn .icon-circle { 
+            width: 50px; height: 50px; 
+            background: var(--accent); 
+            border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
-            border: 4px solid #050508; transition: 0.3s; 
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
         }
-        .nav-item.center-btn i { color: white; font-size: 22px; margin: 0; }
+        .center-btn i { color: #000; font-size: 20px; }
+
     </style>
 </head>
 <body>
 
-    <div class="header-top">RARE EARN</div>
+    <div class="header-top">RE_EARN_VAULT</div>
 
     <div class="balance-container">
         <div class="bal-card">
-            <div class="bal-label">Main Wallet</div>
-            <div class="bal-amount" id="mainBal">₹...</div>
+            <div class="bal-label">Liquid Cash</div>
+            <div class="bal-amount" id="mainBal">₹0</div>
         </div>
-        <div class="bal-card" style="border-color: #ffaa00;">
+        <div class="bal-card" style="border-left: 1px solid var(--gold);">
             <div class="bal-label">Rare Coins</div>
-            <div class="bal-amount" id="rareCoins" style="color: #ffaa00;">0</div>
+            <div class="bal-amount" id="rareCoins" style="color: var(--gold);">0</div>
         </div>
     </div>
 
     <div class="wallet-panel">
-        <div class="panel-title" style="color:#00f2fe;"><i class="fas fa-money-bill-wave"></i> Withdraw Cash</div>
-        <input type="number" id="witAmt" placeholder="Amount (Min ₹50)">
-        <input type="text" id="witUpi" placeholder="UPI ID (e.g. name@upi)">
-        <button class="btn-action btn-blue" id="btnWithdraw" onclick="withdraw()">Withdraw Now</button>
+        <div class="panel-title"><i class="fas fa-arrow-up-right-from-square"></i> Withdrawal_Protocol</div>
+        <input type="number" id="witAmt" placeholder="ENTER_AMOUNT (MIN ₹50)">
+        <input type="text" id="witUpi" placeholder="UPI_ADDRESS">
+        <button class="btn-action" id="btnWithdraw" onclick="withdraw()">Execute_Withdrawal</button>
     </div>
 
-    <div class="wallet-panel" style="border: 1px solid #ffaa00;">
-        <div class="panel-title" style="color:#ffaa00;"><i class="fas fa-exchange-alt"></i> Redeem Coins</div>
-        <p style="font-size: 11px; color: #888; margin-top: -5px;">100 Rare Coins = ₹2 Cash</p>
-        <button class="btn-action btn-yellow" id="btnRedeem" onclick="redeemCoins()">Redeem 100 Coins</button>
+    <div class="wallet-panel" style="border-left-color: var(--gold);">
+        <div class="panel-title" style="color: var(--gold);"><i class="fas fa-coins"></i> Asset_Conversion</div>
+        <p style="font-size: 9px; color: #444; margin-bottom: 20px; text-transform: uppercase;">Rate: 100 COINS = ₹2 CASH</p>
+        <button class="btn-action" id="btnRedeem" onclick="redeemCoins()" style="border-color: rgba(255,215,0,0.2);">Redeem_100_Units</button>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item active"><i class="fas fa-wallet"></i><span>EARN</span></a>
+    <nav class="nav-protection">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-th-large"></i>
+            <span>Lobby</span>
+        </a>
+        <a href="earn.html" class="nav-item active">
+            <i class="fas fa-wallet"></i>
+            <span>Vault</span>
+        </a>
         
         <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
-            <span style="margin-top: 5px;">TRANSFER</span>
+            <div class="icon-circle"><i class="fas fa-paper-plane"></i></div>
         </a>
 
-        <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+        <a href="chat_list.html" class="nav-item">
+            <i class="fas fa-comment-dots"></i>
+            <span>Intel</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user-shield"></i>
+            <span>Account</span>
+        </a>
     </nav>
-    <div class="system-nav-bar"></div>
 
     <script>
-        // Naya URL Jo Aapne Diya Tha
         const scriptURL = "https://script.google.com/macros/s/AKfycbxkNQ1Zc4mrOV3oAT-FEW7yJbp2c1WL5T80hHa5lTth5K1I5OloyJ3ddbc-pDAl1JHSeQ/exec";
         let user = JSON.parse(localStorage.getItem("rareGamingUser"));
 
-        function sync() {
+        async function sync() {
             if(!user) return window.location.href = "login.html";
-            fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(user.name))
-            .then(res => res.json()).then(data => {
+            try {
+                const res = await fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(user.name));
+                const data = await res.json();
                 document.getElementById('mainBal').innerText = "₹" + (data.cash || 0);
                 document.getElementById('rareCoins').innerText = (data.coins || 0);
-            }).catch(e => console.log("Sync Error"));
+            } catch(e) { console.log("Sync Error"); }
         }
 
         function withdraw() {
             let amt = document.getElementById('witAmt').value;
             let upi = document.getElementById('witUpi').value;
-            if(!amt || !upi) return alert("Pura detail bharo bhai!");
-            if(amt < 50) return alert("Minimum ₹50 withdraw kar sakte ho!");
+            if(!amt || !upi) return alert("All fields required.");
+            if(amt < 50) return alert("Minimum ₹50 required.");
 
             let btn = document.getElementById('btnWithdraw');
-            btn.innerText = "PROCESSING..."; btn.disabled = true;
+            btn.innerText = "EXECUTING..."; btn.disabled = true;
 
             fetch(scriptURL + "?action=withdraw&username=" + encodeURIComponent(user.name) + "&amount=" + amt + "&upi=" + encodeURIComponent(upi))
             .then(res => res.text()).then(resp => {
                 alert(resp); sync();
-                btn.innerText = "Withdraw Now"; btn.disabled = false;
+                btn.innerText = "Execute_Withdrawal"; btn.disabled = false;
                 document.getElementById('witAmt').value = ""; document.getElementById('witUpi').value = "";
             });
         }
 
         function redeemCoins() {
             let btn = document.getElementById('btnRedeem');
-            btn.innerText = "PROCESSING..."; btn.disabled = true;
+            btn.innerText = "CONVERTING..."; btn.disabled = true;
 
             fetch(scriptURL + "?action=redeemCoins&username=" + encodeURIComponent(user.name))
             .then(res => res.text()).then(resp => {
                 alert(resp); sync();
-                btn.innerText = "Redeem 100 Coins"; btn.disabled = false;
+                btn.innerText = "Redeem_100_Units"; btn.disabled = false;
             });
         }
 
