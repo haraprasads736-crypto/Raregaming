@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rare Chat - Ultimate</title>
+    <title>Rare Chat - Pro Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
@@ -12,8 +12,8 @@
             --neon-cyan: #00f2fe;
             --neon-red: #ff4444;
             --dark-bg: #050508;
+            --card-bg: #111116;
             --glass: rgba(255, 255, 255, 0.05);
-            --card-grad: linear-gradient(135deg, rgba(17, 17, 22, 0.9), rgba(5, 5, 8, 0.9));
         }
 
         body { 
@@ -26,148 +26,165 @@
             overflow-x: hidden;
         }
 
-        /* ✨ Cyber Background Effect */
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at top right, rgba(0, 242, 254, 0.05), transparent);
-            z-index: -1;
-        }
-
-        /* 🛡️ Header Pro */
+        /* 🛡️ Header */
         .header { 
-            padding: 30px 20px; 
-            background: #111116; 
+            padding: 25px 20px; 
+            background: var(--card-bg); 
             display: flex; 
             justify-content: space-between; 
             align-items: center;
             border-bottom: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
         .header h2 { 
             font-family: 'Orbitron', sans-serif;
-            font-size: 20px; 
+            font-size: 19px; 
             margin: 0; 
-            font-weight: 900;
             color: var(--neon-cyan); 
             text-transform: uppercase;
+            font-weight: 900;
         }
 
-        /* ➕ Add Connection (Modernized) */
+        /* ➕ Add Contact Section */
         .add-box { 
-            padding: 25px; 
+            padding: 20px; 
             background: var(--glass); 
             margin: 20px 15px; 
-            border-radius: 15px; 
-            border: 1px solid rgba(0, 242, 254, 0.1);
-            backdrop-filter: blur(15px);
+            border-radius: 12px; 
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            backdrop-filter: blur(10px);
         }
-        .add-box h3 { font-size: 14px; color: #888; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
-        
         input { 
             width: 100%; 
-            padding: 15px; 
-            background: rgba(0,0,0,0.6); 
-            border: 1px solid #333; 
+            padding: 14px; 
+            background: #000; 
+            border: 1px solid #2a2a30; 
             color: #fff; 
             border-radius: 10px; 
-            margin-bottom: 12px; 
+            margin-bottom: 10px; 
             font-size: 15px;
             outline: none;
-            transition: 0.4s;
+            box-sizing: border-box;
         }
-        input:focus { border-color: var(--neon-cyan); background: #000; box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.1); }
+        input:focus { border-color: var(--neon-cyan); }
         
         .btn-add { 
             width: 100%; 
-            padding: 15px; 
+            padding: 14px; 
             background: var(--neon-cyan); 
             color: #000; 
             border: none; 
             border-radius: 10px; 
-            font-weight: 900; 
+            font-weight: 800; 
             font-family: 'Orbitron', sans-serif;
             cursor: pointer; 
             text-transform: uppercase;
-            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3);
         }
 
-        /* 👥 Contact List (Advanced) */
+        /* 👥 Contact List */
         .contact-list { padding: 0 15px; }
         .contact-card { 
-            background: var(--card-grad);
-            padding: 18px; 
+            background: var(--card-bg);
+            padding: 16px; 
             border-radius: 15px; 
-            margin-bottom: 15px; 
+            margin-bottom: 12px; 
             display: flex; 
             align-items: center; 
             gap: 15px; 
-            border: 1px solid rgba(255,255,255,0.03); 
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            border: 1px solid rgba(255,255,255,0.05); 
+            transition: 0.3s;
         }
-        .contact-card:active { transform: scale(0.97); }
-        .contact-card:hover { border-color: var(--neon-cyan); }
+        .contact-card:active { transform: scale(0.98); }
         
         .user-icon { 
-            width: 55px; height: 55px; 
-            background: rgba(0, 242, 254, 0.05); 
-            border-radius: 12px; 
+            width: 50px; height: 50px; 
+            background: rgba(0, 242, 254, 0.1); 
+            border-radius: 50%; 
             display: flex; align-items: center; justify-content: center;
-            border: 1px solid rgba(0, 242, 254, 0.2);
             color: var(--neon-cyan);
             font-size: 24px;
+            border: 1px solid var(--neon-cyan);
         }
         
         .contact-info { flex-grow: 1; }
-        .contact-info b { font-size: 18px; display: block; font-family: 'Orbitron', sans-serif; color: #fff; margin-bottom: 2px; }
-        .contact-info span { font-size: 12px; color: var(--neon-cyan); opacity: 0.6; font-weight: 600; }
+        .contact-info b { font-size: 17px; display: block; font-family: 'Orbitron', sans-serif; color: #fff; text-transform: uppercase; }
+        .contact-info span { font-size: 11px; color: #888; }
 
-        /* 🗑️ Delete Button (Modern) */
+        /* 🗑️ Delete Button */
         .delete-btn {
             background: rgba(255, 68, 68, 0.1);
             color: var(--neon-red);
-            border: 1px solid rgba(255, 68, 68, 0.2);
-            width: 40px; height: 40px;
+            border: none;
+            width: 38px; height: 38px;
             border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
-            transition: 0.3s;
+            font-size: 18px;
         }
-        .delete-btn:hover { background: var(--neon-red); color: white; }
 
-        /* 🧭 System Navigation Fix */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: #0c0c12; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #1f1f25; z-index: 1000; }
-        .nav-item { text-decoration: none; color: #555; font-size: 9px; font-weight: 700; display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; }
-        .nav-item.active { color: var(--neon-cyan); }
+        /* 🧭 FIXED BOTTOM NAVIGATION (Icon Fix) */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 48px; 
+            left: 0; 
+            width: 100%; 
+            height: 70px; 
+            background: #111116; 
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center; 
+            border-top: 1px solid #1f1f25; 
+            z-index: 1000; 
+        }
+        .nav-item { 
+            text-decoration: none; 
+            color: #666; 
+            font-size: 10px; 
+            font-weight: 800; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            transition: 0.3s; 
+        }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .nav-item.active { color: white; }
+        .nav-item.active i { color: var(--neon-cyan); }
         
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; border-top: 1px solid #333; }
+        /* Protection Bar */
+        .system-nav-bar { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 48px; 
+            background-color: #4f515e; /* Wahi Grey Color Jo Aapne Manga Tha */
+            z-index: 1001; 
+        }
         
-        .empty-text { text-align: center; color: #444; margin-top: 40px; font-style: italic; font-size: 14px; }
+        .empty-text { text-align: center; color: #444; margin-top: 40px; font-style: italic; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h2>Rare Chat Pro</h2>
-        <div style="width: 10px; height: 10px; background: var(--neon-cyan); border-radius: 50%; box-shadow: 0 0 10px var(--neon-cyan);"></div>
+        <i class="fas fa-comments" style="color: var(--neon-cyan);"></i>
     </div>
 
     <div class="add-box">
-        <h3>Add Secure Link</h3>
-        <input type="text" id="newUID" placeholder="PLAYER UID (RG123456)">
-        <input type="text" id="newName" placeholder="PLAYER NAME">
-        <button class="btn-add" onclick="saveContact()">Connect Player</button>
+        <input type="text" id="newUID" placeholder="Friend's UID (RGXXXXXX)">
+        <input type="text" id="newName" placeholder="Friend's Name">
+        <button class="btn-add" onclick="saveContact()">Add Contact</button>
     </div>
 
     <div class="contact-list" id="contactList"></div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-grid-2"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-bolt"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item"><i class="fas fa-random"></i><span>SECURE</span></a>
-        <a href="chat_list.html" class="nav-item active"><i class="fas fa-message"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-gear"></i><span>PROFILE</span></a>
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="transfer.html" class="nav-item"><i class="fas fa-exchange-alt"></i><span>TRANSFER</span></a>
+        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comments"></i><span>CHAT</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
 
@@ -175,7 +192,7 @@
         function saveContact() {
             let uid = document.getElementById('newUID').value.trim().toUpperCase();
             let name = document.getElementById('newName').value.trim();
-            if(!uid || !name) return;
+            if(!uid || !name) return alert("Details bhariye!");
 
             let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
             contacts.push({uid: uid, name: name});
@@ -186,7 +203,7 @@
             renderContacts();
         }
 
-        // 🔥 DELETE WITH SPECIFIC MESSAGE
+        // 🔥 DELETE WITH YOUR MESSAGE
         function deleteContact(index) {
             if(confirm("are you sure for delete")) {
                 let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
@@ -199,22 +216,22 @@
         function renderContacts() {
             let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
             let list = document.getElementById('contactList');
-            list.innerHTML = contacts.length ? "" : "<p class='empty-text'>NO ACTIVE CONNECTIONS FOUND.</p>";
+            list.innerHTML = contacts.length ? "" : "<p class='empty-text'>No contacts yet.</p>";
             
             contacts.forEach((c, index) => {
                 list.innerHTML += `
                     <div class="contact-card">
                         <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" style="text-decoration:none; display:flex; align-items:center; gap:15px; flex-grow:1;">
                             <div class="user-icon">
-                                <i class="fas fa-shield-halved"></i>
+                                <i class="fas fa-user-circle"></i>
                             </div>
                             <div class="contact-info">
                                 <b>${c.name}</b>
-                                <span>ONLINE ID: ${c.uid}</span>
+                                <span>${c.uid}</span>
                             </div>
                         </a>
                         <button class="delete-btn" onclick="deleteContact(${index})">
-                            <i class="fas fa-xmark"></i>
+                            <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
                 `;
