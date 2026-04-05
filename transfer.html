@@ -4,71 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Transfer - RARE GAMING</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         
+        :root {
+            --bg-color: #030305;
+            --neon-blue: #00f2fe;
+            --rare-gold: #ffd700;
+            --transfer-green: #39ff14;
+        }
+
         body { 
             background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 160px; 
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
         }
         
         /* Header */
-        .header { padding: 30px 20px; text-align: center; background: #111116; border-bottom: 1px solid #1f1f25; }
-        .header h2 { color: #00f2fe; margin: 0; text-transform: uppercase; font-size: 20px; letter-spacing: 1px; }
+        .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid #1f1f25; }
+        .header h2 { color: var(--neon-blue); margin: 0; text-transform: uppercase; font-size: 22px; letter-spacing: 2px; font-weight: 800; }
 
         /* Transfer Card */
-        .wallet-panel { background: #111116; border-radius: 20px; padding: 25px; border: 1px solid #1f1f25; margin: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .panel-label { font-size: 11px; font-weight: 800; color: #888; margin-bottom: 10px; text-transform: uppercase; }
+        .wallet-panel { background: #0a0a0f; border-radius: 24px; padding: 25px; border: 1px solid #1f1f25; margin: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        .panel-label { font-size: 11px; font-weight: 800; color: #888; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
         
         input { 
-            width: 100%; padding: 14px; background: #000; border: 1px solid #2a2a30; 
-            color: #fff; border-radius: 12px; margin-bottom: 12px; box-sizing: border-box; 
-            font-family: 'Poppins'; font-size: 14px; outline: none;
+            width: 100%; padding: 16px; background: #000; border: 1px solid #2a2a30; 
+            color: #fff; border-radius: 15px; margin-bottom: 12px; box-sizing: border-box; 
+            font-family: 'Poppins'; font-size: 14px; outline: none; transition: 0.3s;
         }
-        input:focus { border-color: #00f2fe; }
+        input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 242, 254, 0.1); }
 
         .btn-blue { 
-            width: 100%; padding: 16px; background: #00f2fe; color: #000; border: none; 
-            border-radius: 12px; font-weight: 800; text-transform: uppercase; font-size: 14px;
-            cursor: pointer; transition: 0.3s;
+            width: 100%; padding: 18px; background: var(--neon-blue); color: #000; border: none; 
+            border-radius: 15px; font-weight: 800; text-transform: uppercase; font-size: 14px;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.2);
         }
-        .btn-blue:disabled { background: #333; color: #666; }
+        .btn-blue:disabled { background: #222; color: #555; box-shadow: none; }
 
-        #verifyName { font-weight: 600; margin-bottom: 10px; min-height: 18px; font-size: 12px; }
+        #verifyName { font-weight: 700; margin-bottom: 15px; min-height: 20px; font-size: 13px; text-align: center; }
 
-        /* 🌟 NAVIGATION BAR SYSTEM 🌟 */
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
-        
+        /* 🌟 NAVIGATION BAR SYSTEM (Matching Earn/Index) 🌟 */
         .bottom-nav { 
-            position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; 
-            background: #111116; display: flex; justify-content: space-between; 
-            align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
-            padding: 0 5px;
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
+            background: rgba(10, 10, 15, 0.95); display: flex; 
+            justify-content: space-around; align-items: center; 
+            backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000; border-radius: 20px 20px 0 0;
         }
 
         .nav-item { 
-            text-decoration: none; color: #666; font-size: 9px; font-weight: 800; 
-            display: flex; flex-direction: column; align-items: center; flex: 1; 
+            text-decoration: none; color: #666; font-size: 10px; font-weight: 700; 
+            display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;
         }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .nav-item i { font-size: 20px; }
 
-        /* Transfer Active Effect (Center Button) */
-        .nav-item.center-btn { position: relative; color: white; margin-top: -35px; }
-        .nav-item.center-btn .icon-circle { 
-            width: 60px; height: 60px; background: #00f2fe; border-radius: 50%; 
+        /* Green Center Button (Active on this page) */
+        .center-btn .icon-circle { 
+            width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.5); border: 5px solid #050508; 
+            border: 4px solid #050508; box-shadow: 0 0 20px rgba(57, 255, 20, 0.4); 
+            margin-top: -35px;
         }
-        .nav-item.center-btn i { color: #000; font-size: 24px; margin: 0; }
-        
-        .nav-item.active:not(.center-btn) { color: white; position: relative; }
-        .nav-item.active:not(.center-btn) i { color: #000; z-index: 2; font-size: 22px; }
-        .nav-item.active:not(.center-btn)::before { 
-            content: ''; position: absolute; top: -16px; width: 55px; height: 55px; 
-            background: #ffffff; border-radius: 16px; transform: rotate(45deg); 
-            z-index: -1; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); 
-        }
+        .center-btn i { color: #000 !important; font-size: 22px; }
+        .center-btn span { color: #fff; margin-top: 5px; font-weight: 800; }
+
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
 </head>
 <body>
@@ -93,18 +95,18 @@
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
         
-        <a href="transfer.html" class="nav-item center-btn active">
+        <a href="transfer.html" class="nav-item center-btn">
             <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
-            <span style="margin-top: 5px;">TRANSFER</span>
+            <span>SEND</span>
         </a>
 
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
+    
     <div class="system-nav-bar"></div>
 
     <script>
-        // Naya Link Jo Aapne Diya Tha
         const scriptURL = "https://script.google.com/macros/s/AKfycbxkNQ1Zc4mrOV3oAT-FEW7yJbp2c1WL5T80hHa5lTth5K1I5OloyJ3ddbc-pDAl1JHSeQ/exec";
         let user = JSON.parse(localStorage.getItem("rareGamingUser"));
 
@@ -123,11 +125,11 @@
                 .then(res => res.text())
                 .then(name => {
                     if(name !== "Not Found") {
-                        nameBox.innerText = "Target: " + name;
-                        nameBox.style.color = "#00ff00";
+                        nameBox.innerText = "To: " + name;
+                        nameBox.style.color = var(--transfer-green);
                         btn.disabled = false;
                     } else {
-                        nameBox.innerText = "Invalid UID!";
+                        nameBox.innerText = "Invalid ID! No player found.";
                         nameBox.style.color = "#ff3131";
                         btn.disabled = true;
                     }
