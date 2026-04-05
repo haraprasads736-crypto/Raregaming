@@ -13,7 +13,6 @@
             --neon-blue: #00f2fe;
             --neon-purple: #9d00ff;
             --panel-color: #0a0a0f;
-            --rare-gold: #ffd700;
         }
 
         body { 
@@ -53,7 +52,7 @@
         .money-desc { font-size: 11px; color: #aaa; margin: 5px 0 15px 0; }
         .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
-        /* 💰 ADMOB BANNER UNIT */
+        /* 💰 ADMOB BANNER UNIT (ID: ca-app-pub-5695800911065486/5516230371) */
         .ad-container {
             margin: 10px 20px;
             height: 60px;
@@ -74,18 +73,12 @@
         
         .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
         .match-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 1/1.1; background: #0a0a0f; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; }
-        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: 0.3s; }
+        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
         
         .card-overlay { position: absolute; bottom: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); padding: 15px; text-align: center; box-sizing: border-box; }
         .match-name { font-size: 12px; font-weight: 700; color: #fff; margin: 0; text-transform: uppercase; }
         .match-fee { font-size: 10px; color: #00f2fe; margin-bottom: 5px; font-weight: 600; }
         .match-status { background: rgba(255, 49, 49, 0.1); border: 1px solid #ff3131; color: #ff3131; font-size: 9px; padding: 4px 10px; border-radius: 50px; display: inline-block; font-weight: 700; }
-
-        /* 🚀 QUICK ACTIONS GRID (Original Size) */
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
-        .action-card { background: #111116; border: 1px solid #1f1f25; border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; display: block; }
-        .action-card i { font-size: 28px; margin-bottom: 10px; display: block; color: var(--rare-gold); }
-        .action-card span { font-size: 11px; font-weight: 800; color: #fff; text-transform: uppercase; }
 
         /* NAVIGATION */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
@@ -108,8 +101,9 @@
     <div class="money-banner">
         <div class="money-tag">Fast & Secure</div>
         <p class="money-title">Transfer Earnings</p>
+        <p class="money-desc">Send money to your friends instantly within the app.</p>
         <button class="money-btn" onclick="location.href='transfer.html'">
-            <i class="fas fa-paper-plane"></i> Send Money
+            <i class="fas fa-paper-plane"></i> Send Money Now
         </button>
     </div>
 
@@ -127,28 +121,21 @@
             <img src="br_poster.jpg">
             <div class="card-overlay"><p class="match-name">BR SQUAD</p><p class="match-fee">Fee: ₹20</p><div class="match-status">CLOSED</div></div>
         </a>
+        
         <a href="match_details.html?type=CS" class="match-card">
             <img src="cs_poster.jpg">
             <div class="card-overlay"><p class="match-name">CS SQUAD</p><p class="match-fee">Fee: ₹20</p><div class="match-status">CLOSED</div></div>
         </a>
+
         <a href="match_details.html?type=LW" class="match-card">
             <img src="lw_poster.jpg">
             <div class="card-overlay"><p class="match-name">LONE WOLF</p><p class="match-fee">Fee: ₹10</p><div class="match-status">CLOSED</div></div>
         </a>
+
         <a href="match_details.html?type=1V1" class="match-card">
             <img src="1v1_poster.jpg">
             <div class="card-overlay"><p class="match-name">1V1 BATTLE</p><p class="match-fee">Fee: ₹50</p><div class="match-status">CLOSED</div></div>
         </a>
-    </div>
-
-    <div class="section-header" style="margin-top: 30px;">
-        <div class="section-title">Quick Actions</div>
-    </div>
-    <div class="action-grid">
-        <a href="teams.html" class="action-card"><i class="fas fa-shield-alt"></i><span>Teams Info</span></a>
-        <a href="https://wa.me/917008170291" class="action-card"><i class="fab fa-whatsapp"></i><span>Contact Admin</span></a>
-        <a href="prizes.html" class="action-card"><i class="fas fa-trophy"></i><span>Prize Pool</span></a>
-        <a href="profile.html" class="action-card"><i class="fas fa-user-cog"></i><span>My Account</span></a>
     </div>
 
     <nav class="bottom-nav">
@@ -166,6 +153,7 @@
 
     <script>
         const scriptURL = "https://script.google.com/macros/s/AKfycbwOkgiMlegqp1-dU4JLLk7oOjMxpQhweDVjLfr3ETbuEuvKlZs41KMQJei_6JAb5ctC6A/exec";
+        
         function syncBalance() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!userData) { window.location.href = "login.html"; return; }
