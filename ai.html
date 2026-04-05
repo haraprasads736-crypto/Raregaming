@@ -2,174 +2,98 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Rare Gaming AI</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <title>Rare AI - Firebase</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root { 
-      --primary: #00ffcc; 
-      --bg: #0f0f12; 
-      --card: #1e1e26; 
-      --grey-bar: #2a2a35; /* Grey Protection Bar Color */
-      --text: #ffffff; 
-    }
+    /* ✨ AAPKA FAVORITE ADVANCE UI ✨ */
+    :root { --neon: #00f2fe; --bg: #050508; --card: #111116; --grey-bar: #1c1c21; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Rajdhani', sans-serif; }
+    body { background: var(--bg); color: white; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
     
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    #chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-bottom: 140px; }
+    .msg { max-width: 80%; padding: 12px 16px; border-radius: 18px; font-size: 1rem; animation: pop 0.3s ease; }
+    @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .bot-msg { align-self: flex-start; background: var(--card); color: var(--neon); border-left: 3px solid var(--neon); }
+    .user-msg { align-self: flex-end; background: var(--neon); color: #000; font-weight: 700; border-bottom-right-radius: 2px; }
 
-    body { 
-      font-family: 'Poppins', sans-serif; 
-      background: var(--bg); 
-      color: var(--text); 
-      height: 100vh; 
-      display: flex; 
-      flex-direction: column;
-      overflow: hidden; 
-    }
+    .input-wrapper { position: fixed; bottom: 75px; width: 100%; padding: 0 15px; z-index: 1000; }
+    .input-container { background: var(--grey-bar); padding: 10px; display: flex; gap: 10px; border-radius: 15px; border: 1px solid #333; }
+    #msg-input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 16px; }
+    .btn { background: var(--neon); border: none; width: 45px; height: 45px; border-radius: 12px; color: #000; cursor: pointer; }
 
-    /* 💬 CHAT BOX (Center Area) */
-    #chat-box { 
-      flex: 1;
-      padding: 20px;
-      margin-bottom: 140px; /* Space for Input + Bottom Nav */
-      overflow-y: auto; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 15px; 
-    }
-
-    .msg { 
-      max-width: 85%; 
-      padding: 12px 16px; 
-      border-radius: 18px; 
-      font-size: 0.95rem; 
-      word-wrap: break-word;
-    }
-    
-    .bot-msg { align-self: flex-start; background: var(--card); color: var(--primary); border: 1px solid #333; }
-    .user-msg { align-self: flex-end; background: var(--primary); color: #000; font-weight: 500; }
-
-    /* ⌨️ MESSAGE INPUT BOX (Ab Upar Hoga) */
-    .input-container { 
-      background: rgba(15, 15, 18, 0.9);
-      padding: 10px 15px; 
-      display: flex; 
-      gap: 10px; 
-      align-items: center; 
-      position: fixed; 
-      bottom: 65px; /* Nav bar ke theek upar */
-      left: 0;
-      width: 100%; 
-      z-index: 999;
-      border-top: 1px solid #333;
-    }
-
-    #msg-input { 
-      flex: 1; 
-      background: #2a2a35; 
-      border: 1px solid #444; 
-      border-radius: 10px; 
-      padding: 12px 15px; 
-      color: white; 
-      outline: none; 
-    }
-
-    .send-btn { 
-      background: var(--primary); 
-      border: none; 
-      width: 45px; 
-      height: 45px; 
-      border-radius: 10px; 
-      color: #000; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-    }
-
-    /* 🛡️ NAVIGATION PROTECTION BAR (Ab Niche Hoga - Grey Theme) */
-    .navbar { 
-      background: var(--grey-bar); 
-      padding: 0 20px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between; 
-      border-top: 2px solid var(--primary); 
-      position: fixed; 
-      bottom: 0; 
-      left: 0;
-      width: 100%; 
-      height: 65px;
-      z-index: 1000; 
-      box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
-    }
-
-    .nav-brand { display: flex; align-items: center; gap: 8px; font-weight: bold; color: var(--primary); font-size: 0.9rem; }
-    .nav-user { font-size: 0.7rem; color: #bbb; text-align: right; }
-
-    .typing { font-size: 0.8rem; color: var(--primary); position: fixed; bottom: 120px; left: 20px; display: none; }
+    .navbar { background: var(--grey-bar); position: fixed; bottom: 0; width: 100%; height: 65px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-top: 1px solid var(--neon); z-index: 1001; }
+    .nav-tag { color: var(--neon); font-weight: 800; font-size: 0.9rem; }
   </style>
 </head>
 <body>
 
   <div id="chat-box">
-    <div class="msg bot-msg">
-      <b>Rare AI:</b> Layout Updated! Navigation niche hai aur Input uske upar. Protection active hai.
-    </div>
+    <div class="msg bot-msg"><b>Rare AI:</b> Firebase Connected! Ab main pehle se 10x fast reply doonga.</div>
   </div>
 
-  <div class="typing" id="typing-indicator">AI is typing...</div>
-
-  <div class="input-container">
-    <input type="text" id="msg-input" placeholder="Enter message..." autocomplete="off">
-    <button class="send-btn" onclick="sendMessage()">
-      <i class="fas fa-paper-plane"></i>
-    </button>
+  <div class="input-wrapper">
+    <div class="input-container">
+      <input type="text" id="msg-input" placeholder="Ask Rare AI..." autocomplete="off">
+      <button class="btn" onclick="askAI()"><i class="fas fa-paper-plane"></i></button>
+    </div>
   </div>
 
   <div class="navbar">
-    <div class="nav-brand">
-      <i class="fas fa-shield-alt"></i>
-      <span>RARE PROTECTION</span>
-    </div>
-    <div class="nav-user">
-      <div>Rare Gaming User</div>
-      <div style="color: var(--primary);"><i class="fas fa-circle"></i> Secure</div>
-    </div>
+    <div class="nav-tag">RARE PROTECTION</div>
+    <div style="font-size: 10px; color: #888;">Secure Database</div>
   </div>
 
-  <script>
-    const chatBox = document.getElementById('chat-box');
-    const msgInput = document.getElementById('msg-input');
-    const typingIndicator = document.getElementById('typing-indicator');
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    function sendMessage() {
-      const text = msgInput.value.trim();
+    // AAPKA CONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyBul5xy6XwEeZwqlnGWkqVXiqax9Lbcuvw",
+      authDomain: "rare-gaming-ai.firebaseapp.com",
+      databaseURL: "https://rare-gaming-ai-default-rtdb.firebaseio.com",
+      projectId: "rare-gaming-ai",
+      storageBucket: "rare-gaming-ai.firebasestorage.app",
+      messagingSenderId: "424589932393",
+      appId: "1:424589932393:web:4988207761dfe49662aff8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const chatRef = ref(db, 'chats');
+
+    // Message Bhejna
+    window.askAI = async function() {
+      const input = document.getElementById('msg-input');
+      const text = input.value.trim();
       if (!text) return;
 
-      appendMessage('user-msg', 'You', text);
-      msgInput.value = '';
-      typingIndicator.style.display = 'block';
-      chatBox.scrollTop = chatBox.scrollHeight;
+      appendMsg('user-msg', 'You', text);
+      input.value = '';
 
-      google.script.run
-        .withSuccessHandler((response) => {
-          typingIndicator.style.display = 'none';
-          appendMessage('bot-msg', 'Rare AI', response);
-        })
-        .withFailureHandler(() => {
-          typingIndicator.style.display = 'none';
-          appendMessage('bot-msg', 'Error', "Connection slow hai.");
-        })
-        .askGemini(text); 
+      // Direct Gemini Call (No Code.gs needed!)
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${firebaseConfig.apiKey}`, {
+          method: 'POST',
+          body: JSON.stringify({ contents: [{ parts: [{ text: text + " (Jawab short mein dena)" }] }] })
+        });
+        const data = await response.json();
+        const aiReply = data.candidates[0].content.parts[0].text;
+        
+        appendMsg('bot-msg', 'Rare AI', aiReply);
+        
+        // Backup to Firebase (Optional)
+        push(chatRef, { user: text, ai: aiReply, time: Date.now() });
+      } catch (e) {
+        appendMsg('bot-msg', 'Error', "Gemini is still busy. Check API Key permissions.");
+      }
+    };
+
+    function appendMsg(cls, sender, txt) {
+      const box = document.getElementById('chat-box');
+      box.innerHTML += `<div class="msg ${cls}"><b>${sender}:</b><br>${txt}</div>`;
+      box.scrollTop = box.scrollHeight;
     }
-
-    function appendMessage(type, sender, text) {
-      const msgDiv = document.createElement('div');
-      msgDiv.className = `msg ${type}`;
-      msgDiv.innerHTML = `<b>${sender}:</b><br>${text}`;
-      chatBox.appendChild(msgDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    msgInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
   </script>
 </body>
 </html>
