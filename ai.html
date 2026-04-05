@@ -3,49 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Rare Gaming AI - Official</title>
+  <title>Rare Gaming AI</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root { --neon: #00f2fe; --bg: #050508; --card: #111116; --grey-bar: #1c1c21; }
+    :root { --neon: #00f2fe; --bg: #050508; --card: #111116; --grey: #1c1c21; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { background: var(--bg); color: white; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-    #chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-bottom: 160px; }
+    #chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-bottom: 150px; }
     .msg { max-width: 85%; padding: 12px 16px; border-radius: 15px; font-size: 1rem; line-height: 1.4; animation: pop 0.3s ease; }
     @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .bot-msg { align-self: flex-start; background: var(--card); color: #fff; border-left: 4px solid var(--neon); }
-    .user-msg { align-self: flex-end; background: var(--neon); color: #000; font-weight: 600; border-bottom-right-radius: 2px; }
-    .input-wrapper { position: fixed; bottom: 80px; width: 100%; padding: 0 15px; z-index: 10; }
-    .input-container { background: var(--grey-bar); padding: 10px; display: flex; gap: 10px; border-radius: 20px; border: 1px solid #333; align-items: center; }
-    #msg-input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 16px; padding-left: 10px; }
-    .btn-send { background: var(--neon); border: none; width: 45px; height: 45px; border-radius: 50%; color: #000; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .navbar { background: var(--grey-bar); position: fixed; bottom: 0; width: 100%; height: 65px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-top: 1px solid var(--neon); z-index: 11; }
-    .nav-tag { color: var(--neon); font-weight: 900; font-size: 1.1rem; text-transform: uppercase; }
+    .user-msg { align-self: flex-end; background: var(--neon); color: #000; font-weight: 600; }
+    .input-wrapper { position: fixed; bottom: 75px; width: 100%; padding: 0 15px; }
+    .input-container { background: var(--grey); padding: 10px; display: flex; gap: 10px; border-radius: 20px; align-items: center; border: 1px solid #333; }
+    #msg-input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 16px; }
+    .btn-send { background: var(--neon); border: none; width: 45px; height: 45px; border-radius: 50%; color: #000; cursor: pointer; }
+    .navbar { background: var(--grey); position: fixed; bottom: 0; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--neon); }
+    .nav-tag { color: var(--neon); font-weight: 900; letter-spacing: 2px; }
   </style>
 </head>
 <body>
 
   <div id="chat-box">
-    <div class="msg bot-msg"><b>Rare AI:</b> System Online, <b>Rare Gaming</b>! Sab kuch verify ho gaya hai. Ab puchiye? 🤘</div>
+    <div class="msg bot-msg"><b>Rare AI:</b> <b>Rare Gaming</b> Bhai, system 100% Ready! Ab error ki chutti. Puchiye kya puchna hai? 🤘</div>
   </div>
 
   <div class="input-wrapper">
     <div class="input-container">
-      <input type="text" id="msg-input" placeholder="Type here..." autocomplete="off">
+      <input type="text" id="msg-input" placeholder="Kuch dhasu puchiye..." autocomplete="off">
       <button class="btn-send" onclick="askAI()"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>
 
-  <div class="navbar">
-    <div class="nav-tag">RARE GAMING AI</div>
-    <div style="font-size: 10px; color: var(--neon); opacity: 0.7;">V1.5 STABLE</div>
-  </div>
+  <div class="navbar"><div class="nav-tag">RARE GAMING AI</div></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyA__hSyOZ4AdbCjnTy4KjOSK4Pi2gbfcKQ", 
+      apiKey: "AIzaSyA__hSyOZ4AdbCjnTy4KjOSK4Pi2gbfcKQ",
       authDomain: "rare-gaming-ai.firebaseapp.com",
       databaseURL: "https://rare-gaming-ai-default-rtdb.firebaseio.com",
       projectId: "rare-gaming-ai",
@@ -56,9 +53,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-
-    // ✅ Aapki Cloud Wali Asli Key
-    const CLOUD_KEY = "AIzaSyA__hSyOZ4AdbCjnTy4KjOSK4Pi2gbfcKQ"; 
+    const API_KEY = "AIzaSyA__hSyOZ4AdbCjnTy4KjOSK4Pi2gbfcKQ";
 
     window.askAI = async function() {
       const input = document.getElementById('msg-input');
@@ -73,31 +68,34 @@
       box.innerHTML += `<div id="${tempId}" class="msg bot-msg">Thinking...</div>`;
       box.scrollTop = box.scrollHeight;
 
-      try {
-        // 🔥 Sabse Stable Model URL (v1beta + gemini-1.5-flash)
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CLOUD_KEY}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            contents: [{ parts: [{ text: text }] }] 
-          })
-        });
+      // 🔥 TRY MULTIPLE ENDPOINTS (Jo chal jaye wahi sahi)
+      const endpoints = [
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`
+      ];
 
-        const data = await response.json();
-        
-        if (data.error) {
-           // Agar abhi bhi "Not Found" aaye, toh iska matlab hai API enable toh hai par server sync nahi hua
-           document.getElementById(tempId).innerHTML = "<b>System:</b> Google is still syncing your key. Wait 10 mins.";
-           return;
-        }
+      let success = false;
+      for (let url of endpoints) {
+        if (success) break;
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: text }] }] })
+          });
 
-        const aiReply = data.candidates[0].content.parts[0].text;
-        document.getElementById(tempId).innerHTML = `<b>Rare AI:</b><br>${aiReply}`;
-        
-        push(ref(db, 'chats'), { user: text, ai: aiReply, time: Date.now() });
+          const data = await response.json();
+          if (data.candidates) {
+            const aiReply = data.candidates[0].content.parts[0].text;
+            document.getElementById(tempId).innerHTML = `<b>Rare AI:</b><br>${aiReply}`;
+            push(ref(db, 'chats'), { user: text, ai: aiReply, time: Date.now() });
+            success = true;
+          }
+        } catch (e) { console.log("Trying next endpoint..."); }
+      }
 
-      } catch (e) {
-        document.getElementById(tempId).innerHTML = "<b>System:</b> Connection failed! Refresh page.";
+      if (!success) {
+        document.getElementById(tempId).innerHTML = "<b>System:</b> Google Syncing... Please wait 5 mins and refresh.";
       }
       box.scrollTop = box.scrollHeight;
     };
@@ -107,7 +105,6 @@
       box.innerHTML += `<div class="msg ${cls}"><b>${sender}:</b><br>${txt}</div>`;
       box.scrollTop = box.scrollHeight;
     }
-
     document.getElementById('msg-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') askAI(); });
   </script>
 </body>
