@@ -40,31 +40,32 @@
             font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 10px;
         }
 
-        /* 💸 NEW: MONEY TRANSFER BANNER (AI Hata Kar Ye Laga Diya) */
+        /* 💸 MONEY TRANSFER BANNER */
         .money-banner {
-            margin: 15px 20px 25px 20px; padding: 20px;
+            margin: 15px 20px 15px 20px; padding: 20px;
             background: linear-gradient(135deg, #0a0a0f 0%, #1a2e1a 100%);
             border-radius: 24px; border: 1px solid rgba(57, 255, 20, 0.2);
             position: relative; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .money-banner::after {
-            content: '💸'; position: absolute; right: -10px; bottom: -10px;
-            font-size: 100px; opacity: 0.1; transform: rotate(-15deg);
-        }
-        .money-tag { 
-            background: #39ff14; color: #000; font-size: 9px; 
-            font-weight: 800; padding: 3px 10px; border-radius: 50px; 
-            display: inline-block; margin-bottom: 10px; text-transform: uppercase;
-        }
+        .money-tag { background: #39ff14; color: #000; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 50px; display: inline-block; margin-bottom: 10px; text-transform: uppercase; }
         .money-title { font-size: 18px; font-weight: 800; margin: 0; color: #fff; }
         .money-desc { font-size: 11px; color: #aaa; margin: 5px 0 15px 0; }
-        .money-btn {
-            background: #39ff14; color: #000; border: none; padding: 10px 20px;
-            border-radius: 12px; font-size: 12px; font-weight: 800;
-            text-transform: uppercase; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; gap: 8px;
+        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+
+        /* 💰 ADMOB BANNER UNIT (ID: ca-app-pub-5695800911065486/5516230371) */
+        .ad-container {
+            margin: 10px 20px;
+            height: 60px;
+            background: #000;
+            border-radius: 12px;
+            border: 1px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
         }
+        .ad-label { position: absolute; top: 2px; left: 5px; font-size: 7px; color: #333; letter-spacing: 1px; }
 
         /* MATCH GRID */
         .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 15px 20px; }
@@ -72,32 +73,20 @@
         
         .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
         .match-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 1/1.1; background: #0a0a0f; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; }
-        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: 0.3s; }
+        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
         
         .card-overlay { position: absolute; bottom: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); padding: 15px; text-align: center; box-sizing: border-box; }
         .match-name { font-size: 12px; font-weight: 700; color: #fff; margin: 0; text-transform: uppercase; }
         .match-fee { font-size: 10px; color: #00f2fe; margin-bottom: 5px; font-weight: 600; }
         .match-status { background: rgba(255, 49, 49, 0.1); border: 1px solid #ff3131; color: #ff3131; font-size: 9px; padding: 4px 10px; border-radius: 50px; display: inline-block; font-weight: 700; }
 
-        /* NAVIGATION (AI Button Hata Diya) */
-        .bottom-nav { 
-            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
-            background: rgba(10, 10, 15, 0.95); display: flex; 
-            justify-content: space-around; align-items: center; 
-            backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
-            z-index: 1000; border-radius: 20px 20px 0 0;
-        }
+        /* NAVIGATION */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;}
         .nav-item.active { color: var(--neon-blue); }
         .nav-item i { font-size: 20px; }
         
-        /* New Center Button: Transfer */
-        .center-btn .icon-circle { 
-            width: 55px; height: 55px; background: #39ff14; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
-            margin-top: -35px;
-        }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: #39ff14; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
 
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
@@ -116,6 +105,11 @@
         <button class="money-btn" onclick="location.href='transfer.html'">
             <i class="fas fa-paper-plane"></i> Send Money Now
         </button>
+    </div>
+
+    <div class="ad-container">
+        <div class="ad-label">ADVERTISEMENT</div>
+        <div id="rare-banner-ad"></div>
     </div>
 
     <div class="section-header">
@@ -163,12 +157,10 @@
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        
         <a href="transfer.html" class="nav-item center-btn">
             <div class="icon-circle"><i class="fas fa-exchange-alt" style="color: #000;"></i></div>
             <span style="margin-top: 5px; color: #fff;">SEND</span>
         </a>
-
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
@@ -181,7 +173,6 @@
         function syncBalance() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!userData) { window.location.href = "login.html"; return; }
-
             fetch(`${scriptURL}?action=getUserData&username=${encodeURIComponent(userData.name)}`)
             .then(res => res.json())
             .then(data => { 
