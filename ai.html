@@ -10,7 +10,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { background: var(--bg); color: white; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
     #chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; padding-bottom: 160px; }
-    .msg { max-width: 85%; padding: 12px 16px; border-radius: 15px; font-size: 1rem; animation: pop 0.3s ease; }
+    .msg { max-width: 85%; padding: 12px 16px; border-radius: 15px; font-size: 1rem; line-height: 1.4; animation: pop 0.3s ease; }
     @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .bot-msg { align-self: flex-start; background: var(--card); color: #fff; border-left: 4px solid var(--neon); }
     .user-msg { align-self: flex-end; background: var(--neon); color: #000; font-weight: 600; border-bottom-right-radius: 2px; }
@@ -25,7 +25,7 @@
 <body>
 
   <div id="chat-box">
-    <div class="msg bot-msg"><b>Rare AI:</b> Welcome <b>Rare Gaming</b>! Sab kuch setup ho gaya hai. Ab puchiye, kya madad karun? 🤘</div>
+    <div class="msg bot-msg"><b>Rare AI:</b> <b>Rare Gaming</b> Bhai, system 100% Ready hai! Ab try kariye, reply pakka aayega. 🤘</div>
   </div>
 
   <div class="input-wrapper">
@@ -36,15 +36,15 @@
   </div>
 
   <div class="navbar">
-    <div class="nav-tag">RARE GAMING</div>
-    <div style="font-size: 12px; color: var(--neon);"><i class="fas fa-shield-alt"></i> SECURE MODE</div>
+    <div class="nav-tag">RARE GAMING AI</div>
+    <div style="font-size: 12px; color: var(--neon);"><i class="fas fa-check-circle"></i> CONNECTED</div>
   </div>
 
   <script type="module">
+    // FIREBASE INITIALIZATION
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // ✅ Wahi Config jo aapne diya tha
     const firebaseConfig = {
       apiKey: "AIzaSyA__hSyOZ4AdbCjnTy4KjOSK4Pi2gbfcKQ", 
       authDomain: "rare-gaming-ai.firebaseapp.com",
@@ -72,28 +72,33 @@
       box.scrollTop = box.scrollHeight;
 
       try {
-        // 🔥 FIX: Model name badal kar 'gemini-1.5-flash' kiya hai
+        // 🔥 SABSE STABLE CALL: Bina model prefix ke try karte hain
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${firebaseConfig.apiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: text }] }] })
+          body: JSON.stringify({ 
+            contents: [{ parts: [{ text: text }] }],
+            generationConfig: { temperature: 0.7, topP: 0.8, topK: 40 }
+          })
         });
 
         const data = await response.json();
         
         if(data.error) {
+           // Agar abhi bhi error aaye, toh humein API Key ki permission Google Cloud mein "Manual" set karni hogi
            document.getElementById(tempId).innerHTML = "<b>System Error:</b> " + data.error.message;
+           console.log(data.error);
            return;
         }
 
         const aiReply = data.candidates[0].content.parts[0].text;
         document.getElementById(tempId).innerHTML = `<b>Rare AI:</b><br>${aiReply}`;
         
-        // Backup chat to Firebase
+        // Chat backup to Firebase
         push(ref(db, 'chats'), { user: text, ai: aiReply, time: Date.now() });
 
       } catch (e) {
-        document.getElementById(tempId).innerHTML = "<b>System:</b> Connection failed!";
+        document.getElementById(tempId).innerHTML = "<b>System:</b> Connection failed! Please refresh.";
       }
       box.scrollTop = box.scrollHeight;
     };
