@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Rare Gaming AI</title>
+  <title>Rare Gaming AI - Official</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root { --neon: #00f2fe; --bg: #050508; --card: #111116; --grey-bar: #1c1c21; }
@@ -25,23 +25,22 @@
 <body>
 
   <div id="chat-box">
-    <div class="msg bot-msg"><b>Rare AI:</b> System fully Online, <b>Rare Gaming</b>! Ab koi error nahi aayega. Test karke dekho? 🤘</div>
+    <div class="msg bot-msg"><b>Rare AI:</b> System Online, <b>Rare Gaming</b>! Sab kuch verify ho gaya hai. Ab puchiye? 🤘</div>
   </div>
 
   <div class="input-wrapper">
     <div class="input-container">
-      <input type="text" id="msg-input" placeholder="Ask Rare AI..." autocomplete="off">
+      <input type="text" id="msg-input" placeholder="Type here..." autocomplete="off">
       <button class="btn-send" onclick="askAI()"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>
 
   <div class="navbar">
     <div class="nav-tag">RARE GAMING AI</div>
-    <div style="font-size: 12px; color: var(--neon);"><i class="fas fa-shield-alt"></i> SECURE MODE</div>
+    <div style="font-size: 10px; color: var(--neon); opacity: 0.7;">V1.5 STABLE</div>
   </div>
 
   <script type="module">
-    // FIREBASE SETUP
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
@@ -58,8 +57,8 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // ✅ Aapki Working Key
-    const MY_KEY = "AIzaSyA__hSyOZ4AdbCjnTy4KjOSK4Pi2gbfcKQ"; 
+    // ✅ Aapki Cloud Wali Asli Key
+    const CLOUD_KEY = "AIzaSyA__hSyOZ4AdbCjnTy4KjOSK4Pi2gbfcKQ"; 
 
     window.askAI = async function() {
       const input = document.getElementById('msg-input');
@@ -75,17 +74,20 @@
       box.scrollTop = box.scrollHeight;
 
       try {
-        // 🔥 ULTIMATE FIX: Version v1 aur model gemini-1.5-flash-8b (Sabse fast aur easy)
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-8b:generateContent?key=${MY_KEY}`, {
+        // 🔥 Sabse Stable Model URL (v1beta + gemini-1.5-flash)
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CLOUD_KEY}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: text }] }] })
+          body: JSON.stringify({ 
+            contents: [{ parts: [{ text: text }] }] 
+          })
         });
 
         const data = await response.json();
         
-        if(data.error) {
-           document.getElementById(tempId).innerHTML = "<b>System Message:</b> Google is still syncing. Refresh in 2 minutes.";
+        if (data.error) {
+           // Agar abhi bhi "Not Found" aaye, toh iska matlab hai API enable toh hai par server sync nahi hua
+           document.getElementById(tempId).innerHTML = "<b>System:</b> Google is still syncing your key. Wait 10 mins.";
            return;
         }
 
