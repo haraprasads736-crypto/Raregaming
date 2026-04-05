@@ -5,7 +5,7 @@
   <title>Rare Gaming AI</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    :root { --primary: #00ffcc; --bg: #0f0f12; --card: #1e1e26; --text: #ffffff; }
+    :root { --primary: #00ffcc; --bg: #0f0f12; --card: #1e1e26; --text: #ffffff; --nav-height: 70px; }
     
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,112 +15,122 @@
       color: var(--text); 
       height: 100vh; 
       display: flex; 
-      flex-direction: column; 
+      flex-direction: column;
+      overflow: hidden; /* Screen se bahar na jaye */
     }
     
-    /* 📱 Fixed Navigation Bar */
+    /* 🛡️ NAVIGATION PROTECTION BAR (Fixed at Top) */
     .navbar { 
       background: var(--card); 
-      padding: 15px; 
+      padding: 0 20px; 
       display: flex; 
       align-items: center; 
       justify-content: space-between; 
-      border-bottom: 2px solid #333; 
+      border-bottom: 2px solid var(--primary); 
       position: fixed; 
       top: 0; 
+      left: 0;
       width: 100%; 
-      z-index: 1000;
+      height: var(--nav-height);
+      z-index: 9999; /* Sabse upar rahega */
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     }
-    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--primary); }
+
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--primary); font-size: 1.1rem; }
     .nav-user { font-size: 0.8rem; color: #888; text-align: right; }
 
-    /* 💬 Chat Area (Adjusted for Fixed Nav) */
+    /* 💬 CHAT BOX (Safety Margin Added) */
     #chat-box { 
       flex-grow: 1; 
-      padding: 80px 15px 100px 15px; /* Top padding for Nav, Bottom for Input */
+      margin-top: var(--nav-height); /* Nav bar ke niche se shuru hoga */
+      margin-bottom: 80px; /* Input bar ke liye jagah */
+      padding: 20px 15px;
       overflow-y: auto; 
       display: flex; 
       flex-direction: column; 
       gap: 15px; 
+      background: linear-gradient(to bottom, #0f0f12, #16161d);
     }
 
     .msg { 
       max-width: 85%; 
-      padding: 12px 15px; 
-      border-radius: 18px; 
+      padding: 12px 16px; 
+      border-radius: 15px; 
       font-size: 0.95rem; 
-      line-height: 1.4; 
-      animation: fadeIn 0.3s ease; 
+      line-height: 1.5; 
+      position: relative;
+      word-wrap: break-word;
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     
-    .bot-msg { align-self: flex-start; background: var(--card); color: var(--primary); border-bottom-left-radius: 2px; border: 1px solid #333; }
-    .user-msg { align-self: flex-end; background: var(--primary); color: #000; border-bottom-right-radius: 2px; font-weight: 500; }
+    .bot-msg { align-self: flex-start; background: var(--card); color: var(--primary); border-top-left-radius: 2px; border: 1px solid #333; }
+    .user-msg { align-self: flex-end; background: var(--primary); color: #000; border-top-right-radius: 2px; font-weight: 500; }
     
-    /* ⏳ Typing Indicator */
-    .typing { font-size: 0.75rem; color: #00ffcc; margin-left: 20px; display: none; margin-bottom: 10px; }
-
-    /* ⌨️ Bottom Fixed Input System */
+    /* ⌨️ BOTTOM INPUT PROTECTION */
     .input-container { 
       background: var(--card); 
-      padding: 12px 15px; 
+      padding: 15px; 
       display: flex; 
       gap: 10px; 
       align-items: center; 
-      border-top: 1px solid #333; 
       position: fixed; 
       bottom: 0; 
+      left: 0;
       width: 100%; 
-      z-index: 1000;
+      z-index: 9998;
+      border-top: 1px solid #333;
     }
+
     #msg-input { 
       flex-grow: 1; 
       background: #2a2a35; 
       border: 1px solid #444; 
-      border-radius: 25px; 
-      padding: 12px 18px; 
+      border-radius: 30px; 
+      padding: 12px 20px; 
       color: white; 
       outline: none; 
       font-size: 16px; 
     }
+
     .send-btn { 
       background: var(--primary); 
       border: none; 
-      width: 45px; 
-      height: 45px; 
+      width: 50px; 
+      height: 50px; 
       border-radius: 50%; 
       color: #000; 
       cursor: pointer; 
       display: flex; 
       align-items: center; 
-      justify-content: center; 
-      transition: 0.2s;
+      justify-content: center;
+      box-shadow: 0 0 10px var(--primary);
     }
+
+    .typing { font-size: 0.8rem; color: var(--primary); margin-left: 20px; display: none; position: fixed; bottom: 85px; z-index: 10; }
   </style>
 </head>
 <body>
 
   <div class="navbar">
     <div class="nav-brand">
-      <i class="fas fa-gamepad"></i>
+      <i class="fas fa-shield-alt"></i>
       <span>RARE GAMING AI</span>
     </div>
     <div class="nav-user">
-      <div id="username-display">Rare Gaming User</div>
-      <div style="color: var(--primary); font-size: 10px;"><i class="fas fa-circle"></i> AI Online</div>
+      <div>Rare Gaming User</div>
+      <div style="color: var(--primary); font-size: 10px;"><i class="fas fa-circle"></i> Secure Connection</div>
     </div>
   </div>
 
   <div id="chat-box">
     <div class="msg bot-msg">
-      <b>Rare AI:</b> Swagat hai! Main Rare Gaming ka official AI hoon. Main aapki kya madad kar sakta hoon?
+      <b>Rare AI:</b> System Protection Active! Nav bar fix kar diya gaya hai. Ab aap chat kar sakte hain.
     </div>
   </div>
 
-  <div class="typing" id="typing-indicator">Rare AI soch raha hai...</div>
+  <div class="typing" id="typing-indicator">Rare AI is thinking...</div>
 
   <div class="input-container">
-    <input type="text" id="msg-input" placeholder="Type here..." autocomplete="off">
+    <input type="text" id="msg-input" placeholder="Type your message..." autocomplete="off">
     <button class="send-btn" onclick="sendMessage()">
       <i class="fas fa-paper-plane"></i>
     </button>
@@ -139,7 +149,7 @@
       msgInput.value = '';
       
       typingIndicator.style.display = 'block';
-      window.scrollTo(0, document.body.scrollHeight);
+      chatBox.scrollTop = chatBox.scrollHeight;
 
       google.script.run
         .withSuccessHandler((response) => {
@@ -148,7 +158,7 @@
         })
         .withFailureHandler((err) => {
           typingIndicator.style.display = 'none';
-          appendMessage('bot-msg', 'Error', "Network slow hai, dubara try karein.");
+          appendMessage('bot-msg', 'Error', "Response late hai, refresh karein.");
         })
         .askGemini(text); 
     }
