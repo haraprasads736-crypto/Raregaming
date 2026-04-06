@@ -20,6 +20,7 @@ jobs:
       - name: Build Process
         run: |
           cordova create build com.raregaming.app "Rare Gaming"
+          # Yahan index.html (small i) bilkul sahi hai
           cp index.html build/www/
           cd build
           cordova platform add android@10.1.1
