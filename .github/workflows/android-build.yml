@@ -2,9 +2,7 @@ name: Build Rare Gaming APK
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
-      - master
+    branches: [ main, master ]
 
 jobs:
   build:
@@ -13,27 +11,35 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11' # Stable version for Cordova
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '16'
 
       - name: Install Cordova
-        run: npm install -g cordova
+        run: npm install -g cordova@11.0.0
 
       - name: Build APK
         run: |
           cordova create myapp com.raregaming.app "Rare Gaming"
-          if [ -f index.html ]; then cp index.html myapp/www/; fi
+          cp index.html myapp/www/
+          # Icon and Splash setup
           if [ -f icon.png ]; then mkdir -p myapp/res/icon && cp icon.png myapp/res/icon/android-icon.png; fi
           if [ -f splash.png ]; then mkdir -p myapp/res/screen && cp splash.png myapp/res/screen/android-splash.png; fi
+          
           cd myapp
           cordova platform add android@10.1.2
-          cordova build android
+          cordova build android --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: RareGaming-APK
-          path: myapp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+          path: myapp/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
           
