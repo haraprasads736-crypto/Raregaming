@@ -1,0 +1,44 @@
+name: Build Rare Gaming Pro APK
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Cordova
+        run: npm install -g cordova
+
+      - name: Create Project & Set Assets
+        run: |
+          # Project structure banayein
+          cordova create build com.raregaming.app "Rare Gaming"
+          
+          # Aapka index.html copy karein
+          cp index.html build/www/
+          
+          # Logo aur Splash folders banayein aur files copy karein
+          mkdir -p build/res/icon build/res/screen
+          cp icon.png build/res/icon/android-icon.png || echo "Icon not found"
+          cp splash.png build/res/screen/android-splash.png || echo "Splash not found"
+
+      - name: Add Android Platform
+        run: |
+          cd build
+          cordova platform add android@10.1.1
+
+      - name: Build Final APK
+        run: |
+          cd build
+          cordova build android
+
+      - name: Upload APK to GitHub
+        uses: actions/upload-artifact@v2
+        with:
+          name: RareGaming-Final-App
+          path: build/platforms/android/app/build/outputs/apk/debug/app-debug.apk
