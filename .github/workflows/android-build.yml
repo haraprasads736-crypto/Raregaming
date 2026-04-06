@@ -14,30 +14,26 @@ jobs:
       - name: Install Cordova
         run: npm install -g cordova
 
-      - name: Create Project & Set Assets
+      - name: Create Project
         run: |
-          # Project structure banayein
           cordova create build com.raregaming.app "Rare Gaming"
-          
-          # Aapka index.html copy karein
           cp index.html build/www/
-          
-          # Logo aur Splash folders banayein aur files copy karein
           mkdir -p build/res/icon build/res/screen
-          cp icon.png build/res/icon/android-icon.png || echo "Icon not found"
-          cp splash.png build/res/screen/android-splash.png || echo "Splash not found"
+          cp icon.png build/res/icon/android-icon.png || echo "no icon"
+          cp splash.png build/res/screen/android-splash.png || echo "no splash"
 
       - name: Add Android Platform
         run: |
           cd build
+          # Hum specifically version 10 use karenge jo stable hai
           cordova platform add android@10.1.1
 
-      - name: Build Final APK
+      - name: Build APK
         run: |
           cd build
           cordova build android
 
-      - name: Upload APK to GitHub
+      - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
           name: RareGaming-Final-App
