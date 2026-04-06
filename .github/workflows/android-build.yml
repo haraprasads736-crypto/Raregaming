@@ -11,33 +11,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install Cordova
         run: npm install -g cordova
 
       - name: Build APK
         run: |
-          # Project folder banana
           cordova create myapp com.raregaming.app "Rare Gaming"
-          
-          # Files copy karna (Safety check ke sath)
           if [ -f index.html ]; then cp index.html myapp/www/; fi
           if [ -f icon.png ]; then mkdir -p myapp/res/icon && cp icon.png myapp/res/icon/android-icon.png; fi
           if [ -f splash.png ]; then mkdir -p myapp/res/screen && cp splash.png myapp/res/screen/android-splash.png; fi
-          
-          # Android build shuru karna
           cd myapp
-          cordova platform add android@10.1.1
-          cordova build android --verbose
+          cordova platform add android@10.1.2
+          cordova build android
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: RareGaming-APK
           path: myapp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
