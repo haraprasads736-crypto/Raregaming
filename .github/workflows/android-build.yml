@@ -8,40 +8,38 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Java 17
+      - name: set up JDK 17
         uses: actions/setup-java@v3
         with:
+          java-version: '17'
           distribution: 'temurin'
-          java-version: '17' # Ab Java 17 use karenge
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
-      - name: Install Cordova
-        run: npm install -g cordova
-
-      - name: Build APK
+      - name: Install Capacitor (Modern Tool)
         run: |
-          cordova create myapp com.raregaming.app "Rare Gaming"
-          cp index.html myapp/www/
-          # Icon and Splash setup
-          if [ -f icon.png ]; then mkdir -p myapp/res/icon && cp icon.png myapp/res/icon/android-icon.png; fi
-          if [ -f splash.png ]; then mkdir -p myapp/res/screen && cp splash.png myapp/res/screen/android-splash.png; fi
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npx cap init "Rare Gaming" com.raregaming.app --web-dir .
+          npx cap add android
+
+      - name: Copy Assets
+        run: |
+          mkdir -p android/app/src/main/res/drawable
+          [ -f icon.png ] && cp icon.png android/app/src/main/res/drawable/ic_launcher.png
           
-          cd myapp
-          cordova platform add android@10.1.2
-          # Accept licenses automatically
-          yes | sdkmanager --licenses || true
-          cordova build android
+      - name: Build Final APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: RareGaming-APK
-          path: myapp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+          name: RareGaming-Final-App
+          path: android/app/build/outputs/apk/debug/app-debug.apk
           
