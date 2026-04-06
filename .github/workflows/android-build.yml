@@ -14,18 +14,19 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Install Dependencies
+      - name: Install Tools
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android
-          # Yahan folder ka naam 'www' kar diya taaki error na aaye
           mkdir -p www
           cp index.html www/
           npx cap init "Rare Gaming" com.raregaming.app --web-dir www
           npx cap add android
 
-      - name: Build APK
+      - name: Build APK (Fixing Version)
         run: |
           cd android
+          # Force Gradle to use Java 17
+          echo "org.gradle.java.home=$JAVA_HOME" >> gradle.properties
           chmod +x gradlew
           ./gradlew assembleDebug
 
@@ -34,4 +35,3 @@ jobs:
         with:
           name: RareGaming-App
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          
