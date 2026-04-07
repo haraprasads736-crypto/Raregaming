@@ -41,7 +41,9 @@
             background: rgba(0, 242, 254, 0.05); border: 1.5px solid var(--neon-blue); 
             padding: 10px 18px; border-radius: 50px; color: var(--neon-blue); 
             font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 10px;
+            cursor: pointer; transition: 0.3s;
         }
+        .wallet-pill:active { transform: scale(0.95); opacity: 0.7; }
 
         /* 🚀 NEW: QUICK SHARE TOP BAR */
         .quick-share-bar {
@@ -109,7 +111,7 @@
 
     <div class="header-top">
         <div class="brand-name">RARE GAMING</div>
-        <div class="wallet-pill" id="walletBal"><i class="fas fa-coins"></i> ₹0</div>
+        <div class="wallet-pill" id="walletBal" onclick="syncBalance()"><i class="fas fa-coins"></i> ₹0</div>
     </div>
 
     <div class="quick-share-bar" onclick="location.href='share.html'">
@@ -187,15 +189,30 @@
         function syncBalance() {
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!userData) { window.location.href = "login.html"; return; }
+            
+            // Syncing visual feedback
+            document.getElementById('walletBal').style.opacity = "0.6";
+
             fetch(`${scriptURL}?action=getUserData&username=${encodeURIComponent(userData.name)}`)
             .then(res => res.json())
             .then(data => { 
                 if(data && data.balance !== undefined) {
                     document.getElementById('walletBal').innerHTML = `<i class="fas fa-coins"></i> ₹${data.balance}`; 
+                    
+                    // Update LocalStorage also
+                    userData.balance = data.balance;
+                    localStorage.setItem("rareGamingUser", JSON.stringify(userData));
                 }
-            }).catch(e => { console.log("Sync Error"); });
+                document.getElementById('walletBal').style.opacity = "1";
+            }).catch(e => { 
+                console.log("Sync Error"); 
+                document.getElementById('walletBal').style.opacity = "1";
+            });
         }
+
         window.onload = syncBalance;
+        // Har 20 second mein apne aap sync hoga
+        setInterval(syncBalance, 20000);
     </script>
 </body>
 </html>
