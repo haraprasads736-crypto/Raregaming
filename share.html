@@ -2,129 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Quick Share - RARE GAMING</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rare Quick Share - P2P</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap');
+        :root { --neon: #00f2fe; --bg: #030305; }
+        body { background: var(--bg); color: white; font-family: 'Poppins'; text-align: center; margin: 0; padding: 20px; }
         
-        :root {
-            --bg: #030305;
-            --neon: #00f2fe;
-            --glow: rgba(0, 242, 254, 0.3);
-        }
-
-        body { 
-            background: var(--bg); color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; display: flex; flex-direction: column; align-items: center; 
-            min-height: 100vh; overflow: hidden;
-        }
-
-        /* 🌌 Animated Background */
-        .bg-glow {
-            position: fixed; top: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #030305 100%);
-            z-index: -1;
-        }
-
-        .header { margin-top: 50px; text-align: center; }
-        .header h1 { font-size: 28px; font-weight: 800; letter-spacing: 3px; margin: 0; color: var(--neon); text-shadow: 0 0 15px var(--glow); }
-        .header p { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* 🌀 Scanning Radar Effect */
-        .radar-container {
-            position: relative; width: 250px; height: 250px; margin: 40px 0;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .radar-circle {
-            position: absolute; width: 100%; height: 100%;
-            border: 2px solid rgba(0, 242, 254, 0.1); border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        .radar-scanner {
-            position: absolute; width: 100%; height: 100%;
-            border-radius: 50%; border: 2px solid transparent;
-            border-top: 2px solid var(--neon);
-            animation: spin 3s linear infinite;
-        }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.8; } 100% { transform: scale(1.2); opacity: 0; } }
-
-        .share-core {
-            z-index: 10; width: 100px; height: 100px; background: var(--neon);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 40px var(--glow); cursor: pointer;
-        }
-        .share-core i { font-size: 40px; color: #000; }
-
-        /* 📂 File Detail Card */
-        .file-card {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px); border-radius: 20px; width: 85%; padding: 20px;
-            text-align: center; margin-top: 20px; display: none;
-        }
-        .file-name { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 5px; }
-        .file-info { font-size: 10px; color: #666; }
-
-        /* ⚡ Share Button */
-        .btn-ready {
-            margin-top: 30px; width: 80%; padding: 18px; border-radius: 50px;
-            background: #fff; color: #000; font-weight: 800; border: none;
-            text-transform: uppercase; font-size: 14px; letter-spacing: 1px;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(255,255,255,0.1);
-        }
+        /* 🌀 Radar Animation */
+        .radar { width: 200px; height: 200px; border: 2px solid var(--neon); border-radius: 50%; margin: 50px auto; position: relative; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1.3); opacity: 0; } }
+        
+        .device-list { background: #0a0a0f; border-radius: 20px; padding: 15px; margin-top: 20px; border: 1px solid #1f1f25; }
+        .device-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #1a1a1a; cursor: pointer; }
+        .btn-action { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: 800; margin-top: 20px; cursor: pointer; }
+        .btn-send { background: var(--neon); color: #000; }
+        
+        /* 🔔 Notification Popup */
+        #transferPopup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; padding: 30px; border-radius: 25px; border: 2px solid var(--neon); z-index: 10000; width: 80%; }
     </style>
 </head>
 <body>
-    <div class="bg-glow"></div>
 
-    <div class="header">
-        <h1>QUICK SHARE</h1>
-        <p>Ultra Fast P2P Transfer</p>
+    <h2>RARE QUICK SHARE</h2>
+    <p id="status">Bluetooth Scanning Off</p>
+
+    <div class="radar" id="radar"></div>
+
+    <div class="device-list" id="deviceBox">
+        <p style="font-size: 10px; color: #666;">NEARBY DEVICES</p>
+        <div id="foundDevices">Searching...</div>
     </div>
 
-    <div class="radar-container">
-        <div class="radar-circle" style="animation-delay: 0s;"></div>
-        <div class="radar-circle" style="animation-delay: 0.5s;"></div>
-        <div class="radar-scanner"></div>
-        <div class="share-core" onclick="document.getElementById('fileInp').click()">
-            <i class="fas fa-bolt"></i>
+    <input type="file" id="fileInput" style="display:none" onchange="fileSelected()">
+    <button class="btn-action btn-send" onclick="startDiscovery()">FIND NEARBY DEVICES</button>
+
+    <div id="transferPopup">
+        <h3 id="senderInfo">Incoming File!</h3>
+        <p id="fileDetail">UID: RG_BATTEL_07</p>
+        <div style="display:flex; gap:10px;">
+            <button onclick="acceptFile()" style="flex:1; background:#39ff14; border:none; padding:10px; border-radius:10px; font-weight:800;">ACCEPT</button>
+            <button onclick="declineFile()" style="flex:1; background:#ff3131; border:none; padding:10px; border-radius:10px; font-weight:800; color:white;">DECLINE</button>
         </div>
     </div>
 
-    <input type="file" id="fileInp" style="display:none" onchange="handleFile()">
-
-    <div class="file-card" id="fCard">
-        <i class="fas fa-file-alt" style="font-size: 24px; color: var(--neon);"></i>
-        <div class="file-name" id="fName">file_name.zip</div>
-        <div class="file-info" id="fSize">Size: 0 MB</div>
-    </div>
-
-    <button id="sendBtn" class="btn-ready" style="display:none" onclick="execShare()">
-        Initialize Transfer
-    </button>
-
     <script>
-        function handleFile() {
-            const file = document.getElementById('fileInp').files[0];
-            if(file) {
-                document.getElementById('fName').innerText = file.name;
-                document.getElementById('fSize').innerText = "Size: " + (file.size / (1024*1024)).toFixed(2) + " MB";
-                document.getElementById('fCard').style.display = 'block';
-                document.getElementById('sendBtn').style.display = 'block';
+        let selectedFile = null;
+
+        // 1. Bluetooth Find Logic
+        async function startDiscovery() {
+            document.getElementById('status').innerText = "Finding Bluetooth Devices...";
+            try {
+                // Ye asli Bluetooth menu trigger karega
+                const device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: ['battery_service'] // Sample service
+                });
+                
+                document.getElementById('foundDevices').innerHTML = `
+                    <div class="device-item" onclick="prepareTransfer('${device.name}')">
+                        <span><i class="fas fa-mobile-alt"></i> ${device.name || 'Unknown Device'}</span>
+                        <span style="color:var(--neon)">CONNECT</span>
+                    </div>
+                `;
+            } catch (err) {
+                alert("Bluetooth Error: " + err.message);
             }
         }
 
-        async function execShare() {
-            const files = document.getElementById('fileInp').files;
-            if (navigator.canShare && navigator.canShare({ files: files })) {
-                try {
-                    await navigator.share({ files: files, title: 'Rare Share' });
-                } catch (e) { console.log("User cancelled"); }
-            } else {
-                alert("Naya Realme phone use karo!");
+        // 2. Prepare Transfer (Send Code/UID)
+        function prepareTransfer(targetName) {
+            document.getElementById('fileInput').click();
+        }
+
+        function fileSelected() {
+            selectedFile = document.getElementById('fileInput').files[0];
+            if(selectedFile) {
+                alert("File Ready! Sending Request to Receiver...");
+                // Simulated Notification to Receiver
+                showReceiverPopup();
             }
+        }
+
+        // 3. Receiver Notification Logic
+        function showReceiverPopup() {
+            // Asli app mein ye Firebase ya WebRTC se jayega
+            document.getElementById('transferPopup').style.display = 'block';
+            document.getElementById('senderInfo').innerText = "Request from: Rare_Gaming_Admin";
+            document.getElementById('fileDetail').innerText = "File: " + selectedFile.name + " (" + (selectedFile.size/1024/1024).toFixed(2) + " MB)";
+        }
+
+        async function acceptFile() {
+            alert("Transferring File...");
+            document.getElementById('transferPopup').style.display = 'none';
+            
+            // Native Share Trigger
+            if (navigator.share) {
+                await navigator.share({
+                    files: [selectedFile],
+                    title: 'Rare Transfer',
+                    text: 'Quick Share Successful'
+                });
+            }
+        }
+
+        function declineFile() {
+            document.getElementById('transferPopup').style.display = 'none';
+            alert("Transfer Declined by User.");
         }
     </script>
 </body>
