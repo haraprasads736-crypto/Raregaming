@@ -43,6 +43,17 @@
             font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 10px;
         }
 
+        /* 🚀 NEW: QUICK SHARE TOP BAR */
+        .quick-share-bar {
+            padding: 15px 20px; 
+            background: rgba(0, 242, 254, 0.03); 
+            border-bottom: 1px solid rgba(0, 242, 254, 0.1); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            cursor: pointer;
+        }
+
         /* 💸 MONEY TRANSFER BANNER */
         .money-banner {
             margin: 15px 20px 15px 20px; padding: 20px;
@@ -99,6 +110,16 @@
     <div class="header-top">
         <div class="brand-name">RARE GAMING</div>
         <div class="wallet-pill" id="walletBal"><i class="fas fa-coins"></i> ₹0</div>
+    </div>
+
+    <div class="quick-share-bar" onclick="location.href='share.html'">
+        <div>
+            <div style="font-size: 14px; font-weight: 800; color: #00f2fe; letter-spacing: 1px;">QUICK SHARE</div>
+            <div style="font-size: 10px; color: #888;">Share any file instantly</div>
+        </div>
+        <div style="background: rgba(0, 242, 254, 0.1); padding: 8px 15px; border-radius: 12px; border: 1px solid #00f2fe;">
+            <i class="fas fa-paper-plane" style="color: #00f2fe; font-size: 12px;"></i>
+        </div>
     </div>
 
     <div class="money-banner">
