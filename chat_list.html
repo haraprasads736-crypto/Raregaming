@@ -3,160 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rare Chat - Messages</title>
+    <title>Rare Chat - Friends</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
         :root {
-            --bg: #000000;
-            --surface: #121212;
+            --bg: #030305;
+            --surface: #0a0a0f;
             --accent: #00f2fe;
-            --text-main: #ffffff;
-            --text-dim: #888888;
-            --unread: #39ff14;
+            --transfer-green: #39ff14;
+            --text-dim: #666;
         }
 
         body { 
             background-color: var(--bg); 
-            color: var(--text-main); 
-            font-family: 'Inter', sans-serif; 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 0; 
             overflow-x: hidden;
         }
 
-        /* 📱 Top Bar */
-        .top-bar {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg);
-            position: sticky; top: 0; z-index: 100;
-        }
-        .top-bar h1 { font-size: 24px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
-        .add-icon { color: var(--accent); font-size: 22px; cursor: pointer; }
-
-        /* 🔍 Search Box */
-        .search-container { padding: 0 20px 15px; }
-        .search-box {
-            background: var(--surface);
-            border-radius: 12px;
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .search-box input {
-            background: transparent; border: none; color: white;
-            width: 100%; outline: none; font-size: 15px;
-        }
-        .search-box i { color: var(--text-dim); }
-
-        /* 👥 Chat List Container */
-        .chat-container { padding-bottom: 150px; }
-
-        .chat-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            gap: 15px;
-            text-decoration: none;
-            color: inherit;
-            transition: background 0.2s;
-            border-bottom: 0.5px solid #1a1a1a;
-        }
-        .chat-item:active { background: #1a1a1a; }
-
-        /* 👤 Avatar System */
-        .avatar {
-            width: 55px; height: 55px;
-            background: linear-gradient(135deg, #1a1a1a, #000);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            border: 1px solid #333;
-            position: relative;
-        }
-        .avatar i { font-size: 24px; color: var(--accent); }
-
-        .chat-details { flex: 1; }
-        .chat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-        .user-name { font-weight: 600; font-size: 16px; color: white; }
-        .last-time { font-size: 11px; color: var(--text-dim); }
-        
-        .chat-preview { 
-            font-size: 13px; color: var(--text-dim); 
+        /* 🛡️ Header */
+        .header { 
+            padding: 20px; 
             display: flex; justify-content: space-between; align-items: center;
+            background: rgba(3, 3, 5, 0.9);
+            position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .header h2 { font-size: 20px; margin: 0; color: #ffd700; font-weight: 800; text-transform: uppercase; }
+
+        /* ➕ Clean Add Friend Button (Instead of just icon) */
+        .add-friend-bar {
+            margin: 15px 20px;
+            padding: 12px;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px dashed var(--accent);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; color: var(--accent);
+            font-weight: 600; font-size: 14px;
+            cursor: pointer;
         }
 
-        /* 🟢 The Notification Dot */
+        /* 👥 Chat List */
+        .chat-list { padding: 0 15px 150px; }
+        .chat-card { 
+            background: var(--surface);
+            padding: 15px; border-radius: 18px; 
+            margin-bottom: 12px; display: flex; align-items: center; gap: 15px; 
+            border: 1px solid rgba(255,255,255,0.05);
+            text-decoration: none; color: white;
+        }
+
+        .avatar {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: #111; border: 1px solid var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: var(--accent);
+        }
+
+        .chat-info { flex: 1; }
+        .chat-info b { display: block; font-size: 15px; text-transform: uppercase; }
+        .chat-info span { font-size: 11px; color: var(--text-dim); }
+
         .unread-dot {
-            width: 10px; height: 10px;
-            background: var(--unread);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--unread);
-            display: none; /* JS control karega */
+            width: 10px; height: 10px; background: var(--transfer-green);
+            border-radius: 50%; box-shadow: 0 0 10px var(--transfer-green);
+            display: none;
         }
 
-        /* 🧭 System Navigation */
+        /* 🧭 EXACT NAVIGATION BAR MATCH (From your screenshot) */
         .bottom-nav { 
-            position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; 
-            background: rgba(10, 10, 15, 0.98); display: flex; 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
+            background: rgba(10, 10, 15, 0.95); display: flex; 
             justify-content: space-around; align-items: center; 
-            backdrop-filter: blur(20px); border-top: 1px solid #222; 
-            z-index: 1000;
+            backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000; border-radius: 20px 20px 0 0;
         }
         .nav-item { 
-            text-decoration: none; color: #555; font-size: 10px; 
-            font-weight: 600; display: flex; flex-direction: column; 
-            align-items: center; gap: 5px;
+            text-decoration: none; color: #666; font-size: 10px; 
+            font-weight: 700; display: flex; flex-direction: column; 
+            align-items: center; gap: 4px; flex: 1;
         }
-        .nav-item i { font-size: 22px; }
+        .nav-item i { font-size: 20px; }
         .nav-item.active { color: var(--accent); }
+        
+        /* Green Center Button: SEND */
+        .center-btn .icon-circle { 
+            width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 4px solid #050508; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
+            margin-top: -35px;
+        }
+        .center-btn i { color: #000 !important; font-size: 22px; }
 
         .system-nav-bar { position: fixed; bottom: 0; width: 100%; height: 48px; background: #1a1b22; z-index: 1001; }
 
-        /* 🗑️ Swipable/Delete Icon */
-        .del-icon { color: #333; font-size: 14px; margin-left: 10px; }
+        /* Hidden Input Box */
+        #addBox { display: none; padding: 20px; background: var(--surface); margin: 0 20px 15px; border-radius: 15px; border: 1px solid #222; }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <h1>Rare Chat</h1>
-        <i class="fas fa-plus-circle add-icon" onclick="toggleAddBox()"></i>
+    <div class="header">
+        <h2>Rare Chat</h2>
+        <i class="fas fa-shield-alt" style="color: var(--accent);"></i>
     </div>
 
-    <div class="search-container">
-        <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search friends...">
-        </div>
+    <div class="add-friend-bar" onclick="toggleAdd()">
+        <i class="fas fa-user-plus"></i> ADD FRIEND
     </div>
 
-    <div id="addBox" style="display:none; padding:20px; background:#111; margin:10px 20px; border-radius:15px;">
-        <input type="text" id="newUID" style="width:100%; padding:12px; margin-bottom:10px; background:#000; border:1px solid #333; border-radius:8px; color:white;" placeholder="UID (RGXXXXXX)">
-        <input type="text" id="newName" style="width:100%; padding:12px; margin-bottom:10px; background:#000; border:1px solid #333; border-radius:8px; color:white;" placeholder="Friend Name">
-        <button onclick="saveContact()" style="width:100%; padding:12px; background:var(--accent); border:none; border-radius:8px; font-weight:bold;">Add Friend</button>
+    <div id="addBox">
+        <input type="text" id="newUID" placeholder="UID (RGXXXXXX)" style="width:100%; padding:12px; margin-bottom:10px; background:#000; border:1px solid #333; border-radius:8px; color:white;">
+        <input type="text" id="newName" placeholder="Friend Name" style="width:100%; padding:12px; margin-bottom:10px; background:#000; border:1px solid #333; border-radius:8px; color:white;">
+        <button onclick="saveContact()" style="width:100%; padding:12px; background:var(--accent); border:none; border-radius:8px; font-weight:bold; color:#000;">SAVE CONTACT</button>
     </div>
 
-    <div class="chat-container" id="contactList">
-        </div>
+    <div class="chat-list" id="contactList"></div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comment-dots"></i><span>CHATS</span></a>
+        
+        <a href="transfer.html" class="nav-item center-btn">
+            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
+            <span style="margin-top: 5px; color: #fff;">SEND</span>
+        </a>
+
+        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
+    
     <div class="system-nav-bar"></div>
 
     <script>
-        // Firebase Setup (Wahi purana)
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -167,7 +154,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        function toggleAddBox() {
+        function toggleAdd() {
             const box = document.getElementById('addBox');
             box.style.display = box.style.display === 'none' ? 'block' : 'none';
         }
@@ -175,55 +162,44 @@
         function saveContact() {
             let uid = document.getElementById('newUID').value.trim().toUpperCase();
             let name = document.getElementById('newName').value.trim();
-            if(!uid || !name) return;
-            let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
-            contacts.push({uid: uid, name: name});
-            localStorage.setItem("rareContacts", JSON.stringify(contacts));
-            toggleAddBox();
-            renderContacts();
+            if(uid && name) {
+                let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
+                contacts.push({uid: uid, name: name});
+                localStorage.setItem("rareContacts", JSON.stringify(contacts));
+                toggleAdd();
+                renderContacts();
+            }
         }
 
         function renderContacts() {
             let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
             let list = document.getElementById('contactList');
-            list.innerHTML = "";
+            list.innerHTML = contacts.length ? "" : "<p style='text-align:center; color:#444; margin-top:30px;'>No friends added yet.</p>";
             
-            contacts.forEach((c, index) => {
-                const contactHtml = `
-                    <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" class="chat-item">
-                        <div class="avatar">
-                            <i class="fas fa-user-circle"></i>
+            contacts.forEach(c => {
+                list.innerHTML += `
+                    <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" class="chat-card">
+                        <div class="avatar"><i class="fas fa-user-astronaut"></i></div>
+                        <div class="chat-info">
+                            <b>${c.name}</b>
+                            <span>${c.uid}</span>
                         </div>
-                        <div class="chat-details">
-                            <div class="chat-row">
-                                <span class="user-name">${c.name}</span>
-                                <span class="last-time">Active</span>
-                            </div>
-                            <div class="chat-preview">
-                                <span>${c.uid}</span>
-                                <div class="unread-dot" id="dot-${c.uid}"></div>
-                            </div>
-                        </div>
+                        <div class="unread-dot" id="dot-${c.uid}"></div>
                     </a>
                 `;
-                list.innerHTML += contactHtml;
                 checkUnread(c.uid);
             });
         }
 
-        // 🟢 REAL-TIME DOT CHECKER
         function checkUnread(uid) {
-            database.ref('messages').on('value', (snapshot) => {
+            database.ref('messages').on('value', (snap) => {
                 let hasUnread = false;
-                snapshot.forEach((child) => {
-                    const data = child.val();
-                    // Agar message is dost ne bheja aur tune dekha nahi (seen: false)
-                    if (data.sender === uid && data.seen === false) {
-                        hasUnread = true;
-                    }
+                snap.forEach(child => {
+                    if(child.val().sender === uid && child.val().seen === false) hasUnread = true;
                 });
-                const dot = document.getElementById(`dot-${uid}`);
-                if(dot) dot.style.display = hasUnread ? "block" : "none";
+                if(document.getElementById(`dot-${uid}`)) {
+                    document.getElementById(`dot-${uid}`).style.display = hasUnread ? "block" : "none";
+                }
             });
         }
 
