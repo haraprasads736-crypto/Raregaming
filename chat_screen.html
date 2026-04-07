@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rare Vault - Secure Chat</title>
+    <title>Rare Vault - Pro</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
@@ -17,6 +17,9 @@
         
         body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow: hidden; -webkit-tap-highlight-color: transparent; }
 
+        /* 🔔 NOTIFICATION DOT STYLE */
+        .unread-dot { width: 10px; height: 10px; background: #39ff14; border-radius: 50%; box-shadow: 0 0 10px #39ff14; display: inline-block; margin-left: 8px; }
+
         .chat-header { background: rgba(10, 10, 15, 0.95); padding: 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--neon); z-index: 100; }
         #chatBox { height: calc(100vh - 180px); overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: #050508; }
 
@@ -24,21 +27,13 @@
         .sent { background: var(--sent-bg); color: #000; align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 600; }
         .received { background: #111; border: 1px solid rgba(255,255,255,0.1); align-self: flex-start; border-bottom-left-radius: 4px; }
         
-        .chat-img { width: 100%; max-width: 220px; border-radius: 12px; margin-top: 5px; }
         .time { font-size: 8px; opacity: 0.6; display: block; margin-top: 5px; text-align: right; }
-        .edited-tag { font-size: 8px; font-style: italic; margin-right: 5px; opacity: 0.7; }
-
-        /* 🛡️ MENU & OVERLAY */
-        .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; }
-        .action-menu { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-radius: 30px 30px 0 0; padding: 25px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2001; box-sizing: border-box; }
-        .action-menu.active { bottom: 0; }
-        .menu-item { padding: 20px; display: flex; align-items: center; gap: 15px; font-weight: 600; border-bottom: 1px solid #222; cursor: pointer; }
 
         .input-area { background: #0a0a0f; padding: 10px 15px; display: flex; align-items: center; gap: 10px; position: fixed; bottom: 35px; width: 100%; box-sizing: border-box; z-index: 100; }
         #msgInput { flex: 1; background: #151520; border: 1px solid #2a2a30; padding: 12px 18px; border-radius: 50px; color: #fff; outline: none; }
         .send-btn { background: var(--neon); width: 45px; height: 45px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--neon); }
         
-        .system-nav-protection { position: fixed; bottom: 0; width: 100%; height: 35px; background: #1a1b22; z-index: 1001; border-top: 1px solid rgba(255,255,255,0.05); }
+        .system-nav-protection { position: fixed; bottom: 0; width: 100%; height: 35px; background: #1a1b22; z-index: 1001; }
     </style>
 </head>
 <body>
@@ -47,38 +42,24 @@
         <div style="display:flex; align-items:center; gap:12px;">
             <i class="fas fa-user-shield" style="color: var(--neon); font-size: 20px;"></i>
             <div>
-                <div style="font-weight: 800; font-size: 14px; letter-spacing: 1px;">RARE VAULT</div>
-                <div style="font-size: 9px; color: #39ff14; font-weight: 600;">LONG-PRESS FOR OPTIONS</div>
+                <div style="font-weight: 800; font-size: 14px;">RARE VAULT</div>
+                <div id="statusText" style="font-size: 9px; color: #39ff14;">SECURE & LIVE</div>
             </div>
         </div>
-        <i class="fas fa-fingerprint" style="color: var(--neon); opacity: 0.7;"></i>
+        <button onclick="requestNotify()" style="background:none; border:none; color:var(--neon);"><i class="fas fa-bell"></i></button>
     </div>
 
     <div id="chatBox"></div>
 
     <div class="input-area">
-        <label for="imgInp" style="color:var(--neon); font-size:22px; cursor:pointer;"><i class="fas fa-plus-circle"></i></label>
-        <input type="file" id="imgInp" accept="image/*" style="display:none" onchange="uploadImg()">
         <input type="text" id="msgInput" placeholder="Secure message..." onkeypress="if(event.key === 'Enter') handleSend()">
-        <button class="send-btn" onclick="handleSend()"><i class="fas fa-paper-plane" id="sendIcon" style="color: #000;"></i></button>
+        <button class="send-btn" onclick="handleSend()"><i class="fas fa-paper-plane" style="color: #000;"></i></button>
     </div>
 
     <div class="system-nav-protection"></div>
 
-    <div class="menu-overlay" id="overlay" onclick="closeMenu()"></div>
-    <div class="action-menu" id="actionMenu">
-        <div id="senderOptions" style="display:none">
-            <div class="menu-item" onclick="startEdit()"><i class="fas fa-edit" style="color: var(--neon);"></i> Edit Message</div>
-            <div class="menu-item" onclick="deleteForEveryone()" style="color:#ff4444;"><i class="fas fa-trash-alt"></i> Delete for Everyone</div>
-        </div>
-        <div id="receiverOptions" style="display:none">
-            <div class="menu-item" onclick="closeMenu()"><i class="fas fa-copy"></i> Copy Text</div>
-        </div>
-    </div>
-
     <script>
         const SECRET_KEY = "RareGaming_9thClass_Security"; 
-
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -89,32 +70,30 @@
 
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const storage = firebase.storage();
         const user = JSON.parse(localStorage.getItem("rareGamingUser")) || { name: "Player_" + Math.floor(Math.random()*100) };
-
-        let selectedMsgId = null;
-        let selectedMsgText = "";
-        let isEditing = false;
-        let pressTimer;
 
         function encrypt(text) { return CryptoJS.AES.encrypt(text, SECRET_KEY).toString(); }
         function decrypt(ciphertext) {
-            try {
-                const bytes = CryptoJS.AES.decrypt(ciphertext, SECRET_KEY);
-                return bytes.toString(CryptoJS.enc.Utf8);
-            } catch(e) { return "--- Encrypted ---"; }
+            try { return CryptoJS.AES.decrypt(ciphertext, SECRET_KEY).toString(CryptoJS.enc.Utf8); }
+            catch(e) { return "--- Encrypted ---"; }
+        }
+
+        // 🔔 NOTIFICATION PERMISSION
+        function requestNotify() {
+            Notification.requestPermission().then(perm => {
+                if(perm === 'granted') alert("Notifications Enabled! 🔔");
+            });
         }
 
         function handleSend() {
             const text = document.getElementById('msgInput').value.trim();
             if(!text) return;
-            if(isEditing) {
-                database.ref('messages/' + selectedMsgId).update({ text: encrypt(text), edited: true });
-                isEditing = false;
-                document.getElementById('sendIcon').className = "fas fa-paper-plane";
-            } else {
-                database.ref('messages').push({ sender: user.name, text: encrypt(text), type: 'text', timestamp: firebase.database.ServerValue.TIMESTAMP });
-            }
+            database.ref('messages').push({
+                sender: user.name,
+                text: encrypt(text),
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                seen: false // 🆕 Naya message 'unseen' hoga
+            });
             document.getElementById('msgInput').value = "";
         }
 
@@ -123,71 +102,32 @@
             chatBox.innerHTML = "";
             snapshot.forEach((child) => {
                 const data = child.val();
-                const id = child.key;
                 const isMe = data.sender === user.name;
-                const time = data.timestamp ? new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "";
-                const unlockedText = data.type === 'text' ? decrypt(data.text) : "";
+                const unlockedText = decrypt(data.text);
+
+                // 🆕 Notification Logic
+                if(!isMe && data.seen === false && document.hidden) {
+                    new Notification("New Message from " + data.sender, { body: unlockedText });
+                }
 
                 const msgDiv = document.createElement('div');
                 msgDiv.className = `msg ${isMe ? 'sent' : 'received'}`;
                 
-                // 🖱️ LONG PRESS LOGIC
-                msgDiv.ontouchstart = () => {
-                    pressTimer = window.setTimeout(() => openMenu(id, isMe, unlockedText), 800);
-                };
-                msgDiv.ontouchend = () => clearTimeout(pressTimer);
-                msgDiv.onmousedown = () => {
-                    pressTimer = window.setTimeout(() => openMenu(id, isMe, unlockedText), 800);
-                };
-                msgDiv.onmouseup = () => clearTimeout(pressTimer);
-
-                if(data.type === 'text') {
-                    msgDiv.innerHTML = `${data.edited ? '<span class="edited-tag">(edited)</span>' : ''}${unlockedText}<span class="time">${time}</span>`;
-                } else {
-                    msgDiv.innerHTML = `<img src="${data.img}" class="chat-img"><span class="time">${time}</span>`;
-                }
+                // 🟢 Dot Logic: Agar receiver ne nahi dekha toh dot dikhao
+                let dot = (!isMe && data.seen === false) ? '<span class="unread-dot"></span>' : '';
+                
+                msgDiv.innerHTML = `${unlockedText}${dot}<span class="time">${new Date(data.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>`;
                 chatBox.appendChild(msgDiv);
             });
             chatBox.scrollTop = chatBox.scrollHeight;
-        });
-
-        function openMenu(id, isMe, text) {
-            selectedMsgId = id;
-            selectedMsgText = text;
-            document.getElementById('overlay').style.display = "block";
-            document.getElementById('actionMenu').classList.add('active');
-            if(isMe) {
-                document.getElementById('senderOptions').style.display = "block";
-                document.getElementById('receiverOptions').style.display = "none";
-            } else {
-                document.getElementById('senderOptions').style.display = "none";
-                document.getElementById('receiverOptions').style.display = "block";
+            
+            // Sabhi messages ko 'seen' mark kar do jab chat khuli ho
+            if(!document.hidden) {
+                database.ref('messages').once('value', (snap) => {
+                    snap.forEach(c => { if(c.val().sender !== user.name) c.ref.update({seen: true}); });
+                });
             }
-        }
-
-        function closeMenu() {
-            document.getElementById('overlay').style.display = "none";
-            document.getElementById('actionMenu').classList.remove('active');
-        }
-
-        function deleteForEveryone() { database.ref('messages/' + selectedMsgId).remove(); closeMenu(); }
-        
-        function startEdit() {
-            document.getElementById('msgInput').value = selectedMsgText;
-            document.getElementById('msgInput').focus();
-            document.getElementById('sendIcon').className = "fas fa-check";
-            isEditing = true;
-            closeMenu();
-        }
-
-        async function uploadImg() {
-            const file = document.getElementById('imgInp').files[0];
-            if(!file) return;
-            const ref = storage.ref(`chat_images/${Date.now()}`);
-            await ref.put(file);
-            const url = await ref.getDownloadURL();
-            database.ref('messages').push({ sender: user.name, img: url, type: 'image', timestamp: firebase.database.ServerValue.TIMESTAMP });
-        }
+        });
     </script>
 </body>
 </html>
