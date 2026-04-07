@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rare Chat - Class 9 Edition</title>
+    <title>Rare Chat - Pro</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
@@ -21,9 +21,9 @@
         .header-user { display: flex; align-items: center; gap: 12px; }
         .back-btn { font-size: 20px; color: var(--neon); cursor: pointer; }
 
-        #chatBox { height: calc(100vh - 160px); overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: radial-gradient(circle at top, #1a1a2e 0%, #030305 100%); }
+        #chatBox { height: calc(100vh - 175px); overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: radial-gradient(circle at top, #1a1a2e 0%, #030305 100%); }
 
-        .msg { max-width: 80%; padding: 12px 16px; border-radius: 20px; font-size: 14px; line-height: 1.4; position: relative; cursor: pointer; transition: 0.2s; }
+        .msg { max-width: 80%; padding: 12px 16px; border-radius: 20px; font-size: 14px; line-height: 1.4; position: relative; cursor: pointer; }
         .sent { background: var(--sent-bg); color: #000; font-weight: 600; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
         .received { background: var(--panel); border: 1px solid rgba(255,255,255,0.1); align-self: flex-start; border-bottom-left-radius: 4px; }
         
@@ -31,17 +31,19 @@
         .time { font-size: 8px; opacity: 0.6; display: block; margin-top: 5px; text-align: right; }
         .edited-tag { font-size: 8px; font-style: italic; margin-right: 5px; opacity: 0.7; }
 
-        /* 🛠️ ACTION MENU */
+        /* 🛡️ MENU & OVERLAY */
         .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; }
-        .action-menu { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-radius: 30px 30px 0 0; padding: 25px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2001; }
+        .action-menu { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-radius: 30px 30px 0 0; padding: 25px; transition: 0.3s; z-index: 2001; }
         .action-menu.active { bottom: 0; }
-        .menu-item { padding: 18px; display: flex; align-items: center; gap: 15px; font-weight: 600; border-bottom: 1px solid #222; }
+        .menu-item { padding: 18px; display: flex; align-items: center; gap: 15px; font-weight: 600; border-bottom: 1px solid #222; cursor: pointer; }
 
-        .input-area { background: #0a0a0f; padding: 10px 15px; display: flex; align-items: center; gap: 10px; position: fixed; bottom: 25px; width: 100%; box-sizing: border-box; }
+        /* ⌨️ INPUT AREA (Position Adjusted) */
+        .input-area { background: #0a0a0f; padding: 10px 15px; display: flex; align-items: center; gap: 10px; position: fixed; bottom: 35px; width: 100%; box-sizing: border-box; }
         #msgInput { flex: 1; background: #151520; border: 1px solid #2a2a30; padding: 12px 18px; border-radius: 50px; color: #fff; outline: none; }
         .send-btn { background: var(--neon); width: 45px; height: 45px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--neon); }
         
-        .system-nav-protection { position: fixed; bottom: 0; width: 100%; height: 25px; background: #1a1b22; z-index: 1001; }
+        /* 🛡️ BIGGER NAVIGATION BAR (35px) */
+        .system-nav-protection { position: fixed; bottom: 0; width: 100%; height: 35px; background: #1a1b22; z-index: 1001; border-top: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
@@ -50,19 +52,19 @@
         <div class="header-user">
             <i class="fas fa-chevron-left back-btn" onclick="history.back()"></i>
             <div>
-                <div style="font-weight: 800; font-size: 14px; letter-spacing: 1px;">RARE CHAT PRO</div>
-                <div style="font-size: 10px; color: var(--neon);">CLASS 9 SECURE MODE</div>
+                <div style="font-weight: 800; font-size: 16px; letter-spacing: 1px;">RARE CHAT PRO</div>
+                <div style="font-size: 10px; color: #39ff14;">online</div>
             </div>
         </div>
-        <i class="fas fa-microchip" style="color: var(--neon);"></i>
+        <i class="fas fa-shield-alt" style="color: var(--neon);"></i>
     </div>
 
     <div id="chatBox"></div>
 
     <div class="input-area">
-        <label for="imgInp" style="color:var(--neon); font-size:22px; cursor:pointer;"><i class="fas fa-plus-circle"></i></label>
+        <label for="imgInp" style="color:var(--neon); font-size:22px; cursor:pointer;"><i class="fas fa-image"></i></label>
         <input type="file" id="imgInp" accept="image/*" style="display:none" onchange="uploadImg()">
-        <input type="text" id="msgInput" placeholder="Enter message..." onkeypress="if(event.key === 'Enter') handleSend()">
+        <input type="text" id="msgInput" placeholder="Message..." onkeypress="if(event.key === 'Enter') handleSend()">
         <button class="send-btn" onclick="handleSend()"><i class="fas fa-paper-plane" id="sendIcon" style="color:#000;"></i></button>
     </div>
 
@@ -71,21 +73,24 @@
     <div class="menu-overlay" id="overlay" onclick="closeMenu()"></div>
     <div class="action-menu" id="actionMenu">
         <div id="senderOptions" style="display:none">
-            <div class="menu-item" onclick="startEdit()"><i class="fas fa-edit" style="color: var(--neon);"></i> Edit Message</div>
+            <div class="menu-item" onclick="startEdit()"><i class="fas fa-edit" style="color: var(--neon);"></i> Edit</div>
             <div class="menu-item" onclick="deleteForEveryone()" style="color:#ff4444;"><i class="fas fa-trash-alt"></i> Delete for Everyone</div>
         </div>
         <div id="receiverOptions" style="display:none">
-            <div class="menu-item" onclick="deleteLocal()"><i class="fas fa-eye-slash" style="color: var(--neon);"></i> Hide Message</div>
+            <div class="menu-item" onclick="deleteLocal()"><i class="fas fa-eye-slash"></i> Hide</div>
         </div>
     </div>
 
     <script>
+        // 🟢 CONFIG CHECK: databaseURL bahut zaroori hai message bhejney ke liye!
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
             projectId: "rare-gaming-b8875",
-            storageBucket: "rare-gaming-b8875.appspot.com",
-            databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
+            storageBucket: "rare-gaming-b8875.firebasestorage.app",
+            messagingSenderId: "679728435115",
+            appId: "1:679728435115:web:7d51e5fe0e9147b34dccee",
+            databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com" 
         };
 
         firebase.initializeApp(firebaseConfig);
@@ -100,12 +105,18 @@
         function handleSend() {
             const text = document.getElementById('msgInput').value.trim();
             if(!text) return;
+            
             if(isEditing) {
                 database.ref('messages/' + selectedMsgId).update({ text: text, edited: true });
                 isEditing = false;
                 document.getElementById('sendIcon').className = "fas fa-paper-plane";
             } else {
-                database.ref('messages').push({ sender: user.name, text: text, type: 'text', timestamp: Date.now() });
+                database.ref('messages').push({
+                    sender: user.name,
+                    text: text,
+                    type: 'text',
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
             }
             document.getElementById('msgInput').value = "";
         }
@@ -116,7 +127,7 @@
             snapshot.forEach((child) => {
                 const data = child.val();
                 const id = child.key;
-                const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const time = data.timestamp ? new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "";
                 const isMe = data.sender === user.name;
 
                 const msgDiv = document.createElement('div');
@@ -171,7 +182,7 @@
             const ref = storage.ref(`chat_images/${Date.now()}_${file.name}`);
             await ref.put(file);
             const url = await ref.getDownloadURL();
-            database.ref('messages').push({ sender: user.name, img: url, type: 'image', timestamp: Date.now() });
+            database.ref('messages').push({ sender: user.name, img: url, type: 'image', timestamp: firebase.database.ServerValue.TIMESTAMP });
         }
     </script>
 </body>
