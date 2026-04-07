@@ -3,194 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rare Chat - Community</title>
+    <title>Rare Chat - Fast Mode</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        body { background: #0b141a; font-family: 'Poppins', sans-serif; margin: 0; color: #fff; }
         
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            background: #000; color: #efefef; font-family: 'Poppins', sans-serif; 
-            margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; 
-        }
+        /* 📱 WhatsApp Style Header */
+        .chat-header { background: #202c33; padding: 15px 20px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; gap: 15px; }
+        .back-btn { font-size: 20px; color: #8696a0; }
+        .user-info h4 { margin: 0; font-size: 16px; color: #e9edef; }
+        .user-info p { margin: 0; font-size: 11px; color: #8696a0; }
 
-        /* 📱 Clean Header */
-        .chat-header { 
-            background: #000; padding: 12px 15px; display: flex; align-items: center; 
-            gap: 15px; border-bottom: 0.5px solid #262626; z-index: 100;
-        }
-        .chat-header i.back-btn { font-size: 20px; color: #fff; cursor: pointer; }
-        .header-info { flex: 1; }
-        .header-info b { font-size: 15px; display: block; color: #fff; }
-        .status-dot { font-size: 10px; color: #a8a8a8; display: flex; align-items: center; gap: 4px; }
-        .status-dot.online { color: #00e676; }
+        /* 💬 Chat Area */
+        #chatBox { height: calc(100vh - 140px); overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; background-image: url('https://i.pinimg.com/originals/79/5c/36/795c367505b3ef3bc324d6fd2ad59096.png'); background-blend-mode: overlay; background-color: #0b141a; }
 
-        /* 💬 Chat Area - Low Data & Fast Loading */
-        .chat-container { 
-            flex: 1; overflow-y: auto; padding: 15px; display: flex; 
-            flex-direction: column; gap: 4px; background: #000;
-            scrollbar-width: none;
-        }
-        .chat-container::-webkit-scrollbar { display: none; }
+        .msg { max-width: 75%; padding: 8px 12px; border-radius: 12px; font-size: 14px; position: relative; line-height: 1.5; }
+        .sent { background: #005c4b; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .received { background: #202c33; align-self: flex-start; border-bottom-left-radius: 2px; }
         
-        .msg-wrapper { display: flex; flex-direction: column; max-width: 80%; margin-bottom: 2px; }
-        .sent-wrapper { align-self: flex-end; }
-        .received-wrapper { align-self: flex-start; }
+        .time { font-size: 9px; color: rgba(255,255,255,0.5); display: block; text-align: right; margin-top: 4px; }
 
-        .msg { 
-            padding: 8px 14px; border-radius: 18px; font-size: 14px; 
-            line-height: 1.4; position: relative; word-wrap: break-word;
-            user-select: none; -webkit-user-select: none;
-        }
-        .sent { background: #3797f0; color: #fff; border-bottom-right-radius: 4px; }
-        .received { background: #262626; color: #fff; border-bottom-left-radius: 4px; }
-        
-        .time { font-size: 9px; color: #8e8e8e; margin: 2px 0 10px 0; }
-        .sent-wrapper .time { align-self: flex-end; }
-        .received-wrapper .time { align-self: flex-start; }
-
-        /* ⚙️ Popup Menu (Daba kar rakhne par) */
-        #contextMenu {
-            position: fixed; background: #262626; border-radius: 12px;
-            display: none; flex-direction: column; width: 170px; z-index: 2000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.8); border: 1px solid #333;
-        }
-        #contextMenu button {
-            background: none; border: none; color: white; padding: 12px;
-            text-align: left; font-size: 14px; cursor: pointer; border-bottom: 0.5px solid #363636;
-        }
-        #contextMenu button:last-child { border: none; color: #ff3b30; }
-
-        /* ⌨️ Updated Input Area (Send Button Fix) */
-        .input-wrapper { 
-            background: #000; padding: 10px 12px; display: flex; 
-            align-items: center; gap: 8px; border-top: 0.5px solid #262626; 
-            width: 100%; position: relative; z-index: 10;
-        }
-        .input-container {
-            flex: 0 0 75%; /* Space fixed for message box */
-            background: #121212; border-radius: 25px; padding: 0 15px; 
-            border: 1px solid #363636; display: flex; align-items: center;
-        }
-        .input-container input { 
-            width: 100%; background: none; border: none; padding: 10px 0; color: white; 
-            outline: none; font-size: 14px; font-family: 'Poppins';
-        }
-        .send-link { 
-            flex: 1; /* Bachi hui space send button ko di */
-            color: #3797f0; font-weight: 600; font-size: 14px; 
-            cursor: pointer; text-align: center; white-space: nowrap;
-        }
-
-        .system-nav-bar { height: 48px; background-color: #4f515e; display: flex; justify-content: center; align-items: center; font-size: 10px; color: #ccc; letter-spacing: 1px; }
+        /* ⌨️ Input Bar */
+        .input-area { background: #202c33; padding: 10px 15px; display: flex; align-items: center; gap: 10px; position: fixed; bottom: 0; width: 100%; box-sizing: border-box; }
+        .input-area input { flex: 1; background: #2a3942; border: none; padding: 12px 15px; border-radius: 25px; color: #fff; outline: none; font-size: 14px; }
+        .send-btn { background: #00a884; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; color: #fff; cursor: pointer; }
     </style>
 </head>
-<body onclick="hideMenu()">
+<body>
 
     <div class="chat-header">
         <i class="fas fa-arrow-left back-btn" onclick="history.back()"></i>
-        <div class="header-info">
-            <b id="chatTitle">Rare Player</b>
-            <span id="statusText" class="status-dot">Offline</span>
+        <div class="user-info">
+            <h4>Rare Gaming Support</h4>
+            <p>online</p>
         </div>
     </div>
 
-    <div id="contextMenu">
-        <button onclick="copyMsg()">Copy Message</button>
-        <button id="delBtn" onclick="triggerDelete()">Unsend (Delete)</button>
+    <div id="chatBox">
+        <div class="msg received">Bhai, message bhej ke dekho kitna fast hai!<span class="time">10:00 PM</span></div>
     </div>
 
-    <div class="chat-container" id="chatBox"></div>
-
-    <div class="input-wrapper">
-        <div class="input-container">
-            <input type="text" id="msgInput" placeholder="Message..." autocomplete="off">
-        </div>
-        <div class="send-link" onclick="sendMsg()">Send</div>
+    <div class="input-area">
+        <input type="text" id="msgInput" placeholder="Message..." onkeypress="if(event.key === 'Enter') sendMsg()">
+        <button class="send-btn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
     </div>
-
-    <div class="system-nav-bar">RARE GAMING PROTECTION ACTIVE</div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzrboeZs3AgsuTaMS3TGE9kBFhrW394FRq9rNnVQ9vjMj2k434OhvS3JC59j5LG49pFEw/exec";
-        
-        const urlParams = new URLSearchParams(window.location.search);
-        const targetUID = urlParams.get('uid');
-        const targetName = urlParams.get('name');
-        let user = JSON.parse(localStorage.getItem("rareGamingUser"));
-        let selectedMsgTime = null;
-        let selectedMsgText = "";
-
-        document.getElementById('chatTitle').innerText = targetName || "Player";
-
-        function showOptions(e, time, text, type) {
-            e.preventDefault();
-            e.stopPropagation();
-            selectedMsgTime = time;
-            selectedMsgText = text;
-            const menu = document.getElementById('contextMenu');
-            menu.style.display = 'flex';
-            let topPos = e.clientY > window.innerHeight - 150 ? e.clientY - 100 : e.clientY;
-            menu.style.top = topPos + 'px';
-            menu.style.left = '50px';
-            document.getElementById('delBtn').style.display = (type === 'sent') ? 'block' : 'none';
-        }
-
-        function hideMenu() { document.getElementById('contextMenu').style.display = 'none'; }
-        function copyMsg() { navigator.clipboard.writeText(selectedMsgText); alert("Copied!"); hideMenu(); }
-
-        function triggerDelete() {
-            if(confirm("Unsend this message?")) {
-                fetch(`${scriptURL}?action=deleteMessage&sender=${user.uid}&timestamp=${selectedMsgTime}`)
-                .then(() => fetchMessages());
-            }
-            hideMenu();
-        }
-
-        function fetchMessages() {
-            if(!user || !targetUID) return;
-            fetch(`${scriptURL}?action=getMessages&user1=${user.uid}&user2=${targetUID}`)
-            .then(res => res.json()).then(data => {
-                const box = document.getElementById('chatBox');
-                box.innerHTML = "";
-                data.forEach(m => {
-                    let type = (m.sender == user.uid) ? 'sent' : 'received';
-                    box.innerHTML += `
-                        <div class="${type}-wrapper msg-wrapper">
-                            <div class="msg ${type}" 
-                                 onclick="showOptions(event, '${new Date(m.time).getTime()}', '${m.text}', '${type}')"
-                                 oncontextmenu="showOptions(event, '${new Date(m.time).getTime()}', '${m.text}', '${type}')">
-                                ${m.text}
-                            </div>
-                            <span class="time">${new Date(m.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                        </div>`;
-                });
-                box.scrollTop = box.scrollHeight;
-            });
-        }
+        const chatBox = document.getElementById('chatBox');
+        const msgInput = document.getElementById('msgInput');
 
         function sendMsg() {
-            let text = document.getElementById('msgInput').value.trim();
-            if(!text || !user) return;
-            document.getElementById('msgInput').value = "";
-            fetch(`${scriptURL}?action=sendMessage&sender=${user.uid}&receiver=${targetUID}&msg=${encodeURIComponent(text)}`)
-            .then(() => fetchMessages());
+            const text = msgInput.value.trim();
+            if(!text) return;
+
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // 🟢 WHATSAPP LOGIC: Pehle screen par dikhao (Fast Feel)
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg sent';
+            msgDiv.innerHTML = `${text}<span class="time">${time}</span>`;
+            chatBox.appendChild(msgDiv);
+            
+            msgInput.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // ☁️ Ab Background mein server (Google Sheet/Firebase) par bhejo
+            saveToDatabase(text);
         }
 
-        function checkOnline() {
-            if(!targetName) return;
-            fetch(`${scriptURL}?action=getStatus&username=${encodeURIComponent(targetName)}`)
-            .then(res => res.text()).then(status => {
-                const sText = document.getElementById('statusText');
-                sText.innerText = status;
-                sText.className = "status-dot " + (status === "Online" ? "online" : "");
-            });
-            if(user) fetch(`${scriptURL}?action=updateStatus&username=${encodeURIComponent(user.name)}`);
+        function saveToDatabase(msg) {
+            // Yahan tera fetch logic aayega
+            console.log("Saving to server in background...");
         }
-
-        setInterval(fetchMessages, 4000);
-        setInterval(checkOnline, 10000);
-        window.onload = () => { fetchMessages(); checkOnline(); };
     </script>
 </body>
 </html>
