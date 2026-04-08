@@ -8,119 +8,153 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
         :root {
-            --bg-color: #030305;
-            --neon-blue: #00f2fe;
-            --panel-color: #0a0a0f;
+            --bg: #030305;
+            --surface: #0a0a0f;
+            --accent: #00f2fe;
             --transfer-green: #39ff14;
+            --text-dim: #666;
         }
 
-        * { box-sizing: border-box; }
+        /* 🚫 Yahan refresh band karne ka fix hai */
+        * { 
+            box-sizing: border-box; 
+        }
 
-        /* 🚫 YAHAN HAI FIX: Refresh band karne ke liye */
         html, body { 
-            background-color: var(--bg-color); 
+            background-color: var(--bg); 
             color: white; 
             font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 0; 
-            height: 100%;
-            overflow: hidden; /* Main body ko scroll se roko */
-            overscroll-behavior-y: contain; /* Browser refresh ko disable karta hai */
+            overflow-x: hidden;
+            overscroll-behavior-y: contain; /* Isse refresh band ho jayega */
         }
 
-        /* HEADER (Matches Index) */
-        .header-top { 
-            padding: 25px 20px 15px 20px; display: flex; 
-            justify-content: space-between; align-items: center;
-            position: sticky; top: 0; background: rgba(3, 3, 5, 0.9);
-            backdrop-filter: blur(10px); z-index: 999;
+        /* 🛡️ Header (Original) */
+        .header { 
+            padding: 20px; 
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(3, 3, 5, 0.9);
+            position: sticky; top: 0; z-index: 100;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .brand-name { 
-            font-size: 24px; font-weight: 800; text-transform: uppercase; 
-            letter-spacing: 2px; background: linear-gradient(to right, #ffffff, #00f2fe);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .header h2 { font-size: 20px; margin: 0; color: #ffd700; font-weight: 800; text-transform: uppercase; }
 
         .my-header-avatar {
             width: 40px; height: 40px; border-radius: 50%;
-            border: 2px solid var(--neon-blue); overflow: hidden;
+            border: 2px solid var(--accent); overflow: hidden;
             background: #111; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
         .my-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 👥 CHAT LIST AREA (Scrollable fix) */
-        .chat-list-container {
-            height: calc(100vh - 200px); /* Adjust height for nav and header */
-            overflow-y: auto; /* Sirf isi area mein scroll hoga */
-            padding: 0 20px 100px;
-            overscroll-behavior-y: contain; /* Yahan bhi refresh preventer */
+        /* ➕ Add Friend Bar */
+        .add-friend-bar {
+            margin: 15px 20px;
+            padding: 12px;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px dashed var(--accent);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; color: var(--accent);
+            font-weight: 600; font-size: 14px;
+            cursor: pointer;
         }
 
+        /* 👥 Chat List */
+        .chat-list { padding: 0 15px 150px; }
         .chat-card { 
-            background: var(--panel-color); padding: 15px; border-radius: 20px; 
+            background: var(--surface);
+            padding: 15px; border-radius: 18px; 
             margin-bottom: 12px; display: flex; align-items: center; gap: 15px; 
             border: 1px solid rgba(255,255,255,0.05);
-            text-decoration: none; color: white; transition: 0.2s;
+            text-decoration: none; color: white;
+            transition: 0.2s;
         }
+        .chat-card:active { transform: scale(0.97); background: #111; }
 
-        /* Avatar styles */
         .avatar {
             width: 50px; height: 50px; border-radius: 50%;
-            background: #111; border: 1.5px solid var(--neon-blue);
+            background: #111; border: 1.5px solid var(--accent);
             display: flex; align-items: center; justify-content: center;
-            overflow: hidden; font-size: 20px; color: var(--neon-blue);
+            font-size: 20px; color: var(--accent); overflow: hidden;
         }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .chat-info { flex: 1; }
         .chat-info b { display: block; font-size: 15px; text-transform: uppercase; }
+        .chat-info span { font-size: 11px; color: var(--text-dim); }
 
-        /* NAVIGATION & PROTECTION */
+        /* 🧭 STABLE NAVIGATION BAR (Matches Index) */
         .bottom-nav { 
             position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
             background: rgba(10, 10, 15, 0.95); display: flex; 
             justify-content: space-around; align-items: center; 
             backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
-            z-index: 1000; border-radius: 20px 20px 0 0; 
+            z-index: 1000; border-radius: 20px 20px 0 0;
         }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .nav-item.active { color: var(--neon-blue); }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-color); margin-top: -35px; }
+        .nav-item { 
+            text-decoration: none; color: #666; font-size: 10px; 
+            font-weight: 700; display: flex; flex-direction: column; 
+            align-items: center; gap: 4px; flex: 1;
+        }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--accent); }
         
+        .center-btn .icon-circle { 
+            width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 4px solid #030305; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
+            margin-top: -35px;
+        }
+        .center-btn i { color: #000 !important; font-size: 22px; }
+
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+
+        /* Input Box */
+        #addBox { display: none; padding: 20px; background: var(--surface); margin: 0 20px 15px; border-radius: 15px; border: 1px solid #222; }
     </style>
 </head>
 <body>
 
-    <div class="header-top">
-        <div class="brand-name">RARE VAULT</div>
+    <div class="header">
+        <h2>Rare Vault</h2>
         <div class="my-header-avatar" onclick="location.href='profile.html'" id="myHeaderDP">
             <i class="fas fa-user"></i>
         </div>
     </div>
 
-    <div class="chat-list-container" id="contactList">
-        </div>
+    <div class="add-friend-bar" onclick="toggleAdd()">
+        <i class="fas fa-user-plus"></i> ADD FRIEND
+    </div>
+
+    <div id="addBox">
+        <input type="text" id="newUID" placeholder="UID (RGXXXXXX)" style="width:100%; padding:12px; margin-bottom:10px; background:#000; border:1px solid #333; border-radius:8px; color:white; outline:none;">
+        <input type="text" id="newName" placeholder="Friend Name" style="width:100%; padding:12px; margin-bottom:10px; background:#000; border:1px solid #333; border-radius:8px; color:white; outline:none;">
+        <button onclick="saveContact()" style="width:100%; padding:12px; background:var(--accent); border:none; border-radius:8px; font-weight:bold; color:#000;">SAVE CONTACT</button>
+    </div>
+
+    <div class="chat-list" id="contactList"></div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        
         <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle"><i class="fas fa-exchange-alt" style="color: #000;"></i></div>
+            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
             <span style="margin-top: 5px; color: #fff;">SEND</span>
         </a>
+
         <a href="chat_list.html" class="nav-item active"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
-
+    
     <div class="system-nav-bar"></div>
 
     <script>
-        // Firebase Config (Keep your existing config here)
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -131,22 +165,38 @@
         const database = firebase.database();
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
 
-        // Load My DP
+        // Sync My DP
         if(userData && userData.uid) {
             database.ref('users/' + userData.uid + '/dp').on('value', (snap) => {
                 if(snap.val()) document.getElementById('myHeaderDP').innerHTML = `<img src="${snap.val()}">`;
             });
         }
 
-        // Render Contacts from LocalStorage
+        function toggleAdd() {
+            const box = document.getElementById('addBox');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function saveContact() {
+            let uid = document.getElementById('newUID').value.trim().toUpperCase();
+            let name = document.getElementById('newName').value.trim();
+            if(uid && name) {
+                let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
+                contacts.push({uid: uid, name: name});
+                localStorage.setItem("rareContacts", JSON.stringify(contacts));
+                toggleAdd();
+                renderContacts();
+            }
+        }
+
         function renderContacts() {
             let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
             let list = document.getElementById('contactList');
-            list.innerHTML = "";
+            list.innerHTML = contacts.length ? "" : "<p style='text-align:center; color:#444; margin-top:30px;'>No friends added yet.</p>";
             
             contacts.forEach(c => {
                 database.ref('users/' + c.uid + '/dp').once('value', (snap) => {
-                    let dp = snap.val() ? `<img src="${snap.val()}">` : `<i class="fas fa-user"></i>`;
+                    let dp = snap.val() ? `<img src="${snap.val()}">` : `<i class="fas fa-user-astronaut"></i>`;
                     list.innerHTML += `
                         <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" class="chat-card">
                             <div class="avatar">${dp}</div>
