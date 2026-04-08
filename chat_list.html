@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Chat List - RARE GAMING</title>
     
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
@@ -40,7 +42,15 @@
             letter-spacing: 2px; background: linear-gradient(to right, #ffffff, #00f2fe);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .vault-lock { font-size: 20px; color: var(--neon-blue); cursor: pointer; }
+
+        /* 📸 MY LIVE DP IN HEADER */
+        .my-header-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            border: 2px solid var(--neon-blue); overflow: hidden;
+            background: #111; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .my-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .my-header-avatar i { font-size: 18px; color: var(--neon-blue); }
 
         /* ADD FRIEND BAR */
         .add-friend-bar {
@@ -74,7 +84,7 @@
         .chat-info b { display: block; font-size: 15px; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px; }
         .chat-info span { font-size: 11px; color: #666; }
 
-        /* LONG PRESS MENU (Options) */
+        /* LONG PRESS MENU */
         #optionsMenu {
             position: fixed; bottom: -100%; left: 0; width: 100%;
             background: #0a0a0f; border-radius: 25px 25px 0 0;
@@ -89,7 +99,7 @@
         }
         .opt-delete { color: #ff3131; }
 
-        /* NAVIGATION (Matches Index Exactly) */
+        /* NAVIGATION */
         .bottom-nav { 
             position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
             background: rgba(10, 10, 15, 0.95); display: flex; 
@@ -124,7 +134,9 @@
 
     <div class="header-top">
         <div class="brand-name">RARE VAULT</div>
-        <i class="fas fa-user-lock vault-lock" onclick="masterLock()"></i>
+        <div class="my-header-avatar" onclick="location.href='profile.html'" id="myHeaderDP">
+            <i class="fas fa-user"></i>
+        </div>
     </div>
 
     <div class="add-friend-bar" onclick="toggleAdd()">
@@ -141,7 +153,7 @@
 
     <div id="optionsMenu">
         <div id="selectedFriendName" style="text-align: center; font-size: 12px; color: #555; margin-bottom: 15px; font-weight: 700;"></div>
-        <div class="opt-item" onclick="lockSpecificChat()"><i class="fas fa-lock"></i> LOCK CHAT</div>
+        <div class="opt-item" onclick="alert('Chat Locked!')"><i class="fas fa-lock"></i> LOCK CHAT</div>
         <div class="opt-item opt-delete" onclick="deleteContact()"><i class="fas fa-trash-alt"></i> DELETE CONTACT</div>
         <button onclick="closeMenu()" style="width:100%; margin-top: 20px; padding: 15px; background: #151520; border: none; border-radius: 15px; color: white; font-weight: 700;">CANCEL</button>
     </div>
@@ -160,14 +172,29 @@
     <div class="system-nav-bar"></div>
 
     <script>
+        // 🏁 CONFIGURATION
+        const firebaseConfig = {
+            apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
+            authDomain: "rare-gaming-b8875.firebaseapp.com",
+            projectId: "rare-gaming-b8875",
+            databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         let longPressTimer;
         let selectedUID = null;
-        const MASTER_PASSWORD = "1234";
+        const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
 
-        function masterLock() {
-            let pass = prompt("Enter Vault Password:");
-            if(pass === MASTER_PASSWORD) alert("Vault Access Granted!");
-            else alert("Access Denied!");
+        // 🟢 SYNC MY DP FROM FIREBASE
+        function syncMyDP() {
+            if(userData && userData.uid) {
+                database.ref('users/' + userData.uid + '/dp').on('value', (snap) => {
+                    if(snap.val()) {
+                        document.getElementById('myHeaderDP').innerHTML = `<img src="${snap.val()}">`;
+                    }
+                });
+            }
         }
 
         function toggleAdd() {
@@ -193,30 +220,33 @@
             list.innerHTML = contacts.length ? "" : "<p style='text-align:center; color:#333; margin-top:50px;'>No Vault Contacts Found.</p>";
             
             contacts.forEach(c => {
-                let friendDP = localStorage.getItem("dp_" + c.uid) || ""; 
-                let dpHtml = friendDP ? `<img src="${friendDP}">` : `<i class="fas fa-user-astronaut"></i>`;
-
-                list.innerHTML += `
-                    <div class="chat-card" 
-                        onmousedown="startPress('${c.uid}', '${c.name}')" 
-                        onmouseup="endPress()" 
-                        ontouchstart="startPress('${c.uid}', '${c.name}')" 
-                        ontouchend="endPress()"
-                        onclick="handleChatClick('${c.uid}', '${c.name}')">
-                        <div class="avatar">${dpHtml}</div>
-                        <div class="chat-info">
-                            <b>${c.name}</b>
-                            <span>${c.uid}</span>
+                // Check Firebase for friend's DP
+                database.ref('users/' + c.uid + '/dp').once('value', (snap) => {
+                    let dp = snap.val() ? `<img src="${snap.val()}">` : `<i class="fas fa-user-astronaut"></i>`;
+                    
+                    let card = `
+                        <div class="chat-card" 
+                            onmousedown="startPress('${c.uid}', '${c.name}')" 
+                            onmouseup="endPress()" 
+                            ontouchstart="startPress('${c.uid}', '${c.name}')" 
+                            ontouchend="endPress()"
+                            onclick="handleChatClick('${c.uid}', '${c.name}')">
+                            <div class="avatar" id="avatar-${c.uid}">${dp}</div>
+                            <div class="chat-info">
+                                <b>${c.name}</b>
+                                <span>${c.uid}</span>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                    list.innerHTML += card;
+                });
             });
         }
 
         function startPress(uid, name) {
             selectedUID = uid;
             longPressTimer = setTimeout(() => {
-                document.getElementById('selectedFriendName').innerText = "VAULT OPTIONS: " + name;
+                document.getElementById('selectedFriendName').innerText = "OPTIONS: " + name;
                 document.getElementById('optionsMenu').style.bottom = "0";
             }, 700); 
         }
@@ -225,7 +255,7 @@
         function closeMenu() { document.getElementById('optionsMenu').style.bottom = "-100%"; }
 
         function deleteContact() {
-            if(confirm("Delete this contact permanently?")) {
+            if(confirm("Delete contact?")) {
                 let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
                 contacts = contacts.filter(c => c.uid !== selectedUID);
                 localStorage.setItem("rareContacts", JSON.stringify(contacts));
@@ -240,7 +270,10 @@
             }
         }
 
-        window.onload = renderContacts;
+        window.onload = () => {
+            syncMyDP();
+            renderContacts();
+        };
     </script>
 </body>
 </html>
