@@ -3,169 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rare Vault - Secure Chat</title>
+    <title>Chat List - RARE GAMING</title>
     
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+        
         :root {
-            --bg: #030305;
-            --surface: #0a0a0f;
-            --accent: #00f2fe;
+            --bg-color: #030305;
+            --neon-blue: #00f2fe;
+            --panel-color: #0a0a0f;
             --transfer-green: #39ff14;
-            --text-dim: #666;
-            --nav-bg: #050508;
-            --sys-nav: #1a1b22; /* Grey Protection Bar Color */
         }
 
         * { box-sizing: border-box; }
 
         body { 
-            background-color: var(--bg); 
-            color: white; 
-            font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; 
-            overflow-x: hidden;
+            background-color: var(--bg-color); color: white; 
+            font-family: 'Poppins', sans-serif; margin: 0; padding: 0; 
+            overflow-x: hidden; padding-bottom: 160px;
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
             -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
-        .header { 
-            padding: 20px; 
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(3, 3, 5, 0.95);
-            position: sticky; top: 0; z-index: 100;
+        /* HEADER (Matches Index) */
+        .header-top { 
+            padding: 25px 20px 15px 20px; display: flex; 
+            justify-content: space-between; align-items: center;
+            position: sticky; top: 0; background: rgba(3, 3, 5, 0.9);
+            backdrop-filter: blur(10px); z-index: 999;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .header h2 { font-size: 18px; margin: 0; color: #ffd700; font-weight: 800; }
+        .brand-name { 
+            font-size: 24px; font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 2px; background: linear-gradient(to right, #ffffff, #00f2fe);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .vault-lock { font-size: 20px; color: var(--neon-blue); cursor: pointer; }
 
-        /* ➕ Add Friend Section */
+        /* ADD FRIEND BAR */
         .add-friend-bar {
             margin: 15px 20px; padding: 12px;
             background: rgba(0, 242, 254, 0.05);
-            border: 1px dashed var(--accent); border-radius: 12px;
+            border: 1px dashed var(--neon-blue); border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            gap: 10px; color: var(--accent); font-weight: 600; font-size: 13px;
+            gap: 10px; color: var(--neon-blue); font-weight: 700; font-size: 13px;
             cursor: pointer;
         }
 
-        /* 👥 Chat List */
-        .chat-list { padding: 0 15px 160px; } /* Padding increased for stable view */
-        
+        /* CHAT LIST AREA */
+        .chat-list { padding: 0 20px; }
         .chat-card { 
-            background: var(--surface); padding: 15px; border-radius: 18px; 
+            background: var(--panel-color); padding: 15px; border-radius: 20px; 
             margin-bottom: 12px; display: flex; align-items: center; gap: 15px; 
-            border: 1px solid rgba(255,255,255,0.03);
-            text-decoration: none; color: white;
-            transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-decoration: none; color: white; transition: 0.2s;
         }
-        .chat-card:active { transform: scale(0.98); background: #111; }
+        .chat-card:active { transform: scale(0.97); background: #111; }
 
         .avatar {
-            width: 48px; height: 48px; border-radius: 50%;
-            background: #151515; border: 1px solid #222;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: #111; border: 1.5px solid var(--neon-blue);
             display: flex; align-items: center; justify-content: center;
-            overflow: hidden; font-size: 20px; color: var(--accent);
+            overflow: hidden; font-size: 20px; color: var(--neon-blue);
         }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .chat-info { flex: 1; }
-        .chat-info b { display: block; font-size: 14px; text-transform: uppercase; }
-        .chat-info span { font-size: 10px; color: var(--text-dim); }
+        .chat-info b { display: block; font-size: 15px; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px; }
+        .chat-info span { font-size: 11px; color: #666; }
 
-        /* 🧭 STABLE NAVIGATION BAR */
-        .bottom-nav { 
-            position: fixed; bottom: 40px; /* Shifted up for protection bar */
-            left: 0; width: 100%; height: 75px; 
-            background: var(--nav-bg); display: flex; 
-            justify-content: space-around; align-items: center; 
-            border-top: 1px solid rgba(255, 255, 255, 0.05); 
-            z-index: 2000; padding: 0 10px;
-            border-radius: 20px 20px 0 0; /* Premium Rounded Look */
+        /* LONG PRESS MENU (Options) */
+        #optionsMenu {
+            position: fixed; bottom: -100%; left: 0; width: 100%;
+            background: #0a0a0f; border-radius: 25px 25px 0 0;
+            padding: 25px; z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
+        .opt-item { 
+            padding: 18px; display: flex; align-items: center; gap: 15px;
+            font-weight: 600; font-size: 16px; color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .opt-delete { color: #ff3131; }
 
+        /* NAVIGATION (Matches Index Exactly) */
+        .bottom-nav { 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
+            background: rgba(10, 10, 15, 0.95); display: flex; 
+            justify-content: space-around; align-items: center; 
+            backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000; border-radius: 20px 20px 0 0; 
+        }
         .nav-item { 
-            text-decoration: none; color: #444; font-size: 9px; 
+            text-decoration: none; color: #666; font-size: 10px; 
             font-weight: 700; display: flex; flex-direction: column; 
-            align-items: center; gap: 5px; flex: 1;
+            align-items: center; gap: 4px; flex: 1;
         }
         .nav-item i { font-size: 20px; }
-        .nav-item.active { color: var(--accent); }
+        .nav-item.active { color: var(--neon-blue); }
         
         .center-btn .icon-circle { 
-            width: 52px; height: 52px; background: var(--transfer-green); border-radius: 50%; 
+            width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
-            border: 4px solid #050508; box-shadow: 0 0 15px rgba(57, 255, 20, 0.2); 
-            margin-top: -30px;
+            border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
+            margin-top: -35px;
         }
         .center-btn i { color: #000 !important; font-size: 20px; }
 
-        /* 🛡️ SYSTEM NAVIGATION PROTECTION (GREY BAR) */
-        .system-nav-protection { 
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 40px; 
-            background: var(--sys-nav); z-index: 2001; 
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
 
-        #addBox { display: none; padding: 20px; background: var(--surface); margin: 0 20px 15px; border-radius: 15px; border: 1px solid #222; }
-        input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; border-radius: 8px; color: white; outline: none; }
+        /* ADD BOX */
+        #addBox { display: none; padding: 20px; background: var(--panel-color); margin: 0 20px 15px; border-radius: 20px; border: 1px solid #1a1a20; }
+        input { width: 100%; padding: 14px; margin-bottom: 10px; background: #000; border: 1px solid #222; border-radius: 12px; color: white; outline: none; font-family: 'Poppins'; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2>RARE VAULT</h2>
-        <i class="fas fa-lock vault-lock" onclick="masterLock()" style="color:var(--accent); font-size:20px;"></i>
+    <div class="header-top">
+        <div class="brand-name">RARE VAULT</div>
+        <i class="fas fa-user-lock vault-lock" onclick="masterLock()"></i>
     </div>
 
     <div class="add-friend-bar" onclick="toggleAdd()">
-        <i class="fas fa-plus-circle"></i> ADD TO VAULT
+        <i class="fas fa-plus-circle"></i> ADD FRIEND TO VAULT
     </div>
 
     <div id="addBox">
         <input type="text" id="newUID" placeholder="UID (RGXXXXXX)">
         <input type="text" id="newName" placeholder="Friend Name">
-        <button onclick="saveContact()" style="width:100%; padding:12px; background:var(--accent); border:none; border-radius:8px; font-weight:bold; color:#000;">SAVE CONTACT</button>
+        <button onclick="saveContact()" style="width:100%; padding:14px; background:var(--neon-blue); border:none; border-radius:12px; font-weight:800; color:#000; text-transform:uppercase;">SAVE CONTACT</button>
     </div>
 
     <div class="chat-list" id="contactList"></div>
 
+    <div id="optionsMenu">
+        <div id="selectedFriendName" style="text-align: center; font-size: 12px; color: #555; margin-bottom: 15px; font-weight: 700;"></div>
+        <div class="opt-item" onclick="lockSpecificChat()"><i class="fas fa-lock"></i> LOCK CHAT</div>
+        <div class="opt-item opt-delete" onclick="deleteContact()"><i class="fas fa-trash-alt"></i> DELETE CONTACT</div>
+        <button onclick="closeMenu()" style="width:100%; margin-top: 20px; padding: 15px; background: #151520; border: none; border-radius: 15px; color: white; font-weight: 700;">CANCEL</button>
+    </div>
+
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-th-large"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-coins"></i><span>EARN</span></a>
-        
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
         <a href="transfer.html" class="nav-item center-btn">
             <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
-            <span style="color: #fff; margin-top: 2px;">SEND</span>
+            <span style="margin-top: 5px; color: #fff;">SEND</span>
         </a>
-
-        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comment-alt"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
+        <a href="chat_list.html" class="nav-item active"><i class="fas fa-comments"></i><span>CHAT</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
 
-    <div class="system-nav-protection"></div>
+    <div class="system-nav-bar"></div>
 
     <script>
-        const MASTER_PASSWORD = "1234"; 
+        let longPressTimer;
+        let selectedUID = null;
+        const MASTER_PASSWORD = "1234";
 
         function masterLock() {
             let pass = prompt("Enter Vault Password:");
-            if(pass === MASTER_PASSWORD) alert("Vault Unlocked!");
-            else alert("Access Denied.");
+            if(pass === MASTER_PASSWORD) alert("Vault Access Granted!");
+            else alert("Access Denied!");
         }
-
-        // Firebase Config (Keep your original here)
-        const firebaseConfig = {
-            apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
-            authDomain: "rare-gaming-b8875.firebaseapp.com",
-            projectId: "rare-gaming-b8875",
-            databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
 
         function toggleAdd() {
             const box = document.getElementById('addBox');
@@ -187,22 +190,54 @@
         function renderContacts() {
             let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
             let list = document.getElementById('contactList');
-            list.innerHTML = contacts.length ? "" : "<p style='text-align:center; color:#333; margin-top:40px;'>Vault is empty.</p>";
+            list.innerHTML = contacts.length ? "" : "<p style='text-align:center; color:#333; margin-top:50px;'>No Vault Contacts Found.</p>";
             
             contacts.forEach(c => {
                 let friendDP = localStorage.getItem("dp_" + c.uid) || ""; 
                 let dpHtml = friendDP ? `<img src="${friendDP}">` : `<i class="fas fa-user-astronaut"></i>`;
 
                 list.innerHTML += `
-                    <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" class="chat-card">
+                    <div class="chat-card" 
+                        onmousedown="startPress('${c.uid}', '${c.name}')" 
+                        onmouseup="endPress()" 
+                        ontouchstart="startPress('${c.uid}', '${c.name}')" 
+                        ontouchend="endPress()"
+                        onclick="handleChatClick('${c.uid}', '${c.name}')">
                         <div class="avatar">${dpHtml}</div>
                         <div class="chat-info">
                             <b>${c.name}</b>
                             <span>${c.uid}</span>
                         </div>
-                    </a>
+                    </div>
                 `;
             });
+        }
+
+        function startPress(uid, name) {
+            selectedUID = uid;
+            longPressTimer = setTimeout(() => {
+                document.getElementById('selectedFriendName').innerText = "VAULT OPTIONS: " + name;
+                document.getElementById('optionsMenu').style.bottom = "0";
+            }, 700); 
+        }
+
+        function endPress() { clearTimeout(longPressTimer); }
+        function closeMenu() { document.getElementById('optionsMenu').style.bottom = "-100%"; }
+
+        function deleteContact() {
+            if(confirm("Delete this contact permanently?")) {
+                let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
+                contacts = contacts.filter(c => c.uid !== selectedUID);
+                localStorage.setItem("rareContacts", JSON.stringify(contacts));
+                closeMenu();
+                renderContacts();
+            }
+        }
+
+        function handleChatClick(uid, name) {
+            if(document.getElementById('optionsMenu').style.bottom !== "0px") {
+                window.location.href = `chat_screen.html?uid=${uid}&name=${encodeURIComponent(name)}`;
+            }
         }
 
         window.onload = renderContacts;
