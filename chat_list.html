@@ -8,93 +8,104 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+        
         :root {
-            --bg: #030305;
-            --surface: #0a0a0f;
-            --accent: #00f2fe;
+            --bg-color: #030305;
+            --neon-blue: #00f2fe;
+            --panel-color: #0a0a0f;
             --transfer-green: #39ff14;
-            --text-dim: #666;
         }
 
-        /* 🚫 Yahan refresh band karne ka fix hai */
-        * { 
-            box-sizing: border-box; 
+        * { box-sizing: border-box; }
+
+        body { 
+            background-color: var(--bg-color); color: white; 
+            font-family: 'Poppins', sans-serif; margin: 0; padding: 0; 
+            overflow-x: hidden; padding-bottom: 160px;
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
-        html, body { 
-            background-color: var(--bg); 
-            color: white; 
-            font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; 
-            overflow-x: hidden;
-            overscroll-behavior-y: contain; /* Isse refresh band ho jayega */
-        }
-
-        /* 🛡️ Header (Original) */
-        .header { 
-            padding: 20px; 
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(3, 3, 5, 0.9);
-            position: sticky; top: 0; z-index: 100;
+        /* HEADER (Matches Index) */
+        .header-top { 
+            padding: 25px 20px 15px 20px; display: flex; 
+            justify-content: space-between; align-items: center;
+            position: sticky; top: 0; background: rgba(3, 3, 5, 0.9);
+            backdrop-filter: blur(10px); z-index: 999;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .header h2 { font-size: 20px; margin: 0; color: #ffd700; font-weight: 800; text-transform: uppercase; }
+        .brand-name { 
+            font-size: 24px; font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 2px; background: linear-gradient(to right, #ffffff, #00f2fe);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
 
+        /* 📸 MY LIVE DP IN HEADER */
         .my-header-avatar {
             width: 40px; height: 40px; border-radius: 50%;
-            border: 2px solid var(--accent); overflow: hidden;
+            border: 2px solid var(--neon-blue); overflow: hidden;
             background: #111; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
         .my-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .my-header-avatar i { font-size: 18px; color: var(--neon-blue); }
 
-        /* ➕ Add Friend Bar */
+        /* ADD FRIEND BAR */
         .add-friend-bar {
-            margin: 15px 20px;
-            padding: 12px;
-            background: rgba(0, 242, 254, 0.1);
-            border: 1px dashed var(--accent);
-            border-radius: 12px;
+            margin: 15px 20px; padding: 12px;
+            background: rgba(0, 242, 254, 0.05);
+            border: 1px dashed var(--neon-blue); border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            gap: 10px; color: var(--accent);
-            font-weight: 600; font-size: 14px;
+            gap: 10px; color: var(--neon-blue); font-weight: 700; font-size: 13px;
             cursor: pointer;
         }
 
-        /* 👥 Chat List */
-        .chat-list { padding: 0 15px 150px; }
+        /* CHAT LIST AREA */
+        .chat-list { padding: 0 20px; }
         .chat-card { 
-            background: var(--surface);
-            padding: 15px; border-radius: 18px; 
+            background: var(--panel-color); padding: 15px; border-radius: 20px; 
             margin-bottom: 12px; display: flex; align-items: center; gap: 15px; 
             border: 1px solid rgba(255,255,255,0.05);
-            text-decoration: none; color: white;
-            transition: 0.2s;
+            text-decoration: none; color: white; transition: 0.2s;
         }
         .chat-card:active { transform: scale(0.97); background: #111; }
 
         .avatar {
             width: 50px; height: 50px; border-radius: 50%;
-            background: #111; border: 1.5px solid var(--accent);
+            background: #111; border: 1.5px solid var(--neon-blue);
             display: flex; align-items: center; justify-content: center;
-            font-size: 20px; color: var(--accent); overflow: hidden;
+            overflow: hidden; font-size: 20px; color: var(--neon-blue);
         }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .chat-info { flex: 1; }
-        .chat-info b { display: block; font-size: 15px; text-transform: uppercase; }
-        .chat-info span { font-size: 11px; color: var(--text-dim); }
+        .chat-info b { display: block; font-size: 15px; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px; }
+        .chat-info span { font-size: 11px; color: #666; }
 
-        /* 🧭 STABLE NAVIGATION BAR (Matches Index) */
+        /* LONG PRESS MENU */
+        #optionsMenu {
+            position: fixed; bottom: -100%; left: 0; width: 100%;
+            background: #0a0a0f; border-radius: 25px 25px 0 0;
+            padding: 25px; z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .opt-item { 
+            padding: 18px; display: flex; align-items: center; gap: 15px;
+            font-weight: 600; font-size: 16px; color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .opt-delete { color: #ff3131; }
+
+        /* NAVIGATION */
         .bottom-nav { 
             position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
             background: rgba(10, 10, 15, 0.95); display: flex; 
             justify-content: space-around; align-items: center; 
             backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
-            z-index: 1000; border-radius: 20px 20px 0 0;
+            z-index: 1000; border-radius: 20px 20px 0 0; 
         }
         .nav-item { 
             text-decoration: none; color: #666; font-size: 10px; 
@@ -102,59 +113,66 @@
             align-items: center; gap: 4px; flex: 1;
         }
         .nav-item i { font-size: 20px; }
-        .nav-item.active { color: var(--accent); }
+        .nav-item.active { color: var(--neon-blue); }
         
         .center-btn .icon-circle { 
             width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
-            border: 4px solid #030305; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
+            border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
             margin-top: -35px;
         }
-        .center-btn i { color: #000 !important; font-size: 22px; }
+        .center-btn i { color: #000 !important; font-size: 20px; }
 
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
 
-        /* Input Box */
-        #addBox { display: none; padding: 20px; background: var(--surface); margin: 0 20px 15px; border-radius: 15px; border: 1px solid #222; }
+        /* ADD BOX */
+        #addBox { display: none; padding: 20px; background: var(--panel-color); margin: 0 20px 15px; border-radius: 20px; border: 1px solid #1a1a20; }
+        input { width: 100%; padding: 14px; margin-bottom: 10px; background: #000; border: 1px solid #222; border-radius: 12px; color: white; outline: none; font-family: 'Poppins'; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2>Rare Vault</h2>
+    <div class="header-top">
+        <div class="brand-name">RARE VAULT</div>
         <div class="my-header-avatar" onclick="location.href='profile.html'" id="myHeaderDP">
             <i class="fas fa-user"></i>
         </div>
     </div>
 
     <div class="add-friend-bar" onclick="toggleAdd()">
-        <i class="fas fa-user-plus"></i> ADD FRIEND
+        <i class="fas fa-plus-circle"></i> ADD FRIEND TO VAULT
     </div>
 
     <div id="addBox">
-        <input type="text" id="newUID" placeholder="UID (RGXXXXXX)" style="width:100%; padding:12px; margin-bottom:10px; background:#000; border:1px solid #333; border-radius:8px; color:white; outline:none;">
-        <input type="text" id="newName" placeholder="Friend Name" style="width:100%; padding:12px; margin-bottom:10px; background:#000; border:1px solid #333; border-radius:8px; color:white; outline:none;">
-        <button onclick="saveContact()" style="width:100%; padding:12px; background:var(--accent); border:none; border-radius:8px; font-weight:bold; color:#000;">SAVE CONTACT</button>
+        <input type="text" id="newUID" placeholder="UID (RGXXXXXX)">
+        <input type="text" id="newName" placeholder="Friend Name">
+        <button onclick="saveContact()" style="width:100%; padding:14px; background:var(--neon-blue); border:none; border-radius:12px; font-weight:800; color:#000; text-transform:uppercase;">SAVE CONTACT</button>
     </div>
 
     <div class="chat-list" id="contactList"></div>
 
+    <div id="optionsMenu">
+        <div id="selectedFriendName" style="text-align: center; font-size: 12px; color: #555; margin-bottom: 15px; font-weight: 700;"></div>
+        <div class="opt-item" onclick="alert('Chat Locked!')"><i class="fas fa-lock"></i> LOCK CHAT</div>
+        <div class="opt-item opt-delete" onclick="deleteContact()"><i class="fas fa-trash-alt"></i> DELETE CONTACT</div>
+        <button onclick="closeMenu()" style="width:100%; margin-top: 20px; padding: 15px; background: #151520; border: none; border-radius: 15px; color: white; font-weight: 700;">CANCEL</button>
+    </div>
+
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        
         <a href="transfer.html" class="nav-item center-btn">
             <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
             <span style="margin-top: 5px; color: #fff;">SEND</span>
         </a>
-
         <a href="chat_list.html" class="nav-item active"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
-    
+
     <div class="system-nav-bar"></div>
 
     <script>
+        // 🏁 CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -163,13 +181,20 @@
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+
+        let longPressTimer;
+        let selectedUID = null;
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
 
-        // Sync My DP
-        if(userData && userData.uid) {
-            database.ref('users/' + userData.uid + '/dp').on('value', (snap) => {
-                if(snap.val()) document.getElementById('myHeaderDP').innerHTML = `<img src="${snap.val()}">`;
-            });
+        // 🟢 SYNC MY DP FROM FIREBASE
+        function syncMyDP() {
+            if(userData && userData.uid) {
+                database.ref('users/' + userData.uid + '/dp').on('value', (snap) => {
+                    if(snap.val()) {
+                        document.getElementById('myHeaderDP').innerHTML = `<img src="${snap.val()}">`;
+                    }
+                });
+            }
         }
 
         function toggleAdd() {
@@ -192,25 +217,63 @@
         function renderContacts() {
             let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
             let list = document.getElementById('contactList');
-            list.innerHTML = contacts.length ? "" : "<p style='text-align:center; color:#444; margin-top:30px;'>No friends added yet.</p>";
+            list.innerHTML = contacts.length ? "" : "<p style='text-align:center; color:#333; margin-top:50px;'>No Vault Contacts Found.</p>";
             
             contacts.forEach(c => {
+                // Check Firebase for friend's DP
                 database.ref('users/' + c.uid + '/dp').once('value', (snap) => {
                     let dp = snap.val() ? `<img src="${snap.val()}">` : `<i class="fas fa-user-astronaut"></i>`;
-                    list.innerHTML += `
-                        <a href="chat_screen.html?uid=${c.uid}&name=${encodeURIComponent(c.name)}" class="chat-card">
-                            <div class="avatar">${dp}</div>
+                    
+                    let card = `
+                        <div class="chat-card" 
+                            onmousedown="startPress('${c.uid}', '${c.name}')" 
+                            onmouseup="endPress()" 
+                            ontouchstart="startPress('${c.uid}', '${c.name}')" 
+                            ontouchend="endPress()"
+                            onclick="handleChatClick('${c.uid}', '${c.name}')">
+                            <div class="avatar" id="avatar-${c.uid}">${dp}</div>
                             <div class="chat-info">
                                 <b>${c.name}</b>
                                 <span>${c.uid}</span>
                             </div>
-                        </a>
+                        </div>
                     `;
+                    list.innerHTML += card;
                 });
             });
         }
 
-        window.onload = renderContacts;
+        function startPress(uid, name) {
+            selectedUID = uid;
+            longPressTimer = setTimeout(() => {
+                document.getElementById('selectedFriendName').innerText = "OPTIONS: " + name;
+                document.getElementById('optionsMenu').style.bottom = "0";
+            }, 700); 
+        }
+
+        function endPress() { clearTimeout(longPressTimer); }
+        function closeMenu() { document.getElementById('optionsMenu').style.bottom = "-100%"; }
+
+        function deleteContact() {
+            if(confirm("Delete contact?")) {
+                let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
+                contacts = contacts.filter(c => c.uid !== selectedUID);
+                localStorage.setItem("rareContacts", JSON.stringify(contacts));
+                closeMenu();
+                renderContacts();
+            }
+        }
+
+        function handleChatClick(uid, name) {
+            if(document.getElementById('optionsMenu').style.bottom !== "0px") {
+                window.location.href = `chat_screen.html?uid=${uid}&name=${encodeURIComponent(name)}`;
+            }
+        }
+
+        window.onload = () => {
+            syncMyDP();
+            renderContacts();
+        };
     </script>
 </body>
 </html>
