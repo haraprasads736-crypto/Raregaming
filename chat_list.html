@@ -20,16 +20,15 @@
 
         * { box-sizing: border-box; }
 
-        /* 🚫 Refresh stop fix + Scroll enabled */
         html, body { 
             background-color: var(--bg-color); color: white; 
             font-family: 'Poppins', sans-serif; margin: 0; padding: 0; 
             height: 100%; width: 100%;
-            overflow: hidden; /* Body ko hilaane se refresh hota hai isliye ise hidden rakha */
-            overscroll-behavior-y: contain;
-            -webkit-tap-highlight-color: transparent;
+            overflow: hidden; /* Main page scroll band */
+            position: fixed; /* Screen ko ek jagah lock karne ke liye */
         }
 
+        /* Fixed Header */
         .header-top { 
             height: 80px; padding: 25px 20px 15px 20px; display: flex; 
             justify-content: space-between; align-items: center;
@@ -50,15 +49,17 @@
         }
         .my-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 🚀 NEW SCROLL AREA FIX */
+        /* 🚀 SCROLL AREA FIX */
         .chat-scroll-area {
-            position: absolute;
-            top: 80px; /* Header ke niche se shuru */
-            bottom: 123px; /* Nav bar aur protection bar ke upar tak */
-            width: 100%;
-            overflow-y: auto; /* Sirf isi area mein scroll hoga */
-            padding: 10px 20px;
-            -webkit-overflow-scrolling: touch; /* Smooth iOS scroll */
+            position: fixed;
+            top: 80px; /* Header ke niche */
+            bottom: 123px; /* Nav bar ke upar */
+            left: 0;
+            right: 0;
+            overflow-y: scroll; /* Force scroll */
+            padding: 15px 20px;
+            -webkit-overflow-scrolling: touch;
+            z-index: 10;
         }
 
         .add-friend-bar {
@@ -90,17 +91,7 @@
         .chat-info b { display: block; font-size: 15px; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 0.5px; }
         .chat-info span { font-size: 11px; color: #666; }
 
-        #optionsMenu {
-            position: fixed; bottom: -100%; left: 0; width: 100%;
-            background: #0a0a0f; border-radius: 25px 25px 0 0;
-            padding: 25px; z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        .opt-item { padding: 18px; display: flex; align-items: center; gap: 15px; font-weight: 600; font-size: 16px; color: white; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .opt-delete { color: #ff3131; }
-
-        /* Bottom Nav fixed positioning */
+        /* Navigation */
         .bottom-nav { 
             position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
             background: rgba(10, 10, 15, 0.95); display: flex; 
@@ -128,24 +119,22 @@
         </div>
     </div>
 
-    <div class="chat-scroll-area">
+    <div class="chat-scroll-area" id="scrollContainer">
         <div class="add-friend-bar" onclick="toggleAdd()">
             <i class="fas fa-plus-circle"></i> ADD FRIEND TO VAULT
         </div>
-
         <div id="addBox">
             <input type="text" id="newUID" placeholder="UID (RGXXXXXX)">
             <input type="text" id="newName" placeholder="Friend Name">
             <button onclick="saveContact()" style="width:100%; padding:14px; background:var(--neon-blue); border:none; border-radius:12px; font-weight:800; color:#000; text-transform:uppercase;">SAVE CONTACT</button>
         </div>
-
         <div id="contactList"></div>
     </div>
 
-    <div id="optionsMenu">
+    <div id="optionsMenu" style="position: fixed; bottom: -100%; left: 0; width: 100%; background: #0a0a0f; border-radius: 25px 25px 0 0; padding: 25px; z-index: 2000; transition: 0.4s;">
         <div id="selectedFriendName" style="text-align: center; font-size: 12px; color: #555; margin-bottom: 15px; font-weight: 700;"></div>
-        <div class="opt-item" onclick="alert('Chat Locked!')"><i class="fas fa-lock"></i> LOCK CHAT</div>
-        <div class="opt-item opt-delete" onclick="deleteContact()"><i class="fas fa-trash-alt"></i> DELETE CONTACT</div>
+        <div class="opt-item" style="padding: 18px; display: flex; align-items: center; gap: 15px; font-weight: 600;" onclick="alert('Chat Locked!')"><i class="fas fa-lock"></i> LOCK CHAT</div>
+        <div class="opt-item opt-delete" style="padding: 18px; display: flex; align-items: center; gap: 15px; font-weight: 600; color:#ff3131;" onclick="deleteContact()"><i class="fas fa-trash-alt"></i> DELETE CONTACT</div>
         <button onclick="closeMenu()" style="width:100%; margin-top: 20px; padding: 15px; background: #151520; border: none; border-radius: 15px; color: white; font-weight: 700;">CANCEL</button>
     </div>
 
@@ -163,6 +152,26 @@
     <div class="system-nav-bar"></div>
 
     <script>
+        // 🏁 REFRESH BLOCKER SCRIPT
+        let lastTouchY = 0;
+        const scrollContainer = document.getElementById('scrollContainer');
+
+        scrollContainer.addEventListener('touchstart', (e) => {
+            lastTouchY = e.touches[0].clientY;
+        }, { passive: false });
+
+        scrollContainer.addEventListener('touchmove', (e) => {
+            const touchY = e.touches[0].clientY;
+            const isScrollingUp = touchY > lastTouchY;
+
+            // Agar container top par hai aur user niche khinch raha hai (scroll up gesture)
+            if (scrollContainer.scrollTop === 0 && isScrollingUp) {
+                e.preventDefault(); // Refresh block karo
+            }
+            lastTouchY = touchY;
+        }, { passive: false });
+
+        // Firebase & Contacts Logic
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -171,87 +180,56 @@
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-
-        let longPressTimer;
-        let selectedUID = null;
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
 
         function syncMyDP() {
             if(!userData || !userData.uid) return;
-            let cachedDP = localStorage.getItem("my_dp_cache");
-            if(cachedDP) document.getElementById('myHeaderDP').innerHTML = `<img src="${cachedDP}">`;
-
             database.ref('users/' + userData.uid + '/dp').on('value', (snap) => {
-                let dpUrl = snap.val();
-                if(dpUrl) {
-                    localStorage.setItem("my_dp_cache", dpUrl);
-                    document.getElementById('myHeaderDP').innerHTML = `<img src="${dpUrl}">`;
-                }
+                if(snap.val()) document.getElementById('myHeaderDP').innerHTML = `<img src="${snap.val()}">`;
             });
         }
 
         function renderContacts() {
             let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
             let list = document.getElementById('contactList');
+            list.innerHTML = contacts.length ? "" : "<p style='text-align:center; color:#333; margin-top:50px;'>No Vault Contacts Found.</p>";
             
-            if (contacts.length === 0) {
-                list.innerHTML = "<p style='text-align:center; color:#333; margin-top:50px;'>No Vault Contacts Found.</p>";
-                return;
-            }
-
-            let listHTML = "";
-            contacts.forEach(c => {
-                let cachedFriendDP = localStorage.getItem("dp_cache_" + c.uid);
-                let dpImg = cachedFriendDP ? `<img src="${cachedFriendDP}">` : `<i class="fas fa-user-astronaut"></i>`;
-                
-                listHTML += `
-                    <div class="chat-card" 
-                        ontouchstart="startPress('${c.uid}', '${c.name}')" 
-                        ontouchend="endPress()"
-                        onclick="handleChatClick('${c.uid}', '${c.name}')">
-                        <div class="avatar" id="avatar-${c.uid}">${dpImg}</div>
-                        <div class="chat-info">
-                            <b>${c.name}</b>
-                            <span>${c.uid}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            list.innerHTML = listHTML;
-
             contacts.forEach(c => {
                 database.ref('users/' + c.uid + '/dp').on('value', (snap) => {
-                    let liveDP = snap.val();
-                    if(liveDP) {
-                        localStorage.setItem("dp_cache_" + c.uid, liveDP);
-                        let target = document.getElementById(`avatar-${c.uid}`);
-                        if(target) target.innerHTML = `<img src="${liveDP}">`;
+                    let liveDP = snap.val() ? `<img src="${snap.val()}">` : `<i class="fas fa-user-astronaut"></i>`;
+                    let existingCard = document.getElementById(`card-${c.uid}`);
+                    
+                    if (!existingCard) {
+                        list.innerHTML += `
+                            <div class="chat-card" id="card-${c.uid}" 
+                                ontouchstart="startPress('${c.uid}', '${c.name}')" 
+                                ontouchend="endPress()"
+                                onclick="handleChatClick('${c.uid}', '${c.name}')">
+                                <div class="avatar" id="avatar-${c.uid}">${liveDP}</div>
+                                <div class="chat-info">
+                                    <b>${c.name}</b>
+                                    <span>${c.uid}</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        document.getElementById(`avatar-${c.uid}`).innerHTML = liveDP;
                     }
                 });
             });
         }
 
         function startPress(uid, name) {
-            selectedUID = uid;
             longPressTimer = setTimeout(() => {
                 document.getElementById('selectedFriendName').innerText = "OPTIONS: " + name;
                 document.getElementById('optionsMenu').style.bottom = "0";
+                selectedUID = uid;
             }, 700); 
         }
         function endPress() { clearTimeout(longPressTimer); }
         function closeMenu() { document.getElementById('optionsMenu').style.bottom = "-100%"; }
-
-        function handleChatClick(uid, name) {
-            if(document.getElementById('optionsMenu').style.bottom !== "0px") {
-                window.location.href = `chat_screen.html?uid=${uid}&name=${encodeURIComponent(name)}`;
-            }
-        }
-
-        function toggleAdd() {
-            const box = document.getElementById('addBox');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
-
+        function toggleAdd() { document.getElementById('addBox').style.display = (document.getElementById('addBox').style.display === 'block' ? 'none' : 'block'); }
+        
         function saveContact() {
             let uid = document.getElementById('newUID').value.trim().toUpperCase();
             let name = document.getElementById('newName').value.trim();
@@ -264,20 +242,13 @@
             }
         }
 
-        function deleteContact() {
-            if(confirm("Delete contact?")) {
-                let contacts = JSON.parse(localStorage.getItem("rareContacts")) || [];
-                contacts = contacts.filter(c => c.uid !== selectedUID);
-                localStorage.setItem("rareContacts", JSON.stringify(contacts));
-                closeMenu();
-                renderContacts();
+        function handleChatClick(uid, name) {
+            if(document.getElementById('optionsMenu').style.bottom !== "0px") {
+                window.location.href = `chat_screen.html?uid=${uid}&name=${encodeURIComponent(name)}`;
             }
         }
 
-        window.onload = () => {
-            syncMyDP();
-            renderContacts();
-        };
+        window.onload = () => { syncMyDP(); renderContacts(); };
     </script>
 </body>
 </html>
