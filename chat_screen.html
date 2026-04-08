@@ -14,14 +14,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         :root { --bg: #030305; --neon: #00f2fe; --sent-bg: linear-gradient(135deg, #00f2fe, #0062ff); }
         
-        /* 🚫 Pull-to-refresh band karne ke liye */
+        /* 🚫 Refresh band karne ke liye */
         html, body { 
             background: var(--bg); 
             color: white; 
             font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 0; 
             overflow: hidden; 
-            overscroll-behavior-y: contain;
+            overscroll-behavior-y: contain; /* Sabse zaroori line */
         }
         
         .chat-header { background: rgba(10, 10, 15, 0.95); padding: 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--neon); z-index: 100; }
@@ -50,14 +50,17 @@
 
     <div class="chat-header">
         <div style="display:flex; align-items:center; gap:12px;">
-            <i class="fas fa-user-shield" style="color: var(--neon);"></i>
+            <i class="fas fa-user-lock" style="color: var(--neon);"></i>
             <div>
                 <div id="chatPartner" style="font-weight: 800; font-size: 14px;">Loading...</div>
-                <div id="statusIndicator" style="font-size: 9px; display: flex; align-items: center;">
-                    <span id="dot" class="status-dot online-dot"></span>
-                    <span id="statusText" style="color: #39ff14;">ONLINE</span>
+                <div id="partnerStatus" style="font-size: 9px; display: flex; align-items: center;">
+                    <span id="friendDot" class="status-dot offline-dot"></span>
+                    <span id="friendText" style="color: #ff4444;">OFFLINE</span>
                 </div>
             </div>
+        </div>
+        <div id="myNetStatus" style="font-size: 8px; color: #666;">
+            <i class="fas fa-wifi"></i> <span id="myNetText">CHECKING...</span>
         </div>
     </div>
 
@@ -82,7 +85,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         
-        // 🟢 User Pehchaan
+        // 🟢 User Profile & ID (RG IDs must be in localStorage)
         const user = JSON.parse(localStorage.getItem("rareGamingUser")) || { 
             name: "Player_" + Math.floor(Math.random()*100),
             uid: "RG" + Math.floor(Math.random()*999999)
@@ -93,7 +96,7 @@
         const friendUID = urlParams.get('uid') || "UNKNOWN";
         document.getElementById('chatPartner').innerText = friendName;
 
-        // 🛡️ Private Room ID Logic
+        // 🛡️ Private Chat Room Path
         const chatRoomID = [user.uid, friendUID].sort().join("_");
         const chatRef = database.ref('private_chats/' + chatRoomID);
 
@@ -103,23 +106,40 @@
             catch(e) { return "--- Locked ---"; }
         }
 
-        // 🌐 Network Status System
-        function updateStatus() {
-            const dot = document.getElementById('dot');
-            const text = document.getElementById('statusText');
-            if(navigator.onLine) {
+        // 🌐 YOUR CONNECTION STATUS
+        function checkMyNet() {
+            const netText = document.getElementById('myNetText');
+            if(navigator.onLine) { netText.innerText = "STABLE"; netText.style.color = "#39ff14"; }
+            else { netText.innerText = "NO INTERNET"; netText.style.color = "#ff4444"; }
+        }
+        window.addEventListener('online', checkMyNet);
+        window.addEventListener('offline', checkMyNet);
+        checkMyNet();
+
+        // 📡 PRESENCE SYSTEM (Partner Online/Offline)
+        const myStatusRef = database.ref('status/' + user.uid);
+        database.ref('.info/connected').on('value', (snap) => {
+            if (snap.val() === true) {
+                myStatusRef.onDisconnect().set({ state: 'offline' });
+                myStatusRef.set({ state: 'online' });
+            }
+        });
+
+        const friendStatusRef = database.ref('status/' + friendUID);
+        friendStatusRef.on('value', (snap) => {
+            const data = snap.val();
+            const dot = document.getElementById('friendDot');
+            const text = document.getElementById('friendText');
+            if(data && data.state === 'online') {
                 dot.className = "status-dot online-dot";
                 text.innerText = "ONLINE";
                 text.style.color = "#39ff14";
             } else {
                 dot.className = "status-dot offline-dot";
-                text.innerText = "OFFLINE (SYNCING...)";
+                text.innerText = "OFFLINE";
                 text.style.color = "#ff4444";
             }
-        }
-        window.addEventListener('online', updateStatus);
-        window.addEventListener('offline', updateStatus);
-        updateStatus();
+        });
 
         // 1. OFFLINE DATA LOAD
         const cacheKey = "rareCache_" + chatRoomID;
@@ -133,25 +153,18 @@
                 sender: user.name,
                 senderUID: user.uid,
                 text: encrypt(text),
-                timestamp: firebase.database.ServerValue.TIMESTAMP,
-                seen: false
+                timestamp: firebase.database.ServerValue.TIMESTAMP
             });
             document.getElementById('msgInput').value = "";
         }
 
-        // 2. ONLINE DATA SYNC (Private Room Only)
+        // 2. ONLINE DATA SYNC
         chatRef.limitToLast(100).on('value', (snapshot) => {
             const messages = [];
             snapshot.forEach((child) => {
                 messages.push(child.val());
             });
-
-            try {
-                localStorage.setItem(cacheKey, JSON.stringify(messages));
-            } catch(e) {
-                localStorage.removeItem(cacheKey);
-            }
-
+            localStorage.setItem(cacheKey, JSON.stringify(messages));
             renderMessages(messages);
         });
 
@@ -161,12 +174,9 @@
             messages.forEach((data) => {
                 const isMe = data.senderUID === user.uid;
                 const time = data.timestamp ? new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "";
-                
                 const msgDiv = document.createElement('div');
                 msgDiv.className = `msg ${isMe ? 'sent' : 'received'}`;
-                
-                const unlockedMsg = decrypt(data.text);
-                msgDiv.innerHTML = `${unlockedMsg}<span class="time">${time}</span>`;
+                msgDiv.innerHTML = `${decrypt(data.text)}<span class="time">${time}</span>`;
                 chatBox.appendChild(msgDiv);
             });
             chatBox.scrollTop = chatBox.scrollHeight;
