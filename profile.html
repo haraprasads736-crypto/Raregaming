@@ -13,44 +13,91 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-        :root { --bg: #030305; --neon: #00f2fe; --panel: #0a0a0f; }
+        :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; }
         
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; overflow-x: hidden; }
+        * { box-sizing: border-box; }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; overflow-x: hidden; background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%); }
 
-        /* 📸 DP Section */
-        .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; text-align: center; border: 1px solid #1a1a20; }
+        /* 🛡️ Header (Original) */
+        .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
+
+        /* 👤 Profile Card (Fixed & Smaller) */
+        .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
         
-        .avatar-wrapper { position: relative; width: 120px; height: 120px; margin: 0 auto 15px; }
-        #dpPreview { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--neon); object-fit: cover; background: #111; }
-        .edit-icon { position: absolute; bottom: 5px; right: 5px; background: var(--neon); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; border: 3px solid var(--panel); }
+        .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: 0 auto 15px; cursor: pointer; }
+        #dpPreview { width: 90px; height: 90px; border-radius: 50%; border: 2.5px solid var(--neon); object-fit: cover; background: #111; }
+        .edit-badge { position: absolute; bottom: 2px; right: 2px; background: var(--neon); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11px; border: 2px solid var(--panel); }
 
-        /* ✂️ Crop Modal */
-        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; padding: 20px; box-sizing: border-box; }
-        #cropContainer { width: 100%; height: 70vh; margin-top: 30px; }
+        .player-name { font-size: 20px; font-weight: 800; margin: 0; text-transform: uppercase; }
+        .player-uid { font-size: 12px; color: #666; font-weight: 700; margin-top: 5px; letter-spacing: 1px; }
+
+        /* 📝 About Section (New) */
+        .about-box { margin: 0 20px 20px; padding: 15px; background: var(--panel); border-radius: 20px; border: 1px solid rgba(255,255,255,0.03); }
+        .about-box h3 { font-size: 10px; color: var(--neon); text-transform: uppercase; margin: 0 0 8px; letter-spacing: 1px; }
+        #aboutText { font-size: 13px; color: #bbb; margin: 0; line-height: 1.5; }
+
+        /* 📊 Stats Grid (Original) */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
+        .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
+        .stat-label { font-size: 9px; color: #888; text-transform: uppercase; }
+        .stat-value { font-size: 18px; font-weight: 800; color: #fff; margin-top: 5px; }
+
+        /* ⚙️ Options List (Original) */
+        .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; }
+        .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
+        .logout-btn { color: #ff3131 !important; border-bottom: none; }
+        .logout-btn i { color: #ff3131 !important; }
+
+        /* ✂️ Crop Modal (WhatsApp Style) */
+        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; padding: 20px; }
         .crop-btns { display: flex; gap: 10px; margin-top: 20px; }
         .btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; }
 
-        /* 🧭 Nav Bar (Stable) */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #1a1a20; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        /* 🧭 Nav Bar (Matched to Index) */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
         .nav-item.active { color: var(--neon); }
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background: #1a1b22; }
+        .nav-item i { font-size: 20px; }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
+        .center-btn i { color: #000 !important; font-size: 22px; }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
 </head>
 <body>
 
+    <div class="header"><h2>Account Profile</h2></div>
+
     <div class="profile-card">
         <div class="avatar-wrapper" onclick="document.getElementById('uploadInput').click()">
             <img id="dpPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-            <div class="edit-icon"><i class="fas fa-camera"></i></div>
+            <div class="edit-badge"><i class="fas fa-camera"></i></div>
         </div>
         <input type="file" id="uploadInput" style="display:none;" accept="image/*">
-        <h2 id="userName" style="margin:0; text-transform:uppercase;">Player Name</h2>
-        <p id="userUID" style="font-size:12px; color:#555; margin:5px 0 0;">UID: RG000000</p>
+        <p class="player-name" id="userName">PLAYER_NAME</p>
+        <p class="player-uid" id="userUID">UID: RG000000</p>
+    </div>
+
+    <div class="about-box">
+        <h3>About Me</h3>
+        <p id="aboutText">Rare Gaming Member | Esports Enthusiast</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-box"><div class="stat-label">Total Cash</div><div class="stat-value" id="cashVal">₹0</div></div>
+        <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--gold);">0</div></div>
+    </div>
+
+    <div class="options-container">
+        <a href="earn.html" class="option-item"><i class="fas fa-wallet"></i> Wallet History</a>
+        <a href="transfer.html" class="option-item"><i class="fas fa-exchange-alt"></i> Transfer Records</a>
+        <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
+        <a href="javascript:void(0)" class="option-item logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout System</a>
     </div>
 
     <div id="cropModal">
-        <div id="cropContainer"></div>
+        <div id="cropContainer" style="height: 60vh;"></div>
         <div class="crop-btns">
             <button class="btn" style="background:#222; color:#fff;" onclick="closeCrop()">CANCEL</button>
             <button class="btn" style="background:var(--neon); color:#000;" onclick="saveCrop()">DONE</button>
@@ -58,11 +105,11 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i>HOME</a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i>EARN</a>
-        <a href="transfer.html" class="nav-item"><div style="width:50px; height:50px; background:#39ff14; border-radius:50%; margin-top:-30px; display:flex; align-items:center; justify-content:center; border:4px solid #030305;"><i class="fas fa-exchange-alt" style="color:#000;"></i></div>SEND</a>
-        <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i>CHAT</a>
-        <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i>PROFILE</a>
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
+        <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
 
@@ -80,15 +127,18 @@
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if(!userData) window.location.href = "login.html";
 
-        // 1. Firebase se DP Load karna
-        function loadDP() {
+        function loadProfile() {
             document.getElementById('userName').innerText = userData.name;
-            database.ref('users/' + userData.uid + '/dp').on('value', (snap) => {
-                if(snap.val()) document.getElementById('dpPreview').src = snap.val();
+            // Load DP & Stats
+            database.ref('users/' + userData.uid).on('value', (snap) => {
+                const data = snap.val();
+                if(data && data.dp) document.getElementById('dpPreview').src = data.dp;
+                if(data && data.uid) document.getElementById('userUID').innerText = "UID: " + data.uid;
+                if(data && data.cash) document.getElementById('cashVal').innerText = "₹" + data.cash;
+                if(data && data.coins) document.getElementById('coinVal').innerText = data.coins;
             });
         }
 
-        // 2. Image Select & Open Crop Modal
         document.getElementById('uploadInput').onchange = function(e) {
             const file = e.target.files[0];
             const reader = new FileReader();
@@ -96,8 +146,8 @@
                 document.getElementById('cropModal').style.display = 'block';
                 if(croppieInstance) croppieInstance.destroy();
                 croppieInstance = new Croppie(document.getElementById('cropContainer'), {
-                    viewport: { width: 250, height: 250, type: 'circle' },
-                    boundary: { width: 300, height: 400 },
+                    viewport: { width: 200, height: 200, type: 'circle' },
+                    boundary: { width: 300, height: 350 },
                     showZoomer: true
                 });
                 croppieInstance.bind({ url: event.target.result });
@@ -105,21 +155,19 @@
             reader.readAsDataURL(file);
         };
 
-        function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
-
-        // 3. Save Cropped Image to Firebase
         function saveCrop() {
             croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 }, circle: false }).then(function(base64) {
-                // Firebase mein save karo taaki sabko dikhe
-                database.ref('users/' + userData.uid).update({ dp: base64 })
-                .then(() => {
+                database.ref('users/' + userData.uid).update({ dp: base64 }).then(() => {
                     document.getElementById('dpPreview').src = base64;
                     closeCrop();
                 });
             });
         }
 
-        window.onload = loadDP;
+        function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
+        function logout() { if(confirm("Dost, logout karna chahte ho?")) { localStorage.removeItem("rareGamingUser"); window.location.href = "login.html"; } }
+
+        window.onload = loadProfile;
     </script>
 </body>
 </html>
