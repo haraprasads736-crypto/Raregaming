@@ -16,12 +16,7 @@
         :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; }
         
         * { box-sizing: border-box; }
-        body { 
-            background: var(--bg); color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding-bottom: 160px; overflow-x: hidden; 
-            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%); 
-            -webkit-tap-highlight-color: transparent;
-        }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; overflow-x: hidden; background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%); }
 
         .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
@@ -71,7 +66,7 @@
         </div>
         <input type="file" id="uploadInput" style="display:none;" accept="image/*">
         <p class="player-name" id="userName">PLAYER_NAME</p>
-        <p class="player-uid" id="userUID">UID: Loading...</p>
+        <p class="player-uid" id="userUID">UID: RGXXXXXX</p>
     </div>
 
     <div class="about-box">
@@ -110,6 +105,8 @@
 
     <script>
         // 🏁 CONFIGURATION
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxkNQ1Zc4mrOV3oAT-FEW7yJbp2c1WL5T80hHa5lTth5K1I5OloyJ3ddbc-pDAl1JHSeQ/exec";
+        
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -119,58 +116,41 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let croppieInstance;
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if(!userData) window.location.href = "login.html";
 
+        let croppieInstance;
+
         function loadProfile() {
+            // 1. Instant Name from LocalStorage
             document.getElementById('userName').innerText = userData.name;
-            const userKey = userData.name.replace(/\s+/g, '_').toLowerCase();
-            
-            // Firebase Listener: Real-time Stats & UID
-            database.ref('players/' + userKey).on('value', (snap) => {
-                const data = snap.val();
-                
-                if (data && data.uid) {
-                    // ✅ Case 1: Existing User (Purane users ka data yahan se update hoga)
-                    updateUI(data);
-                } else {
-                    // 🆕 Case 2: New User (Auto RG ID Generation)
-                    generateRGID(userKey);
+
+            // 2. Fetch Live Stats & UID from Google Sheets (Tera 1 Crore wala system)
+            fetch(`${scriptURL}?action=getPlayerData&username=${encodeURIComponent(userData.name)}`)
+            .then(res => res.json())
+            .then(data => {
+                if(data) {
+                    document.getElementById('userUID').innerText = "UID: " + (data.uid || "RGXXXXXX");
+                    document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
+                    document.getElementById('coinVal').innerText = (data.coins || 0);
+                    
+                    // Update local storage with real UID for DP sync
+                    userData.uid = data.uid;
+                    localStorage.setItem("rareGamingUser", JSON.stringify(userData));
+                    
+                    // Once UID is ready, fetch DP from Firebase
+                    syncDP(data.uid);
                 }
+            }).catch(e => {
+                // If offline, show stored UID
+                document.getElementById('userUID').innerText = "UID: " + (userData.uid || "RGXXXXXX");
             });
         }
 
-        function generateRGID(userKey) {
-            const counterRef = database.ref('vault_settings/id_counter');
-            counterRef.transaction((currentValue) => {
-                return (currentValue || 1000) + 1;
-            }, (error, committed, snapshot) => {
-                if (committed) {
-                    const newID = "RG" + snapshot.val();
-                    const initialData = {
-                        name: userData.name,
-                        uid: newID,
-                        cash: 0,
-                        coins: 0,
-                        about: "Rare Gaming Member",
-                        dp: "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                    };
-                    database.ref('players/' + userKey).set(initialData);
-                }
+        function syncDP(uid) {
+            database.ref('users/' + uid + '/dp').on('value', (snap) => {
+                if(snap.val()) document.getElementById('dpPreview').src = snap.val();
             });
-        }
-
-        function updateUI(data) {
-            document.getElementById('userUID').innerText = "UID: " + data.uid;
-            document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
-            document.getElementById('coinVal').innerText = (data.coins || 0);
-            document.getElementById('aboutText').innerText = data.about || "Esports Enthusiast";
-            if(data.dp) document.getElementById('dpPreview').src = data.dp;
-
-            // Update LocalStorage for Chat/Transfer
-            userData.uid = data.uid;
-            localStorage.setItem("rareGamingUser", JSON.stringify(userData));
         }
 
         // 📸 Crop Logic
@@ -191,9 +171,10 @@
         };
 
         function saveCrop() {
-            const userKey = userData.name.replace(/\s+/g, '_').toLowerCase();
             croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 }, circle: false }).then(function(base64) {
-                database.ref('players/' + userKey).update({ dp: base64 }).then(() => {
+                if(!userData.uid) { alert("UID not synced yet. Wait a second!"); return; }
+                
+                database.ref('users/' + userData.uid).update({ dp: base64 }).then(() => {
                     document.getElementById('dpPreview').src = base64;
                     closeCrop();
                 });
