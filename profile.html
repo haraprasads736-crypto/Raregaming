@@ -23,11 +23,9 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 🛡️ Header */
         .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
 
-        /* 👤 Profile Card */
         .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
         .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: 0 auto 15px; cursor: pointer; }
         #dpPreview { width: 90px; height: 90px; border-radius: 50%; border: 2.5px solid var(--neon); object-fit: cover; background: #111; }
@@ -36,28 +34,23 @@
         .player-name { font-size: 20px; font-weight: 800; margin: 0; text-transform: uppercase; }
         .player-uid { font-size: 12px; color: #666; font-weight: 700; margin-top: 5px; letter-spacing: 1px; }
 
-        /* 📝 About Section */
         .about-box { margin: 0 20px 20px; padding: 15px; background: var(--panel); border-radius: 20px; border: 1px solid rgba(255,255,255,0.03); }
         .about-box h3 { font-size: 10px; color: var(--neon); text-transform: uppercase; margin: 0 0 8px; letter-spacing: 1px; }
         #aboutText { font-size: 13px; color: #bbb; margin: 0; line-height: 1.5; }
 
-        /* 📊 Stats Grid */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
         .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
         .stat-label { font-size: 9px; color: #888; text-transform: uppercase; }
         .stat-value { font-size: 18px; font-weight: 800; color: #fff; margin-top: 5px; }
 
-        /* ⚙️ Options List */
         .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
         .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; }
         .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
 
-        /* ✂️ Crop Modal */
         #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; padding: 20px; }
         .crop-btns { display: flex; gap: 10px; margin-top: 20px; }
         .btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; }
 
-        /* 🧭 Bottom Nav (Stable) */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
         .nav-item.active { color: var(--neon); }
@@ -78,7 +71,7 @@
         </div>
         <input type="file" id="uploadInput" style="display:none;" accept="image/*">
         <p class="player-name" id="userName">PLAYER_NAME</p>
-        <p class="player-uid" id="userUID">UID: RGXXXXXX</p>
+        <p class="player-uid" id="userUID">UID: Loading...</p>
     </div>
 
     <div class="about-box">
@@ -117,7 +110,6 @@
 
     <script>
         // 🏁 CONFIGURATION
-        const sheetsURL = "https://script.google.com/macros/s/AKfycbxkNQ1Zc4mrOV3oAT-FEW7yJbp2c1WL5T80hHa5lTth5K1I5OloyJ3ddbc-pDAl1JHSeQ/exec";
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -127,33 +119,58 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        let croppieInstance;
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if(!userData) window.location.href = "login.html";
 
-        let croppieInstance;
-
         function loadProfile() {
-            // 1. Instant Name & UID from LocalStorage
             document.getElementById('userName').innerText = userData.name;
-            document.getElementById('userUID').innerText = "UID: " + (userData.uid || "RGXXXXXX");
-
-            // 2. Fetch Live Stats from Google Sheets
-            fetch(`${sheetsURL}?action=getPlayerData&username=${encodeURIComponent(userData.name)}`)
-            .then(res => res.json())
-            .then(data => {
-                if(data) {
-                    document.getElementById('userUID').innerText = "UID: " + data.uid;
-                    document.getElementById('cashVal').innerText = "₹" + data.cash;
-                    document.getElementById('coinVal').innerText = data.coins;
-                    userData.uid = data.uid;
-                    localStorage.setItem("rareGamingUser", JSON.stringify(userData));
+            const userKey = userData.name.replace(/\s+/g, '_').toLowerCase();
+            
+            // Firebase Listener: Real-time Stats & UID
+            database.ref('players/' + userKey).on('value', (snap) => {
+                const data = snap.val();
+                
+                if (data && data.uid) {
+                    // ✅ Case 1: Existing User (Purane users ka data yahan se update hoga)
+                    updateUI(data);
+                } else {
+                    // 🆕 Case 2: New User (Auto RG ID Generation)
+                    generateRGID(userKey);
                 }
             });
+        }
 
-            // 3. Sync DP from Firebase (Real-time)
-            database.ref('users/' + userData.uid + '/dp').on('value', (snap) => {
-                if(snap.val()) document.getElementById('dpPreview').src = snap.val();
+        function generateRGID(userKey) {
+            const counterRef = database.ref('vault_settings/id_counter');
+            counterRef.transaction((currentValue) => {
+                return (currentValue || 1000) + 1;
+            }, (error, committed, snapshot) => {
+                if (committed) {
+                    const newID = "RG" + snapshot.val();
+                    const initialData = {
+                        name: userData.name,
+                        uid: newID,
+                        cash: 0,
+                        coins: 0,
+                        about: "Rare Gaming Member",
+                        dp: "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                    };
+                    database.ref('players/' + userKey).set(initialData);
+                }
             });
+        }
+
+        function updateUI(data) {
+            document.getElementById('userUID').innerText = "UID: " + data.uid;
+            document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
+            document.getElementById('coinVal').innerText = (data.coins || 0);
+            document.getElementById('aboutText').innerText = data.about || "Esports Enthusiast";
+            if(data.dp) document.getElementById('dpPreview').src = data.dp;
+
+            // Update LocalStorage for Chat/Transfer
+            userData.uid = data.uid;
+            localStorage.setItem("rareGamingUser", JSON.stringify(userData));
         }
 
         // 📸 Crop Logic
@@ -174,8 +191,9 @@
         };
 
         function saveCrop() {
+            const userKey = userData.name.replace(/\s+/g, '_').toLowerCase();
             croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 }, circle: false }).then(function(base64) {
-                database.ref('users/' + userData.uid).update({ dp: base64 }).then(() => {
+                database.ref('players/' + userKey).update({ dp: base64 }).then(() => {
                     document.getElementById('dpPreview').src = base64;
                     closeCrop();
                 });
@@ -183,7 +201,7 @@
         }
 
         function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
-        function logout() { if(confirm("Logout karna chahte ho?")) { localStorage.clear(); window.location.href = "login.html"; } }
+        function logout() { if(confirm("Dost, logout karna chahte ho?")) { localStorage.clear(); window.location.href = "login.html"; } }
 
         window.onload = loadProfile;
     </script>
