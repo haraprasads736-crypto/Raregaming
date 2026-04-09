@@ -43,8 +43,8 @@
 </div>
 
 <script>
-    // ✅ AAPKA NAYA DEPLOY URL
-    const scriptURL = "https://script.google.com/macros/s/AKfycbylRDpKROBiNqgOihC6EG-DVa1wjgSX-dKS-h04cENYlP2qDttsSWHZfbVhD3vm4zpWgg/exec";
+    // ✅ AAPKA NAYA DEPLOY URL (v4.5)
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxcjZbelh5OqDNm_BszVHWbRNI5Az8C7qw0uyF8ImlXvhcPvy8C2Y9YHcaHIOs_18WM4g/exec";
     
     let isLoginMode = true;
 
@@ -54,6 +54,7 @@
         document.getElementById('authBtn').innerText = isLoginMode ? "ENTER DASHBOARD" : "REGISTER NOW";
         document.getElementById('toggleBtn').innerHTML = isLoginMode ? "New Player? <span>Sign Up</span>" : "Already a Player? <span>Login</span>";
         document.getElementById('userLabel').innerText = isLoginMode ? "Username or Rare UID" : "Choose Username";
+        document.getElementById('statusMsg').innerText = "";
     }
 
     function processAuth() {
@@ -71,7 +72,7 @@
         status.style.color = "#66fcf1";
         status.innerText = isLoginMode ? "Checking Database..." : "Registering...";
 
-        // Action aur Parameters decide karna
+        // Action aur Parameters
         let url = isLoginMode ? 
             `${scriptURL}?action=login&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}` :
             `${scriptURL}?action=register&name=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}`;
@@ -80,27 +81,24 @@
         .then(res => res.json())
         .then(data => {
             btn.disabled = false;
-            if(isLoginMode) {
-                if(data.status === "Success") {
-                    // Sab kuch sahi hai! Save data and teleport
+            if(data.status === "Success") {
+                if(isLoginMode) {
+                    // Login Success: Save to LocalStorage
                     localStorage.setItem("rareGamingUser", JSON.stringify({
                         name: data.name,
-                        uid: data.uid
+                        uid: data.uid,
+                        balance: data.balance
                     }));
-                    status.innerText = "Success! Redirecting...";
-                    setTimeout(() => window.location.href = "index.html", 800);
+                    status.innerText = "Welcome " + data.name + "! Redirecting...";
+                    setTimeout(() => window.location.href = "index.html", 1000);
                 } else {
-                    status.innerHTML = "<span style='color:red'>ID ya Pass galat hai, bhai!</span>";
-                    btn.innerText = "RETRY";
+                    // Register Success
+                    alert("Account Created! Your Rare UID: " + data.uid);
+                    location.reload(); // Login par wapas bhej dega
                 }
             } else {
-                // Register Success
-                if(data && data.toString().includes("RG")) {
-                    alert("Account Created! Your Rare ID: " + data);
-                    location.reload();
-                } else {
-                    status.innerHTML = "<span style='color:red'>" + data + "</span>";
-                }
+                status.innerHTML = "<span style='color:red'>" + (data.message || "Error Occurred!") + "</span>";
+                btn.innerText = "RETRY";
             }
         })
         .catch(err => {
