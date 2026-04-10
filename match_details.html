@@ -11,80 +11,120 @@
         .header { display: flex; align-items: center; padding: 20px; background: #1A0A2D; position: sticky; top: 0; z-index: 100; }
         .back-btn { font-size: 20px; color: #fff; margin-right: 20px; cursor: pointer; }
         .title { font-size: 18px; font-weight: 700; flex: 1; text-align: center; margin-right: 40px; }
+        
+        /* TABS */
         .tab-container { display: flex; justify-content: space-around; background: #2D1B44; margin: 15px 20px; border-radius: 50px; padding: 5px; }
         .tab { padding: 10px 20px; border-radius: 50px; font-size: 14px; font-weight: 600; color: #AAA; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
+        
+        /* CARDS */
         .match-list { padding: 0 15px; }
         .card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; color: #000; position: relative; }
         .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
         .match-info { display: flex; align-items: center; gap: 10px; }
         .match-info img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
         .match-title-text { font-size: 13px; font-weight: 800; color: #111; }
+        .view-link { color: #8B3EEB; font-weight: 700; font-size: 13px; text-decoration: underline; cursor: pointer; }
+
         .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
         .stat-box { background: #F2F2F2; border-radius: 12px; padding: 8px; text-align: center; }
         .stat-label { background: #8B3EEB; color: white; font-size: 8px; padding: 2px 5px; border-radius: 5px; display: inline-block; margin-bottom: 5px; }
         .stat-value { font-size: 11px; font-weight: 800; display: block; }
 
+        /* PROGRESS BAR */
         .progress-container { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
         .progress-bar { flex: 1; height: 18px; background: #E0D4FF; border-radius: 20px; overflow: hidden; position: relative; }
         .progress-fill { height: 100%; background: #8B3EEB; transition: 0.5s; }
         .player-count { position: absolute; width: 100%; text-align: center; font-size: 10px; font-weight: 800; line-height: 18px; color: #120524; z-index: 2; }
         .join-btn { background: #1A0A2D; color: white; border: none; padding: 8px 25px; border-radius: 50px; font-weight: 700; font-size: 12px; cursor: pointer; }
 
-        /* MODAL POPUP */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; box-sizing: border-box;}
-        .modal-card { background: #2D1B44; width: 100%; max-width: 350px; border-radius: 24px; padding: 25px; text-align: center; position: relative; border: 1px solid rgba(255,255,255,0.1); }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 20px; color: #fff; cursor: pointer; }
-        .modal-title { font-size: 17px; font-weight: 800; margin-bottom: 15px; color: #fff; }
-        .modal-desc { font-size: 12px; color: #ccc; margin-bottom: 25px; line-height: 1.6; }
-        .modal-btn-row { display: flex; gap: 15px; }
-        .m-btn { flex: 1; padding: 12px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; font-size: 13px; }
-        .btn-cancel { background: #fff; color: #000; }
-        .btn-join { background: linear-gradient(to right, #8B3EEB, #4facfe); color: #fff; }
+        /* --- INFO OVERLAY (Full Screen Detail) --- */
+        .info-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1A0A2D 0%, #120524 100%); display: none; flex-direction: column; z-index: 3000; overflow-y: auto; }
+        .info-header { padding: 20px; display: flex; align-items: center; gap: 15px; }
+        .info-content { padding: 20px; }
+        .info-title { font-size: 18px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; display: block;}
+        
+        .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+        .detail-label { color: #AAA; }
+        .detail-value { font-weight: 700; color: #00f2fe; }
 
-        .input-group { text-align: left; margin-bottom: 15px; }
-        .input-group label { font-size: 11px; font-weight: 700; color: #00f2fe; display: block; margin-bottom: 5px; }
-        .input-group input { width: 100%; background: #1A0A2D; border: 1px solid #382A4D; padding: 12px; border-radius: 12px; color: #fff; box-sizing: border-box; }
+        .room-details-box { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; margin-top: 25px; text-align: center; border: 1px solid rgba(139, 62, 235, 0.2); }
+        .room-btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .room-btn { flex: 1; padding: 12px; border-radius: 50px; border: none; font-weight: 800; font-size: 13px; color: white; cursor: pointer; }
+        .btn-participants { background: #8B3EEB; width: 100%; margin-top: 15px; }
+
+        .rules-box { background: #000; color: #fff; padding: 15px; border-radius: 15px; margin-top: 20px; font-size: 11px; line-height: 1.5; text-align: left; opacity: 0.8;}
+
+        /* MODALS (Confirmation/Form) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
+        .modal-card { background: #2D1B44; width: 100%; max-width: 350px; border-radius: 24px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
         .btn-submit { background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 12px; font-weight: 800; border: none; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="header"><i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i><div class="title" id="pageTitle">LOADING...</div></div>
-    <div class="tab-container"><div class="tab" id="tab-ongoing" onclick="switchTab('ongoing')">Ongoing</div><div class="tab active" id="tab-upcoming" onclick="switchTab('upcoming')">Upcoming</div><div class="tab" id="tab-result" onclick="switchTab('result')">Result</div></div>
-    <div class="match-list" id="matchList"></div>
+    <div id="mainPage">
+        <div class="header"><i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i><div class="title" id="pageTitle">LOADING...</div></div>
+        <div class="tab-container"><div class="tab" id="tab-ongoing" onclick="switchTab('ongoing')">Ongoing</div><div class="tab active" id="tab-upcoming" onclick="switchTab('upcoming')">Upcoming</div><div class="tab" id="tab-result" onclick="switchTab('result')">Result</div></div>
+        <div class="match-list" id="matchList"></div>
+    </div>
+
+    <div id="infoOverlay" class="info-overlay">
+        <div class="info-header"><i class="fas fa-arrow-left back-btn" onclick="closeInfo()"></i></div>
+        <div class="info-content">
+            <span id="infoMatchTitle" class="info-title">MATCH TITLE</span>
+            <div style="font-size: 12px; color: #8B3EEB; margin-top: -10px;">2026-04-11</div>
+            
+            <div style="margin-top: 30px;">
+                <div class="detail-row"><span class="detail-label">Type :</span><span id="infoType" class="detail-value">Duo</span></div>
+                <div class="detail-row"><span class="detail-label">Version :</span><span class="detail-value">TPP</span></div>
+                <div class="detail-row"><span class="detail-label">Map :</span><span id="infoMap" class="detail-value">BERMUDA</span></div>
+                <div class="detail-row"><span class="detail-label">Entry Fee :</span><span id="infoFee" class="detail-value">5</span></div>
+            </div>
+
+            <div class="room-details-box">
+                <div style="font-size: 14px; font-weight: 700; color: #AAA;">Room Details</div>
+                <div style="font-size: 12px; margin-top: 15px;">About This Match</div>
+                <div style="color: #00f2fe; font-size: 13px; margin-top: 5px;">id show before 10 minutes</div>
+                <div style="font-size: 13px; margin-top: 10px;">WINNER : 20<br>2ND : 10</div>
+                
+                <div class="room-btn-group">
+                    <button class="room-btn" style="background: rgba(255,255,255,0.1); border: 1px solid #AAA;">My Entries</button>
+                    <button class="room-btn" style="background: #8B3EEB;" onclick="triggerJoinFromInfo()">Join</button>
+                </div>
+                <button class="room-btn btn-participants">Participants</button>
+            </div>
+
+            <div class="rules-box">
+                <b>PLEASE READ ALL RULES BEFORE PLAY :</b><br>
+                1. Room ID & Password will be given 5-10 mins before match.<br>
+                2. Screen recording is mandatory while playing.
+            </div>
+        </div>
+    </div>
 
     <div id="confirmModal" class="modal-overlay">
         <div class="modal-card">
-            <i class="fas fa-times close-modal" onclick="closeAllModals()"></i>
-            <div id="confirmText" class="modal-title">Checking fee...</div>
-            <p class="modal-desc">Are you sure you want to accept the challenges?</p>
-            <div class="modal-btn-row">
-                <button class="m-btn btn-cancel" onclick="closeAllModals()">Cancel</button>
-                <button class="m-btn btn-join" onclick="showFormModal()">Join</button>
+            <div id="confirmText" style="font-weight:800; margin-bottom:15px;">₹ 5 will be deduct</div>
+            <div style="display:flex; gap:10px;">
+                <button style="flex:1; padding:10px; border-radius:10px; border:none;" onclick="closeModals()">Cancel</button>
+                <button style="flex:1; padding:10px; border-radius:10px; border:none; background:#8B3EEB; color:#fff;" onclick="showForm()">Join</button>
             </div>
         </div>
     </div>
 
     <div id="formModal" class="modal-overlay">
         <div class="modal-card">
-            <i class="fas fa-times close-modal" onclick="closeAllModals()"></i>
-            <div class="modal-title">Join Match <i class="fas fa-info-circle" style="font-size:14px; opacity:0.6;"></i></div>
-            <div class="input-group">
-                <label>User Name FREE FIRE MAX</label>
-                <input type="text" id="gameName" placeholder="Enter user name">
-            </div>
-            <div class="input-group">
-                <label>User Id FREE FIRE MAX</label>
-                <input type="number" id="gameId" placeholder="Enter user id">
-            </div>
+            <div style="font-weight:800; margin-bottom:15px;">Enter Details</div>
+            <input type="text" id="gameName" placeholder="FF User Name" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:none; background:#1A0A2D; color:#fff;">
+            <input type="number" id="gameId" placeholder="FF User ID" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:none; background:#1A0A2D; color:#fff;">
             <button class="btn-submit" onclick="submitJoin()">Submit</button>
         </div>
     </div>
 
     <script>
         const allMatchData = {
-            "BR": [{ id: "BR-50", title: "BR DUO BATTLE", prize: "380", fee: "5", type: "Duo", map: "Bermuda", pk: "3", joined: 12, max: 50 }],
+            "BR": [{ id: "BR-50", title: "FREE FIRE DUO MATCH", prize: "380", fee: "5", type: "Duo", map: "Bermuda", pk: "3", joined: 12, max: 50 }],
             "CS": [{ id: "CS-01", title: "CLASS SQUAD BATTLE", prize: "40", fee: "25", type: "Solo", map: "Kalahari", pk: "0", joined: 1, max: 2 }],
             "LW": [{ id: "LW-01", title: "LONE WOLF 1V1", prize: "40", fee: "25", type: "Solo", map: "Lone Wolf", pk: "0", joined: 0, max: 2 }],
             "1V1": [{ id: "V1-PRO", title: "1V1 ULTRA BATTLE", prize: "25", fee: "15", type: "Solo", map: "Custom", pk: "0", joined: 1, max: 2 }],
@@ -96,7 +136,7 @@
 
         const params = new URLSearchParams(window.location.search);
         const matchKey = params.get('type') || 'LW';
-        let activeMatchId = null;
+        let currentMatch = null;
 
         function displayMatches(status) {
             const container = document.getElementById('matchList');
@@ -106,61 +146,50 @@
             
             if(status === 'upcoming') {
                 matches.forEach(m => {
-                    let fillPercent = (m.joined / m.max) * 100;
-                    let btnText = "Join";
-                    if(localStorage.getItem("joined_" + m.id)) {
-                        btnText = (m.type === "Solo") ? "Already Joined" : "Join Friend";
-                    }
-
+                    let btnText = localStorage.getItem("joined_" + m.id) ? (m.type === "Solo" ? "Joined" : "Join Friend") : "Join";
                     container.innerHTML += `
                     <div class="card">
-                        <div class="card-header"><div class="match-info"><img src="${matchKey.toLowerCase()}_poster.jpg" onerror="this.src='lw2_poster.jpg'"><div><div class="match-title-text">${m.title} #${m.id}</div><div style="font-size:10px; color:#666;">2026-04-11</div></div></div></div>
+                        <div class="card-header"><div class="match-info"><img src="${matchKey.toLowerCase()}_poster.jpg" onerror="this.src='lw2_poster.jpg'"><div><div class="match-title-text">${m.title} #${m.id}</div></div></div><div class="view-link" onclick="openInfo('${m.id}')">view</div></div>
                         <div class="stats-row">
                             <div class="stat-box"><span class="stat-label">Prize Pool</span><span class="stat-value">₹${m.prize}</span></div>
-                            <div class="stat-box"><span class="stat-label">Per Kill</span><span class="stat-value">₹${m.pk}</span></div>
                             <div class="stat-box"><span class="stat-label">Entry Fee</span><span class="stat-value">₹${m.fee}</span></div>
-                            <div class="stat-box"><span class="stat-label">Type</span><span class="stat-value">${m.type}</span></div>
                             <div class="stat-box"><span class="stat-label">Map</span><span class="stat-value">${m.map}</span></div>
-                            <div class="stat-box"><span class="stat-label">Max Players</span><span class="stat-value">${m.max}</span></div>
                         </div>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="player-count">${m.joined}/${m.max}</div>
-                                <div class="progress-fill" style="width:${fillPercent}%"></div>
-                            </div>
-                            <button class="join-btn" onclick="openJoinProcess('${m.id}', ${m.fee})">${btnText}</button>
-                        </div>
+                        <div class="progress-container"><div class="progress-bar"><div class="player-count">${m.joined}/${m.max}</div><div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div></div><button class="join-btn" onclick="startJoin('${m.id}', ${m.fee})">${btnText}</button></div>
                     </div>`;
                 });
             }
         }
 
-        function openJoinProcess(id, fee) {
-            activeMatchId = id;
-            // ✅ Dynamic Fee Text
-            let message = fee == 0 ? "This is a FREE match! Join now." : `₹ ${fee} will be deduct from your wallet`;
-            document.getElementById('confirmText').innerText = message;
+        function openInfo(id) {
+            const m = allMatchData[matchKey].find(x => x.id === id);
+            currentMatch = m;
+            document.getElementById('infoMatchTitle').innerText = m.title + " #" + m.id;
+            document.getElementById('infoType').innerText = m.type;
+            document.getElementById('infoMap').innerText = m.map;
+            document.getElementById('infoFee').innerText = m.fee;
+            document.getElementById('infoOverlay').style.display = 'flex';
+        }
+
+        function closeInfo() { document.getElementById('infoOverlay').style.display = 'none'; }
+
+        function startJoin(id, fee) {
+            currentMatch = allMatchData[matchKey].find(x => x.id === id);
+            document.getElementById('confirmText').innerText = fee == 0 ? "FREE MATCH!" : `₹ ${fee} will be deduct`;
             document.getElementById('confirmModal').style.display = 'flex';
         }
 
-        function showFormModal() {
-            document.getElementById('confirmModal').style.display = 'none';
-            document.getElementById('formModal').style.display = 'flex';
-        }
-
-        function closeAllModals() {
-            document.getElementById('confirmModal').style.display = 'none';
-            document.getElementById('formModal').style.display = 'none';
-        }
+        function triggerJoinFromInfo() { startJoin(currentMatch.id, currentMatch.fee); }
+        function showForm() { document.getElementById('confirmModal').style.display = 'none'; document.getElementById('formModal').style.display = 'flex'; }
+        function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
 
         function submitJoin() {
-            const name = document.getElementById('gameName').value.trim();
-            const id = document.getElementById('gameId').value.trim();
-            if(!name || !id) { alert("Please enter both Name and ID!"); return; }
-
-            localStorage.setItem("joined_" + activeMatchId, "true");
-            alert("Registration Successful for " + name);
-            closeAllModals();
+            const name = document.getElementById('gameName').value;
+            if(!name) return alert("Enter Name!");
+            localStorage.setItem("joined_" + currentMatch.id, "true");
+            alert("Success!");
+            closeModals();
+            closeInfo();
             displayMatches('upcoming');
         }
 
