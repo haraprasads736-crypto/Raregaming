@@ -6,16 +6,17 @@
     <title>Dashboard - RARE GAMING</title>
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-5695800911065486" crossorigin="anonymous"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         
         :root {
             --bg-color: #030305;
             --neon-blue: #00f2fe;
-            --neon-purple: #9d00ff;
+            --neon-green: #39ff14;
             --panel-color: #0a0a0f;
+            --border-color: rgba(255, 255, 255, 0.05);
         }
 
         body { 
@@ -25,7 +26,7 @@
             background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
         }
 
-        /* HEADER */
+        /* 1. HEADER (Purana Style - Pro Colors) */
         .header-top { 
             padding: 25px 20px 15px 20px; display: flex; 
             justify-content: space-between; align-items: center;
@@ -33,70 +34,49 @@
             backdrop-filter: blur(10px); z-index: 999;
         }
         .brand-name { 
-            font-size: 24px; font-weight: 800; text-transform: uppercase; 
+            font-size: 22px; font-weight: 800; text-transform: uppercase; 
             letter-spacing: 2px; background: linear-gradient(to right, #ffffff, #00f2fe);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .wallet-pill { 
             background: rgba(0, 242, 254, 0.05); border: 1.5px solid var(--neon-blue); 
-            padding: 10px 18px; border-radius: 50px; color: var(--neon-blue); 
-            font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 10px;
-            cursor: pointer; transition: 0.3s;
+            padding: 8px 15px; border-radius: 50px; color: var(--neon-blue); 
+            font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;
         }
-        .wallet-pill:active { transform: scale(0.95); opacity: 0.7; }
 
-        /* 🚀 NEW: QUICK SHARE TOP BAR */
+        /* 2. QUICK SHARE & MONEY BANNER (No Change) */
         .quick-share-bar {
-            padding: 15px 20px; 
-            background: rgba(0, 242, 254, 0.03); 
+            padding: 15px 20px; background: rgba(0, 242, 254, 0.03); 
             border-bottom: 1px solid rgba(0, 242, 254, 0.1); 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; 
         }
 
-        /* 💸 MONEY TRANSFER BANNER */
         .money-banner {
-            margin: 15px 20px 15px 20px; padding: 20px;
+            margin: 15px 20px; padding: 20px;
             background: linear-gradient(135deg, #0a0a0f 0%, #1a2e1a 100%);
             border-radius: 24px; border: 1px solid rgba(57, 255, 20, 0.2);
-            position: relative; overflow: hidden;
         }
-        .money-tag { background: #39ff14; color: #000; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 50px; display: inline-block; margin-bottom: 10px; text-transform: uppercase; }
-        .money-title { font-size: 18px; font-weight: 800; margin: 0; color: #fff; }
+        .money-tag { background: #39ff14; color: #000; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 50px; display: inline-block; margin-bottom: 10px; }
+        .money-title { font-size: 18px; font-weight: 800; margin: 0; }
         .money-desc { font-size: 11px; color: #aaa; margin: 5px 0 15px 0; }
-        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
 
-        /* 💰 ADMOB BANNER UNIT */
-        .ad-container {
-            margin: 10px 20px;
-            height: 60px;
-            background: #000;
-            border-radius: 12px;
-            border: 1px solid #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
+        /* 3. MATCH GRID (New Battle OP Style - Compact) */
+        .section-header { margin: 20px 20px 10px 20px; font-size: 16px; font-weight: 700; text-transform: uppercase; border-left: 4px solid var(--neon-blue); padding-left: 10px; }
+        
+        .match-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* 3 column grid */
+            gap: 10px; padding: 0 15px; 
         }
-        .ad-label { position: absolute; top: 2px; left: 5px; font-size: 7px; color: #333; letter-spacing: 1px; }
+        .match-card { 
+            position: relative; border-radius: 15px; overflow: hidden; 
+            aspect-ratio: 1/1.2; background: #0a0a0f; border: 1px solid var(--border-color); 
+        }
+        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .match-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 9px; font-weight: 700; color: #fff; text-shadow: 0 0 5px #000; }
 
-        /* MATCH GRID */
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 15px 20px; }
-        .section-title { font-size: 18px; font-weight: 700; text-transform: uppercase; border-left: 4px solid var(--neon-blue); padding-left: 12px; }
-        
-        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
-        .match-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 1/1.1; background: #0a0a0f; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; }
-        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
-        
-        .card-overlay { position: absolute; bottom: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); padding: 15px; text-align: center; box-sizing: border-box; }
-        .match-name { font-size: 12px; font-weight: 700; color: #fff; margin: 0; text-transform: uppercase; }
-        .match-fee { font-size: 10px; color: #00f2fe; margin-bottom: 5px; font-weight: 600; }
-        .match-status { background: rgba(255, 49, 49, 0.1); border: 1px solid #ff3131; color: #ff3131; font-size: 9px; padding: 4px 10px; border-radius: 50px; display: inline-block; font-weight: 700; }
-
-        /* NAVIGATION */
+        /* 4. NAVIGATION (Purana Style - Original UI) */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;}
         .nav-item.active { color: var(--neon-blue); }
@@ -105,6 +85,9 @@
         .center-btn .icon-circle { width: 55px; height: 55px; background: #39ff14; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
 
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+
+        .ad-container { margin: 10px 20px; height: 60px; background: #000; border-radius: 12px; border: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .ad-label { position: absolute; top: 2px; left: 5px; font-size: 7px; color: #333; }
     </style>
 </head>
 <body>
@@ -135,38 +118,28 @@
 
     <div class="ad-container">
         <div class="ad-label">ADVERTISEMENT</div>
-        <ins class="adsbygoogle"
-             style="display:inline-block;width:320px;height:50px"
-             data-ad-client="ca-app-pub-5695800911065486"
-             data-ad-slot="5516230371"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+        <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-5695800911065486" data-ad-slot="5516230371"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
-    <div class="section-header">
-        <div class="section-title">Live Tournaments</div>
-    </div>
+    <div class="section-header">Live Tournaments</div>
     
     <div class="match-grid">
         <a href="match_details.html?type=BR" class="match-card">
             <img src="br_poster.jpg">
-            <div class="card-overlay"><p class="match-name">BR SQUAD</p><p class="match-fee">Fee: ₹20</p><div class="match-status">CLOSED</div></div>
+            <div class="match-label">BR SQUAD</div>
         </a>
-        
         <a href="match_details.html?type=CS" class="match-card">
             <img src="cs_poster.jpg">
-            <div class="card-overlay"><p class="match-name">CS SQUAD</p><p class="match-fee">Fee: ₹20</p><div class="match-status">CLOSED</div></div>
+            <div class="match-label">CS SQUAD</div>
         </a>
-
         <a href="match_details.html?type=LW" class="match-card">
             <img src="lw_poster.jpg">
-            <div class="card-overlay"><p class="match-name">LONE WOLF</p><p class="match-fee">Fee: ₹10</p><div class="match-status">CLOSED</div></div>
+            <div class="match-label">LONE WOLF</div>
         </a>
-
         <a href="match_details.html?type=1V1" class="match-card">
             <img src="1v1_poster.jpg">
-            <div class="card-overlay"><p class="match-name">1V1 BATTLE</p><p class="match-fee">Fee: ₹50</p><div class="match-status">CLOSED</div></div>
+            <div class="match-label">1V1 BATTLE</div>
         </a>
     </div>
 
@@ -190,7 +163,6 @@
             let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!userData) { window.location.href = "login.html"; return; }
             
-            // Syncing visual feedback
             document.getElementById('walletBal').style.opacity = "0.6";
 
             fetch(`${scriptURL}?action=getUserData&username=${encodeURIComponent(userData.name)}`)
@@ -198,20 +170,16 @@
             .then(data => { 
                 if(data && data.balance !== undefined) {
                     document.getElementById('walletBal').innerHTML = `<i class="fas fa-coins"></i> ₹${data.balance}`; 
-                    
-                    // Update LocalStorage also
                     userData.balance = data.balance;
                     localStorage.setItem("rareGamingUser", JSON.stringify(userData));
                 }
                 document.getElementById('walletBal').style.opacity = "1";
             }).catch(e => { 
-                console.log("Sync Error"); 
                 document.getElementById('walletBal').style.opacity = "1";
             });
         }
 
         window.onload = syncBalance;
-        // Har 20 second mein apne aap sync hoga
         setInterval(syncBalance, 20000);
     </script>
 </body>
