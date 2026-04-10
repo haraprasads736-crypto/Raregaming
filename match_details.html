@@ -38,7 +38,7 @@
         .player-count { position: absolute; width: 100%; text-align: center; font-size: 10px; font-weight: 800; line-height: 18px; color: #120524; z-index: 2; }
         .join-btn { background: #1A0A2D; color: white; border: none; padding: 8px 25px; border-radius: 50px; font-weight: 700; font-size: 12px; cursor: pointer; }
 
-        /* --- INFO OVERLAY (Full Screen Detail) --- */
+        /* --- INFO OVERLAY --- */
         .info-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1A0A2D 0%, #120524 100%); display: none; flex-direction: column; z-index: 3000; overflow-y: auto; }
         .info-header { padding: 20px; display: flex; align-items: center; gap: 15px; }
         .info-content { padding: 20px; }
@@ -55,7 +55,7 @@
 
         .rules-box { background: #000; color: #fff; padding: 15px; border-radius: 15px; margin-top: 20px; font-size: 11px; line-height: 1.5; text-align: left; opacity: 0.8;}
 
-        /* MODALS (Confirmation/Form) */
+        /* MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
         .modal-card { background: #2D1B44; width: 100%; max-width: 350px; border-radius: 24px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
         .btn-submit { background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 12px; font-weight: 800; border: none; margin-top: 10px; }
@@ -89,10 +89,10 @@
                 <div style="font-size: 13px; margin-top: 10px;">WINNER : 20<br>2ND : 10</div>
                 
                 <div class="room-btn-group">
-                    <button class="room-btn" style="background: rgba(255,255,255,0.1); border: 1px solid #AAA;">My Entries</button>
+                    <button class="room-btn" style="background: rgba(255,255,255,0.1); border: 1px solid #AAA;" onclick="showMyEntries()">My Entries</button>
                     <button class="room-btn" style="background: #8B3EEB;" onclick="triggerJoinFromInfo()">Join</button>
                 </div>
-                <button class="room-btn btn-participants">Participants</button>
+                <button class="room-btn btn-participants" onclick="showParticipants()">Participants</button>
             </div>
 
             <div class="rules-box">
@@ -105,7 +105,7 @@
 
     <div id="confirmModal" class="modal-overlay">
         <div class="modal-card">
-            <div id="confirmText" style="font-weight:800; margin-bottom:15px;">₹ 5 will be deduct</div>
+            <div id="confirmText" style="font-weight:800; margin-bottom:15px; color: white;">₹ 5 will be deduct</div>
             <div style="display:flex; gap:10px;">
                 <button style="flex:1; padding:10px; border-radius:10px; border:none;" onclick="closeModals()">Cancel</button>
                 <button style="flex:1; padding:10px; border-radius:10px; border:none; background:#8B3EEB; color:#fff;" onclick="showForm()">Join</button>
@@ -115,9 +115,9 @@
 
     <div id="formModal" class="modal-overlay">
         <div class="modal-card">
-            <div style="font-weight:800; margin-bottom:15px;">Enter Details</div>
-            <input type="text" id="gameName" placeholder="FF User Name" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:none; background:#1A0A2D; color:#fff;">
-            <input type="number" id="gameId" placeholder="FF User ID" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:none; background:#1A0A2D; color:#fff;">
+            <div style="font-weight:800; margin-bottom:15px; color: white;">Enter Details</div>
+            <input type="text" id="gameName" placeholder="FF User Name" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:none; background:#1A0A2D; color:#fff; box-sizing: border-box;">
+            <input type="number" id="gameId" placeholder="FF User ID" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:none; background:#1A0A2D; color:#fff; box-sizing: border-box;">
             <button class="btn-submit" onclick="submitJoin()">Submit</button>
         </div>
     </div>
@@ -175,7 +175,7 @@
 
         function startJoin(id, fee) {
             currentMatch = allMatchData[matchKey].find(x => x.id === id);
-            document.getElementById('confirmText').innerText = fee == 0 ? "FREE MATCH!" : `₹ ${fee} will be deduct`;
+            document.getElementById('confirmText').innerText = fee == 0 ? "FREE ENTRY MATCH!" : `₹ ${fee} will be deduct`;
             document.getElementById('confirmModal').style.display = 'flex';
         }
 
@@ -183,11 +183,34 @@
         function showForm() { document.getElementById('confirmModal').style.display = 'none'; document.getElementById('formModal').style.display = 'flex'; }
         function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
 
+        function showMyEntries() {
+            let entries = JSON.parse(localStorage.getItem("my_registrations_" + currentMatch.id)) || [];
+            if(entries.length === 0) {
+                alert("You haven't joined this match yet!");
+            } else {
+                let list = entries.map((e, i) => `${i+1}. ${e.name} (ID: ${e.id})`).join("\n");
+                alert("Your Entries for this match:\n\n" + list);
+            }
+        }
+
+        function showParticipants() {
+            alert("Fetching participants list from server...");
+            // Yahan Google Sheet se fetch karne ka logic baad mein daal sakte ho
+        }
+
         function submitJoin() {
-            const name = document.getElementById('gameName').value;
-            if(!name) return alert("Enter Name!");
+            const name = document.getElementById('gameName').value.trim();
+            const id = document.getElementById('gameId').value.trim();
+            if(!name || !id) return alert("Enter Name and ID!");
+
+            // Local save for 'My Entries'
+            let entries = JSON.parse(localStorage.getItem("my_registrations_" + currentMatch.id)) || [];
+            entries.push({name: name, id: id});
+            localStorage.setItem("my_registrations_" + currentMatch.id, JSON.stringify(entries));
             localStorage.setItem("joined_" + currentMatch.id, "true");
-            alert("Success!");
+
+            // Google Sheet URL yahan daalna hoga jab register match wala system connect karoge
+            alert("Registration Successful!");
             closeModals();
             closeInfo();
             displayMatches('upcoming');
