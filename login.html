@@ -63,6 +63,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
 
 <script>
+    // Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyA6GgehsphLSUJ8jfEwwTT-DD7GMRO28AA",
         authDomain: "rare-gaming-6b29a.firebaseapp.com",
@@ -73,7 +74,8 @@
     };
     firebase.initializeApp(firebaseConfig);
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxGySusVnUw7aID7sGrfK0eSX0k7l47GZc5qJ0ogQGokqZQJH_MK9JOUesvvsFneoo8FA/exec";
+    // ✅ APKA NAYA DEPLOY URL
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzcW3IGmnqsAf4YN5VQE-EESWBHZTbZ7h2Iyk5NQQ82J9wEJVkJrd3ERmYH3zw5DWwwGQ/exec";
     
     function getDeviceID() {
         let id = localStorage.getItem("rare_device_id");
@@ -158,7 +160,6 @@
         });
     }
 
-    // --- 🛡️ FORGET PASSWORD FUNCTION ---
     function forgetPassword() {
         const user = document.getElementById('userInput').value.trim();
         const status = document.getElementById('statusMsg');
