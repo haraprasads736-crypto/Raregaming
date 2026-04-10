@@ -8,7 +8,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
 
-        /* 1. BACKGROUND & LAYOUT: Battle OP jaisa dark purple gradient */
         body { 
             background: linear-gradient(180deg, #1A0A2D 0%, #000000 100%); 
             color: white; 
@@ -27,17 +26,17 @@
             padding: 20px;
         }
 
-        /* 2. LOGO: Ninja/Gaming vibe */
+        /* ✅ LOGO: Ab ye tumhari 'logo.png' file ko uthayega */
         .logo-img {
-            width: 120px;
+            width: 140px;
             margin-bottom: 20px;
             filter: drop-shadow(0 0 10px #8B3EEB);
+            border-radius: 20px;
         }
 
-        .welcome-text h2 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: 2px; }
+        .welcome-text h2 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: 2px; color: #fff; }
         .welcome-text p { font-size: 12px; color: #AAA; margin-bottom: 30px; }
 
-        /* 3. INPUT BOXES: Bengni background aur icons */
         .input-group { 
             background: #2D1B44; 
             border-radius: 15px; 
@@ -59,7 +58,6 @@
             font-size: 14px;
         }
 
-        /* 4. BUTTON: Glossy Purple Gradient */
         .btn-main { 
             width: 100%; 
             padding: 15px; 
@@ -101,15 +99,15 @@
 <body>
 
 <div class="login-box">
-    <img src="https://i.ibb.co/Vmq8m8N/ninja-logo.png" class="logo-img" alt="Rare Gaming">
+    <img src="logo.png" class="logo-img" alt="Rare Gaming">
 
     <div class="welcome-text">
         <h2 id="title">WELCOME</h2>
-        <p id="subtitle">Let us know your details to enter the arena</p>
+        <p id="subtitle">Convert your skill to money</p>
     </div>
     
     <div class="input-group">
-        <i class="fas fa-user" id="userIcon"></i>
+        <i class="fas fa-user"></i>
         <input type="text" id="userInput" placeholder="Username or Rare UID">
     </div>
     
@@ -152,7 +150,6 @@
     };
     firebase.initializeApp(firebaseConfig);
 
-    // ✅ APKA NAYA DEPLOY URL
     const scriptURL = "https://script.google.com/macros/s/AKfycbzcW3IGmnqsAf4YN5VQE-EESWBHZTbZ7h2Iyk5NQQ82J9wEJVkJrd3ERmYH3zw5DWwwGQ/exec";
     
     function getDeviceID() {
@@ -169,7 +166,7 @@
     function toggleMode() {
         isLoginMode = !isLoginMode;
         document.getElementById('title').innerText = isLoginMode ? "WELCOME" : "JOIN US";
-        document.getElementById('subtitle').innerText = isLoginMode ? "Enter details to enter the arena" : "Create an account to start earning";
+        document.getElementById('subtitle').innerText = isLoginMode ? "Convert your skill to money" : "Create an account to start earning";
         document.getElementById('authBtn').innerText = isLoginMode ? "ENTER DASHBOARD" : "REGISTER NOW";
         document.getElementById('toggleBtn').innerHTML = isLoginMode ? "New Player? <span>SIGN UP</span>" : "Already a Player? <span>LOGIN</span>";
         document.getElementById('userInput').placeholder = isLoginMode ? "Username or Rare UID" : "Choose Username";
@@ -188,7 +185,7 @@
         }
 
         btn.disabled = true;
-        status.innerText = "Connecting to Server...";
+        status.innerText = "Connecting to Arena...";
 
         let url = isLoginMode ? 
             `${scriptURL}?action=login&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&deviceId=${dID}` :
@@ -216,7 +213,7 @@
         const user = document.getElementById('userInput').value.trim();
         const status = document.getElementById('statusMsg');
         if(!user) {
-            status.innerHTML = "<span style='color:yellow'>Username likho pehle!</span>";
+            status.innerHTML = "<span style='color:yellow'>Pehle Username likho!</span>";
             return;
         }
         status.innerText = "Finding Password...";
