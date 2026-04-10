@@ -2,124 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Match Details - RARE GAMING</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        
-        body { 
-            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding: 0; padding-bottom: 160px; /* Space for Bottom Nav */
-        }
-        
-        /* Header */
-        .header { padding: 20px; display: flex; align-items: center; gap: 15px; background: #111116; border-bottom: 1px solid #1f1f25; }
-        .header a { color: #00f2fe; text-decoration: none; font-size: 20px; }
-        .header span { font-size: 16px; font-weight: 800; text-transform: uppercase; }
-
-        /* Banner */
-        .match-banner { width: 100%; height: 220px; position: relative; overflow: hidden; }
-        .match-banner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        
-        /* Info Card */
-        .details-card { 
-            background: #111116; margin: -40px 20px 20px 20px; border-radius: 20px; 
-            padding: 20px; border: 1px solid #1f1f25; position: relative; z-index: 10;
-        }
-        .match-type-title { font-size: 24px; font-weight: 800; color: #00f2fe; margin-bottom: 5px; }
-        .map-name { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .stat-box { background: #000; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #2a2a30; }
-        .stat-label { font-size: 9px; color: #666; text-transform: uppercase; margin-bottom: 4px; }
-        .stat-val { font-size: 14px; font-weight: 800; color: #fff; }
-
-        /* Join Button */
-        .btn-join-match { 
-            display: block; margin: 20px; background: #00f2fe; color: #000; 
-            padding: 16px; text-align: center; border-radius: 15px; 
-            font-weight: 800; text-decoration: none; text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
-        }
-
-        /* 🌟 NAVIGATION SYSTEM 🌟 */
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #4f515e; z-index: 1001; }
-        .bottom-nav { 
-            position: fixed; bottom: 48px; left: 0; width: 100%; height: 70px; 
-            background: #111116; display: flex; justify-content: space-around; 
-            align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; 
-        }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 800; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .nav-item i { font-size: 22px; margin-bottom: 5px; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+        body { background-color: #120524; color: white; font-family: 'Poppins', sans-serif; margin: 0; }
+        .header { display: flex; align-items: center; padding: 20px; background: #1A0A2D; position: sticky; top: 0; z-index: 100; }
+        .back-btn { font-size: 20px; color: #fff; margin-right: 20px; cursor: pointer; }
+        .title { font-size: 18px; font-weight: 700; flex: 1; text-align: center; margin-right: 40px; }
+        .tab-container { display: flex; justify-content: space-around; background: #2D1B44; margin: 15px 20px; border-radius: 50px; padding: 5px; }
+        .tab { padding: 10px 20px; border-radius: 50px; font-size: 14px; font-weight: 600; color: #AAA; cursor: pointer; transition: 0.3s; }
+        .tab.active { background: #8B3EEB; color: #fff; }
+        .match-list { padding: 0 15px; }
+        .card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; color: #000; }
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+        .match-info { display: flex; align-items: center; gap: 10px; }
+        .match-info img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .stat-box { background: #F2F2F2; border-radius: 12px; padding: 8px; text-align: center; }
+        .stat-label { background: #8B3EEB; color: white; font-size: 9px; padding: 2px 5px; border-radius: 5px; display: inline-block; margin-bottom: 5px; }
+        .stat-value { font-size: 12px; font-weight: 800; display: block; }
+        .progress-bar { flex: 1; height: 10px; background: #E0D4FF; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: #8B3EEB; }
+        .join-btn { background: #1A0A2D; color: white; border: none; padding: 10px 30px; border-radius: 50px; font-weight: 700; font-size: 12px; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <a href="index.html"><i class="fas fa-arrow-left"></i></a>
-        <span>Match Information</span>
-    </div>
-
-    <div class="match-banner">
-        <img id="mImg" src="br_poster.jpg" alt="Poster">
-    </div>
-
-    <div class="details-card">
-        <div class="match-type-title" id="mTitle">LOADING...</div>
-        <div class="map-name" id="mMap">Map: Loading...</div>
-
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div class="stat-label">Win Prize</div>
-                <div class="stat-val" id="mPrize">₹--</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Per Kill</div>
-                <div class="stat-val" id="mKill">₹--</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Entry Fee</div>
-                <div class="stat-val" id="mFee">₹--</div>
-            </div>
-        </div>
-    </div>
-
-    <a href="#" class="btn-join-match" id="joinLink">JOIN NOW</a>
-
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="winners.html" class="nav-item"><i class="fas fa-crown"></i><span>WINNERS</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>PROFILE</span></a>
-    </nav>
-    <div class="system-nav-bar"></div>
+    <div class="header"><i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i><div class="title" id="pageTitle">LOADING...</div></div>
+    <div class="tab-container"><div class="tab" id="tab-ongoing" onclick="switchTab('ongoing')">Ongoing</div><div class="tab active" id="tab-upcoming" onclick="switchTab('upcoming')">Upcoming</div><div class="tab" id="tab-result" onclick="switchTab('result')">Result</div></div>
+    <div class="match-list" id="matchList"></div>
 
     <script>
-        // URL se data pakadne ke liye
-        const params = new URLSearchParams(window.location.search);
-        const match = params.get('match') || "BR SQUAD";
-
-        // Match ki details list
-        const info = {
-            "BR SQUAD": { p: "₹100", k: "₹5", f: "₹20", m: "Bermuda", img: "br_poster.jpg" },
-            "CS SQUAD": { p: "₹80", k: "₹0", f: "₹30", m: "Nextra (4v4)", img: "cs_poster.jpg" },
-            "LONE WOLF": { p: "₹20", k: "₹0", f: "₹10", m: "Iron Cage", img: "lw_poster.jpg" },
-            "1V1 BATTLE": { p: "₹50", k: "₹0", f: "₹25", m: "Custom Map", img: "1v1_poster.jpg" }
+        const allMatchData = {
+            "BR": [{ id: "BR-1", title: "BR SQUAD BATTLE", prize: "500", fee: "50", type: "Squad", map: "Bermuda", fill: "20%" }],
+            "CS": [{ id: "CS-1", title: "CS SQUAD RANKED", prize: "160", fee: "40", type: "Squad", map: "Kalahari", fill: "40%" }],
+            "LW": [{ id: "LW-1", title: "LONE WOLF 1V1", prize: "40", fee: "25", type: "Solo", map: "Lone Wolf", fill: "10%" }],
+            "1V1": [{ id: "V1-1", title: "1V1 ULTRA BATTLE", prize: "100", fee: "60", type: "Solo", map: "Custom", fill: "30%" }],
+            "LW2": [{ id: "LW2-1", title: "LONE WOLF 2.0", prize: "80", fee: "40", type: "Solo", map: "Iron Cage", fill: "50%" }],
+            "FREE": [{ id: "FR-1", title: "FREE MATCH", prize: "20", fee: "0", type: "Solo", map: "Bermuda", fill: "80%" }],
+            "1V1HS": [{ id: "HS-1", title: "1V1 ONLY HEADSHOT", prize: "200", fee: "110", type: "Solo", map: "Red Map", fill: "5%" }],
+            "CSHS": [{ id: "CSHS-1", title: "CS HEADSHOT", prize: "400", fee: "100", type: "Squad", map: "Store", fill: "0%" }]
         };
 
-        // UI Update logic
-        if(info[match]) {
-            const d = info[match];
-            document.getElementById('mTitle').innerText = match;
-            document.getElementById('mPrize').innerText = d.p;
-            document.getElementById('mKill').innerText = d.k;
-            document.getElementById('mFee').innerText = d.f;
-            document.getElementById('mMap').innerText = "Map: " + d.m;
-            document.getElementById('mImg').src = d.img;
-            document.getElementById('joinLink').href = "register.html?match=" + encodeURIComponent(match);
+        const params = new URLSearchParams(window.location.search);
+        const matchKey = params.get('type') || 'LW';
+
+        function displayMatches(status) {
+            const container = document.getElementById('matchList');
+            const matches = allMatchData[matchKey] || [];
+            document.getElementById('pageTitle').innerText = matchKey.toUpperCase();
+            container.innerHTML = (status !== 'upcoming') ? `<div style="text-align:center; padding:50px;">No matches!</div>` : "";
+            if(status === 'upcoming') {
+                matches.forEach(m => {
+                    container.innerHTML += `
+                    <div class="card">
+                        <div class="card-header"><div class="match-info"><img src="${matchKey.toLowerCase()}_poster.jpg" onerror="this.src='lw2_poster.jpg'"><div><div class="match-title-text">${m.title} #${m.id}</div><div style="font-size:10px; color:#666;">2026-04-11</div></div></div></div>
+                        <div class="stats-row">
+                            <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${m.prize}</span></div>
+                            <div class="stat-box"><span class="stat-label">Entry</span><span class="stat-value">₹${m.fee}</span></div>
+                            <div class="stat-box"><span class="stat-label">Map</span><span class="stat-value">${m.map}</span></div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;"><div class="progress-bar"><div class="progress-fill" style="width:${m.fill}"></div></div><button class="join-btn">Join</button></div>
+                    </div>`;
+                });
+            }
         }
+        function switchTab(t) { document.querySelectorAll('.tab').forEach(x => x.classList.remove('active')); document.getElementById('tab-'+t).classList.add('active'); displayMatches(t); }
+        window.onload = () => displayMatches('upcoming');
     </script>
 </body>
 </html>
