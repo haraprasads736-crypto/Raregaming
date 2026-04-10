@@ -7,19 +7,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-        body { background-color: #120524; color: white; font-family: 'Poppins', sans-serif; margin: 0; }
+        
+        /* 1. RESET & BASE */
+        body { background-color: #120524; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+        
+        /* 2. HEADER */
         .header { display: flex; align-items: center; padding: 20px; background: #1A0A2D; position: sticky; top: 0; z-index: 100; }
         .back-btn { font-size: 20px; color: #fff; margin-right: 20px; cursor: pointer; }
         .title { font-size: 18px; font-weight: 700; flex: 1; text-align: center; margin-right: 40px; }
         
-        /* TABS */
+        /* 3. TABS */
         .tab-container { display: flex; justify-content: space-around; background: #2D1B44; margin: 15px 20px; border-radius: 50px; padding: 5px; }
         .tab { padding: 10px 20px; border-radius: 50px; font-size: 14px; font-weight: 600; color: #AAA; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
         
-        /* CARDS */
+        /* 4. CARDS */
         .match-list { padding: 0 15px; }
-        .card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; color: #000; position: relative; }
+        .card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; color: #000; position: relative; box-sizing: border-box; }
         .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
         .match-info { display: flex; align-items: center; gap: 10px; }
         .match-info img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
@@ -31,17 +35,17 @@
         .stat-label { background: #8B3EEB; color: white; font-size: 8px; padding: 2px 5px; border-radius: 5px; display: inline-block; margin-bottom: 5px; }
         .stat-value { font-size: 11px; font-weight: 800; display: block; }
 
-        /* PROGRESS BAR */
+        /* 5. PROGRESS BAR */
         .progress-container { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
         .progress-bar { flex: 1; height: 18px; background: #E0D4FF; border-radius: 20px; overflow: hidden; position: relative; }
-        .progress-fill { height: 100%; background: #8B3EEB; transition: 0.5s; }
+        .progress-fill { height: 100%; background: #8B3EEB; transition: 0.5s; width: 0%; }
         .player-count { position: absolute; width: 100%; text-align: center; font-size: 10px; font-weight: 800; line-height: 18px; color: #120524; z-index: 2; }
         .join-btn { background: #1A0A2D; color: white; border: none; padding: 8px 25px; border-radius: 50px; font-weight: 700; font-size: 12px; cursor: pointer; }
 
-        /* --- INFO OVERLAY --- */
-        .info-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1A0A2D 0%, #120524 100%); display: none; flex-direction: column; z-index: 3000; overflow-y: auto; }
+        /* 6. INFO OVERLAY (Full Screen Detail) */
+        .info-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1A0A2D 0%, #120524 100%); display: none; flex-direction: column; z-index: 3000; overflow-y: auto; box-sizing: border-box; }
         .info-header { padding: 20px; display: flex; align-items: center; gap: 15px; }
-        .info-content { padding: 20px; }
+        .info-content { padding: 20px; box-sizing: border-box; }
         .info-title { font-size: 18px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; display: block;}
         
         .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
@@ -55,17 +59,30 @@
 
         .rules-box { background: #000; color: #fff; padding: 15px; border-radius: 15px; margin-top: 20px; font-size: 11px; line-height: 1.5; text-align: left; opacity: 0.8;}
 
-        /* MODALS */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
-        .modal-card { background: #2D1B44; width: 100%; max-width: 350px; border-radius: 24px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-submit { background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 12px; font-weight: 800; border: none; margin-top: 10px; }
+        /* 7. MODALS (Fixed Width & Center) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; box-sizing: border-box; }
+        .modal-card { background: #2D1B44; width: 100%; max-width: 320px; border-radius: 24px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; }
+        
+        .modal-card input { 
+            width: 100%; background: #1A0A2D; border: 1px solid #382A4D; padding: 12px; margin-bottom: 10px; 
+            border-radius: 12px; color: #fff; font-family: 'Poppins'; font-size: 13px; box-sizing: border-box;
+        }
+
+        .btn-submit { 
+            background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 12px; 
+            font-weight: 800; border: none; margin-top: 10px; font-size: 14px; cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
     <div id="mainPage">
         <div class="header"><i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i><div class="title" id="pageTitle">LOADING...</div></div>
-        <div class="tab-container"><div class="tab" id="tab-ongoing" onclick="switchTab('ongoing')">Ongoing</div><div class="tab active" id="tab-upcoming" onclick="switchTab('upcoming')">Upcoming</div><div class="tab" id="tab-result" onclick="switchTab('result')">Result</div></div>
+        <div class="tab-container">
+            <div class="tab" id="tab-ongoing" onclick="switchTab('ongoing')">Ongoing</div>
+            <div class="tab active" id="tab-upcoming" onclick="switchTab('upcoming')">Upcoming</div>
+            <div class="tab" id="tab-result" onclick="switchTab('result')">Result</div>
+        </div>
         <div class="match-list" id="matchList"></div>
     </div>
 
@@ -74,32 +91,22 @@
         <div class="info-content">
             <span id="infoMatchTitle" class="info-title">MATCH TITLE</span>
             <div style="font-size: 12px; color: #8B3EEB; margin-top: -10px;">2026-04-11</div>
-            
             <div style="margin-top: 30px;">
                 <div class="detail-row"><span class="detail-label">Type :</span><span id="infoType" class="detail-value">Duo</span></div>
                 <div class="detail-row"><span class="detail-label">Version :</span><span class="detail-value">TPP</span></div>
                 <div class="detail-row"><span class="detail-label">Map :</span><span id="infoMap" class="detail-value">BERMUDA</span></div>
                 <div class="detail-row"><span class="detail-label">Entry Fee :</span><span id="infoFee" class="detail-value">5</span></div>
             </div>
-
             <div class="room-details-box">
                 <div style="font-size: 14px; font-weight: 700; color: #AAA;">Room Details</div>
-                <div style="font-size: 12px; margin-top: 15px;">About This Match</div>
-                <div style="color: #00f2fe; font-size: 13px; margin-top: 5px;">id show before 10 minutes</div>
-                <div style="font-size: 13px; margin-top: 10px;">WINNER : 20<br>2ND : 10</div>
-                
+                <div style="color: #00f2fe; font-size: 13px; margin-top: 15px;">id show before 10 minutes</div>
                 <div class="room-btn-group">
                     <button class="room-btn" style="background: rgba(255,255,255,0.1); border: 1px solid #AAA;" onclick="showMyEntries()">My Entries</button>
                     <button class="room-btn" style="background: #8B3EEB;" onclick="triggerJoinFromInfo()">Join</button>
                 </div>
                 <button class="room-btn btn-participants" onclick="showParticipants()">Participants</button>
             </div>
-
-            <div class="rules-box">
-                <b>PLEASE READ ALL RULES BEFORE PLAY :</b><br>
-                1. Room ID & Password will be given 5-10 mins before match.<br>
-                2. Screen recording is mandatory while playing.
-            </div>
+            <div class="rules-box"><b>RULES:</b> 1. ID/Pass will be shared 10m before match. 2. No hacking.</div>
         </div>
     </div>
 
@@ -116,22 +123,22 @@
     <div id="formModal" class="modal-overlay">
         <div class="modal-card">
             <div style="font-weight:800; margin-bottom:15px; color: white;">Enter Details</div>
-            <input type="text" id="gameName" placeholder="FF User Name" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:none; background:#1A0A2D; color:#fff; box-sizing: border-box;">
-            <input type="number" id="gameId" placeholder="FF User ID" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:none; background:#1A0A2D; color:#fff; box-sizing: border-box;">
+            <input type="text" id="gameName" placeholder="FF User Name">
+            <input type="number" id="gameId" placeholder="FF User ID">
             <button class="btn-submit" onclick="submitJoin()">Submit</button>
         </div>
     </div>
 
     <script>
         const allMatchData = {
-            "BR": [{ id: "BR-50", title: "FREE FIRE DUO MATCH", prize: "380", fee: "5", type: "Duo", map: "Bermuda", pk: "3", joined: 12, max: 50 }],
-            "CS": [{ id: "CS-01", title: "CLASS SQUAD BATTLE", prize: "40", fee: "25", type: "Solo", map: "Kalahari", pk: "0", joined: 1, max: 2 }],
-            "LW": [{ id: "LW-01", title: "LONE WOLF 1V1", prize: "40", fee: "25", type: "Solo", map: "Lone Wolf", pk: "0", joined: 0, max: 2 }],
-            "1V1": [{ id: "V1-PRO", title: "1V1 ULTRA BATTLE", prize: "25", fee: "15", type: "Solo", map: "Custom", pk: "0", joined: 1, max: 2 }],
-            "LW2": [{ id: "LW2-PRO", title: "LONE WOLF 2.0", prize: "40", fee: "25", type: "Solo", map: "Iron Cage", pk: "0", joined: 1, max: 2 }],
-            "FREE": [{ id: "FR-100", title: "FREE ENTRY MATCH", prize: "2000", fee: "0", type: "Duo", map: "Bermuda", pk: "2", joined: 45, max: 100 }],
-            "1V1HS": [{ id: "HS-KING", title: "1V1 ONLY HEADSHOT", prize: "20", fee: "15", type: "Solo", map: "Red Map", pk: "0", joined: 0, max: 2 }],
-            "CSHS": [{ id: "CSHS-HS", title: "CS HEADSHOT BATTLE", prize: "30", fee: "20", type: "Solo", map: "Store", pk: "0", joined: 1, max: 2 }]
+            "BR": [{ id: "BR-50", title: "BR DUO BATTLE", prize: "380", fee: "5", type: "Duo", map: "Bermuda", joined: 12, max: 50 }],
+            "CS": [{ id: "CS-01", title: "CS SQUAD RANKED", prize: "160", fee: "40", type: "Squad", map: "Kalahari", joined: 5, max: 8 }],
+            "LW": [{ id: "LW-01", title: "LONE WOLF 1V1", prize: "40", fee: "25", type: "Solo", map: "Lone Wolf", joined: 0, max: 2 }],
+            "1V1": [{ id: "V1-PRO", title: "1V1 ULTRA BATTLE", prize: "25", fee: "15", type: "Solo", map: "Custom", joined: 1, max: 2 }],
+            "LW2": [{ id: "LW2-PRO", title: "LONE WOLF 2.0", prize: "40", fee: "25", type: "Solo", map: "Iron Cage", joined: 1, max: 2 }],
+            "FREE": [{ id: "FR-100", title: "FREE ENTRY MATCH", prize: "2000", fee: "0", type: "Duo", map: "Bermuda", joined: 45, max: 100 }],
+            "1V1HS": [{ id: "HS-KING", title: "1V1 ONLY HEADSHOT", prize: "20", fee: "15", type: "Solo", map: "Red Map", joined: 0, max: 2 }],
+            "CSHS": [{ id: "CSHS-HS", title: "CS HEADSHOT BATTLE", prize: "30", fee: "20", type: "Solo", map: "Store", joined: 1, max: 2 }]
         };
 
         const params = new URLSearchParams(window.location.search);
@@ -149,71 +156,57 @@
                     let btnText = localStorage.getItem("joined_" + m.id) ? (m.type === "Solo" ? "Joined" : "Join Friend") : "Join";
                     container.innerHTML += `
                     <div class="card">
-                        <div class="card-header"><div class="match-info"><img src="${matchKey.toLowerCase()}_poster.jpg" onerror="this.src='lw2_poster.jpg'"><div><div class="match-title-text">${m.title} #${m.id}</div></div></div><div class="view-link" onclick="openInfo('${m.id}')">view</div></div>
+                        <div class="card-header">
+                            <div class="match-info">
+                                <img src="${matchKey.toLowerCase()}_poster.jpg" onerror="this.src='lw2_poster.jpg'">
+                                <div class="match-title-text">${m.title} #${m.id}</div>
+                            </div>
+                            <div class="view-link" onclick="openInfo('${m.id}')">view</div>
+                        </div>
                         <div class="stats-row">
-                            <div class="stat-box"><span class="stat-label">Prize Pool</span><span class="stat-value">₹${m.prize}</span></div>
+                            <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${m.prize}</span></div>
                             <div class="stat-box"><span class="stat-label">Entry Fee</span><span class="stat-value">₹${m.fee}</span></div>
                             <div class="stat-box"><span class="stat-label">Map</span><span class="stat-value">${m.map}</span></div>
                         </div>
-                        <div class="progress-container"><div class="progress-bar"><div class="player-count">${m.joined}/${m.max}</div><div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div></div><button class="join-btn" onclick="startJoin('${m.id}', ${m.fee})">${btnText}</button></div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="player-count">${m.joined}/${m.max}</div>
+                                <div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div>
+                            </div>
+                            <button class="join-btn" onclick="startJoin('${m.id}', ${m.fee})">${btnText}</button>
+                        </div>
                     </div>`;
                 });
             }
         }
 
         function openInfo(id) {
-            const m = allMatchData[matchKey].find(x => x.id === id);
-            currentMatch = m;
-            document.getElementById('infoMatchTitle').innerText = m.title + " #" + m.id;
-            document.getElementById('infoType').innerText = m.type;
-            document.getElementById('infoMap').innerText = m.map;
-            document.getElementById('infoFee').innerText = m.fee;
+            currentMatch = allMatchData[matchKey].find(x => x.id === id);
+            document.getElementById('infoMatchTitle').innerText = currentMatch.title + " #" + currentMatch.id;
+            document.getElementById('infoType').innerText = currentMatch.type;
+            document.getElementById('infoMap').innerText = currentMatch.map;
+            document.getElementById('infoFee').innerText = currentMatch.fee;
             document.getElementById('infoOverlay').style.display = 'flex';
         }
 
         function closeInfo() { document.getElementById('infoOverlay').style.display = 'none'; }
-
         function startJoin(id, fee) {
             currentMatch = allMatchData[matchKey].find(x => x.id === id);
-            document.getElementById('confirmText').innerText = fee == 0 ? "FREE ENTRY MATCH!" : `₹ ${fee} will be deduct`;
+            document.getElementById('confirmText').innerText = fee == 0 ? "FREE ENTRY!" : `₹ ${fee} will be deduct`;
             document.getElementById('confirmModal').style.display = 'flex';
         }
-
         function triggerJoinFromInfo() { startJoin(currentMatch.id, currentMatch.fee); }
         function showForm() { document.getElementById('confirmModal').style.display = 'none'; document.getElementById('formModal').style.display = 'flex'; }
         function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
-
-        function showMyEntries() {
-            let entries = JSON.parse(localStorage.getItem("my_registrations_" + currentMatch.id)) || [];
-            if(entries.length === 0) {
-                alert("You haven't joined this match yet!");
-            } else {
-                let list = entries.map((e, i) => `${i+1}. ${e.name} (ID: ${e.id})`).join("\n");
-                alert("Your Entries for this match:\n\n" + list);
-            }
-        }
-
-        function showParticipants() {
-            alert("Fetching participants list from server...");
-            // Yahan Google Sheet se fetch karne ka logic baad mein daal sakte ho
-        }
+        function showMyEntries() { alert("Your entries saved locally."); }
+        function showParticipants() { alert("Coming Soon!"); }
 
         function submitJoin() {
             const name = document.getElementById('gameName').value.trim();
-            const id = document.getElementById('gameId').value.trim();
-            if(!name || !id) return alert("Enter Name and ID!");
-
-            // Local save for 'My Entries'
-            let entries = JSON.parse(localStorage.getItem("my_registrations_" + currentMatch.id)) || [];
-            entries.push({name: name, id: id});
-            localStorage.setItem("my_registrations_" + currentMatch.id, JSON.stringify(entries));
+            if(!name) return alert("Enter Name!");
             localStorage.setItem("joined_" + currentMatch.id, "true");
-
-            // Google Sheet URL yahan daalna hoga jab register match wala system connect karoge
-            alert("Registration Successful!");
-            closeModals();
-            closeInfo();
-            displayMatches('upcoming');
+            alert("Success!");
+            closeModals(); closeInfo(); displayMatches('upcoming');
         }
 
         function switchTab(t) { 
