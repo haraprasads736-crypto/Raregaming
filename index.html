@@ -42,42 +42,35 @@
             background: rgba(0, 242, 254, 0.05); border: 1.5px solid var(--neon-blue); 
             padding: 8px 15px; border-radius: 50px; color: var(--neon-blue); 
             font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;
+            cursor: pointer;
         }
 
-        /* 2. BANNERS */
-        .quick-share-bar {
-            padding: 15px 20px; background: rgba(0, 242, 254, 0.03); 
-            border-bottom: 1px solid rgba(0, 242, 254, 0.1); 
-            display: flex; align-items: center; justify-content: space-between; 
-        }
-
+        /* 2. MONEY BANNER */
         .money-banner {
-            margin: 15px 20px; padding: 20px;
+            margin: 20px 20px 15px 20px; padding: 20px;
             background: linear-gradient(135deg, #0a0a0f 0%, #1a2e1a 100%);
             border-radius: 24px; border: 1px solid rgba(57, 255, 20, 0.2);
+            position: relative; overflow: hidden;
         }
-        .money-tag { background: #39ff14; color: #000; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 50px; display: inline-block; margin-bottom: 10px; }
-        .money-title { font-size: 18px; font-weight: 800; margin: 0; }
+        .money-tag { background: #39ff14; color: #000; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 50px; display: inline-block; margin-bottom: 10px; text-transform: uppercase; }
+        .money-title { font-size: 18px; font-weight: 800; margin: 0; color: #fff; }
         .money-desc { font-size: 11px; color: #aaa; margin: 5px 0 15px 0; }
-        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
-        /* 3. MATCH GRID (Compact 3x3) */
-        .section-header { margin: 20px 20px 10px 20px; font-size: 16px; font-weight: 700; text-transform: uppercase; border-left: 4px solid var(--neon-blue); padding-left: 10px; }
+        /* 3. ADMOB BANNER */
+        .ad-container { margin: 10px 20px; height: 60px; background: #000; border-radius: 12px; border: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .ad-label { position: absolute; top: 2px; left: 5px; font-size: 7px; color: #333; letter-spacing: 1px; }
+
+        /* 4. MATCH GRID (3x3 Compact) */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 15px 20px; }
+        .section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-left: 4px solid var(--neon-blue); padding-left: 12px; }
         
-        .match-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 10px; padding: 0 15px; 
-        }
-        .match-card { 
-            position: relative; border-radius: 15px; overflow: hidden; 
-            aspect-ratio: 1/1.2; background: #0a0a0f; border: 1px solid var(--border-color); 
-            text-decoration: none;
-        }
+        .match-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 15px; }
+        .match-card { position: relative; border-radius: 15px; overflow: hidden; aspect-ratio: 1/1.2; background: #0a0a0f; border: 1px solid var(--border-color); text-decoration: none; }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .match-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 0 5px #000; }
+        .match-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 0 5px #000; text-transform: uppercase; }
 
-        /* 4. NAVIGATION */
+        /* 5. NAVIGATION */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;}
         .nav-item.active { color: var(--neon-blue); }
@@ -86,9 +79,6 @@
         .center-btn .icon-circle { width: 55px; height: 55px; background: #39ff14; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
 
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
-
-        .ad-container { margin: 10px 20px; height: 60px; background: #000; border-radius: 12px; border: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .ad-label { position: absolute; top: 2px; left: 5px; font-size: 7px; color: #333; }
     </style>
 </head>
 <body>
@@ -96,16 +86,6 @@
     <div class="header-top">
         <div class="brand-name">RARE GAMING</div>
         <div class="wallet-pill" id="walletBal" onclick="syncBalance()"><i class="fas fa-coins"></i> ₹0</div>
-    </div>
-
-    <div class="quick-share-bar" onclick="location.href='share.html'">
-        <div>
-            <div style="font-size: 14px; font-weight: 800; color: #00f2fe; letter-spacing: 1px;">QUICK SHARE</div>
-            <div style="font-size: 10px; color: #888;">Share any file instantly</div>
-        </div>
-        <div style="background: rgba(0, 242, 254, 0.1); padding: 8px 15px; border-radius: 12px; border: 1px solid #00f2fe;">
-            <i class="fas fa-paper-plane" style="color: #00f2fe; font-size: 12px;"></i>
-        </div>
     </div>
 
     <div class="money-banner">
@@ -123,7 +103,9 @@
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
-    <div class="section-header">Live Tournaments</div>
+    <div class="section-header">
+        <div class="section-title">Live Tournaments</div>
+    </div>
     
     <div class="match-grid">
         <a href="match_details.html?type=BR" class="match-card">
@@ -149,6 +131,14 @@
         <a href="match_details.html?type=FREE" class="match-card">
             <img src="free_poster.jpg">
             <div class="match-label">FREE MATCH</div>
+        </a>
+        <a href="match_details.html?type=1V1HS" class="match-card">
+            <img src="1v1hs_poster.jpg">
+            <div class="match-label">1V1 HEADSHOT</div>
+        </a>
+        <a href="match_details.html?type=CSHS" class="match-card">
+            <img src="cshs_poster.jpg">
+            <div class="match-label">CS HEADSHOT</div>
         </a>
     </div>
 
