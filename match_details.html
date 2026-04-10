@@ -9,49 +9,63 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         body { background-color: #120524; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         
+        /* HEADER */
         .header { display: flex; align-items: center; padding: 20px; background: #1A0A2D; position: sticky; top: 0; z-index: 100; }
         .back-btn { font-size: 20px; color: #fff; margin-right: 20px; cursor: pointer; }
         .title { font-size: 18px; font-weight: 700; flex: 1; text-align: center; margin-right: 40px; }
         
-        .tab-container { display: flex; justify-content: space-around; background: #2D1B44; margin: 15px 20px; border-radius: 50px; padding: 5px; }
-        .tab { padding: 10px 20px; border-radius: 50px; font-size: 14px; font-weight: 600; color: #AAA; cursor: pointer; transition: 0.3s; }
+        /* TABS */
+        .tab-container { display: flex; justify-content: space-around; background: #2D1B44; margin: 15px 20px; border-radius: 15px; padding: 5px; }
+        .tab { padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; color: #AAA; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
 
+        /* MATCH CARD */
         .match-list { padding: 0 15px; }
-        .card { background: white; border-radius: 20px; padding: 15px; margin-bottom: 20px; color: #000; position: relative; }
+        .card { background: white; border-radius: 20px; padding: 0; margin-bottom: 25px; color: #000; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         
-        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-        .match-info img { width: 40px; height: 40px; border-radius: 50%; }
-        .match-title-text { font-size: 12px; font-weight: 800; color: #111; }
+        /* ✅ POSTER SIZE FIXED: Ab ye screen se bada nahi hoga */
+        .match-poster { width: 100%; height: 180px; object-fit: cover; display: block; }
+        
+        .card-body { padding: 15px; }
+        .match-title-text { font-size: 14px; font-weight: 800; color: #111; margin-bottom: 12px; text-transform: uppercase; }
 
-        /* ✅ 7 STATS GRID - ISPE DHAYAN DO */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
-        .stat-box { background: #F2F2F2; border-radius: 10px; padding: 6px; text-align: center; }
-        .stat-label { background: #8B3EEB; color: white; font-size: 7px; padding: 2px 4px; border-radius: 4px; display: inline-block; margin-bottom: 3px; text-transform: uppercase; }
-        .stat-value { font-size: 10px; font-weight: 800; display: block; color: #333; }
+        /* STATS GRID */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .stat-box { background: #F8F6FF; border-radius: 12px; padding: 8px 5px; text-align: center; border: 1px solid #EEE; }
+        .stat-label { background: #F0E6FF; color: #8B3EEB; font-size: 8px; padding: 2px 6px; border-radius: 5px; display: inline-block; margin-bottom: 4px; font-weight: 700; }
+        .stat-value { font-size: 11px; font-weight: 800; display: block; color: #222; }
 
-        /* Progress Bar */
-        .progress-container { display: flex; align-items: center; gap: 10px; }
-        .progress-bar { flex: 1; height: 16px; background: #E0D4FF; border-radius: 20px; overflow: hidden; position: relative; }
-        .progress-fill { height: 100%; background: #8B3EEB; width: 0%; transition: 0.5s; }
-        .player-count { position: absolute; width: 100%; text-align: center; font-size: 9px; font-weight: 800; line-height: 16px; color: #120524; z-index: 2; }
-        .join-btn { background: #1A0A2D; color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 11px; cursor: pointer; }
+        /* PROGRESS & JOIN */
+        .progress-container { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #EEE; padding-top: 15px; }
+        .progress-bar-wrapper { display: flex; align-items: center; gap: 10px; }
+        .progress-bar { flex: 1; height: 12px; background: #E0D4FF; border-radius: 20px; overflow: hidden; position: relative; }
+        .progress-fill { height: 100%; background: #8B3EEB; width: 0%; transition: 0.8s ease-in-out; }
+        .player-count { position: absolute; width: 100%; text-align: center; font-size: 9px; font-weight: 800; line-height: 12px; color: #120524; z-index: 2; }
+        
+        .join-btn { background: #1A0A2D; color: white; border: none; padding: 10px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; width: 100%; transition: 0.2s; }
+        .join-btn:active { transform: scale(0.98); }
 
+        /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
         .modal-card { background: #2D1B44; width: 100%; max-width: 320px; border-radius: 24px; padding: 25px; text-align: center; color: white; }
-        .modal-card input { width: 100%; background: #1A0A2D; border: 1px solid #382A4D; padding: 12px; margin-bottom: 10px; border-radius: 12px; color: #fff; box-sizing: border-box; }
-        .btn-submit { background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; }
+        .modal-card input { width: 100%; background: #1A0A2D; border: 1px solid #382A4D; padding: 12px; margin-bottom: 10px; border-radius: 12px; color: #fff; box-sizing: border-box; font-family: 'Poppins'; }
+        .btn-submit { background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <div id="mainPage">
-        <div class="header"><i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i><div class="title" id="pageTitle">LOADING...</div></div>
+        <div class="header">
+            <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
+            <div class="title" id="pageTitle">LOADING...</div>
+        </div>
+        
         <div class="tab-container">
             <div class="tab active" onclick="switchTab('upcoming', this)">Upcoming</div>
             <div class="tab" onclick="switchTab('ongoing', this)">Ongoing</div>
             <div class="tab" onclick="switchTab('result', this)">Result</div>
         </div>
+        
         <div class="match-list" id="matchList"></div>
     </div>
 
@@ -60,13 +74,15 @@
             <h3 id="modalMatchTitle">Join Match</h3>
             <input type="text" id="gameName" placeholder="FF User Name">
             <input type="number" id="gameId" placeholder="FF User ID">
-            <button class="btn-submit" id="submitBtn" onclick="submitJoin()">Submit</button>
-            <p onclick="closeModals()" style="color:#aaa; cursor:pointer; font-size:12px; margin-top:10px;">Cancel</p>
+            <button class="btn-submit" id="submitBtn" onclick="submitJoin()">Confirm Join</button>
+            <p onclick="closeModals()" style="color:#aaa; cursor:pointer; font-size:12px; margin-top:15px;">Cancel</p>
         </div>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzr5TVy995MNiJgjzSEnMuR1V1Wv-yAVCOvalP8KDUpuDnFTCbSg-wXnRWVTmIUy3E_HQ/exec";
+        // ✅ NAYA DEPLOY URL CONNECTED
+        const scriptURL = "https://script.google.com/macros/s/AKfycbys-5KtuK__rMMOX-lvPZn4d6UFo_ZBNq4fuvTBpH28kIZXwcLVo63tVyiW4TlMazAkJw/exec";
+        
         const params = new URLSearchParams(window.location.search);
         const matchKey = params.get('type') || 'LW';
         let currentMatchId = null;
@@ -74,7 +90,7 @@
 
         async function loadMatches(status = 'upcoming') {
             const container = document.getElementById('matchList');
-            container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;">Loading Live Matches...</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;"><i class="fas fa-spinner fa-spin"></i> Loading Matches...</div>`;
             document.getElementById('pageTitle').innerText = matchKey.toUpperCase();
 
             try {
@@ -84,7 +100,7 @@
 
                 container.innerHTML = ""; 
                 if (filtered.length === 0) {
-                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#AAA;">No ${status} matches!</div>`;
+                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#AAA;">No ${status} matches found!</div>`;
                     return;
                 }
 
@@ -92,54 +108,79 @@
                     let fill = (m.joined / m.max) * 100;
                     let isJoined = localStorage.getItem("joined_" + m.id);
                     
+                    // Poster image logic
+                    let posterImg = `${matchKey.toLowerCase()}_poster.jpg`;
+
                     container.innerHTML += `
                     <div class="card">
-                        <div class="card-header">
-                            <img src="${matchKey.toLowerCase()}_poster.jpg" onerror="this.src='lw2_poster.jpg'">
-                            <div class="match-title-text">${m.title} #${m.id}</div>
-                        </div>
+                        <img src="${posterImg}" class="match-poster" onerror="this.src='https://i.imgur.com/uR1Y6T2.jpeg'">
                         
-                        <div class="stats-grid">
-                            <div class="stat-box"><span class="stat-label">Prize Pool</span><span class="stat-value">₹${m.prize}</span></div>
-                            <div class="stat-box"><span class="stat-label">Per Kill</span><span class="stat-value">₹${m.perkill || '0'}</span></div>
-                            <div class="stat-box"><span class="stat-label">Entry Fee</span><span class="stat-value">₹${m.fee}</span></div>
-                            <div class="stat-box"><span class="stat-label">Type</span><span class="stat-value">${m.type}</span></div>
-                            <div class="stat-box"><span class="stat-label">Version</span><span class="stat-value">${m.version || 'TPP'}</span></div>
-                            <div class="stat-box"><span class="stat-label">Map</span><span class="stat-value">${m.map}</span></div>
-                        </div>
-
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="player-count">${m.joined}/${m.max}</div>
-                                <div class="progress-fill" style="width:${fill}%"></div>
+                        <div class="card-body">
+                            <div class="match-title-text">${m.title} #${m.id}</div>
+                            
+                            <div class="stats-grid">
+                                <div class="stat-box"><span class="stat-label">PRIZE POOL</span><span class="stat-value">₹${m.prize}</span></div>
+                                <div class="stat-box"><span class="stat-label">PER KILL</span><span class="stat-value">₹${m.perkill || '0'}</span></div>
+                                <div class="stat-box"><span class="stat-label">ENTRY FEE</span><span class="stat-value">₹${m.fee}</span></div>
+                                <div class="stat-box"><span class="stat-label">TYPE</span><span class="stat-value">${m.type}</span></div>
+                                <div class="stat-box"><span class="stat-label">VERSION</span><span class="stat-value">${m.version || 'TPP'}</span></div>
+                                <div class="stat-box"><span class="stat-label">MAP</span><span class="stat-value">${m.map}</span></div>
                             </div>
-                            <button class="join-btn" onclick="openForm('${m.id}')">${isJoined ? 'Joined' : 'Join'}</button>
+
+                            <div class="progress-container">
+                                <div class="progress-bar-wrapper">
+                                    <div class="progress-bar">
+                                        <div class="player-count">${m.joined}/${m.max}</div>
+                                        <div class="progress-fill" style="width:${fill}%"></div>
+                                    </div>
+                                </div>
+                                <button class="join-btn" onclick="openForm('${m.id}')">${isJoined ? 'Joined' : 'Join Now'}</button>
+                            </div>
                         </div>
                     </div>`;
                 });
-            } catch (e) { container.innerHTML = "<p style='text-align:center;'>Server Error!</p>"; }
+            } catch (e) { 
+                container.innerHTML = "<p style='text-align:center; color:red;'>Server Connection Error!</p>"; 
+            }
         }
 
-        function openForm(id) { currentMatchId = id; document.getElementById('formModal').style.display = 'flex'; }
-        function closeModals() { document.getElementById('formModal').style.display = 'none'; }
+        function openForm(id) { 
+            currentMatchId = id; 
+            document.getElementById('formModal').style.display = 'flex'; 
+        }
+        
+        function closeModals() { 
+            document.getElementById('formModal').style.display = 'none'; 
+        }
 
         async function submitJoin() {
             const name = document.getElementById('gameName').value;
             const uid = document.getElementById('gameId').value;
-            if(!name || !uid) return alert("Fill details!");
+            if(!name || !uid) return alert("Please enter Player Name and ID!");
             
             const btn = document.getElementById('submitBtn');
-            btn.innerText = "Joining..."; btn.disabled = true;
+            btn.innerText = "Processing..."; btn.disabled = true;
 
             try {
                 await fetch(scriptURL, {
                     method: 'POST', mode: 'no-cors',
-                    body: new URLSearchParams({'action':'registerMatch', 'matchId':currentMatchId, 'playerName':name, 'playerId':uid, 'matchType':matchKey})
+                    body: new URLSearchParams({
+                        'action': 'registerMatch', 
+                        'matchId': currentMatchId, 
+                        'playerName': name, 
+                        'playerId': uid, 
+                        'matchType': matchKey
+                    })
                 });
                 localStorage.setItem("joined_" + currentMatchId, "true");
-                alert("Joined!"); closeModals(); loadMatches('upcoming');
-            } catch (e) { alert("Error!"); }
-            finally { btn.innerText = "Submit"; btn.disabled = false; }
+                alert("Match Joined Successfully!"); 
+                closeModals(); 
+                loadMatches('upcoming');
+            } catch (e) { 
+                alert("Failed to join match. Try again."); 
+            } finally { 
+                btn.innerText = "Confirm Join"; btn.disabled = false; 
+            }
         }
 
         function switchTab(t, el) {
