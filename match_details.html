@@ -23,8 +23,12 @@
         .stat-box { background: #F2F2F2; border-radius: 12px; padding: 8px; text-align: center; }
         .stat-label { background: #8B3EEB; color: white; font-size: 9px; padding: 2px 5px; border-radius: 5px; display: inline-block; margin-bottom: 5px; }
         .stat-value { font-size: 12px; font-weight: 800; display: block; }
-        .progress-bar { flex: 1; height: 10px; background: #E0D4FF; border-radius: 10px; overflow: hidden; margin: 10px 0; }
-        .progress-fill { height: 100%; background: #8B3EEB; }
+        
+        /* Progress Bar with Player Count Inside */
+        .progress-container { flex: 1; position: relative; height: 16px; background: #E0D4FF; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: #8B3EEB; transition: 0.5s; }
+        .player-count { position: absolute; width: 100%; text-align: center; font-size: 10px; font-weight: 800; color: #000; top: 0; line-height: 16px; }
+        
         .join-btn { background: #1A0A2D; color: white; border: none; padding: 10px 30px; border-radius: 50px; font-weight: 700; font-size: 12px; cursor: pointer; }
     </style>
 </head>
@@ -35,14 +39,14 @@
 
     <script>
         const allMatchData = {
-            "BR": [{ id: "BR-1", title: "BR SQUAD BATTLE", prize: "500", fee: "50", type: "Squad", map: "Bermuda", fill: "20%" }],
-            "CS": [{ id: "CS-1", title: "CS SQUAD RANKED", prize: "160", fee: "40", type: "Squad", map: "Kalahari", fill: "40%" }],
-            "LW": [{ id: "LW-1", title: "LONE WOLF 1V1", prize: "40", fee: "25", type: "Solo", map: "Lone Wolf", fill: "10%" }],
-            "1V1": [{ id: "V1-1", title: "1V1 ULTRA BATTLE", prize: "100", fee: "60", type: "Solo", map: "Custom", fill: "30%" }],
-            "LW2": [{ id: "LW2-1", title: "LONE WOLF 2.0", prize: "80", fee: "40", type: "Solo", map: "Iron Cage", fill: "50%" }],
-            "FREE": [{ id: "FR-1", title: "FREE MATCH", prize: "20", fee: "0", type: "Solo", map: "Bermuda", fill: "80%" }],
-            "1V1HS": [{ id: "HS-1", title: "1V1 ONLY HEADSHOT", prize: "200", fee: "110", type: "Solo", map: "Red Map", fill: "5%" }],
-            "CSHS": [{ id: "CSHS-1", title: "CS HEADSHOT", prize: "400", fee: "100", type: "Squad", map: "Store", fill: "0%" }]
+            "BR": [{ id: "BR-1", title: "BR SQUAD BATTLE", prize: "380", fee: "5", perkill: "3", type: "Duo", map: "Bermuda", max: 50, joined: 12 }],
+            "CS": [{ id: "CS-1", title: "CLASH SQUAD", prize: "40", fee: "25", perkill: "0", type: "1v1", map: "Kalahari", max: 2, joined: 1 }],
+            "LW": [{ id: "LW-1", title: "LONE WOLF", prize: "40", fee: "25", perkill: "0", type: "Solo", map: "Lone Wolf", max: 2, joined: 0 }],
+            "1V1": [{ id: "V1-1", title: "1V1 BATTLE", prize: "25", fee: "15", perkill: "0", type: "Solo", map: "Custom", max: 2, joined: 1 }],
+            "LW2": [{ id: "LW2-1", title: "LONE WOLF 2.0", prize: "40", fee: "25", perkill: "0", type: "Solo", map: "Iron Cage", max: 2, joined: 0 }],
+            "FREE": [{ id: "FR-1", title: "FREE MATCH", prize: "2000", fee: "0", perkill: "2", type: "Duo", map: "Bermuda", max: 100, joined: 45 }],
+            "1V1HS": [{ id: "HS-1", title: "1V1 HEADSHOT", prize: "20", fee: "15", perkill: "0", type: "Solo", map: "Red Map", max: 2, joined: 1 }],
+            "CSHS": [{ id: "CSHS-1", title: "CS HEADSHOT", prize: "30", fee: "20", perkill: "0", type: "1v1", map: "Store", max: 2, joined: 0 }]
         };
 
         const params = new URLSearchParams(window.location.search);
@@ -53,17 +57,28 @@
             const matches = allMatchData[matchKey] || [];
             document.getElementById('pageTitle').innerText = matchKey.toUpperCase();
             container.innerHTML = (status !== 'upcoming') ? `<div style="text-align:center; padding:50px;">No matches!</div>` : "";
+            
             if(status === 'upcoming') {
                 matches.forEach(m => {
+                    let fillPercent = (m.joined / m.max) * 100;
                     container.innerHTML += `
                     <div class="card">
                         <div class="card-header"><div class="match-info"><img src="${matchKey.toLowerCase()}_poster.jpg" onerror="this.src='lw2_poster.jpg'"><div><div class="match-title-text">${m.title} #${m.id}</div><div style="font-size:10px; color:#666;">2026-04-11</div></div></div></div>
                         <div class="stats-row">
-                            <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${m.prize}</span></div>
-                            <div class="stat-box"><span class="stat-label">Entry</span><span class="stat-value">₹${m.fee}</span></div>
+                            <div class="stat-box"><span class="stat-label">Prize Pool</span><span class="stat-value">₹${m.prize}</span></div>
+                            <div class="stat-box"><span class="stat-label">Per Kill</span><span class="stat-value">₹${m.perkill}</span></div>
+                            <div class="stat-box"><span class="stat-label">Entry Fee</span><span class="stat-value">₹${m.fee}</span></div>
+                            <div class="stat-box"><span class="stat-label">Type</span><span class="stat-value">${m.type}</span></div>
                             <div class="stat-box"><span class="stat-label">Map</span><span class="stat-value">${m.map}</span></div>
+                            <div class="stat-box"><span class="stat-label">Max</span><span class="stat-value">${m.max}</span></div>
                         </div>
-                        <div style="display:flex; align-items:center; gap:10px;"><div class="progress-bar"><div class="progress-fill" style="width:${m.fill}"></div></div><button class="join-btn">Join</button></div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <div class="progress-container">
+                                <div class="progress-fill" style="width:${fillPercent}%"></div>
+                                <div class="player-count">${m.joined} / ${m.max}</div>
+                            </div>
+                            <button class="join-btn">${m.joined >= m.max ? 'Full' : 'Join'}</button>
+                        </div>
                     </div>`;
                 });
             }
