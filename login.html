@@ -6,56 +6,135 @@
     <title>Login - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .login-box { width: 90%; max-width: 350px; background: #111116; padding: 25px; border-radius: 20px; border: 1.5px solid #1f1f25; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        .brand { font-size: 26px; font-weight: 800; color: #66fcf1; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
-        .input-group { text-align: left; margin-bottom: 15px; }
-        .input-group label { font-size: 11px; color: #888; text-transform: uppercase; font-weight: 600; margin-left: 5px; }
-        input { width: 100%; padding: 12px; margin-top: 5px; background: #1a1a21; border: 1px solid #333; border-radius: 10px; color: white; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: #66fcf1; }
-        .btn { width: 100%; padding: 12px; background: #66fcf1; border: none; border-radius: 10px; color: #000; font-weight: 800; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
-        .btn-google { width: 100%; padding: 12px; background: #ffffff; border: none; border-radius: 10px; color: #000; font-weight: 600; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; }
-        .divider { margin: 20px 0; color: #444; font-size: 12px; position: relative; }
-        .divider::before, .divider::after { content: ""; position: absolute; top: 50%; width: 40%; height: 1px; background: #222; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+
+        /* 1. BACKGROUND & LAYOUT: Battle OP jaisa dark purple gradient */
+        body { 
+            background: linear-gradient(180deg, #1A0A2D 0%, #000000 100%); 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+
+        .login-box { 
+            width: 85%; 
+            max-width: 380px; 
+            text-align: center; 
+            padding: 20px;
+        }
+
+        /* 2. LOGO: Ninja/Gaming vibe */
+        .logo-img {
+            width: 120px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px #8B3EEB);
+        }
+
+        .welcome-text h2 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: 2px; }
+        .welcome-text p { font-size: 12px; color: #AAA; margin-bottom: 30px; }
+
+        /* 3. INPUT BOXES: Bengni background aur icons */
+        .input-group { 
+            background: #2D1B44; 
+            border-radius: 15px; 
+            margin-bottom: 15px; 
+            display: flex; 
+            align-items: center; 
+            padding: 12px 15px;
+            border: 1px solid #443355;
+        }
+
+        .input-group i { color: #8B3EEB; margin-right: 15px; font-size: 18px; }
+
+        input { 
+            background: transparent; 
+            border: none; 
+            color: white; 
+            width: 100%; 
+            outline: none; 
+            font-size: 14px;
+        }
+
+        /* 4. BUTTON: Glossy Purple Gradient */
+        .btn-main { 
+            width: 100%; 
+            padding: 15px; 
+            background: linear-gradient(90deg, #8B3EEB 0%, #6F24A5 100%); 
+            border: none; 
+            border-radius: 30px; 
+            color: white; 
+            font-weight: 800; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(139, 62, 235, 0.4);
+        }
+
+        .divider { margin: 25px 0; color: #555; font-size: 12px; position: relative; }
+        .divider::before, .divider::after { content: ""; position: absolute; top: 50%; width: 35%; height: 1px; background: #333; }
         .divider::before { left: 0; } .divider::after { right: 0; }
-        .toggle { margin-top: 15px; font-size: 12px; color: #666; cursor: pointer; }
-        .toggle span { color: #66fcf1; font-weight: 800; }
-        #statusMsg { margin-top: 10px; font-size: 12px; min-height: 18px; }
+
+        .btn-google { 
+            width: 100%; 
+            padding: 12px; 
+            background: #FFF; 
+            border-radius: 30px; 
+            color: #000; 
+            font-weight: 600; 
+            border: none; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .footer-links { margin-top: 20px; font-size: 13px; }
+        .footer-links span { color: #8B3EEB; font-weight: 700; cursor: pointer; }
+        #statusMsg { margin-top: 15px; font-size: 12px; font-weight: 600; }
     </style>
 </head>
 <body>
 
 <div class="login-box">
-    <div class="brand">RARE GAMING</div>
+    <img src="https://i.ibb.co/Vmq8m8N/ninja-logo.png" class="logo-img" alt="Rare Gaming">
+
+    <div class="welcome-text">
+        <h2 id="title">WELCOME</h2>
+        <p id="subtitle">Let us know your details to enter the arena</p>
+    </div>
     
+    <div class="input-group">
+        <i class="fas fa-user" id="userIcon"></i>
+        <input type="text" id="userInput" placeholder="Username or Rare UID">
+    </div>
+    
+    <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="passInput" placeholder="Password">
+    </div>
+
+    <div style="text-align: right; margin-bottom: 20px;">
+        <span onclick="forgetPassword()" style="color: #888; font-size: 12px; cursor: pointer;">Forgot Password?</span>
+    </div>
+
+    <button class="btn-main" id="authBtn" onclick="processAuth()">ENTER DASHBOARD</button>
+    
+    <div class="divider">OR</div>
+
     <button class="btn-google" onclick="signInWithGoogle()">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18">
         Continue with Google
     </button>
 
-    <div class="divider">OR USE ID/PASS</div>
-
-    <h3 id="title" style="font-size: 14px; margin-bottom: 15px; color: #888;">PLAYER LOGIN</h3>
-    
-    <div class="input-group">
-        <label id="userLabel">Username or Rare UID</label>
-        <input type="text" id="userInput" placeholder="Enter here...">
-    </div>
-    
-    <div class="input-group">
-        <label>Security Password</label>
-        <input type="password" id="passInput" placeholder="••••••••">
+    <div class="footer-links">
+        <div id="toggleBtn" onclick="toggleMode()">New Player? <span>SIGN UP</span></div>
     </div>
 
-    <button class="btn" id="authBtn" onclick="processAuth()">ENTER DASHBOARD</button>
-    
-    <div class="toggle" onclick="toggleMode()" id="toggleBtn">New Player? <span>Sign Up</span></div>
-    
-    <div class="toggle" onclick="forgetPassword()" style="color: #888; margin-top: 10px; border-top: 1px solid #1a1a21; padding-top: 10px;">
-        Forgot Password? <span style="color: #ff4d4d;">Get it</span>
-    </div>
-    
     <div id="statusMsg"></div>
 </div>
 
@@ -63,7 +142,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
 
 <script>
-    // Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyA6GgehsphLSUJ8jfEwwTT-DD7GMRO28AA",
         authDomain: "rare-gaming-6b29a.firebaseapp.com",
@@ -88,39 +166,13 @@
 
     let isLoginMode = true;
 
-    function signInWithGoogle() {
-        const status = document.getElementById('statusMsg');
-        const dID = getDeviceID();
-        status.innerText = "Connecting Google...";
-        const provider = new firebase.auth.GoogleAuthProvider();
-        
-        firebase.auth().signInWithPopup(provider).then((result) => {
-            const user = result.user;
-            status.innerText = "Verifying Device...";
-            
-            fetch(`${scriptURL}?action=firebase_login&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.displayName)}&deviceId=${dID}`)
-            .then(res => res.json())
-            .then(data => {
-                if(data.status === "Success") {
-                    localStorage.setItem("rareGamingUser", JSON.stringify(data));
-                    status.innerText = "Welcome Boss! Redirecting...";
-                    setTimeout(() => window.location.href = "index.html", 800);
-                } else {
-                    status.innerHTML = `<span style='color:red'>${data.message}</span>`;
-                }
-            });
-        }).catch(err => {
-            status.innerHTML = "<span style='color:red'>Google Login Failed!</span>";
-        });
-    }
-
     function toggleMode() {
         isLoginMode = !isLoginMode;
-        document.getElementById('title').innerText = isLoginMode ? "PLAYER LOGIN" : "CREATE ACCOUNT";
+        document.getElementById('title').innerText = isLoginMode ? "WELCOME" : "JOIN US";
+        document.getElementById('subtitle').innerText = isLoginMode ? "Enter details to enter the arena" : "Create an account to start earning";
         document.getElementById('authBtn').innerText = isLoginMode ? "ENTER DASHBOARD" : "REGISTER NOW";
-        document.getElementById('toggleBtn').innerHTML = isLoginMode ? "New Player? <span>Sign Up</span>" : "Already a Player? <span>Login</span>";
-        document.getElementById('userLabel').innerText = isLoginMode ? "Username or Rare UID" : "Choose Username";
-        document.getElementById('statusMsg').innerText = "";
+        document.getElementById('toggleBtn').innerHTML = isLoginMode ? "New Player? <span>SIGN UP</span>" : "Already a Player? <span>LOGIN</span>";
+        document.getElementById('userInput').placeholder = isLoginMode ? "Username or Rare UID" : "Choose Username";
     }
 
     function processAuth() {
@@ -131,12 +183,12 @@
         const dID = getDeviceID();
 
         if(!user || !pass) {
-            status.innerHTML = "<span style='color:red'>Dono box bharo, bhai!</span>";
+            status.innerHTML = "<span style='color:#FF4D4D'>Dono box bharo, bhai!</span>";
             return;
         }
 
         btn.disabled = true;
-        status.innerText = "Processing...";
+        status.innerText = "Connecting to Server...";
 
         let url = isLoginMode ? 
             `${scriptURL}?action=login&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&deviceId=${dID}` :
@@ -148,43 +200,55 @@
             btn.disabled = false;
             if(data.status === "Success") {
                 localStorage.setItem("rareGamingUser", JSON.stringify(data));
-                status.innerText = "Success! Redirecting...";
+                status.innerHTML = "<span style='color:#00FF00'>Access Granted! Redirecting...</span>";
                 setTimeout(() => window.location.href = "index.html", 800);
             } else {
-                status.innerHTML = `<span style='color:red'>${data.message || "Fail!"}</span>`;
+                status.innerHTML = `<span style='color:#FF4D4D'>${data.message}</span>`;
             }
         })
         .catch(err => {
             btn.disabled = false;
-            status.innerHTML = "<span style='color:red'>Server Error!</span>";
+            status.innerHTML = "<span style='color:#FF4D4D'>Server Error!</span>";
         });
     }
 
     function forgetPassword() {
         const user = document.getElementById('userInput').value.trim();
         const status = document.getElementById('statusMsg');
-        
         if(!user) {
-            status.innerHTML = "<span style='color:yellow'>Pehle Username/UID likho!</span>";
+            status.innerHTML = "<span style='color:yellow'>Username likho pehle!</span>";
             return;
         }
-
-        status.innerText = "Finding your password...";
+        status.innerText = "Finding Password...";
         fetch(`${scriptURL}?action=forgetPass&username=${encodeURIComponent(user)}`)
         .then(res => res.json())
         .then(data => {
             if(data.status === "Success") {
-                alert("Rare Gaming Security:\nBhai, tera password ye hai: " + data.pass);
-                status.innerHTML = "<span style='color:green'>Password mil gaya!</span>";
+                alert("RARE GAMING SECURITY:\nBhai, tera password ye hai: " + data.pass);
             } else {
-                status.innerHTML = `<span style='color:red'>${data.message}</span>`;
+                status.innerHTML = `<span style='color:#FF4D4D'>${data.message}</span>`;
             }
-        })
-        .catch(err => {
-            status.innerHTML = "<span style='color:red'>Error! Check Net.</span>";
+        });
+    }
+
+    function signInWithGoogle() {
+        const status = document.getElementById('statusMsg');
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then((result) => {
+            const user = result.user;
+            status.innerText = "Syncing with Rare Server...";
+            fetch(`${scriptURL}?action=firebase_login&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.displayName)}&deviceId=${getDeviceID()}`)
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "Success") {
+                    localStorage.setItem("rareGamingUser", JSON.stringify(data));
+                    window.location.href = "index.html";
+                } else {
+                    status.innerHTML = `<span style='color:#FF4D4D'>${data.message}</span>`;
+                }
+            });
         });
     }
 </script>
-
 </body>
 </html>
