@@ -8,7 +8,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         body { background-color: #050508; color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .login-box { width: 85%; max-width: 350px; background: #111116; padding: 25px; border-radius: 20px; border: 1.5px solid #1f1f25; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
+        .login-box { width: 90%; max-width: 350px; background: #111116; padding: 25px; border-radius: 20px; border: 1.5px solid #1f1f25; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
         .brand { font-size: 26px; font-weight: 800; color: #66fcf1; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
         .input-group { text-align: left; margin-bottom: 15px; }
         .input-group label { font-size: 11px; color: #888; text-transform: uppercase; font-weight: 600; margin-left: 5px; }
@@ -58,7 +58,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
 
 <script>
-    // ✅ TERI FIREBASE CONFIG
+    // ✅ FIREBASE CONFIG
     const firebaseConfig = {
         apiKey: "AIzaSyA6GgehsphLSUJ8jfEwwTT-DD7GMRO28AA",
         authDomain: "rare-gaming-6b29a.firebaseapp.com",
@@ -69,33 +69,44 @@
     };
     firebase.initializeApp(firebaseConfig);
 
-    // ✅ NAYA APPS SCRIPT URL
     const scriptURL = "https://script.google.com/macros/s/AKfycbxGySusVnUw7aID7sGrfK0eSX0k7l47GZc5qJ0ogQGokqZQJH_MK9JOUesvvsFneoo8FA/exec";
     
+    // --- 🛡️ DEVICE ID GENERATOR ---
+    function getDeviceID() {
+        let id = localStorage.getItem("rare_device_id");
+        if (!id) {
+            id = "RG-DEV-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+            localStorage.setItem("rare_device_id", id);
+        }
+        return id;
+    }
+
     let isLoginMode = true;
 
     // --- GOOGLE LOGIN ---
     function signInWithGoogle() {
         const status = document.getElementById('statusMsg');
+        const dID = getDeviceID();
         status.innerText = "Connecting Google...";
         const provider = new firebase.auth.GoogleAuthProvider();
         
         firebase.auth().signInWithPopup(provider).then((result) => {
             const user = result.user;
-            status.innerText = "Verifying with Sheets...";
+            status.innerText = "Verifying Device...";
             
-            fetch(`${scriptURL}?action=firebase_login&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.displayName)}`)
+            fetch(`${scriptURL}?action=firebase_login&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.displayName)}&deviceId=${dID}`)
             .then(res => res.json())
             .then(data => {
                 if(data.status === "Success") {
                     localStorage.setItem("rareGamingUser", JSON.stringify(data));
                     status.innerText = "Welcome Boss! Redirecting...";
                     setTimeout(() => window.location.href = "index.html", 800);
+                } else {
+                    status.innerHTML = `<span style='color:red'>${data.message}</span>`;
                 }
             });
         }).catch(err => {
             status.innerHTML = "<span style='color:red'>Google Login Failed!</span>";
-            console.error(err);
         });
     }
 
@@ -114,6 +125,7 @@
         const pass = document.getElementById('passInput').value.trim();
         const status = document.getElementById('statusMsg');
         const btn = document.getElementById('authBtn');
+        const dID = getDeviceID();
 
         if(!user || !pass) {
             status.innerHTML = "<span style='color:red'>Dono box bharo, bhai!</span>";
@@ -121,11 +133,11 @@
         }
 
         btn.disabled = true;
-        status.innerText = isLoginMode ? "Checking..." : "Registering...";
+        status.innerText = "Processing...";
 
         let url = isLoginMode ? 
-            `${scriptURL}?action=login&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}` :
-            `${scriptURL}?action=register&name=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}`;
+            `${scriptURL}?action=login&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&deviceId=${dID}` :
+            `${scriptURL}?action=register&name=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&deviceId=${dID}`;
 
         fetch(url)
         .then(res => res.json())
@@ -136,7 +148,7 @@
                 status.innerText = "Success! Redirecting...";
                 setTimeout(() => window.location.href = "index.html", 800);
             } else {
-                status.innerHTML = "<span style='color:red'>" + (data.message || "Fail!") + "</span>";
+                status.innerHTML = `<span style='color:red'>${data.message || "Fail!"}</span>`;
             }
         })
         .catch(err => {
