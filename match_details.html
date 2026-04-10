@@ -8,125 +8,117 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         
+        /* 🛠️ RESET & BASE - Dark Battle Theme */
         body { background-color: #120524; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* HEADER */
-        .header { display: flex; align-items: center; padding: 15px 20px; background: #1A0A2D; position: sticky; top: 0; z-index: 100; }
-        .back-btn { font-size: 20px; color: #fff; cursor: pointer; }
-        .title { font-size: 18px; font-weight: 700; flex: 1; text-align: center; margin-right: 20px; text-transform: uppercase; }
+        /* 🛠️ HEADER - Professional Top Bar */
+        .header { display: flex; align-items: center; padding: 15px 20px; background: #1A0A2D; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .back-btn { font-size: 18px; color: #fff; cursor: pointer; transition: 0.2s; }
+        .back-btn:hover { color: #8B3EEB; }
+        .title { font-size: 16px; font-weight: 700; flex: 1; text-align: center; margin-right: 20px; text-transform: uppercase; color: #E0E0E0; letter-spacing: 1px;}
 
-        .tab-container { display: flex; justify-content: space-around; background: #2D1B44; margin: 15px 20px; border-radius: 50px; padding: 5px; }
-        .tab { padding: 8px 15px; border-radius: 50px; font-size: 13px; font-weight: 600; color: #AAA; cursor: pointer; transition: 0.3s; }
+        /* 🛠️ TABS - Minimalist Design */
+        .tab-container { display: flex; justify-content: space-around; background: #2D1B44; margin: 15px; border-radius: 50px; padding: 3px; border: 1px solid #382A4D; }
+        .tab { padding: 8px 15px; border-radius: 50px; font-size: 12px; font-weight: 600; color: #AAA; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
 
-        /* MATCH CARD */
-        .match-list { padding: 0 15px; }
-        .card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 20px; color: #000; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        /* 🛠️ MATCH LIST - PROFESSIONAL CARD */
+        .match-list { padding: 0 10px; }
         
-        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-        .match-logo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #8B3EEB; }
+        /* Removed Cartoonish Rounded Corners, Made them sharp professional like BattleOp */
+        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; color: #000; position: relative; border-left: 4px solid #8B3EEB; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        
+        .card-header { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #EEE; padding-bottom: 10px; margin-bottom: 12px;}
+        .match-logo { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
         .header-text { flex: 1; }
-        .match-title { font-size: 13px; font-weight: 800; color: #111; display: flex; justify-content: space-between; align-items: center; }
-        .match-time { font-size: 10px; font-weight: 700; color: #444; display: block; margin-top: 2px; }
-        .view-link { color: #8B3EEB; font-weight: 800; font-size: 12px; cursor: pointer; }
+        .match-title { font-size: 12px; font-weight: 800; color: #111; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase;}
+        .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 1px; }
+        .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; text-decoration: none; cursor: pointer; }
+        .view-link:hover { text-decoration: underline; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
-        .stat-box { background: #8B3EEB; border-radius: 8px; padding: 5px; text-align: center; color: white; }
-        .stat-label { font-size: 8px; font-weight: 600; text-transform: uppercase; display: block; }
-        .stat-value { font-size: 11px; font-weight: 800; display: block; }
+        /* 🛠️ 6-SLOT GRID - BATTLEOP STYLE WITH PURPLE BOXES */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .stat-box { background: #8B3EEB; border-radius: 6px; padding: 5px 2px; text-align: center; color: white; border: 1px solid rgba(255,255,255,0.1); }
+        .stat-label { font-size: 7px; font-weight: 600; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 2px; color: #E0D4FF;}
+        .stat-value { font-size: 10px; font-weight: 800; display: block; margin-top: 1px; color: #fff; }
 
-        .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 10px; }
-        .progress-bar { flex: 1; height: 14px; background: #E0D4FF; border-radius: 20px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
-        .progress-fill { height: 100%; background: #2D1B44; width: 0%; transition: 0.5s; }
-        .player-count { position: absolute; width: 100%; text-align: center; font-size: 9px; font-weight: 800; line-height: 14px; color: #fff; z-index: 2; }
+        /* 🛠️ PROGRESS SECTION - Fixed Colors and Alignment */
+        .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 8px; }
+        .progress-bar-container { flex: 1; }
         
-        .join-btn { background: #1A0A2D; color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: 800; font-size: 12px; cursor: pointer; }
+        .progress-bar { width: 100%; height: 10px; background: #2D1B44; border-radius: 10px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
+        .progress-fill { height: 100%; background: #8B3EEB; width: 0%; transition: 0.5s Ease-in-out; }
+        .player-count { position: absolute; width: 100%; text-align: center; font-size: 8px; font-weight: 800; line-height: 10px; color: #fff; z-index: 2; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);}
+        
+        .progress-labels { display: flex; justify-content: space-between; font-size: 8px; color: #1A0A2D; font-weight: 700; margin-top: 2px;}
 
-        /* OVERLAY DETAIL */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #120524; display: none; flex-direction: column; z-index: 2000; overflow-y: auto; }
-        .overlay-content { padding: 20px; }
-        .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .detail-label { color: #AAA; font-size: 14px; }
-        .detail-value { font-weight: 700; color: #fff; }
+        /* JOIN BUTTON */
+        .join-btn { background: #1A0A2D; color: white; border: none; padding: 7px 18px; border-radius: 8px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
+        .join-btn:active { transform: scale(0.97); }
 
-        /* MODALS */
+        /* 🛠️ MODAL STYLE (Photo 4 & 5 Style) - Dynamic Alignment */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; box-sizing: border-box; }
         .modal-card { background: #2D1B44; width: 100%; max-width: 320px; border-radius: 20px; padding: 25px; text-align: center; color: white; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; }
         
-        /* Fixed Input Middle Alignment */
         .modal-card input { 
             width: 100%; background: #1A0A2D; border: 1px solid #8B3EEB; padding: 12px; margin: 10px 0; 
             border-radius: 10px; color: #fff; text-align: center; font-family: 'Poppins'; font-size: 14px; box-sizing: border-box;
         }
 
-        .btn-confirm { background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 10px; font-weight: 800; border: none; cursor: pointer; margin-top: 10px; }
-        .btn-join-modal { background: #fff; color: #000; padding: 10px 25px; border-radius: 10px; font-weight: 800; border: none; cursor: pointer; }
+        .btn-confirm { background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 10px; font-weight: 800; border: none; cursor: pointer; margin-top: 10px; font-size: 14px;}
     </style>
 </head>
 <body>
 
     <div id="mainPage">
-        <div class="header"><i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i><div class="title" id="pageTitle">FREE FIRE MAXX</div></div>
+        <div class="header">
+            <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
+            <div class="title" id="pageTitle">FREE FIRE MAXX</div>
+        </div>
+        
         <div class="tab-container">
             <div class="tab active" onclick="switchTab('upcoming', this)">Upcoming</div>
             <div class="tab" onclick="switchTab('ongoing', this)">Ongoing</div>
             <div class="tab" onclick="switchTab('result', this)">Result</div>
         </div>
+        
         <div class="match-list" id="matchList"></div>
-    </div>
-
-    <div id="viewOverlay" class="overlay">
-        <div class="header"><i class="fas fa-arrow-left back-btn" onclick="closeView()"></i><div class="title" id="viewTitle">DETAILS</div></div>
-        <div class="overlay-content">
-            <div class="detail-row"><span class="detail-label">Type :</span><span id="detType" class="detail-value"></span></div>
-            <div class="detail-row"><span class="detail-label">Version :</span><span id="detVer" class="detail-value"></span></div>
-            <div class="detail-row"><span class="detail-label">Map :</span><span id="detMap" class="detail-value"></span></div>
-            <div class="detail-row"><span class="detail-label">Entry Fee :</span><span id="detFee" class="detail-value"></span></div>
-            <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 20px; margin-top: 20px; text-align: center;">
-                <p style="color:#AAA;">Room Details</p>
-                <p style="color:#00f2fe; font-weight:700;">ID/PASS show before 10 mins</p>
-                <button class="join-btn" style="width:100%; margin-top:10px;" onclick="startJoinFlow()">Join</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="walletModal" class="modal-overlay">
-        <div class="modal-card">
-            <i class="fas fa-wallet" style="font-size:30px; color:#8B3EEB; margin-bottom:15px;"></i>
-            <h3 id="deductText" style="margin:10px 0;">₹ -- will be deduct</h3>
-            <p style="font-size:12px; color:#AAA;">Are you sure you want to join this match?</p>
-            <div style="display:flex; gap:10px; margin-top:20px;">
-                <button onclick="closeModals()" style="flex:1; background:none; border:1px solid #fff; color:#fff; padding:10px; border-radius:10px;">Cancel</button>
-                <button class="btn-join-modal" onclick="showInputModal()">Join</button>
-            </div>
-        </div>
     </div>
 
     <div id="inputModal" class="modal-overlay">
         <div class="modal-card">
-            <h3>Player Details</h3>
+            <h3>Enter Your Details</h3>
             <input type="text" id="gameName" placeholder="Game Name">
             <input type="number" id="gameId" placeholder="Game UID">
-            <button class="btn-confirm" id="submitBtn" onclick="finalJoin()">Confirm Join</button>
-            <p onclick="closeModals()" style="color:#aaa; cursor:pointer; font-size:12px; margin-top:15px;">Cancel</p>
+            <button class="btn-submit btn-confirm" id="submitBtn" onclick="finalJoin()">Confirm Join</button>
+            <p onclick="closeModals()" style="color:#aaa; cursor:pointer; font-size:12px; margin-top:10px;">Cancel</p>
         </div>
     </div>
 
     <script>
+        // TERA DEPLOY URL
         const scriptURL = "https://script.google.com/macros/s/AKfycbys-5KtuK__rMMOX-lvPZn4d6UFo_ZBNq4fuvTBpH28kIZXwcLVo63tVyiW4TlMazAkJw/exec";
         const matchKey = new URLSearchParams(window.location.search).get('type') || 'LW';
-        let currentMatch = null;
-        let allMatches = [];
+        let currentMatchId = null;
 
         async function loadMatches(status = 'upcoming') {
             const container = document.getElementById('matchList');
-            container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;">Checking Matches...</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>`;
             try {
                 const response = await fetch(`${scriptURL}?action=getMatches`);
-                allMatches = await response.json();
+                const allMatches = await response.json();
                 const filtered = allMatches.filter(m => m.category === matchKey && m.status === status);
+
                 container.innerHTML = ""; 
+                if (filtered.length === 0) {
+                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#AAA;">No matches available!</div>`;
+                    return;
+                }
+
                 filtered.forEach(m => {
+                    let fill = (m.joined / m.max) * 100;
+                    let isJoined = localStorage.getItem("joined_" + m.id);
+                    
                     // Clean Date/Time Formatting
                     let d = m.date ? new Date(m.date).toLocaleDateString('en-GB') : 'TBD';
                     let t = m.time ? new Date(m.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
@@ -136,10 +128,11 @@
                         <div class="card-header">
                             <img src="${matchKey.toLowerCase()}_poster.jpg" class="match-logo" onerror="this.src='https://i.imgur.com/uR1Y6T2.jpeg'">
                             <div class="header-text">
-                                <div class="match-title">${m.title} #${m.id} <span class="view-link" onclick="openView('${m.id}')">view</span></div>
+                                <div class="match-title">${m.title} #${m.id} <span class="view-link" onclick="alert('view details')">view</span></div>
                                 <span class="match-time">${d} | ${t}</span>
                             </div>
                         </div>
+                        
                         <div class="stats-grid">
                             <div class="stat-box"><span class="stat-label">Prize Pool</span><span class="stat-value">₹${m.prize}</span></div>
                             <div class="stat-box"><span class="stat-label">Per Kill</span><span class="stat-value">₹${m.perkill || '0'}</span></div>
@@ -148,60 +141,45 @@
                             <div class="stat-box"><span class="stat-label">Version</span><span class="stat-value">${m.version || 'TPP'}</span></div>
                             <div class="stat-box"><span class="stat-label">Map</span><span class="stat-value">${m.map}</span></div>
                         </div>
+
                         <div class="progress-section">
-                            <div class="progress-bar">
-                                <div class="player-count">${m.joined}/${m.max}</div>
-                                <div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar">
+                                    <div class="player-count">${m.joined}/${m.max}</div>
+                                    <div class="progress-fill" style="width:${fill}%"></div>
+                                </div>
+                                <div class="progress-labels"><span>Spots Left: ${m.max - m.joined}</span><span>Total: ${m.max}</span></div>
                             </div>
-                            <button class="join-btn" onclick="openWalletModal('${m.id}')">${localStorage.getItem("joined_"+m.id)?'Joined':'Join'}</button>
+                            <button class="join-btn" onclick="openForm('${m.id}')">${isJoined ? 'Joined' : 'Join'}</button>
                         </div>
                     </div>`;
                 });
-            } catch (e) { container.innerHTML = "Error loading data!"; }
+            } catch (e) { container.innerHTML = "<p style='text-align:center;'>Error loading matches!</p>"; }
         }
 
-        // View Details Logic
-        function openView(id) {
-            currentMatch = allMatches.find(x => x.id == id);
-            document.getElementById('viewTitle').innerText = currentMatch.title;
-            document.getElementById('detType').innerText = currentMatch.type;
-            document.getElementById('detVer').innerText = currentMatch.version || 'TPP';
-            document.getElementById('detMap').innerText = currentMatch.map;
-            document.getElementById('detFee').innerText = "₹ " + currentMatch.fee;
-            document.getElementById('viewOverlay').style.display = 'flex';
-        }
-
-        // Wallet Deduct Logic (Dynamic Amount)
-        function openWalletModal(id) {
-            currentMatch = allMatches.find(x => x.id == id);
-            // ✅ Yahan Amount Dynamic ho gaya hai
-            document.getElementById('deductText').innerText = `₹ ${currentMatch.fee} will be deduct`;
-            document.getElementById('walletModal').style.display = 'flex';
-        }
-
-        function showInputModal() { closeModals(); document.getElementById('inputModal').style.display = 'flex'; }
-        function startJoinFlow() { closeView(); openWalletModal(currentMatch.id); }
-        function closeView() { document.getElementById('viewOverlay').style.display = 'none'; }
-        function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
+        function openForm(id) { currentMatchId = id; document.getElementById('inputModal').style.display = 'flex'; }
+        function closeModals() { document.getElementById('inputModal').style.display = 'none'; }
 
         async function finalJoin() {
             const name = document.getElementById('gameName').value.trim();
             const uid = document.getElementById('gameId').value.trim();
-            if(!name || !uid) return alert("Please fill all details!");
+            if(!name || !uid) return alert("Fill all details!");
             
             const btn = document.getElementById('submitBtn');
-            btn.innerText = "Joining..."; btn.disabled = true;
+            btn.innerText = "Processing..."; btn.disabled = true;
+
             try {
-                await fetch(scriptURL, { method:'POST', mode:'no-cors', body: new URLSearchParams({'action':'registerMatch','matchId':currentMatch.id,'playerName':name,'playerId':uid,'matchType':currentMatch.type})});
-                localStorage.setItem("joined_"+currentMatch.id, "true");
-                alert("Successfully Joined!"); closeModals(); loadMatches('upcoming');
+                await fetch(scriptURL, { method:'POST', mode:'no-cors', body: new URLSearchParams({'action':'registerMatch','matchId':currentMatchId,'playerName':name,'playerId':uid,'matchType':matchKey})});
+                localStorage.setItem("joined_"+currentMatchId, "true");
+                alert("Successfully Joined Match!"); closeModals(); loadMatches('upcoming');
             } catch (e) { alert("Error joining match!"); }
             finally { btn.innerText = "Confirm Join"; btn.disabled = false; }
         }
 
         function switchTab(t, el) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            el.classList.add('active'); loadMatches(t);
+            el.classList.add('active');
+            loadMatches(t);
         }
 
         window.onload = () => loadMatches('upcoming');
