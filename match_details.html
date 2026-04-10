@@ -38,11 +38,11 @@
         /* 5. PROGRESS BAR */
         .progress-container { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
         .progress-bar { flex: 1; height: 18px; background: #E0D4FF; border-radius: 20px; overflow: hidden; position: relative; }
-        .progress-fill { height: 100%; background: #8B3EEB; transition: 0.5s; width: 0%; }
+        .progress-fill { height: 100%; background: #8B3EEB; transition: 0.8s ease-in-out; width: 0%; }
         .player-count { position: absolute; width: 100%; text-align: center; font-size: 10px; font-weight: 800; line-height: 18px; color: #120524; z-index: 2; }
         .join-btn { background: #1A0A2D; color: white; border: none; padding: 8px 25px; border-radius: 50px; font-weight: 700; font-size: 12px; cursor: pointer; }
 
-        /* 6. INFO OVERLAY (Full Screen Detail) */
+        /* 6. INFO OVERLAY */
         .info-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1A0A2D 0%, #120524 100%); display: none; flex-direction: column; z-index: 3000; overflow-y: auto; box-sizing: border-box; }
         .info-header { padding: 20px; display: flex; align-items: center; gap: 15px; }
         .info-content { padding: 20px; box-sizing: border-box; }
@@ -59,7 +59,7 @@
 
         .rules-box { background: #000; color: #fff; padding: 15px; border-radius: 15px; margin-top: 20px; font-size: 11px; line-height: 1.5; text-align: left; opacity: 0.8;}
 
-        /* 7. MODALS (Fixed Width & Center) */
+        /* 7. MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; box-sizing: border-box; }
         .modal-card { background: #2D1B44; width: 100%; max-width: 320px; border-radius: 24px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; }
         
@@ -125,20 +125,23 @@
             <div style="font-weight:800; margin-bottom:15px; color: white;">Enter Details</div>
             <input type="text" id="gameName" placeholder="FF User Name">
             <input type="number" id="gameId" placeholder="FF User ID">
-            <button class="btn-submit" onclick="submitJoin()">Submit</button>
+            <button class="btn-submit" id="submitBtn" onclick="submitJoin()">Submit</button>
         </div>
     </div>
 
     <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycby_03noxKUZPJCpPb2f7f5IRCTAvKdzqvX9HmuCL3RyRmGeGIY8D_0tYDUF6RVWQiXFpg/exec";
+
+        // Yahan joined 0 hai taaki tumhara logic sahi se chale
         const allMatchData = {
-            "BR": [{ id: "BR-50", title: "BR DUO BATTLE", prize: "380", fee: "5", type: "Duo", map: "Bermuda", joined: 12, max: 50 }],
-            "CS": [{ id: "CS-01", title: "CS SQUAD RANKED", prize: "160", fee: "40", type: "Squad", map: "Kalahari", joined: 5, max: 8 }],
+            "BR": [{ id: "BR-50", title: "BR DUO BATTLE", prize: "380", fee: "5", type: "Duo", map: "Bermuda", joined: 0, max: 50 }],
+            "CS": [{ id: "CS-01", title: "CS SQUAD RANKED", prize: "160", fee: "40", type: "Squad", map: "Kalahari", joined: 0, max: 8 }],
             "LW": [{ id: "LW-01", title: "LONE WOLF 1V1", prize: "40", fee: "25", type: "Solo", map: "Lone Wolf", joined: 0, max: 2 }],
-            "1V1": [{ id: "V1-PRO", title: "1V1 ULTRA BATTLE", prize: "25", fee: "15", type: "Solo", map: "Custom", joined: 1, max: 2 }],
-            "LW2": [{ id: "LW2-PRO", title: "LONE WOLF 2.0", prize: "40", fee: "25", type: "Solo", map: "Iron Cage", joined: 1, max: 2 }],
-            "FREE": [{ id: "FR-100", title: "FREE ENTRY MATCH", prize: "2000", fee: "0", type: "Duo", map: "Bermuda", joined: 45, max: 100 }],
+            "1V1": [{ id: "V1-PRO", title: "1V1 ULTRA BATTLE", prize: "25", fee: "15", type: "Solo", map: "Custom", joined: 0, max: 2 }],
+            "LW2": [{ id: "LW2-PRO", title: "LONE WOLF 2.0", prize: "40", fee: "25", type: "Solo", map: "Iron Cage", joined: 0, max: 2 }],
+            "FREE": [{ id: "FR-100", title: "FREE ENTRY MATCH", prize: "2000", fee: "0", type: "Duo", map: "Bermuda", joined: 0, max: 100 }],
             "1V1HS": [{ id: "HS-KING", title: "1V1 ONLY HEADSHOT", prize: "20", fee: "15", type: "Solo", map: "Red Map", joined: 0, max: 2 }],
-            "CSHS": [{ id: "CSHS-HS", title: "CS HEADSHOT BATTLE", prize: "30", fee: "20", type: "Solo", map: "Store", joined: 1, max: 2 }]
+            "CSHS": [{ id: "CSHS-HS", title: "CS HEADSHOT BATTLE", prize: "30", fee: "20", type: "Solo", map: "Store", joined: 0, max: 2 }]
         };
 
         const params = new URLSearchParams(window.location.search);
@@ -153,7 +156,11 @@
             
             if(status === 'upcoming') {
                 matches.forEach(m => {
+                    // ✅ YE HAI AUTO-FILL LOGIC: (Bande joined / Max Limit) * 100
+                    let fillPercentage = (m.joined / m.max) * 100;
+                    
                     let btnText = localStorage.getItem("joined_" + m.id) ? (m.type === "Solo" ? "Joined" : "Join Friend") : "Join";
+                    
                     container.innerHTML += `
                     <div class="card">
                         <div class="card-header">
@@ -165,13 +172,13 @@
                         </div>
                         <div class="stats-row">
                             <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${m.prize}</span></div>
-                            <div class="stat-box"><span class="stat-label">Entry Fee</span><span class="stat-value">₹${m.fee}</span></div>
+                            <div class="stat-box"><span class="stat-label">Fee</span><span class="stat-value">₹${m.fee}</span></div>
                             <div class="stat-box"><span class="stat-label">Map</span><span class="stat-value">${m.map}</span></div>
                         </div>
                         <div class="progress-container">
                             <div class="progress-bar">
                                 <div class="player-count">${m.joined}/${m.max}</div>
-                                <div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div>
+                                <div class="progress-fill" style="width:${fillPercentage}%"></div>
                             </div>
                             <button class="join-btn" onclick="startJoin('${m.id}', ${m.fee})">${btnText}</button>
                         </div>
@@ -198,15 +205,49 @@
         function triggerJoinFromInfo() { startJoin(currentMatch.id, currentMatch.fee); }
         function showForm() { document.getElementById('confirmModal').style.display = 'none'; document.getElementById('formModal').style.display = 'flex'; }
         function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
-        function showMyEntries() { alert("Your entries saved locally."); }
+        function showMyEntries() { alert("Your Entries are saved locally."); }
         function showParticipants() { alert("Coming Soon!"); }
 
         function submitJoin() {
             const name = document.getElementById('gameName').value.trim();
-            if(!name) return alert("Enter Name!");
-            localStorage.setItem("joined_" + currentMatch.id, "true");
-            alert("Success!");
-            closeModals(); closeInfo(); displayMatches('upcoming');
+            const gId = document.getElementById('gameId').value.trim();
+            if(!name || !gId) return alert("Enter Name and ID!");
+
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "Joining...";
+            btn.disabled = true;
+
+            const formData = new URLSearchParams();
+            formData.append("action", "registerMatch");
+            formData.append("matchId", currentMatch.id);
+            formData.append("playerName", name);
+            formData.append("playerId", gId);
+            formData.append("matchType", currentMatch.type);
+
+            fetch(scriptURL, {
+                method: "POST",
+                mode: "no-cors",
+                body: formData
+            })
+            .then(() => {
+                // UI Update: Joined badha do taaki bar bhare
+                currentMatch.joined++; 
+                
+                let entries = JSON.parse(localStorage.getItem("my_registrations_" + currentMatch.id)) || [];
+                entries.push({name: name, id: gId});
+                localStorage.setItem("my_registrations_" + currentMatch.id, JSON.stringify(entries));
+                localStorage.setItem("joined_" + currentMatch.id, "true");
+
+                alert("Successfully Joined!");
+                closeModals(); closeInfo(); displayMatches('upcoming');
+            })
+            .catch(err => {
+                alert("Error connecting to server!");
+            })
+            .finally(() => {
+                btn.innerText = "Submit";
+                btn.disabled = false;
+            });
         }
 
         function switchTab(t) { 
