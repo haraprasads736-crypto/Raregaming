@@ -74,7 +74,12 @@
     <div class="balance-container">
         <div class="bal-card">
             <div class="bal-label">Main Wallet</div>
-            <div class="bal-amount" id="mainBal">₹0</div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <div class="bal-amount" id="mainBal">₹0</div>
+                <div onclick="window.location.href='payment.html'" style="background: var(--transfer-green); color: black; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 10px rgba(57, 255, 20, 0.4); margin-top: 5px;">
+                    <i class="fas fa-plus" style="font-size: 14px; font-weight: bold;"></i>
+                </div>
+            </div>
         </div>
         <div class="bal-card" style="border-color: var(--rare-gold);">
             <div class="bal-label">Rare Coins</div>
