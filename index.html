@@ -103,6 +103,11 @@
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
+    <div style="padding: 0 20px; margin-top: 15px;">
+        <button onclick="window.location.href='payment.html'" style="background: linear-gradient(90deg, #ff8a00, #e52e71); color: white; width: 100%; padding: 15px; font-size: 16px; font-weight: 800; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(229, 46, 113, 0.4); text-transform: uppercase; display: flex; justify-content: center; align-items: center; gap: 10px;">
+            <i class="fas fa-plus-circle" style="font-size: 20px;"></i> Add Money To Wallet
+        </button>
+    </div>
     <div class="section-header">
         <div class="section-title">Live Tournaments</div>
     </div>
@@ -139,8 +144,7 @@
             }
         })();
 
-        // ✅ NAYA DEPLOY URL UPDATED
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyRd0GE6nGsyE8L_zKol6aIVt6DRoQ3E-FHGlix4REgY3II9eWPYgBFADafIuz8HZZHDA/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzEflOY59qvc4kz757prSqTdGb0_A8iV1evtBTIgAPSCr2VTzSp-dsccufQs0iOPklMCg/exec";
         
         async function syncBalance() {
             let userStr = localStorage.getItem("rareGamingUser");
@@ -153,7 +157,6 @@
             balEl.style.opacity = "0.5";
 
             try {
-                // Backend se real balance fetch karna
                 const response = await fetch(`${scriptURL}?action=getBalance&userId=${userId}`);
                 const data = await response.json();
                 
@@ -161,7 +164,6 @@
                     balEl.innerHTML = `<i class="fas fa-coins"></i> ₹${data.balance}`;
                     userData.balance = data.balance;
                     localStorage.setItem("rareGamingUser", JSON.stringify(userData));
-                    localStorage.setItem("userUID", userId); // Sabse important sync
                 }
             } catch (e) {
                 console.error("Sync failed");
