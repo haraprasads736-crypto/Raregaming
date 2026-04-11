@@ -101,8 +101,8 @@
             <h3 id="deductText">₹ -- will be deduct</h3>
             <p style="font-size:11px; color:#888; margin-top: 5px;">Coins will be debited from your wallet.</p>
             <div style="display:flex; gap:10px; margin-top:25px;">
-                <button onclick="closeModals()" style="flex:1; background:none; border:1px solid #444; color:#AAA; border-radius:8px;">Cancel</button>
-                <button onclick="showInputModal()" style="flex:1; background:#fff; color:#000; font-weight:800; border-radius:8px; border:none; padding:12px;">Join</button>
+                <button onclick="closeModals()" style="flex:1; background:none; border:1px solid #444; color:#AAA; border-radius:8px; cursor:pointer;">Cancel</button>
+                <button onclick="showInputModal()" style="flex:1; background:#fff; color:#000; font-weight:800; border-radius:8px; border:none; padding:12px; cursor:pointer;">Join</button>
             </div>
         </div>
     </div>
@@ -118,8 +118,8 @@
     </div>
 
     <script>
-        // ✅ NAYA DEPLOY URL UPDATED
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzEflOY59qvc4kz757prSqTdGb0_A8iV1evtBTIgAPSCr2VTzSp-dsccufQs0iOPklMCg/exec";
+        // ✅ TERA NAYA DEPLOY URL CONNECTED
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyKsSRWjQI8bt-25852g_rv-eDdmbtE0IHqiVufHdl-NODtKGEXjlyxwJr0GvfnXgBNew/exec";
         
         const matchKey = new URLSearchParams(window.location.search).get('type') || 'LW';
         let currentMatch = null;
@@ -191,10 +191,16 @@
         async function finalJoin() {
             const name = document.getElementById('gameName').value.trim();
             const uid = document.getElementById('gameId').value.trim();
-            const userAppUID = localStorage.getItem("userUID"); 
+            
+            // Sync user data from index/login
+            let userStr = localStorage.getItem("rareGamingUser") || localStorage.getItem("user");
+            if(!userStr) return alert("Please Login First!");
+            
+            let userData = JSON.parse(userStr);
+            const userAppUID = userData.uid || localStorage.getItem("userUID");
 
             if(!name || !uid) return alert("Please fill all details!");
-            if(!userAppUID) return alert("Please Login First!");
+            if(!userAppUID) return alert("Login session expired. Please Re-login!");
 
             const btn = document.getElementById('submitBtn');
             btn.innerText = "Processing..."; btn.disabled = true;
@@ -216,12 +222,13 @@
                 const result = await response.text();
                 if (result.includes("Success")) {
                     localStorage.setItem("joined_"+currentMatch.id, "true");
-                    alert("Match Joined Successfully!");
-                    closeModals(); loadMatches('upcoming');
+                    alert("Match Joined Successfully! Coins Deducted.");
+                    closeModals(); 
+                    loadMatches('upcoming');
                 } else {
-                    alert(result);
+                    alert(result); // Yahan "Low Balance" ya "User Not Found" dikhayega
                 }
-            } catch (e) { alert("Server Error!"); }
+            } catch (e) { alert("Server Error! Check Internet."); }
             finally { btn.innerText = "Confirm Join"; btn.disabled = false; }
         }
 
