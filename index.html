@@ -156,30 +156,47 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwOkgiMlegqp1-dU4JLLk7oOjMxpQhweDVjLfr3ETbuEuvKlZs41KMQJei_6JAb5ctC6A/exec";
+        // ✅ TERA NAYA DEPLOY URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzEflOY59qvc4kz757prSqTdGb0_A8iV1evtBTIgAPSCr2VTzSp-dsccufQs0iOPklMCg/exec";
         
-        function syncBalance() {
-            let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!userData) { window.location.href = "login.html"; return; }
-            
+        async function syncBalance() {
+            // Hum "rareGamingUser" se username uthayenge jo login ke waqt save hua tha
+            let userStr = localStorage.getItem("rareGamingUser") || localStorage.getItem("user");
+            if(!userStr) { 
+                console.log("No user found, redirecting...");
+                return; 
+            }
+
+            let userData = JSON.parse(userStr);
+            let username = userData.name || userData.username;
+            let userId = userData.uid;
+
+            // Loading state
             document.getElementById('walletBal').style.opacity = "0.6";
 
-            fetch(`${scriptURL}?action=getUserData&username=${encodeURIComponent(userData.name)}`)
-            .then(res => res.json())
-            .then(data => { 
+            try {
+                // Backend se user ka balance la rahe hain
+                const response = await fetch(`${scriptURL}?action=getBalance&userId=${userId}`);
+                const data = await response.json();
+                
                 if(data && data.balance !== undefined) {
-                    document.getElementById('walletBal').innerHTML = `<i class="fas fa-coins"></i> ₹${data.balance}`; 
+                    document.getElementById('walletBal').innerHTML = `<i class="fas fa-coins"></i> ₹${data.balance}`;
+                    // Local Storage update taaki doosre pages pe bhi dikhe
                     userData.balance = data.balance;
                     localStorage.setItem("rareGamingUser", JSON.stringify(userData));
+                    localStorage.setItem("userUID", userId); // Sabse important join ke liye
                 }
+            } catch (e) {
+                console.log("Balance sync failed");
+            } finally {
                 document.getElementById('walletBal').style.opacity = "1";
-            }).catch(e => { 
-                document.getElementById('walletBal').style.opacity = "1";
-            });
+            }
         }
 
+        // Jab page load ho tab balance check karo
         window.onload = syncBalance;
-        setInterval(syncBalance, 20000);
+        // Har 30 second mein auto-update
+        setInterval(syncBalance, 30000);
     </script>
 </body>
 </html>
