@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit - Rare Gaming</title>
+    <style>
+        /* Exact Ditto Background from your screenshot */
+        body {
+            background: linear-gradient(to bottom, #1b103c, #a1368b);
+            font-family: sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Top Header */
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        /* Step 1: Deposit Form Styling */
+        .input-box {
+            background: transparent;
+            border: 1px solid #4a3b75;
+            border-radius: 8px;
+            width: 100%;
+            padding: 15px;
+            font-size: 20px;
+            color: white;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .amount-btn {
+            background-color: #1a153a;
+            border: none;
+            color: white;
+            padding: 12px 0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .amount-btn:active {
+            background-color: #3b2a6e;
+        }
+
+        .continue-btn {
+            background: linear-gradient(90deg, #1b3266, #2d559e);
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        /* Step 2: QR Code Styling (BattleOp Style) */
+        #step2 {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .utr-input {
+            width: 90%;
+            padding: 12px;
+            margin-top: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .verify-btn {
+            background: #4caf50;
+            color: white;
+            width: 90%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header">
+            <button class="back-btn" onclick="window.location.href='earn.html'">←</button>
+            <h2 style="margin: 0; font-size: 20px; font-weight: normal; margin-left: 20px;">Deposit</h2>
+        </div>
+
+        <div id="step1">
+            <p style="font-weight: bold; margin-bottom: 10px;">Amount to Deposit</p>
+            <input type="number" id="payAmount" class="input-box" placeholder="Enter Amount">
+
+            <div class="grid-container">
+                <button class="amount-btn" onclick="setAmount(20)">20</button>
+                <button class="amount-btn" onclick="setAmount(50)">50</button>
+                <button class="amount-btn" onclick="setAmount(70)">70</button>
+                <button class="amount-btn" onclick="setAmount(100)">100</button>
+                <button class="amount-btn" onclick="setAmount(200)">200</button>
+                <button class="amount-btn" onclick="setAmount(500)">500</button>
+                <button class="amount-btn" onclick="setAmount(1000)">1000</button>
+                <button class="amount-btn" onclick="setAmount(2000)">2000</button>
+            </div>
+
+            <button class="continue-btn" onclick="generateQR()">Continue</button>
+        </div>
+
+        <div id="step2" style="display: none;">
+            <h2 style="margin-top: 0; font-size: 20px; color: #333;">RareGaming</h2>
+            <p style="font-size: 14px; font-weight: bold;">Scan & Pay With Any App</p>
+            <p style="font-size: 14px; color: #555;">You are transferring ₹<span id="displayAmount"></span> to RareGaming</p>
+            
+            <img id="qrImage" src="" alt="QR Code" style="width: 220px; height: 220px; margin: 15px 0; border: 2px solid #eee; padding: 5px;">
+            
+            <p style="color: #d9534f; font-weight: bold; margin: 10px 0;">Expire in <span id="timer">05:00</span></p>
+
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+
+            <p style="font-size: 12px; color: #777;">After payment, enter 12-digit UTR below:</p>
+            <input type="number" id="utrNumber" class="utr-input" placeholder="Enter UTR Number">
+            <button class="verify-btn" onclick="submitPayment()">Submit UTR</button>
+        </div>
+
+    </div>
+
+    <script>
+        let timerInterval;
+
+        // Function to put button value into the input box
+        function setAmount(val) {
+            document.getElementById('payAmount').value = val;
+        }
+
+        // Function when 'Continue' is clicked
+        function generateQR() {
+            let amount = document.getElementById('payAmount').value;
+            
+            if(amount < 5 || amount === "") {
+                alert("Please enter an amount (Minimum ₹5).");
+                return;
+            }
+
+            // ⚠️ APNA SBI UPI ID YAHAN DAALNA ⚠️
+            let upiId = "YOUR_UPI_ID@okicici"; 
+            let upiName = "RareGaming";
+            
+            // Create UPI Link
+            let upiLink = `upi://pay?pa=${upiId}&pn=${upiName}&am=${amount}&cu=INR`;
+            
+            // Create QR using Google API
+            let qrUrl = `https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=${encodeURIComponent(upiLink)}`;
+            
+            document.getElementById('qrImage').src = qrUrl;
+            document.getElementById('displayAmount').innerText = amount;
+            
+            // Hide Step 1 and Show Step 2
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            
+            startTimer(300); // Start 5 min timer
+        }
+
+        // Timer Function
+        function startTimer(duration) {
+            clearInterval(timerInterval);
+            let timerDisplay = document.getElementById('timer');
+            let timer = duration, minutes, seconds;
+            
+            timerInterval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                timerDisplay.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    alert("Payment session expired! Please try again.");
+                    // Go back to step 1
+                    document.getElementById('step1').style.display = 'block';
+                    document.getElementById('step2').style.display = 'none';
+                    document.getElementById('payAmount').value = '';
+                }
+            }, 1000);
+        }
+
+        // UTR Submit Function
+        function submitPayment() {
+            let utr = document.getElementById('utrNumber').value;
+            
+            if(utr.length !== 12) {
+                alert("Invalid UTR! Please enter correct 12-digit UTR.");
+                return;
+            }
+
+            alert("Success! Your payment of ₹" + document.getElementById('payAmount').value + " is under review. UTR: " + utr);
+            clearInterval(timerInterval);
+            
+            // Payment ke baad user wapas app (earn.html) par chala jayega
+            window.location.href = 'earn.html';
+        }
+    </script>
+</body>
+</html>
