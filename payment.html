@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deposit - Rare Gaming</title>
     <style>
-        /* Exact Ditto Background */
+        /* Background & Container Styling */
         body {
             background: linear-gradient(to bottom, #1b103c, #a1368b);
-            font-family: sans-serif;
+            font-family: 'Poppins', sans-serif;
             color: white;
             margin: 0;
             padding: 0;
@@ -21,12 +21,12 @@
             margin: 0 auto;
         }
 
-        /* Top Header */
         .header {
             display: flex;
             align-items: center;
             margin-bottom: 30px;
         }
+
         .back-btn {
             background: none;
             border: none;
@@ -36,7 +36,7 @@
             margin-right: 15px;
         }
 
-        /* Step 1: Deposit Form Styling */
+        /* Step 1 Elements */
         .input-box {
             background: transparent;
             border: 1px solid #4a3b75;
@@ -68,9 +68,6 @@
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
-        .amount-btn:active {
-            background-color: #3b2a6e;
-        }
 
         .continue-btn {
             background: linear-gradient(90deg, #1b3266, #2d559e);
@@ -85,7 +82,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        /* Step 2: QR Code Styling */
+        /* Step 2 (QR & Transaction ID Section) */
         #step2 {
             background: white;
             color: black;
@@ -94,8 +91,9 @@
             text-align: center;
             margin-top: 20px;
         }
-        .utr-input {
-            width: 90%;
+
+        .trans-input {
+            width: 95%;
             padding: 12px;
             margin-top: 15px;
             border: 2px solid #ddd;
@@ -103,11 +101,13 @@
             font-size: 16px;
             text-align: center;
             outline: none;
+            font-weight: bold;
         }
+
         .verify-btn {
             background: #4caf50;
             color: white;
-            width: 90%;
+            width: 100%;
             padding: 12px;
             margin-top: 15px;
             border: none;
@@ -115,6 +115,14 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+        }
+
+        .hindi-text {
+            font-size: 12px;
+            color: #444;
+            display: block;
+            margin-top: 5px;
+            line-height: 1.4;
         }
     </style>
 </head>
@@ -148,7 +156,7 @@
         <div id="step2" style="display: none;">
             <h2 style="margin-top: 0; font-size: 20px; color: #333;">RareGaming</h2>
             <p style="font-size: 14px; font-weight: bold;">Scan & Pay With Any App</p>
-            <p style="font-size: 14px; color: #555;">You are transferring ₹<span id="displayAmount"></span> to RareGaming</p>
+            <p style="font-size: 14px; color: #555;">Transferring ₹<span id="displayAmount"></span> to RareGaming</p>
             
             <img id="qrImage" src="" alt="Loading QR..." style="width: 220px; height: 220px; margin: 15px 0; border: 2px solid #eee; padding: 5px; background: #f9f9f9;">
             
@@ -156,12 +164,12 @@
 
             <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
 
-            <p style="font-size: 13px; font-weight: bold; color: #333; margin-bottom: 5px;">Payment Successful?</p>
-            <p style="font-size: 11px; color: #777; margin-top: 0;">Please enter your **12-Digit Transaction ID / UTR** below.</p>
+            <p style="font-size: 14px; font-weight: bold; color: #333; margin-bottom: 2px;">Transaction ID / Ref No.</p>
+            <span class="hindi-text">पेमेंट के बाद 12 अंकों का Transaction ID यहाँ डालें</span>
             
-            <input type="number" id="utrNumber" class="utr-input" placeholder="Example: 4123XXXXXXXX">
+            <input type="number" id="transNumber" class="trans-input" placeholder="Example: 4123XXXXXXXX">
             
-            <p style="font-size: 10px; color: #ff4d4d; margin-top: 5px;">Note: Galat ID daalne par account block ho jayega.</p>
+            <p style="font-size: 10px; color: #ff4d4d; margin-top: 8px; font-weight: bold;">Note: गलत ID डालने पर आपका एकाउंट ब्लॉक हो सकता है।</p>
             
             <button class="verify-btn" onclick="submitPayment()">Submit Transaction ID</button>
         </div>
@@ -177,17 +185,16 @@
 
         function generateQR() {
             let amount = document.getElementById('payAmount').value;
-            
             if(amount < 5 || amount === "") {
-                alert("Please enter an amount (Minimum ₹5).");
+                alert("Please enter a valid amount (Min ₹5).");
                 return;
             }
 
-            // TERA UPI ID
             let upiId = "8328875119-3@ybl"; 
             let upiName = "RareGaming";
-            
             let upiLink = `upi://pay?pa=${upiId}&pn=${upiName}&am=${amount}&cu=INR`;
+            
+            // Using a faster QR API
             let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
             
             document.getElementById('qrImage').src = qrUrl;
@@ -207,57 +214,59 @@
             timerInterval = setInterval(function () {
                 minutes = parseInt(timer / 60, 10);
                 seconds = parseInt(timer % 60, 10);
-
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
-
                 timerDisplay.textContent = minutes + ":" + seconds;
 
                 if (--timer < 0) {
                     clearInterval(timerInterval);
-                    alert("Session expired! Please try again.");
-                    document.getElementById('step1').style.display = 'block';
-                    document.getElementById('step2').style.display = 'none';
-                    document.getElementById('payAmount').value = '';
+                    alert("Session expired! Please start again.");
+                    window.location.reload();
                 }
             }, 1000);
         }
 
         function submitPayment() {
-            let utr = document.getElementById('utrNumber').value;
+            let transId = document.getElementById('transNumber').value;
             let amount = document.getElementById('payAmount').value;
             
             let userStr = localStorage.getItem("rareGamingUser");
+            if(!userStr) {
+                alert("Error: User session expired. Please login again.");
+                return;
+            }
+            
             let userData = JSON.parse(userStr);
             let playerName = userData.name;
             let uid = userData.uid;
 
-            if(utr.length !== 12) {
-                alert("Please enter a valid 12-digit Transaction ID / UTR.");
+            if(transId.length !== 12) {
+                alert("कृपया 12 अंकों का सही Transaction ID डालें।");
                 return;
             }
 
-            // TERA APPS SCRIPT URL YAHAN DAALO
             const scriptURL = "https://script.google.com/macros/s/AKfycbwZQtuhgqNw0VrGBG1fA0-GSGC4Fmeyvi8Fo2xL0F8ngBjmaGNrrbtB88g_J9xu7vnQKw/exec";
 
-            alert("Verifying... Please wait.");
+            alert("Verifying Transaction ID... कृपया प्रतीक्षा करें।");
 
             fetch(scriptURL, {
                 method: 'POST',
                 body: new URLSearchParams({
-                    'action': 'submitUTR',
+                    'action': 'submitUTR', // We keep 'submitUTR' for backend logic compatibility
                     'playerName': playerName,
                     'uid': uid,
                     'amount': amount,
-                    'utr': utr
+                    'utr': transId // transId goes into the 'utr' field in the sheet
                 })
             })
             .then(res => res.text())
             .then(data => {
-                alert("Success! Balance will be added to your wallet.");
+                alert("धन्यवाद! आपका बैलेंस जल्द ही अपडेट हो जाएगा।");
                 window.location.href = 'earn.html';
             })
-            .catch(err => alert("Error! Please try again."));
+            .catch(err => {
+                alert("Network Error! कृपया इंटरनेट कनेक्शन चेक करें और फिर से कोशिश करें।");
+            });
         }
     </script>
 </body>
