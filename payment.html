@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deposit - Rare Gaming</title>
     <style>
-        /* Exact Ditto Background from your screenshot */
+        /* Exact Ditto Background */
         body {
             background: linear-gradient(to bottom, #1b103c, #a1368b);
             font-family: sans-serif;
@@ -85,7 +85,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        /* Step 2: QR Code Styling (BattleOp Style) */
+        /* Step 2: QR Code Styling */
         #step2 {
             background: white;
             color: black;
@@ -149,7 +149,7 @@
             <p style="font-size: 14px; font-weight: bold;">Scan & Pay With Any App</p>
             <p style="font-size: 14px; color: #555;">You are transferring ₹<span id="displayAmount"></span> to RareGaming</p>
             
-            <img id="qrImage" src="" alt="QR Code" style="width: 220px; height: 220px; margin: 15px 0; border: 2px solid #eee; padding: 5px;">
+            <img id="qrImage" src="" alt="Loading QR..." style="width: 220px; height: 220px; margin: 15px 0; border: 2px solid #eee; padding: 5px; background: #f9f9f9;">
             
             <p style="color: #d9534f; font-weight: bold; margin: 10px 0;">Expire in <span id="timer">05:00</span></p>
 
@@ -165,12 +165,10 @@
     <script>
         let timerInterval;
 
-        // Function to put button value into the input box
         function setAmount(val) {
             document.getElementById('payAmount').value = val;
         }
 
-        // Function when 'Continue' is clicked
         function generateQR() {
             let amount = document.getElementById('payAmount').value;
             
@@ -179,27 +177,25 @@
                 return;
             }
 
-            // ✅ TERA UPI ID YAHAN ADD HO GAYA HAI ✅
+            // TERA UPI ID
             let upiId = "8328875119-3@ybl"; 
             let upiName = "RareGaming";
             
             // Create UPI Link
             let upiLink = `upi://pay?pa=${upiId}&pn=${upiName}&am=${amount}&cu=INR`;
             
-            // Create QR using Google API
-            let qrUrl = `https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=${encodeURIComponent(upiLink)}`;
+            // ✅ NAYA AUR FAST QR API (Jo mobile app mein block nahi hota) ✅
+            let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
             
             document.getElementById('qrImage').src = qrUrl;
             document.getElementById('displayAmount').innerText = amount;
             
-            // Hide Step 1 and Show Step 2
             document.getElementById('step1').style.display = 'none';
             document.getElementById('step2').style.display = 'block';
             
-            startTimer(300); // Start 5 min timer
+            startTimer(300);
         }
 
-        // Timer Function
         function startTimer(duration) {
             clearInterval(timerInterval);
             let timerDisplay = document.getElementById('timer');
@@ -217,7 +213,6 @@
                 if (--timer < 0) {
                     clearInterval(timerInterval);
                     alert("Payment session expired! Please try again.");
-                    // Go back to step 1
                     document.getElementById('step1').style.display = 'block';
                     document.getElementById('step2').style.display = 'none';
                     document.getElementById('payAmount').value = '';
@@ -225,7 +220,6 @@
             }, 1000);
         }
 
-        // UTR Submit Function
         function submitPayment() {
             let utr = document.getElementById('utrNumber').value;
             
@@ -237,7 +231,6 @@
             alert("Success! Your payment of ₹" + document.getElementById('payAmount').value + " is under review. UTR: " + utr);
             clearInterval(timerInterval);
             
-            // Payment ke baad user wapas app (earn.html) par chala jayega
             window.location.href = 'earn.html';
         }
     </script>
