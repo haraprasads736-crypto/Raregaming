@@ -26,7 +26,6 @@
             padding: 20px;
         }
 
-        /* ✅ LOGO: Ab ye tumhari 'logo.png' file ko uthayega */
         .logo-img {
             width: 140px;
             margin-bottom: 20px;
@@ -93,13 +92,13 @@
 
         .footer-links { margin-top: 20px; font-size: 13px; }
         .footer-links span { color: #8B3EEB; font-weight: 700; cursor: pointer; }
-        #statusMsg { margin-top: 15px; font-size: 12px; font-weight: 600; }
+        #statusMsg { margin-top: 15px; font-size: 12px; font-weight: 600; min-height: 20px; }
     </style>
 </head>
 <body>
 
 <div class="login-box">
-    <img src="logo.png" class="logo-img" alt="Rare Gaming">
+    <img src="logo.png" class="logo-img" alt="Rare Gaming" onerror="this.src='https://via.placeholder.com/140?text=LOGO'">
 
     <div class="welcome-text">
         <h2 id="title">WELCOME</h2>
@@ -140,6 +139,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
 
 <script>
+    // ✅ FIREBASE INITIALIZATION
     const firebaseConfig = {
         apiKey: "AIzaSyA6GgehsphLSUJ8jfEwwTT-DD7GMRO28AA",
         authDomain: "rare-gaming-6b29a.firebaseapp.com",
@@ -150,8 +150,10 @@
     };
     firebase.initializeApp(firebaseConfig);
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzcW3IGmnqsAf4YN5VQE-EESWBHZTbZ7h2Iyk5NQQ82J9wEJVkJrd3ERmYH3zw5DWwwGQ/exec";
+    // ✅ NAYA DEPLOY URL CONNECTED
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyKsSRWjQI8bt-25852g_rv-eDdmbtE0IHqiVufHdl-NODtKGEXjlyxwJr0GvfnXgBNew/exec";
     
+    // DEVICE ID GENERATOR
     function getDeviceID() {
         let id = localStorage.getItem("rare_device_id");
         if (!id) {
@@ -162,6 +164,13 @@
     }
 
     let isLoginMode = true;
+
+    // AUTO-LOGIN CHECK
+    window.onload = () => {
+        if(localStorage.getItem("rareGamingUser")) {
+            window.location.href = "index.html";
+        }
+    }
 
     function toggleMode() {
         isLoginMode = !isLoginMode;
@@ -185,27 +194,51 @@
         }
 
         btn.disabled = true;
-        status.innerText = "Connecting to Arena...";
+        status.innerText = isLoginMode ? "Authenticating Arena..." : "Creating Account...";
 
-        let url = isLoginMode ? 
-            `${scriptURL}?action=login&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&deviceId=${dID}` :
-            `${scriptURL}?action=register&name=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&deviceId=${dID}`;
+        // Action select based on mode
+        let action = isLoginMode ? "login" : "registerUser";
+        let url = `${scriptURL}?action=${action}&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&deviceId=${dID}&name=${encodeURIComponent(user)}`;
 
         fetch(url)
         .then(res => res.json())
         .then(data => {
             btn.disabled = false;
             if(data.status === "Success") {
+                // Save user data for entire session
                 localStorage.setItem("rareGamingUser", JSON.stringify(data));
+                localStorage.setItem("userUID", data.uid);
                 status.innerHTML = "<span style='color:#00FF00'>Access Granted! Redirecting...</span>";
                 setTimeout(() => window.location.href = "index.html", 800);
             } else {
-                status.innerHTML = `<span style='color:#FF4D4D'>${data.message}</span>`;
+                status.innerHTML = `<span style='color:#FF4D4D'>${data.message || "Error Occurred"}</span>`;
             }
         })
         .catch(err => {
             btn.disabled = false;
-            status.innerHTML = "<span style='color:#FF4D4D'>Server Error!</span>";
+            status.innerHTML = "<span style='color:#FF4D4D'>Server Busy, Try Again!</span>";
+        });
+    }
+
+    function signInWithGoogle() {
+        const status = document.getElementById('statusMsg');
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then((result) => {
+            const user = result.user;
+            status.innerText = "Syncing Rare UID...";
+            fetch(`${scriptURL}?action=firebase_login&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.displayName)}&deviceId=${getDeviceID()}`)
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "Success") {
+                    localStorage.setItem("rareGamingUser", JSON.stringify(data));
+                    localStorage.setItem("userUID", data.uid);
+                    window.location.href = "index.html";
+                } else {
+                    status.innerHTML = `<span style='color:#FF4D4D'>Sync Failed!</span>`;
+                }
+            });
+        }).catch(e => {
+            status.innerHTML = "<span style='color:#FF4D4D'>Google Login Cancelled</span>";
         });
     }
 
@@ -221,29 +254,10 @@
         .then(res => res.json())
         .then(data => {
             if(data.status === "Success") {
-                alert("RARE GAMING SECURITY:\nBhai, tera password ye hai: " + data.pass);
+                alert("RARE GAMING SECURITY:\nTera password ye hai: " + data.pass);
             } else {
-                status.innerHTML = `<span style='color:#FF4D4D'>${data.message}</span>`;
+                status.innerHTML = `<span style='color:#FF4D4D'>User nahi mila!</span>`;
             }
-        });
-    }
-
-    function signInWithGoogle() {
-        const status = document.getElementById('statusMsg');
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then((result) => {
-            const user = result.user;
-            status.innerText = "Syncing with Rare Server...";
-            fetch(`${scriptURL}?action=firebase_login&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.displayName)}&deviceId=${getDeviceID()}`)
-            .then(res => res.json())
-            .then(data => {
-                if(data.status === "Success") {
-                    localStorage.setItem("rareGamingUser", JSON.stringify(data));
-                    window.location.href = "index.html";
-                } else {
-                    status.innerHTML = `<span style='color:#FF4D4D'>${data.message}</span>`;
-                }
-            });
         });
     }
 </script>
