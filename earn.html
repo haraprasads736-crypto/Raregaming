@@ -40,7 +40,7 @@
         .btn-yellow { background: var(--rare-gold); color: #000; }
         .btn-action:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* 🌟 NAVIGATION BAR SYSTEM (Same as Index) 🌟 */
+        /* 🌟 NAVIGATION BAR SYSTEM 🌟 */
         .bottom-nav { 
             position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
             background: rgba(10, 10, 15, 0.95); display: flex; 
@@ -56,7 +56,6 @@
         .nav-item i { font-size: 20px; }
         .nav-item.active { color: var(--neon-blue); }
 
-        /* Green Center Button: Transfer */
         .center-btn .icon-circle { 
             width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
@@ -99,12 +98,10 @@
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item active"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        
         <a href="transfer.html" class="nav-item center-btn">
             <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
             <span style="margin-top: 5px; color: #fff;">SEND</span>
         </a>
-
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
@@ -112,47 +109,101 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxkNQ1Zc4mrOV3oAT-FEW7yJbp2c1WL5T80hHa5lTth5K1I5OloyJ3ddbc-pDAl1JHSeQ/exec";
-        let user = JSON.parse(localStorage.getItem("rareGamingUser"));
+        // ✅ NAYA DEPLOY URL CONNECTED
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyKsSRWjQI8bt-25852g_rv-eDdmbtE0IHqiVufHdl-NODtKGEXjlyxwJr0GvfnXgBNew/exec";
+        
+        // Local storage se user data uthana
+        let userData = JSON.parse(localStorage.getItem("rareGamingUser")) || JSON.parse(localStorage.getItem("user"));
 
-        function sync() {
-            if(!user) return window.location.href = "login.html";
-            fetch(scriptURL + "?action=getPlayerData&username=" + encodeURIComponent(user.name))
-            .then(res => res.json()).then(data => {
-                document.getElementById('mainBal').innerText = "₹" + (data.cash || 0);
-                document.getElementById('rareCoins').innerText = (data.coins || 0);
-            }).catch(e => console.log("Sync Error"));
+        async function sync() {
+            if(!userData) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const userId = userData.uid || localStorage.getItem("userUID");
+
+            try {
+                // Backend se real-time balance fetch karna
+                const response = await fetch(`${scriptURL}?action=getBalance&userId=${userId}`);
+                const data = await response.json();
+                
+                if(data && data.balance !== undefined) {
+                    document.getElementById('mainBal').innerText = "₹" + data.balance;
+                    // Note: Rare Coins ka logic agar sheet mein alag column hai toh wahan se fetch karein
+                    // Abhi ke liye Coins static ya secondary wallet balance dikhayega
+                    document.getElementById('rareCoins').innerText = data.coins || 0;
+                    
+                    // Local Storage update
+                    userData.balance = data.balance;
+                    localStorage.setItem("rareGamingUser", JSON.stringify(userData));
+                }
+            } catch (e) {
+                console.log("Sync Error");
+            }
         }
 
-        function withdraw() {
+        async function withdraw() {
             let amt = document.getElementById('witAmt').value;
             let upi = document.getElementById('witUpi').value;
+            const userId = userData.uid || localStorage.getItem("userUID");
+
             if(!amt || !upi) return alert("Pura detail bharo bhai!");
             if(amt < 50) return alert("Minimum ₹50 withdraw kar sakte ho!");
 
             let btn = document.getElementById('btnWithdraw');
             btn.innerText = "PROCESSING..."; btn.disabled = true;
 
-            fetch(scriptURL + "?action=withdraw&username=" + encodeURIComponent(user.name) + "&amount=" + amt + "&upi=" + encodeURIComponent(upi))
-            .then(res => res.text()).then(resp => {
-                alert(resp); sync();
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        'action': 'withdraw',
+                        'userId': userId,
+                        'amount': amt,
+                        'upi': upi
+                    })
+                });
+                
+                const result = await response.text();
+                alert(result === "Success" ? "Withdrawal Request Sent!" : result);
+                sync();
+            } catch (e) {
+                alert("Server Error!");
+            } finally {
                 btn.innerText = "Withdraw Now"; btn.disabled = false;
-                document.getElementById('witAmt').value = ""; document.getElementById('witUpi').value = "";
-            });
+                document.getElementById('witAmt').value = ""; 
+                document.getElementById('witUpi').value = "";
+            }
         }
 
-        function redeemCoins() {
+        async function redeemCoins() {
+            const userId = userData.uid || localStorage.getItem("userUID");
             let btn = document.getElementById('btnRedeem');
             btn.innerText = "PROCESSING..."; btn.disabled = true;
 
-            fetch(scriptURL + "?action=redeemCoins&username=" + encodeURIComponent(user.name))
-            .then(res => res.text()).then(resp => {
-                alert(resp); sync();
+            try {
+                // Redeem logic backend mein handle hoga
+                const response = await fetch(`${scriptURL}`, {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        'action': 'redeemCoins',
+                        'userId': userId
+                    })
+                });
+                const result = await response.text();
+                alert(result);
+                sync();
+            } catch (e) {
+                alert("Redeem Failed!");
+            } finally {
                 btn.innerText = "Redeem 100 Coins"; btn.disabled = false;
-            });
+            }
         }
 
         window.onload = sync;
+        // Har 20 second mein update
+        setInterval(sync, 20000);
     </script>
 </body>
 </html>
