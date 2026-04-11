@@ -139,7 +139,8 @@
             }
         })();
 
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzEflOY59qvc4kz757prSqTdGb0_A8iV1evtBTIgAPSCr2VTzSp-dsccufQs0iOPklMCg/exec";
+        // ✅ NAYA DEPLOY URL UPDATED
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyRd0GE6nGsyE8L_zKol6aIVt6DRoQ3E-FHGlix4REgY3II9eWPYgBFADafIuz8HZZHDA/exec";
         
         async function syncBalance() {
             let userStr = localStorage.getItem("rareGamingUser");
@@ -152,6 +153,7 @@
             balEl.style.opacity = "0.5";
 
             try {
+                // Backend se real balance fetch karna
                 const response = await fetch(`${scriptURL}?action=getBalance&userId=${userId}`);
                 const data = await response.json();
                 
@@ -159,6 +161,7 @@
                     balEl.innerHTML = `<i class="fas fa-coins"></i> ₹${data.balance}`;
                     userData.balance = data.balance;
                     localStorage.setItem("rareGamingUser", JSON.stringify(userData));
+                    localStorage.setItem("userUID", userId); // Sabse important sync
                 }
             } catch (e) {
                 console.error("Sync failed");
