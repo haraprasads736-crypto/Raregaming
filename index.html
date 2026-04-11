@@ -61,7 +61,7 @@
         .ad-container { margin: 10px 20px; height: 60px; background: #000; border-radius: 12px; border: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
         .ad-label { position: absolute; top: 2px; left: 5px; font-size: 7px; color: #333; letter-spacing: 1px; }
 
-        /* 4. MATCH GRID (3x3 Compact) */
+        /* 4. MATCH GRID */
         .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 15px 20px; }
         .section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-left: 4px solid var(--neon-blue); padding-left: 12px; }
         
@@ -108,38 +108,14 @@
     </div>
     
     <div class="match-grid">
-        <a href="match_details.html?type=BR" class="match-card">
-            <img src="br_poster.jpg">
-            <div class="match-label">BR SQUAD</div>
-        </a>
-        <a href="match_details.html?type=CS" class="match-card">
-            <img src="cs_poster.jpg">
-            <div class="match-label">CS SQUAD</div>
-        </a>
-        <a href="match_details.html?type=LW" class="match-card">
-            <img src="lw_poster.jpg">
-            <div class="match-label">LONE WOLF</div>
-        </a>
-        <a href="match_details.html?type=1V1" class="match-card">
-            <img src="1v1_poster.jpg">
-            <div class="match-label">1V1 BATTLE</div>
-        </a>
-        <a href="match_details.html?type=LW2" class="match-card">
-            <img src="lw2_poster.jpg">
-            <div class="match-label">LONE WOLF 2.0</div>
-        </a>
-        <a href="match_details.html?type=FREE" class="match-card">
-            <img src="free_poster.jpg">
-            <div class="match-label">FREE MATCH</div>
-        </a>
-        <a href="match_details.html?type=1V1HS" class="match-card">
-            <img src="1v1hs_poster.jpg">
-            <div class="match-label">1V1 HEADSHOT</div>
-        </a>
-        <a href="match_details.html?type=CSHS" class="match-card">
-            <img src="cshs_poster.jpg">
-            <div class="match-label">CS HEADSHOT</div>
-        </a>
+        <a href="match_details.html?type=BR" class="match-card"><img src="br_poster.jpg"><div class="match-label">BR SQUAD</div></a>
+        <a href="match_details.html?type=CS" class="match-card"><img src="cs_poster.jpg"><div class="match-label">CS SQUAD</div></a>
+        <a href="match_details.html?type=LW" class="match-card"><img src="lw_poster.jpg"><div class="match-label">LONE WOLF</div></a>
+        <a href="match_details.html?type=1V1" class="match-card"><img src="1v1_poster.jpg"><div class="match-label">1V1 BATTLE</div></a>
+        <a href="match_details.html?type=LW2" class="match-card"><img src="lw2_poster.jpg"><div class="match-label">LONE WOLF 2.0</div></a>
+        <a href="match_details.html?type=FREE" class="match-card"><img src="free_poster.jpg"><div class="match-label">FREE MATCH</div></a>
+        <a href="match_details.html?type=1V1HS" class="match-card"><img src="1v1hs_poster.jpg"><div class="match-label">1V1 HEADSHOT</div></a>
+        <a href="match_details.html?type=CSHS" class="match-card"><img src="cshs_poster.jpg"><div class="match-label">CS HEADSHOT</div></a>
     </div>
 
     <nav class="bottom-nav">
@@ -156,47 +132,43 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ✅ TERA NAYA DEPLOY URL
+        // 🔒 SMART SECURITY: Bina login ke entry band
+        (function() {
+            if (!localStorage.getItem("rareGamingUser")) {
+                window.location.href = "login.html";
+            }
+        })();
+
         const scriptURL = "https://script.google.com/macros/s/AKfycbzEflOY59qvc4kz757prSqTdGb0_A8iV1evtBTIgAPSCr2VTzSp-dsccufQs0iOPklMCg/exec";
         
         async function syncBalance() {
-            // Hum "rareGamingUser" se username uthayenge jo login ke waqt save hua tha
-            let userStr = localStorage.getItem("rareGamingUser") || localStorage.getItem("user");
-            if(!userStr) { 
-                console.log("No user found, redirecting...");
-                return; 
-            }
+            let userStr = localStorage.getItem("rareGamingUser");
+            if(!userStr) return;
 
             let userData = JSON.parse(userStr);
-            let username = userData.name || userData.username;
             let userId = userData.uid;
 
-            // Loading state
-            document.getElementById('walletBal').style.opacity = "0.6";
+            const balEl = document.getElementById('walletBal');
+            balEl.style.opacity = "0.5";
 
             try {
-                // Backend se user ka balance la rahe hain
                 const response = await fetch(`${scriptURL}?action=getBalance&userId=${userId}`);
                 const data = await response.json();
                 
                 if(data && data.balance !== undefined) {
-                    document.getElementById('walletBal').innerHTML = `<i class="fas fa-coins"></i> ₹${data.balance}`;
-                    // Local Storage update taaki doosre pages pe bhi dikhe
+                    balEl.innerHTML = `<i class="fas fa-coins"></i> ₹${data.balance}`;
                     userData.balance = data.balance;
                     localStorage.setItem("rareGamingUser", JSON.stringify(userData));
-                    localStorage.setItem("userUID", userId); // Sabse important join ke liye
                 }
             } catch (e) {
-                console.log("Balance sync failed");
+                console.error("Sync failed");
             } finally {
-                document.getElementById('walletBal').style.opacity = "1";
+                balEl.style.opacity = "1";
             }
         }
 
-        // Jab page load ho tab balance check karo
         window.onload = syncBalance;
-        // Har 30 second mein auto-update
-        setInterval(syncBalance, 30000);
+        setInterval(syncBalance, 30000); // Auto update every 30s
     </script>
 </body>
 </html>
