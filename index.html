@@ -85,7 +85,13 @@
 
     <div class="header-top">
         <div class="brand-name">RARE GAMING</div>
-        <div class="wallet-pill" id="walletBal" onclick="syncBalance()"><i class="fas fa-coins"></i> ₹0</div>
+        
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="wallet-pill" id="walletBal" onclick="syncBalance()"><i class="fas fa-coins"></i> ₹0</div>
+            <div onclick="window.location.href='payment.html'" style="background: var(--neon-green); color: black; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 10px rgba(57, 255, 20, 0.4);">
+                <i class="fas fa-plus" style="font-size: 14px; font-weight: bold;"></i>
+            </div>
+        </div>
     </div>
 
     <div class="money-banner">
@@ -103,11 +109,6 @@
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
-    <div style="padding: 0 20px; margin-top: 15px;">
-        <button onclick="window.location.href='payment.html'" style="background: linear-gradient(90deg, #ff8a00, #e52e71); color: white; width: 100%; padding: 15px; font-size: 16px; font-weight: 800; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(229, 46, 113, 0.4); text-transform: uppercase; display: flex; justify-content: center; align-items: center; gap: 10px;">
-            <i class="fas fa-plus-circle" style="font-size: 20px;"></i> Add Money To Wallet
-        </button>
-    </div>
     <div class="section-header">
         <div class="section-title">Live Tournaments</div>
     </div>
