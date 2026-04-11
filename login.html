@@ -150,19 +150,9 @@
     };
     firebase.initializeApp(firebaseConfig);
 
-    // ✅ NAYA DEPLOY URL CONNECTED
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyKsSRWjQI8bt-25852g_rv-eDdmbtE0IHqiVufHdl-NODtKGEXjlyxwJr0GvfnXgBNew/exec";
+    // ✅ NAYA DEPLOY URL UPDATED
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyRd0GE6nGsyE8L_zKol6aIVt6DRoQ3E-FHGlix4REgY3II9eWPYgBFADafIuz8HZZHDA/exec";
     
-    // DEVICE ID GENERATOR
-    function getDeviceID() {
-        let id = localStorage.getItem("rare_device_id");
-        if (!id) {
-            id = "RG-DEV-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-            localStorage.setItem("rare_device_id", id);
-        }
-        return id;
-    }
-
     let isLoginMode = true;
 
     // AUTO-LOGIN CHECK
@@ -186,7 +176,6 @@
         const pass = document.getElementById('passInput').value.trim();
         const status = document.getElementById('statusMsg');
         const btn = document.getElementById('authBtn');
-        const dID = getDeviceID();
 
         if(!user || !pass) {
             status.innerHTML = "<span style='color:#FF4D4D'>Dono box bharo, bhai!</span>";
@@ -196,16 +185,16 @@
         btn.disabled = true;
         status.innerText = isLoginMode ? "Authenticating Arena..." : "Creating Account...";
 
-        // Action select based on mode
         let action = isLoginMode ? "login" : "registerUser";
-        let url = `${scriptURL}?action=${action}&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&deviceId=${dID}&name=${encodeURIComponent(user)}`;
+        
+        // GET requests for login/register as per your Apps Script doGet
+        let url = `${scriptURL}?action=${action}&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&name=${encodeURIComponent(user)}`;
 
         fetch(url)
         .then(res => res.json())
         .then(data => {
             btn.disabled = false;
             if(data.status === "Success") {
-                // Save user data for entire session
                 localStorage.setItem("rareGamingUser", JSON.stringify(data));
                 localStorage.setItem("userUID", data.uid);
                 status.innerHTML = "<span style='color:#00FF00'>Access Granted! Redirecting...</span>";
@@ -226,7 +215,7 @@
         firebase.auth().signInWithPopup(provider).then((result) => {
             const user = result.user;
             status.innerText = "Syncing Rare UID...";
-            fetch(`${scriptURL}?action=firebase_login&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.displayName)}&deviceId=${getDeviceID()}`)
+            fetch(`${scriptURL}?action=firebase_login&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.displayName)}`)
             .then(res => res.json())
             .then(data => {
                 if(data.status === "Success") {
