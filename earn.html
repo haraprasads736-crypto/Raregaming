@@ -109,32 +109,31 @@
     <div class="system-nav-bar"></div>
 
     <script>
+        // 🔒 SMART SECURITY: Bina login ke entry band
+        (function() {
+            if (!localStorage.getItem("rareGamingUser")) {
+                window.location.href = "login.html";
+            }
+        })();
+
         // ✅ NAYA DEPLOY URL CONNECTED
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyKsSRWjQI8bt-25852g_rv-eDdmbtE0IHqiVufHdl-NODtKGEXjlyxwJr0GvfnXgBNew/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyRd0GE6nGsyE8L_zKol6aIVt6DRoQ3E-FHGlix4REgY3II9eWPYgBFADafIuz8HZZHDA/exec";
         
-        // Local storage se user data uthana
-        let userData = JSON.parse(localStorage.getItem("rareGamingUser")) || JSON.parse(localStorage.getItem("user"));
+        let userData = JSON.parse(localStorage.getItem("rareGamingUser"));
 
         async function sync() {
-            if(!userData) {
-                window.location.href = "login.html";
-                return;
-            }
+            if(!userData) return;
 
-            const userId = userData.uid || localStorage.getItem("userUID");
+            const userId = userData.uid;
 
             try {
-                // Backend se real-time balance fetch karna
                 const response = await fetch(`${scriptURL}?action=getBalance&userId=${userId}`);
                 const data = await response.json();
                 
                 if(data && data.balance !== undefined) {
                     document.getElementById('mainBal').innerText = "₹" + data.balance;
-                    // Note: Rare Coins ka logic agar sheet mein alag column hai toh wahan se fetch karein
-                    // Abhi ke liye Coins static ya secondary wallet balance dikhayega
                     document.getElementById('rareCoins').innerText = data.coins || 0;
                     
-                    // Local Storage update
                     userData.balance = data.balance;
                     localStorage.setItem("rareGamingUser", JSON.stringify(userData));
                 }
@@ -146,7 +145,7 @@
         async function withdraw() {
             let amt = document.getElementById('witAmt').value;
             let upi = document.getElementById('witUpi').value;
-            const userId = userData.uid || localStorage.getItem("userUID");
+            const userId = userData.uid;
 
             if(!amt || !upi) return alert("Pura detail bharo bhai!");
             if(amt < 50) return alert("Minimum ₹50 withdraw kar sakte ho!");
@@ -178,12 +177,11 @@
         }
 
         async function redeemCoins() {
-            const userId = userData.uid || localStorage.getItem("userUID");
+            const userId = userData.uid;
             let btn = document.getElementById('btnRedeem');
             btn.innerText = "PROCESSING..."; btn.disabled = true;
 
             try {
-                // Redeem logic backend mein handle hoga
                 const response = await fetch(`${scriptURL}`, {
                     method: 'POST',
                     body: new URLSearchParams({
@@ -202,7 +200,6 @@
         }
 
         window.onload = sync;
-        // Har 20 second mein update
         setInterval(sync, 20000);
     </script>
 </body>
