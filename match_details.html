@@ -15,17 +15,26 @@
         .tab { padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
 
-        /* 🚀 1. LOBBY ROOM BOX */
-        #topGlobalRoomBox { display: none; margin: 0 15px 15px 15px; background: #1A0A2D; border: 1px solid #2D1B44; border-radius: 10px; padding: 12px; }
+        /* 🚀 GLOBAL ROOM BOX (BATTLE OP STYLE) */
+        #topGlobalRoomBox {
+            display: none; 
+            margin: 0 15px 15px 15px;
+            background: #1A0A2D;
+            border: 1px solid #2D1B44;
+            border-radius: 10px;
+            padding: 12px;
+        }
         .room-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; }
-        .room-label { color: #fff; font-weight: 600; }
-        .room-val { color: #00f2fe; font-weight: 600; }
+        .room-label { color: #aaa; font-size: 12px; }
+        .room-val { color: #00f2fe; font-weight: 800; font-size: 15px; }
+        .wait-msg { color: #8B3EEB; font-size: 11px; font-weight: 700; text-align: center; display: block; margin-top: 5px; }
 
         .match-list { padding: 0 12px; }
         .card { background: #FFFFFF; border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #000; position: relative; border-left: 5px solid #8B3EEB; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
         .card-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #F0F0F0; padding-bottom: 10px; margin-bottom: 12px; }
         .match-logo { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
         .match-title { font-size: 13px; font-weight: 800; color: #111; }
+        .match-time { font-size: 10px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
         .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; border-bottom: 1px solid #8B3EEB; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -45,7 +54,6 @@
         .detail-label { color: #AAA; font-size: 14px; }
         .detail-value { font-weight: 700; color: #00f2fe; }
 
-        /* 🚀 2. VIEW PAGE ROOM BOX */
         .view-room-box { display: none; margin-bottom: 25px; text-align: center; border: 1px dashed #8B3EEB; padding: 15px; border-radius: 10px; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; box-sizing: border-box; }
@@ -70,6 +78,7 @@
         <div id="topGlobalRoomBox">
             <div class="room-row"><span class="room-label">RoomId:</span><span id="topRoomID" class="room-val">Wait...</span></div>
             <div class="room-row"><span class="room-label">RoomPassword:</span><span id="topRoomPass" class="room-val">Wait...</span></div>
+            <span id="topWaitMsg" class="wait-msg" style="display:none;">ID/PASS updated before 15 mins.</span>
         </div>
 
         <div class="match-list" id="matchList"></div>
@@ -81,11 +90,11 @@
             <div class="title" id="viewTitle">MATCH DETAILS</div>
         </div>
         <div class="overlay-content">
-            
             <div id="joinedRoomBox" class="view-room-box">
                 <h4 style="margin:0 0 10px; color:#aaa; font-weight:normal;">Room Details</h4>
-                <div class="room-row"><span class="room-label">RoomId:</span><span id="roomID" class="room-val" style="font-size:18px;">Wait...</span></div>
-                <div class="room-row"><span class="room-label">RoomPassword:</span><span id="roomPass" class="room-val" style="font-size:18px;">Wait...</span></div>
+                <div class="room-row"><span class="room-label">RoomId:</span><span id="roomID" class="room-val">Wait...</span></div>
+                <div class="room-row"><span class="room-label">RoomPassword:</span><span id="roomPass" class="room-val">Wait...</span></div>
+                <p id="viewWaitMsg" class="wait-msg" style="display:none;">Will be updated soon!</p>
             </div>
 
             <div class="detail-row"><span class="detail-label">Match Type :</span><span id="detType" class="detail-value"></span></div>
@@ -103,7 +112,6 @@
                 <button class="join-btn" style="background:#2D1B44; padding:12px;">My Entries</button>
                 <button class="join-btn" style="background:#2D1B44; padding:12px;">Participants</button>
             </div>
-
             <button class="join-btn" id="overlayJoinBtn" style="width:100%; padding: 15px; background:#8B3EEB;" onclick="startFromOverlay()">Join Now</button>
         </div>
     </div>
@@ -131,11 +139,21 @@
         (function() { if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; } })();
 
         const scriptURL = "https://script.google.com/macros/s/AKfycbyRd0GE6nGsyE8L_zKol6aIVt6DRoQ3E-FHGlix4REgY3II9eWPYgBFADafIuz8HZZHDA/exec";
-        const matchKey = new URLSearchParams(window.location.search).get('type') || 'LW';
         let allMatches = [];
         let currentMatch = null;
 
-        // 🚀 SYNC LOGIC (Sahi details dikhane ke liye)
+        // 📅 Helper function to format Date & Time
+        function formatMatchDate(rawDate, rawTime) {
+            if(!rawDate || rawDate === 'TBD') return 'TBD';
+            try {
+                let d = new Date(rawDate);
+                let datePart = d.toLocaleDateString('en-GB'); // "12/04/2026"
+                let t = new Date(rawTime);
+                let timePart = t.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); // "10:45 AM"
+                return `${datePart} | ${timePart}`;
+            } catch(e) { return rawDate; }
+        }
+
         async function syncRoomDetails() {
             const user = JSON.parse(localStorage.getItem("rareGamingUser"));
             const topBox = document.getElementById('topGlobalRoomBox');
@@ -149,21 +167,30 @@
             }
 
             if (joinedId) {
+                topBox.style.display = 'block';
+                viewBox.style.display = 'block';
                 try {
                     const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${joinedId}&userId=${user.uid}`);
                     const data = await res.json();
+                    
                     if (data.status === "Success" && data.roomId && data.roomId !== "TBD" && data.roomId !== "") {
-                        topBox.style.display = 'block';
-                        viewBox.style.display = 'block';
+                        // Data mil gaya
                         document.getElementById('topRoomID').innerText = data.roomId;
                         document.getElementById('topRoomPass').innerText = data.password;
                         document.getElementById('roomID').innerText = data.roomId;
                         document.getElementById('roomPass').innerText = data.password;
+                        document.getElementById('topWaitMsg').style.display = 'none';
+                        document.getElementById('viewWaitMsg').style.display = 'none';
                     } else {
-                        topBox.style.display = 'none';
-                        viewBox.style.display = 'none';
+                        // Join kiya hai par ID abhi update nahi hui
+                        document.getElementById('topRoomID').innerText = "----";
+                        document.getElementById('topRoomPass').innerText = "----";
+                        document.getElementById('roomID').innerText = "----";
+                        document.getElementById('roomPass').innerText = "----";
+                        document.getElementById('topWaitMsg').style.display = 'block';
+                        document.getElementById('viewWaitMsg').style.display = 'block';
                     }
-                } catch (e) { console.log("Sync failed"); }
+                } catch (e) { console.log("Room ID Sync Error"); }
             } else {
                 topBox.style.display = 'none';
                 viewBox.style.display = 'none';
@@ -178,11 +205,14 @@
             try {
                 const response = await fetch(`${scriptURL}?action=getMatches`);
                 allMatches = await response.json();
+                const matchKey = new URLSearchParams(window.location.search).get('type') || 'LW';
                 const filtered = allMatches.filter(m => m.category === matchKey && m.status === status);
                 container.innerHTML = ""; 
                 
                 filtered.forEach(m => {
                     let isJoined = localStorage.getItem("joined_"+m.id);
+                    let displayTime = formatMatchDate(m.date, m.time);
+
                     container.innerHTML += `
                     <div class="card">
                         <div class="card-header">
@@ -192,7 +222,7 @@
                                     <p class="match-title" style="margin:0">${m.title} #${m.id}</p>
                                     <span class="view-link" onclick="openView('${m.id}')">view</span>
                                 </div>
-                                <span class="match-time" style="color:#666; font-size:10px">${m.date || 'TBD'}</span>
+                                <span class="match-time">${displayTime}</span>
                             </div>
                         </div>
                         <div class="stats-grid">
@@ -228,7 +258,6 @@
             document.getElementById('deductText').innerText = `₹ ${currentMatch.fee} will be deduct`;
             document.getElementById('walletModal').style.display = 'flex';
         }
-
         function showInputModal() { closeModals(); document.getElementById('inputModal').style.display = 'flex'; }
         function startFromOverlay() { closeView(); openWalletModal(currentMatch.id); }
         function closeView() { document.getElementById('viewOverlay').style.display = 'none'; }
@@ -246,7 +275,7 @@
                 const result = await response.text();
                 if (result.includes("Success")) {
                     localStorage.setItem("joined_"+currentMatch.id, "true");
-                    alert("Joined!"); closeModals(); loadMatches('upcoming');
+                    alert("Joined Match Successfully!"); closeModals(); loadMatches('upcoming');
                 } else { alert(result); }
             } catch (e) { alert("Error!"); }
             finally { btn.innerText = "Confirm Join"; btn.disabled = false; }
@@ -256,7 +285,6 @@
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             el.classList.add('active'); loadMatches(t);
         }
-
         window.onload = () => loadMatches('upcoming');
     </script>
 </body>
