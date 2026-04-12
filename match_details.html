@@ -53,8 +53,6 @@
         .btn-action { background: #00f2fe; color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-size: 10px; font-weight: 800; cursor: pointer; }
 
         /* 🛠️ OVERLAYS & MODALS */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0F041C; display: none; flex-direction: column; z-index: 2000; overflow-y: auto; }
-        .overlay-content { padding: 25px; padding-bottom: 50px; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
         .modal-card { background: #1A0A2D; width: 100%; max-width: 310px; border-radius: 12px; padding: 30px; text-align: center; color: white; border: 1px solid #2D1B44; }
         .modal-card input { width: 100%; background: #0F041C; border: 1px solid #8B3EEB; padding: 12px; margin: 10px 0; border-radius: 8px; color: #fff; text-align: center; }
@@ -123,7 +121,7 @@
                     if (isJoined) {
                         let btnText = isTeamMatch ? "ADD TEAMMATE" : "ROOM ID";
                         let btnColor = isTeamMatch ? "#39ff14" : "#00f2fe";
-                        let btnLink = isTeamMatch ? `alert('Duo Mode: Contact Admin for Teammate UID!')` : `location.href='room_details.html?matchId=${m.id}'`;
+                        let btnLink = isTeamMatch ? `alert('Duo Mode: Contact Admin for Teammate UID!')` : `window.location.href='room_details.html?matchId=' + encodeURIComponent('${m.id}')`;
 
                         footerHtml = `
                         <div class="joined-footer">
@@ -158,7 +156,6 @@
             } catch (e) { container.innerHTML = "Error loading matches!"; }
         }
 
-        // Logic functions (Keeping your original modal logic)
         function openWalletModal(id) {
             currentMatch = allMatches.find(x => x.id == id);
             document.getElementById('deductText').innerText = `₹ ${currentMatch.fee} will be deduct`;
