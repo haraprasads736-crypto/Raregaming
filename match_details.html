@@ -21,21 +21,6 @@
         .tab { padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
 
-        /* 🚀 LOBBY ROOM BOX */
-        #topGlobalRoomBox {
-            display: none; 
-            margin: 0 15px 15px 15px;
-            background: linear-gradient(135deg, #1A0A2D 0%, #2D1B44 100%);
-            border: 1px dashed #00f2fe;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-        }
-        .room-header { color: #00f2fe; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .room-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; }
-        .room-label { color: #aaa; font-size: 11px; }
-        .room-val { color: #fff; font-weight: 800; font-family: monospace; letter-spacing: 1px; }
-
         /* 🛠️ CARD STYLE */
         .match-list { padding: 0 12px; }
         .card { background: #FFFFFF; border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #000; position: relative; border-left: 5px solid #8B3EEB; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
@@ -68,8 +53,6 @@
         .detail-label { color: #AAA; font-size: 14px; }
         .detail-value { font-weight: 700; color: #00f2fe; }
 
-        .view-room-box { display: none; margin-bottom: 25px; text-align: center; border: 1px dashed #8B3EEB; padding: 15px; border-radius: 10px; background: rgba(139, 62, 235, 0.05); }
-
         /* 🛠️ MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; box-sizing: border-box; }
         .modal-card { background: #1A0A2D; width: 100%; max-width: 310px; border-radius: 12px; padding: 30px; text-align: center; color: white; border: 1px solid #2D1B44; }
@@ -91,12 +74,6 @@
             <div class="tab" onclick="switchTab('result', this)">Result</div>
         </div>
 
-        <div id="topGlobalRoomBox">
-            <div class="room-header"><i class="fas fa-key"></i> Joined Match Access</div>
-            <div class="room-row"><span class="room-label">Room Id:</span><span id="topRoomID" class="room-val">Wait...</span></div>
-            <div class="room-row"><span class="room-label">Password:</span><span id="topRoomPass" class="room-val">Wait...</span></div>
-        </div>
-
         <div class="match-list" id="matchList"></div>
     </div>
 
@@ -106,13 +83,6 @@
             <div class="title" id="viewTitle">MATCH DETAILS</div>
         </div>
         <div class="overlay-content">
-            
-            <div id="joinedRoomBox" class="view-room-box">
-                <h4 style="margin:0 0 10px; color:#00f2fe; font-size:12px; font-weight:800; text-transform: uppercase;">Room Access Granted</h4>
-                <div class="room-row"><span class="room-label">RoomId:</span><span id="roomID" class="room-val" style="font-size:18px;">Wait...</span></div>
-                <div class="room-row"><span class="room-label">RoomPassword:</span><span id="roomPass" class="room-val" style="font-size:18px;">Wait...</span></div>
-            </div>
-
             <div class="detail-row"><span class="detail-label">Match Type :</span><span id="detType" class="detail-value"></span></div>
             <div class="detail-row"><span class="detail-label">Version :</span><span id="detVer" class="detail-value"></span></div>
             <div class="detail-row"><span class="detail-label">Map :</span><span id="detMap" class="detail-value"></span></div>
@@ -157,61 +127,10 @@
     <script>
         (function() { if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; } })();
 
-        // 🚀 UPDATED URL
         const scriptURL = "https://script.google.com/macros/s/AKfycbwra0VJU6qYQfK4SCZTz5mIfrzv6t3PwvMxmckvZX0tj9WO1jKik0zzeuvNgGu8u1qRcQ/exec";
         
         let allMatches = [];
         let currentMatch = null;
-
-        // 🚀 UPDATED SYNC LOGIC (Strict Visibility Check)
-        async function syncRoomDetails() {
-            const user = JSON.parse(localStorage.getItem("rareGamingUser"));
-            const topBox = document.getElementById('topGlobalRoomBox');
-            const viewBox = document.getElementById('joinedRoomBox');
-            if(!user) return;
-
-            // 1. Check if user has joined ANY match
-            let joinedMatchId = null;
-            for (let i = 0; i < localStorage.length; i++) {
-                let key = localStorage.key(i);
-                if (key.startsWith("joined_") && localStorage.getItem(key) === "true") { 
-                    joinedMatchId = key.split("_")[1]; 
-                    break; 
-                }
-            }
-
-            // 2. AGAR JOIN NAHI KIYA TO BOX GAYAB KAR DO
-            if (!joinedMatchId) {
-                topBox.style.display = 'none';
-                if(viewBox) viewBox.style.display = 'none';
-                return; 
-            }
-
-            // 3. Agar join kiya hai, tabhi fetch karo
-            try {
-                const res = await fetch(`${scriptURL}?action=getNewRoomDetails&matchId=${joinedMatchId.toString().trim()}&userId=${user.uid}`);
-                const data = await res.json();
-                
-                if (data.status === "Success" && data.roomId) {
-                    topBox.style.display = 'block';
-                    document.getElementById('topRoomID').innerText = data.roomId;
-                    document.getElementById('topRoomPass').innerText = data.password;
-                    
-                    if(currentMatch && currentMatch.id == joinedMatchId) {
-                        viewBox.style.display = 'block';
-                        document.getElementById('roomID').innerText = data.roomId;
-                        document.getElementById('roomPass').innerText = data.password;
-                    }
-                } else {
-                    topBox.style.display = 'block';
-                    document.getElementById('topRoomID').innerText = "Wait...";
-                    document.getElementById('topRoomPass').innerText = "Wait...";
-                }
-            } catch (e) { 
-                console.log("Room sync error"); 
-                topBox.style.display = 'none';
-            }
-        }
 
         async function loadMatches(status = 'upcoming') {
             const container = document.getElementById('matchList');
@@ -227,6 +146,14 @@
                 filtered.forEach(m => {
                     let isJoined = localStorage.getItem("joined_"+m.id);
                     let d = m.date ? new Date(m.date).toLocaleDateString('en-GB') : 'TBD';
+
+                    // 🚀 LOGIC FOR VIEW ROOM BUTTON
+                    let actionBtn = "";
+                    if(isJoined) {
+                        actionBtn = `<button class="join-btn" style="background:#00f2fe; color:#000; border: 1px solid #00f2fe;" onclick="location.href='room_details.html?matchId=${m.id}'">VIEW ROOM</button>`;
+                    } else {
+                        actionBtn = `<button class="join-btn" onclick="openWalletModal('${m.id}')">Join</button>`;
+                    }
 
                     container.innerHTML += `
                     <div class="card">
@@ -247,13 +174,10 @@
                         </div>
                         <div class="progress-section">
                             <div class="progress-bar"><div class="player-count">${m.joined}/${m.max}</div><div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div></div>
-                            <button class="join-btn" ${isJoined ? 'disabled style="background:#444"' : ''} onclick="openWalletModal('${m.id}')">
-                                ${isJoined ? 'Joined' : 'Join'}
-                            </button>
+                            ${actionBtn}
                         </div>
                     </div>`;
                 });
-                syncRoomDetails();
             } catch (e) { container.innerHTML = "Error loading matches!"; }
         }
 
@@ -268,13 +192,15 @@
             const overlayBtn = document.getElementById('overlayJoinBtn');
             const isJoined = localStorage.getItem("joined_"+id);
             if(isJoined){
-                overlayBtn.innerText = "ALREADY JOINED ✅";
-                overlayBtn.disabled = true;
-                syncRoomDetails();
+                overlayBtn.innerText = "VIEW ROOM ACCESS ✅";
+                overlayBtn.style.background = "#00f2fe";
+                overlayBtn.style.color = "#000";
+                overlayBtn.onclick = () => { location.href = `room_details.html?matchId=${id}`; };
             } else {
                 overlayBtn.innerText = "Join Now";
-                overlayBtn.disabled = false;
-                document.getElementById('joinedRoomBox').style.display = 'none';
+                overlayBtn.style.background = "#8B3EEB";
+                overlayBtn.style.color = "#fff";
+                overlayBtn.onclick = startFromOverlay;
             }
             
             document.getElementById('viewOverlay').style.display = 'flex';
@@ -315,7 +241,7 @@
             el.classList.add('active'); loadMatches(t);
         }
 
-        window.onload = () => { loadMatches('upcoming'); setInterval(syncRoomDetails, 15000); };
+        window.onload = () => { loadMatches('upcoming'); };
     </script>
 </body>
 </html>
