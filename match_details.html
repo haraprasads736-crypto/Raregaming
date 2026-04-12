@@ -157,7 +157,7 @@
     <script>
         (function() { if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; } })();
 
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzur5avygfhOIRnRfgnVH_q5cjU3beaWN6zywqlZi7revoJeqSZuVcB0u_nvmT-MoTOiQ/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzJH6ENGUJcZkhuOi2d5ip-7RorVmtVHGbbeewrKdtqnz8aGF1Pr0oFT4viaV0eEpNQ4A/exec";
         
         let allMatches = [];
         let currentMatch = null;
@@ -175,17 +175,21 @@
             }
 
             if (joinedId) {
-                topBox.style.display = 'block';
-                viewBox.style.display = 'block';
                 try {
-                    const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${joinedId}&userId=${user.uid}`);
+                    // Added .toString().trim() for matching fix
+                    const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${joinedId.toString().trim()}&userId=${user.uid}`);
                     const data = await res.json();
-                    if (data.status === "Success" && data.roomId && data.roomId !== "Wait...") {
+                    
+                    if (data.status === "Success" && data.roomId && data.roomId.toString().trim() !== "Wait..." && data.roomId !== "") {
+                        topBox.style.display = 'block';
+                        viewBox.style.display = 'block';
                         document.getElementById('topRoomID').innerText = data.roomId;
                         document.getElementById('topRoomPass').innerText = data.password;
                         document.getElementById('roomID').innerText = data.roomId;
                         document.getElementById('roomPass').innerText = data.password;
                     } else {
+                        topBox.style.display = 'block';
+                        viewBox.style.display = 'block';
                         document.getElementById('topRoomID').innerText = "Wait...";
                         document.getElementById('topRoomPass').innerText = "Wait...";
                         document.getElementById('roomID').innerText = "Wait...";
@@ -297,7 +301,8 @@
             el.classList.add('active'); loadMatches(t);
         }
 
-        window.onload = () => loadMatches('upcoming');
+        // Auto-refresh timer added to end of onload
+        window.onload = () => { loadMatches('upcoming'); setInterval(syncRoomDetails, 15000); };
     </script>
 </body>
 </html>
