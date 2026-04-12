@@ -7,20 +7,33 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+        
         body { background-color: #0F041C; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+        
+        /* 🛠️ HEADER */
         .header { display: flex; align-items: center; padding: 15px 20px; background: #160826; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2D1B44; }
         .back-btn { font-size: 18px; color: #fff; cursor: pointer; }
         .title { font-size: 15px; font-weight: 700; flex: 1; text-align: center; margin-right: 20px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* 🛠️ TABS */
         .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 15px; border-radius: 8px; padding: 4px; border: 1px solid #2D1B44; }
         .tab { padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
-        
-        /* 🚀 LOBBY ROOM BOX */
-        #topGlobalRoomBox { display: none; margin: 0 15px 15px 15px; background: #1A0A2D; border: 1px solid #2D1B44; border-radius: 10px; padding: 12px; }
+
+        /* 🚀 1. MAIN LOBBY ROOM BOX (Jo tab ke niche dikhega) */
+        #topGlobalRoomBox {
+            display: none; 
+            margin: 0 15px 15px 15px;
+            background: #1A0A2D;
+            border: 1px solid #2D1B44;
+            border-radius: 10px;
+            padding: 12px;
+        }
         .room-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; }
         .room-label { color: #fff; font-weight: 600; }
-        .room-val { color: #00f2fe; font-weight: 600; }
+        .room-val { color: #fff; font-weight: 600; }
 
+        /* 🛠️ CARD STYLE */
         .match-list { padding: 0 12px; }
         .card { background: #FFFFFF; border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #000; position: relative; border-left: 5px solid #8B3EEB; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
         .card-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #F0F0F0; padding-bottom: 10px; margin-bottom: 12px; }
@@ -29,29 +42,36 @@
         .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
         .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
 
+        /* 🛠️ STATS GRID */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .stat-box { background: #8B3EEB; border-radius: 4px; padding: 6px 2px; text-align: center; color: white; }
         .stat-label { font-size: 7px; font-weight: 600; text-transform: uppercase; display: block; opacity: 0.9; }
         .stat-value { font-size: 10px; font-weight: 800; display: block; margin-top: 1px; }
 
+        /* 🛠️ PROGRESS & JOIN */
         .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 10px; }
         .progress-bar { flex: 1; height: 12px; background: #E0D4FF; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
         .progress-fill { height: 100%; background: #2D1B44; width: 0%; transition: 0.5s ease-in-out; }
         .player-count { position: absolute; width: 100%; text-align: center; font-size: 8.5px; font-weight: 800; line-height: 12px; color: #fff; z-index: 2; }
         .join-btn { background: #160826; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
 
+        /* 🛠️ VIEW OVERLAY */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0F041C; display: none; flex-direction: column; z-index: 2000; overflow-y: auto; }
         .overlay-content { padding: 20px; padding-bottom: 50px; }
         .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
         
-        /* 🚀 VIEW PAGE ROOM BOX */
-        .view-room-box { display: none; margin-bottom: 25px; text-align: center; }
+        /* 🚀 2. VIEW PAGE ROOM BOX (Jo View Details ke andar dikhega) */
+        .view-room-box { 
+            display: none; 
+            margin-bottom: 25px; 
+            text-align: center; 
+        }
         .view-room-box h4 { font-size: 14px; color: #aaa; font-weight: normal; margin-bottom: 15px; }
 
+        /* 🛠️ MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; }
         .modal-card { background: #1A0A2D; width: 85%; max-width: 310px; border-radius: 12px; padding: 30px; text-align: center; border: 1px solid #2D1B44; }
         .modal-card input { width: 100%; background: #0F041C; border: 1px solid #8B3EEB; padding: 12px; margin: 10px 0; border-radius: 8px; color: #fff; text-align: center; font-size: 14px; box-sizing: border-box; }
-        .btn-confirm { background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 8px; font-weight: 800; border: none; cursor: pointer; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -61,6 +81,7 @@
             <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
             <div class="title">FREE FIRE MAX</div>
         </div>
+        
         <div class="tab-container">
             <div class="tab active" onclick="switchTab('upcoming', this)">Upcoming</div>
             <div class="tab" onclick="switchTab('ongoing', this)">Ongoing</div>
@@ -71,6 +92,7 @@
             <div class="room-row"><span class="room-label">RoomId:</span><span id="topRoomID" class="room-val">Wait...</span></div>
             <div class="room-row"><span class="room-label">RoomPassword:</span><span id="topRoomPass" class="room-val">Wait...</span></div>
         </div>
+
         <div class="match-list" id="matchList"></div>
     </div>
 
@@ -80,20 +102,26 @@
             <div class="title" id="viewTitle">MATCH DETAILS</div>
         </div>
         <div class="overlay-content">
-            <div id="joinedRoomBox" class="view-room-box">
-                <h4>Room Details</h4>
-                <div class="room-row" style="padding: 5px 0;"><span class="room-label">RoomId:</span><span id="roomID" class="room-val" style="font-size:16px;">Wait...</span></div>
-                <div class="room-row" style="padding: 5px 0;"><span class="room-label">RoomPassword:</span><span id="roomPass" class="room-val" style="font-size:16px;">Wait...</span></div>
-            </div>
-
             <div class="detail-row"><span>Type :</span><span id="detType" style="color:#00f2fe"></span></div>
             <div class="detail-row"><span>Version :</span><span id="detVer" style="color:#00f2fe"></span></div>
             <div class="detail-row"><span>Map :</span><span id="detMap" style="color:#00f2fe"></span></div>
             <div class="detail-row"><span>Entry Fee :</span><span id="detFee" style="color:#00f2fe"></span></div>
             
-            <div style="text-align: center; padding-top: 20px;">
-                <p id="roomLockedText" style="color: #ff4d4d; font-size: 12px; display: none;">Join match to unlock Room Details</p>
-                <button class="join-btn" id="overlayJoinBtn" style="width:100%; padding: 12px;" onclick="startFromOverlay()">Join Now</button>
+            <div style="margin: 20px 0; border-top: 1px solid #333;"></div>
+
+            <div id="joinedRoomBox" class="view-room-box">
+                <h4>Room Details</h4>
+                <div class="room-row" style="padding: 5px 0;"><span class="room-label">RoomId:</span><span id="roomID" class="room-val" style="color:#00f2fe; font-size:16px;">Wait...</span></div>
+                <div class="room-row" style="padding: 5px 0;"><span class="room-label">RoomPassword:</span><span id="roomPass" class="room-val" style="color:#00f2fe; font-size:16px;">Wait...</span></div>
+            </div>
+
+            <div style="text-align: center; padding-top: 10px;">
+                <p style="color: #aaa; font-size: 13px;">About This Match</p>
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                   <button class="join-btn" style="flex:1; background:#2D1B44; padding:12px;" onclick="alert('Coming Soon')">My Entries</button>
+                   <button class="join-btn" style="flex:1; background:#2D1B44; padding:12px;" onclick="alert('Coming Soon')">Join TeamMates</button>
+                </div>
+                <button class="join-btn" id="overlayJoinBtn" style="width:100%; padding: 12px; margin-top:15px;" onclick="startFromOverlay()">Join Now</button>
             </div>
         </div>
     </div>
@@ -102,11 +130,12 @@
         <div class="modal-card">
             <h3 id="deductText">₹ -- will be deduct</h3>
             <div style="display:flex; gap:10px; margin-top:25px;">
-                <button onclick="closeModals()" style="flex:1; background:none; border:1px solid #444; color:#AAA; border-radius:8px;">Cancel</button>
-                <button onclick="showInputModal()" style="flex:1; background:#fff; color:#000; font-weight:800; border-radius:8px; border:none; padding:12px;">Join</button>
+                <button onclick="closeModals()" style="flex:1; background:none; border:1px solid #444; color:#AAA; border-radius:8px; cursor:pointer;">Cancel</button>
+                <button onclick="showInputModal()" style="flex:1; background:#fff; color:#000; font-weight:800; border-radius:8px; border:none; padding:12px; cursor:pointer;">Join</button>
             </div>
         </div>
     </div>
+
     <div id="inputModal" class="modal-overlay">
         <div class="modal-card">
             <h3>Player Details</h3>
@@ -117,45 +146,51 @@
     </div>
 
     <script>
+        (function() { if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; } })();
+
         const scriptURL = "https://script.google.com/macros/s/AKfycbyRd0GE6nGsyE8L_zKol6aIVt6DRoQ3E-FHGlix4REgY3II9eWPYgBFADafIuz8HZZHDA/exec";
+        const matchKey = new URLSearchParams(window.location.search).get('type') || 'LW';
         let allMatches = [];
         let currentMatch = null;
 
+        // 🚀 ROOM DETAILS SECURITY LOGIC
         async function syncRoomDetails() {
             const user = JSON.parse(localStorage.getItem("rareGamingUser"));
             const topBox = document.getElementById('topGlobalRoomBox');
-            if(!user) return;
+            const viewRoomBox = document.getElementById('joinedRoomBox');
+            
+            let foundJoined = false;
 
-            // Check if any match is joined in local storage
-            let joinedMatchId = null;
             for (let i = 0; i < localStorage.length; i++) {
                 let key = localStorage.key(i);
                 if (key.startsWith("joined_")) {
-                    joinedMatchId = key.split("_")[1];
-                    break;
+                    let mId = key.split("_")[1];
+                    try {
+                        const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${mId}&userId=${user.uid}`);
+                        const data = await res.json();
+                        
+                        // Sirf tab dikhao jab Status Success ho aur Room ID khali na ho
+                        if (data.status === "Success" && data.roomId && data.roomId !== "TBD" && data.roomId !== "") {
+                            topBox.style.display = 'block';
+                            viewRoomBox.style.display = 'block';
+                            
+                            // Lobby Box data
+                            document.getElementById('topRoomID').innerText = data.roomId;
+                            document.getElementById('topRoomPass').innerText = data.password || "N/A";
+                            
+                            // View Page data
+                            document.getElementById('roomID').innerText = data.roomId;
+                            document.getElementById('roomPass').innerText = data.password || "N/A";
+                            
+                            foundJoined = true;
+                            return;
+                        }
+                    } catch (e) {}
                 }
             }
-
-            if (joinedMatchId) {
-                try {
-                    const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${joinedMatchId}&userId=${user.uid}`);
-                    const data = await res.json();
-                    if (data.status === "Success" && data.roomId && data.roomId !== "TBD") {
-                        topBox.style.display = 'block';
-                        document.getElementById('topRoomID').innerText = data.roomId;
-                        document.getElementById('topRoomPass').innerText = data.password || "N/A";
-                        
-                        // View Page update
-                        document.getElementById('joinedRoomBox').style.display = 'block';
-                        document.getElementById('roomID').innerText = data.roomId;
-                        document.getElementById('roomPass').innerText = data.password || "N/A";
-                        document.getElementById('roomLockedText').style.display = 'none';
-                    }
-                } catch (e) {}
-            } else {
+            if(!foundJoined) {
                 topBox.style.display = 'none';
-                document.getElementById('joinedRoomBox').style.display = 'none';
-                document.getElementById('roomLockedText').style.display = 'block';
+                viewRoomBox.style.display = 'none';
             }
         }
 
@@ -166,7 +201,7 @@
             try {
                 const response = await fetch(`${scriptURL}?action=getMatches`);
                 allMatches = await response.json();
-                const filtered = allMatches.filter(m => m.status === status);
+                const filtered = allMatches.filter(m => m.category === matchKey && m.status === status);
                 container.innerHTML = ""; 
                 filtered.forEach(m => {
                     let isJoined = localStorage.getItem("joined_"+m.id);
@@ -204,7 +239,7 @@
             document.getElementById('detMap').innerText = currentMatch.map;
             document.getElementById('detFee').innerText = "₹ " + currentMatch.fee;
             document.getElementById('viewOverlay').style.display = 'flex';
-            syncRoomDetails();
+            syncRoomDetails(); 
         }
         
         function closeView() { document.getElementById('viewOverlay').style.display = 'none'; }
@@ -228,10 +263,7 @@
             } catch (e) { alert("Error!"); }
         }
 
-        function switchTab(t, el) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            el.classList.add('active'); loadMatches(t);
-        }
+        function switchTab(t, el) { document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active')); el.classList.add('active'); loadMatches(t); }
         window.onload = () => loadMatches('upcoming');
     </script>
 </body>
