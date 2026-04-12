@@ -7,69 +7,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-        
-        /* 🛠️ DARK THEME BASE */
         body { background-color: #0F041C; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
-        
-        /* 🛠️ HEADER */
         .header { display: flex; align-items: center; padding: 15px 20px; background: #160826; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2D1B44; }
         .back-btn { font-size: 18px; color: #fff; cursor: pointer; }
         .title { font-size: 15px; font-weight: 700; flex: 1; text-align: center; margin-right: 20px; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* 🛠️ TABS */
         .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 15px; border-radius: 8px; padding: 4px; border: 1px solid #2D1B44; }
         .tab { padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
 
-        /* 🚀 LOBBY ROOM BOX (Jo tab ke niche dikhega) */
-        #topGlobalRoomBox {
-            display: none; 
-            margin: 0 15px 15px 15px;
-            background: #1A0A2D;
-            border: 1px solid #2D1B44;
-            border-radius: 10px;
-            padding: 12px;
-        }
+        /* 🚀 1. LOBBY ROOM BOX */
+        #topGlobalRoomBox { display: none; margin: 0 15px 15px 15px; background: #1A0A2D; border: 1px solid #2D1B44; border-radius: 10px; padding: 12px; }
         .room-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; }
         .room-label { color: #fff; font-weight: 600; }
         .room-val { color: #00f2fe; font-weight: 600; }
 
-        /* 🛠️ CARD STYLE */
         .match-list { padding: 0 12px; }
         .card { background: #FFFFFF; border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #000; position: relative; border-left: 5px solid #8B3EEB; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
-        
         .card-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #F0F0F0; padding-bottom: 10px; margin-bottom: 12px; }
         .match-logo { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
-        .header-text { flex: 1; }
-        .match-title { font-size: 13px; font-weight: 800; color: #111; display: flex; justify-content: space-between; align-items: center; }
-        .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
+        .match-title { font-size: 13px; font-weight: 800; color: #111; }
         .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; border-bottom: 1px solid #8B3EEB; }
 
-        /* 🛠️ STATS GRID */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .stat-box { background: #8B3EEB; border-radius: 4px; padding: 6px 2px; text-align: center; color: white; }
         .stat-label { font-size: 7px; font-weight: 600; text-transform: uppercase; display: block; opacity: 0.9; }
         .stat-value { font-size: 10px; font-weight: 800; display: block; margin-top: 1px; }
 
-        /* 🛠️ PROGRESS & JOIN */
         .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 10px; }
         .progress-bar { flex: 1; height: 12px; background: #E0D4FF; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
         .progress-fill { height: 100%; background: #2D1B44; width: 0%; transition: 0.5s ease-in-out; }
         .player-count { position: absolute; width: 100%; text-align: center; font-size: 8.5px; font-weight: 800; line-height: 12px; color: #fff; z-index: 2; }
-        
         .join-btn { background: #160826; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
 
-        /* 🛠️ VIEW OVERLAY */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0F041C; display: none; flex-direction: column; z-index: 2000; overflow-y: auto; }
         .overlay-content { padding: 25px; padding-bottom: 50px; }
         .detail-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .detail-label { color: #AAA; font-size: 14px; }
         .detail-value { font-weight: 700; color: #00f2fe; }
 
-        /* 🚀 VIEW PAGE ROOM BOX (Photo 2 Style) */
+        /* 🚀 2. VIEW PAGE ROOM BOX */
         .view-room-box { display: none; margin-bottom: 25px; text-align: center; border: 1px dashed #8B3EEB; padding: 15px; border-radius: 10px; }
 
-        /* 🛠️ MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; box-sizing: border-box; }
         .modal-card { background: #1A0A2D; width: 100%; max-width: 310px; border-radius: 12px; padding: 30px; text-align: center; color: white; border: 1px solid #2D1B44; }
         .modal-card input { width: 100%; background: #0F041C; border: 1px solid #8B3EEB; padding: 12px; margin: 10px 0; border-radius: 8px; color: #fff; text-align: center; font-size: 14px; box-sizing: border-box; }
@@ -122,8 +100,8 @@
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-                <button class="join-btn" style="background:#2D1B44; padding:12px;" onclick="alert('Checking Entries...')">My Entries</button>
-                <button class="join-btn" style="background:#2D1B44; padding:12px;" onclick="alert('Loading Participants...')">Participants</button>
+                <button class="join-btn" style="background:#2D1B44; padding:12px;">My Entries</button>
+                <button class="join-btn" style="background:#2D1B44; padding:12px;">Participants</button>
             </div>
 
             <button class="join-btn" id="overlayJoinBtn" style="width:100%; padding: 15px; background:#8B3EEB;" onclick="startFromOverlay()">Join Now</button>
@@ -140,14 +118,12 @@
             </div>
         </div>
     </div>
-
     <div id="inputModal" class="modal-overlay">
         <div class="modal-card">
-            <h3 style="font-size:18px;">Player Details</h3>
+            <h3>Player Details</h3>
             <input type="text" id="gameName" placeholder="In-Game Name">
             <input type="number" id="gameId" placeholder="In-Game UID">
             <button class="btn-confirm" id="submitBtn" onclick="finalJoin()">Confirm Join</button>
-            <p onclick="closeModals()" style="color:#aaa; cursor:pointer; font-size:12px; margin-top:15px;">Back</p>
         </div>
     </div>
 
@@ -156,10 +132,10 @@
 
         const scriptURL = "https://script.google.com/macros/s/AKfycbyRd0GE6nGsyE8L_zKol6aIVt6DRoQ3E-FHGlix4REgY3II9eWPYgBFADafIuz8HZZHDA/exec";
         const matchKey = new URLSearchParams(window.location.search).get('type') || 'LW';
-        let currentMatch = null;
         let allMatches = [];
+        let currentMatch = null;
 
-        // 🚀 SYNC ROOM DETAILS LOGIC
+        // 🚀 SYNC LOGIC (Sahi details dikhane ke liye)
         async function syncRoomDetails() {
             const user = JSON.parse(localStorage.getItem("rareGamingUser"));
             const topBox = document.getElementById('topGlobalRoomBox');
@@ -176,23 +152,29 @@
                 try {
                     const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${joinedId}&userId=${user.uid}`);
                     const data = await res.json();
-                    if (data.status === "Success" && data.roomId && data.roomId !== "TBD") {
+                    if (data.status === "Success" && data.roomId && data.roomId !== "TBD" && data.roomId !== "") {
                         topBox.style.display = 'block';
                         viewBox.style.display = 'block';
                         document.getElementById('topRoomID').innerText = data.roomId;
                         document.getElementById('topRoomPass').innerText = data.password;
                         document.getElementById('roomID').innerText = data.roomId;
                         document.getElementById('roomPass').innerText = data.password;
+                    } else {
+                        topBox.style.display = 'none';
+                        viewBox.style.display = 'none';
                     }
-                } catch (e) {}
+                } catch (e) { console.log("Sync failed"); }
+            } else {
+                topBox.style.display = 'none';
+                viewBox.style.display = 'none';
             }
         }
 
         async function loadMatches(status = 'upcoming') {
-            syncRoomDetails();
             const container = document.getElementById('matchList');
             container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;">Loading matches...</div>`;
-            
+            syncRoomDetails();
+
             try {
                 const response = await fetch(`${scriptURL}?action=getMatches`);
                 allMatches = await response.json();
@@ -200,23 +182,26 @@
                 container.innerHTML = ""; 
                 
                 filtered.forEach(m => {
-                    let d = m.date ? new Date(m.date).toLocaleDateString('en-GB') : 'TBD';
-                    let t = m.time ? new Date(m.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
                     let isJoined = localStorage.getItem("joined_"+m.id);
-
                     container.innerHTML += `
                     <div class="card">
                         <div class="card-header">
                             <img src="${matchKey.toLowerCase()}_poster.jpg" class="match-logo" onerror="this.src='https://i.imgur.com/uR1Y6T2.jpeg'">
-                            <div class="header-text">
-                                <div class="match-title">${m.title} #${m.id} <span class="view-link" onclick="openView('${m.id}')">view</span></div>
-                                <span class="match-time">${d} | ${t}</span>
+                            <div style="flex:1;">
+                                <div style="display:flex; justify-content:space-between;">
+                                    <p class="match-title" style="margin:0">${m.title} #${m.id}</p>
+                                    <span class="view-link" onclick="openView('${m.id}')">view</span>
+                                </div>
+                                <span class="match-time" style="color:#666; font-size:10px">${m.date || 'TBD'}</span>
                             </div>
                         </div>
                         <div class="stats-grid">
                             <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${m.prize}</span></div>
                             <div class="stat-box"><span class="stat-label">Per Kill</span><span class="stat-value">₹${m.perkill || '0'}</span></div>
                             <div class="stat-box"><span class="stat-label">Fee</span><span class="stat-value">₹${m.fee}</span></div>
+                            <div class="stat-box" style="background:#2D1B44"><span class="stat-label">Type</span><span class="stat-value">${m.type}</span></div>
+                            <div class="stat-box" style="background:#2D1B44"><span class="stat-label">Map</span><span class="stat-value">${m.map}</span></div>
+                            <div class="stat-box" style="background:#2D1B44"><span class="stat-label">Mode</span><span class="stat-value">${m.version || 'TPP'}</span></div>
                         </div>
                         <div class="progress-section">
                             <div class="progress-bar"><div class="player-count">${m.joined}/${m.max}</div><div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div></div>
@@ -252,13 +237,12 @@
         async function finalJoin() {
             const name = document.getElementById('gameName').value.trim();
             const uid = document.getElementById('gameId').value.trim();
-            let userStr = localStorage.getItem("rareGamingUser");
-            let userData = JSON.parse(userStr);
+            const user = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!name || !uid) return alert("Fill details!");
             const btn = document.getElementById('submitBtn');
             btn.innerText = "Processing..."; btn.disabled = true;
             try {
-                const response = await fetch(scriptURL, { method:'POST', body: new URLSearchParams({'action': 'registerMatch','matchId': currentMatch.id,'matchFee': currentMatch.fee,'userId': userData.uid,'playerName': name,'playerId': uid,'matchType': currentMatch.type})});
+                const response = await fetch(scriptURL, { method:'POST', body: new URLSearchParams({'action': 'registerMatch','matchId': currentMatch.id,'matchFee': currentMatch.fee,'userId': user.uid,'playerName': name,'playerId': uid,'matchType': currentMatch.type})});
                 const result = await response.text();
                 if (result.includes("Success")) {
                     localStorage.setItem("joined_"+currentMatch.id, "true");
