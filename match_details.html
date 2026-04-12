@@ -153,14 +153,11 @@
         let allMatches = [];
         let currentMatch = null;
 
-        // 🚀 ROOM DETAILS SECURITY LOGIC
+        // 🚀 GLOBAL SYNC FOR ROOM ID
         async function syncRoomDetails() {
             const user = JSON.parse(localStorage.getItem("rareGamingUser"));
             const topBox = document.getElementById('topGlobalRoomBox');
-            const viewRoomBox = document.getElementById('joinedRoomBox');
             
-            let foundJoined = false;
-
             for (let i = 0; i < localStorage.length; i++) {
                 let key = localStorage.key(i);
                 if (key.startsWith("joined_")) {
@@ -168,30 +165,21 @@
                     try {
                         const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${mId}&userId=${user.uid}`);
                         const data = await res.json();
-                        
-                        // Sirf tab dikhao jab Status Success ho aur Room ID khali na ho
                         if (data.status === "Success" && data.roomId && data.roomId !== "TBD" && data.roomId !== "") {
                             topBox.style.display = 'block';
-                            viewRoomBox.style.display = 'block';
-                            
-                            // Lobby Box data
                             document.getElementById('topRoomID').innerText = data.roomId;
                             document.getElementById('topRoomPass').innerText = data.password || "N/A";
                             
-                            // View Page data
+                            // View Page ke liye bhi ready rakho
+                            document.getElementById('joinedRoomBox').style.display = 'block';
                             document.getElementById('roomID').innerText = data.roomId;
                             document.getElementById('roomPass').innerText = data.password || "N/A";
-                            
-                            foundJoined = true;
                             return;
                         }
                     } catch (e) {}
                 }
             }
-            if(!foundJoined) {
-                topBox.style.display = 'none';
-                viewRoomBox.style.display = 'none';
-            }
+            topBox.style.display = 'none';
         }
 
         async function loadMatches(status = 'upcoming') {
@@ -224,7 +212,7 @@
                         </div>
                         <div class="progress-section">
                             <div class="progress-bar"><div class="player-count">${m.joined}/${m.max}</div><div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div></div>
-                            <button class="join-btn" ${isJoined ? 'disabled style="background:#444"' : ''} onclick="openWalletModal('${m.id}')">${isJoined ? 'Joined' : 'Join'}</button>
+                            <button class="join-btn" ${isJoined ? 'disabled' : ''} onclick="openWalletModal('${m.id}')">${isJoined ? 'Joined' : 'Join'}</button>
                         </div>
                     </div>`;
                 });
@@ -239,7 +227,7 @@
             document.getElementById('detMap').innerText = currentMatch.map;
             document.getElementById('detFee').innerText = "₹ " + currentMatch.fee;
             document.getElementById('viewOverlay').style.display = 'flex';
-            syncRoomDetails(); 
+            syncRoomDetails(); // View khulne par bhi refresh
         }
         
         function closeView() { document.getElementById('viewOverlay').style.display = 'none'; }
