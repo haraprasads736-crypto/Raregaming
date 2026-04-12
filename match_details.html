@@ -46,13 +46,17 @@
         
         .join-btn { background: #160826; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
 
+        /* 🛠️ ROOM DETAILS BOX (NEW) */
+        #joinedRoomBox { background: #1A0A2D; border: 2px dashed #00f2fe; border-radius: 12px; padding: 15px; margin: 15px 0; display: none; }
+        .room-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .room-val { font-size: 16px; font-weight: 800; color: #fff; margin-top: 5px; }
+
         /* 🛠️ VIEW OVERLAY */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0F041C; display: none; flex-direction: column; z-index: 2000; }
-        .overlay-content { padding: 25px; }
+        .overlay-content { padding: 25px; overflow-y: auto; padding-bottom: 50px; }
         .detail-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .detail-label { color: #AAA; font-size: 14px; }
         .detail-value { font-weight: 700; color: #00f2fe; }
-        .room-box { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 25px; margin-top: 30px; text-align: center; border: 1px solid rgba(139, 62, 235, 0.2); }
 
         /* 🛠️ MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; box-sizing: border-box; }
@@ -82,15 +86,30 @@
             <div class="title" id="viewTitle">MATCH DETAILS</div>
         </div>
         <div class="overlay-content">
+            <div id="joinedRoomBox">
+                <p style="color:#00f2fe; font-size: 13px; font-weight: 800; text-transform: uppercase;">✅ Room Access Granted</p>
+                <div class="room-grid">
+                    <div>
+                        <span style="font-size: 10px; color:#AAA;">Room ID</span>
+                        <div id="roomID" class="room-val">Loading...</div>
+                    </div>
+                    <div>
+                        <span style="font-size: 10px; color:#AAA;">Password</span>
+                        <div id="roomPass" class="room-val">Loading...</div>
+                    </div>
+                </div>
+                <p style="font-size: 9px; color:#888; margin-top: 10px;">ID/Pass updated 10-15 mins before start.</p>
+            </div>
+
             <div class="detail-row"><span class="detail-label">Match Type :</span><span id="detType" class="detail-value"></span></div>
             <div class="detail-row"><span class="detail-label">Version :</span><span id="detVer" class="detail-value"></span></div>
             <div class="detail-row"><span class="detail-label">Map :</span><span id="detMap" class="detail-value"></span></div>
             <div class="detail-row"><span class="detail-label">Entry Fee :</span><span id="detFee" class="detail-value"></span></div>
             
-            <div class="room-box">
+            <div class="room-box" id="overlayJoinBox">
                 <p style="color:#AAA; font-size: 13px;">Room Details</p>
-                <p style="color:#00f2fe; font-size: 15px; font-weight:700; margin: 10px 0;">ID/PASS will show before 10 mins</p>
-                <button class="join-btn" style="width:100%; padding: 12px;" onclick="startFromOverlay()">Join Now</button>
+                <p style="color:#8B3EEB; font-size: 13px; font-weight:700; margin: 10px 0;">ID/PASS will show before 10 mins</p>
+                <button class="join-btn" id="overlayJoinBtn" style="width:100%; padding: 12px;" onclick="startFromOverlay()">Join Now</button>
             </div>
         </div>
     </div>
@@ -118,14 +137,13 @@
     </div>
 
     <script>
-        // 🔒 SMART SECURITY: Bina login ke entry band
+        // Bina login ke entry band
         (function() {
             if (!localStorage.getItem("rareGamingUser")) {
                 window.location.href = "login.html";
             }
         })();
 
-        // ✅ NAYA DEPLOY URL CONNECTED
         const scriptURL = "https://script.google.com/macros/s/AKfycbyRd0GE6nGsyE8L_zKol6aIVt6DRoQ3E-FHGlix4REgY3II9eWPYgBFADafIuz8HZZHDA/exec";
         
         const matchKey = new URLSearchParams(window.location.search).get('type') || 'LW';
@@ -144,6 +162,7 @@
                 filtered.forEach(m => {
                     let d = m.date ? new Date(m.date).toLocaleDateString('en-GB') : 'TBD';
                     let t = m.time ? new Date(m.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+                    let isJoined = localStorage.getItem("joined_"+m.id);
 
                     container.innerHTML += `
                     <div class="card">
@@ -167,21 +186,50 @@
                                 <div class="player-count">${m.joined}/${m.max}</div>
                                 <div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div>
                             </div>
-                            <button class="join-btn" onclick="openWalletModal('${m.id}')">${localStorage.getItem("joined_"+m.id)?'Joined':'Join'}</button>
+                            <button class="join-btn" ${isJoined ? 'disabled style="background:#444"' : ''} onclick="openWalletModal('${m.id}')">
+                                ${isJoined ? 'Joined' : 'Join'}
+                            </button>
                         </div>
                     </div>`;
                 });
             } catch (e) { container.innerHTML = "Error loading matches!"; }
         }
 
-        function openView(id) {
+        async function openView(id) {
             currentMatch = allMatches.find(x => x.id == id);
             document.getElementById('viewTitle').innerText = currentMatch.title;
             document.getElementById('detType').innerText = currentMatch.type;
             document.getElementById('detVer').innerText = currentMatch.version || 'TPP';
             document.getElementById('detMap').innerText = currentMatch.map;
             document.getElementById('detFee').innerText = "₹ " + currentMatch.fee;
+            
+            // 🎮 ID-PASS Check for Joined Players
+            const roomBox = document.getElementById('joinedRoomBox');
+            const joinBox = document.getElementById('overlayJoinBox');
+            const isJoined = localStorage.getItem("joined_"+id);
+
+            if (isJoined) {
+                roomBox.style.display = 'block';
+                joinBox.style.display = 'none';
+                fetchRoomDetails(id); // Backend se ID-Pass uthana
+            } else {
+                roomBox.style.display = 'none';
+                joinBox.style.display = 'block';
+            }
+
             document.getElementById('viewOverlay').style.display = 'flex';
+        }
+
+        async function fetchRoomDetails(matchId) {
+            const user = JSON.parse(localStorage.getItem("rareGamingUser"));
+            try {
+                const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${matchId}&userId=${user.uid}`);
+                const data = await res.json();
+                if (data.status === "Success") {
+                    document.getElementById('roomID').innerText = data.roomId || "TBD";
+                    document.getElementById('roomPass').innerText = data.password || "TBD";
+                }
+            } catch (e) { console.log("Room details not ready"); }
         }
 
         function openWalletModal(id) {
@@ -198,12 +246,8 @@
         async function finalJoin() {
             const name = document.getElementById('gameName').value.trim();
             const uid = document.getElementById('gameId').value.trim();
-            
             let userStr = localStorage.getItem("rareGamingUser");
-            if(!userStr) return alert("Please Login First!");
-            
             let userData = JSON.parse(userStr);
-            const userAppUID = userData.uid;
 
             if(!name || !uid) return alert("Please fill all details!");
 
@@ -217,7 +261,7 @@
                         'action': 'registerMatch',
                         'matchId': currentMatch.id,
                         'matchFee': currentMatch.fee,
-                        'userId': userAppUID,
+                        'userId': userData.uid,
                         'playerName': name,
                         'playerId': uid,
                         'matchType': currentMatch.type
@@ -227,13 +271,13 @@
                 const result = await response.text();
                 if (result.includes("Success")) {
                     localStorage.setItem("joined_"+currentMatch.id, "true");
-                    alert("Match Joined Successfully! Coins Deducted.");
+                    alert("Match Joined Successfully!");
                     closeModals(); 
                     loadMatches('upcoming');
                 } else {
-                    alert(result); // "Low Balance" ya "User Not Found" dikhayega
+                    alert(result);
                 }
-            } catch (e) { alert("Server Error! Check Internet."); }
+            } catch (e) { alert("Server Error!"); }
             finally { btn.innerText = "Confirm Join"; btn.disabled = false; }
         }
 
