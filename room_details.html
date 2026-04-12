@@ -16,49 +16,40 @@
 
         .room-card { 
             background: #0a0a0f; border: 1px solid rgba(0, 242, 254, 0.3); 
-            border-radius: 15px; padding: 20px; width: 280px; 
+            border-radius: 15px; padding: 20px; width: 290px; 
             box-shadow: 0 0 15px rgba(0, 242, 254, 0.1); text-align: center;
         }
 
         .header { color: #00f2fe; font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
         
-        /* Match Details Section */
+        /* Match specific label */
+        .match-tag { 
+            background: #8B3EEB; color: white; font-size: 9px; padding: 3px 10px; 
+            border-radius: 50px; display: inline-block; margin-bottom: 10px;
+        }
+
         .match-info { font-size: 11px; color: #888; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
-        .match-name { color: #fff; font-weight: 700; display: block; font-size: 13px; }
+        .match-name { color: #fff; font-weight: 700; display: block; font-size: 14px; margin-top: 5px; }
 
-        .info-box { background: rgba(255, 255, 255, 0.03); border-radius: 8px; padding: 10px; margin: 8px 0; border: 1px solid rgba(255,255,255,0.05); }
-        .label { font-size: 8px; color: #aaa; text-transform: uppercase; display: block; margin-bottom: 2px; }
-        .value { font-size: 18px; font-weight: 800; color: #fff; font-family: monospace; letter-spacing: 1px; }
+        .info-box { background: rgba(255, 255, 255, 0.03); border-radius: 8px; padding: 12px; margin: 10px 0; border: 1px solid rgba(255,255,255,0.05); }
+        .label { font-size: 8px; color: #aaa; text-transform: uppercase; display: block; margin-bottom: 4px; }
+        .value { font-size: 20px; font-weight: 800; color: #fff; font-family: monospace; letter-spacing: 2px; }
 
-        .back-btn { margin-top: 15px; background: #8B3EEB; color: white; border: none; padding: 8px 20px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+        .back-btn { margin-top: 15px; background: #8B3EEB; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
+        .back-btn:hover { background: #6a2dbd; }
         
-        .error-msg { font-size: 12px; color: #ff3131; font-weight: 600; padding: 10px; }
+        .error-msg { font-size: 12px; color: #ff3131; font-weight: 600; padding: 20px; }
+        .loading-icon { color: #00f2fe; font-size: 25px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <div class="room-card" id="mainCard">
         <div id="contentArea">
-            <div class="header"><i class="fas fa-key"></i> Room Access</div>
-            
-            <div class="match-info">
-                <span class="label">Match Details</span>
-                <span id="matchName" class="match-name">Syncing...</span>
-                <span id="matchIDDisplay" style="font-size: 9px; color: #00f2fe;">ID: #--</span>
-            </div>
-
-            <div class="info-box">
-                <span class="label">Room ID</span>
-                <div id="roomID" class="value">WAIT...</div>
-            </div>
-
-            <div class="info-box">
-                <span class="label">Password</span>
-                <div id="roomPass" class="value">WAIT...</div>
-            </div>
+            <div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>
+            <p>Syncing match data...</p>
         </div>
-
-        <a href="match_details.html" class="back-btn">GO BACK</a>
+        <a href="match_details.html" class="back-btn">EXIT ROOM</a>
     </div>
 
     <script>
@@ -71,28 +62,40 @@
             const contentArea = document.getElementById('contentArea');
 
             if(!matchId || !user) {
-                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-exclamation-triangle'></i> Access Denied:<br>Invalid Session</div>";
+                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-ban'></i> Access Denied<br><span style='font-size:10px; color:#666;'>No active match session found.</span></div>";
                 return;
             }
 
             try {
-                // Fetch details with userId to verify joining status
+                // Backend call with userId check
                 const res = await fetch(`${scriptURL}?action=getNewRoomDetails&matchId=${matchId}&userId=${user.uid}`);
                 const data = await res.json();
                 
                 if (data.status === "Success") {
-                    document.getElementById('matchName').innerText = data.matchTitle || "Tournament Match";
-                    document.getElementById('matchIDDisplay').innerText = "ID: #" + matchId;
-                    document.getElementById('roomID').innerText = data.roomId;
-                    document.getElementById('roomPass').innerText = data.password;
+                    contentArea.innerHTML = `
+                        <div class="header"><i class="fas fa-door-open"></i> Access Granted</div>
+                        <div class="match-tag">Match ID: #${matchId}</div>
+                        <div class="match-info">
+                            <span class="label">Tournament Name</span>
+                            <span class="match-name">${data.matchTitle || "Rare Gaming Pro Match"}</span>
+                        </div>
+                        <div class="info-box">
+                            <span class="label">Room ID</span>
+                            <div class="value">${data.roomId}</div>
+                        </div>
+                        <div class="info-box">
+                            <span class="label">Room Password</span>
+                            <div class="value">${data.password}</div>
+                        </div>
+                    `;
                 } else {
                     contentArea.innerHTML = `
-                        <div class="header" style="color:#ff3131"><i class="fas fa-lock"></i> Access Denied</div>
-                        <div class="error-msg">You have not joined this match yet. Please join to view details.</div>
+                        <div class="header" style="color:#ff3131"><i class="fas fa-lock"></i> Locked</div>
+                        <div class="error-msg">You haven't joined Match #${matchId} yet. Join to unlock credentials.</div>
                     `;
                 }
             } catch (e) {
-                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-wifi'></i> System Error:<br>Check Connection</div>";
+                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-exclamation-triangle'></i> Connection Error<br><span style='font-size:10px; color:#666;'>Check your internet.</span></div>";
             }
         }
 
