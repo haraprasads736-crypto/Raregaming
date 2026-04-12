@@ -31,7 +31,6 @@
         .header-text { flex: 1; }
         .match-title { font-size: 13px; font-weight: 800; color: #111; display: flex; justify-content: space-between; align-items: center; }
         .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
-        .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; border-bottom: 1px solid #8B3EEB; }
 
         /* 🛠️ STATS GRID */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -52,7 +51,7 @@
         .status-text { font-size: 10px; font-weight: 800; color: #2ecc71; text-transform: uppercase; }
         .btn-action { background: #00f2fe; color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-size: 10px; font-weight: 800; cursor: pointer; }
 
-        /* 🛠️ OVERLAYS & MODALS */
+        /* 🛠️ MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
         .modal-card { background: #1A0A2D; width: 100%; max-width: 310px; border-radius: 12px; padding: 30px; text-align: center; color: white; border: 1px solid #2D1B44; }
         .modal-card input { width: 100%; background: #0F041C; border: 1px solid #8B3EEB; padding: 12px; margin: 10px 0; border-radius: 8px; color: #fff; text-align: center; }
@@ -64,7 +63,7 @@
     <div id="mainPage">
         <div class="header">
             <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
-            <div class="title">FREE FIRE MAXX</div>
+            <div class="title" id="pageTitle">LOADING...</div>
         </div>
         
         <div class="tab-container">
@@ -104,28 +103,38 @@
             const container = document.getElementById('matchList');
             container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;">Loading matches...</div>`;
             
+            // 🚀 CATEGORY LOGIC
+            const urlParams = new URLSearchParams(window.location.search);
+            let matchKey = urlParams.get('type');
+            if (!matchKey) matchKey = localStorage.getItem("lastType") || "LW";
+            localStorage.setItem("lastType", matchKey);
+            document.getElementById('pageTitle').innerText = matchKey + " TOURNAMENTS";
+
             try {
                 const response = await fetch(`${scriptURL}?action=getMatches`);
                 allMatches = await response.json();
-                const matchKey = new URLSearchParams(window.location.search).get('type') || 'LW';
                 const filtered = allMatches.filter(m => m.category === matchKey && m.status === status);
-                container.innerHTML = ""; 
                 
+                if (filtered.length === 0) {
+                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#888;">No ${status} matches found.</div>`;
+                    return;
+                }
+
+                container.innerHTML = ""; 
                 filtered.forEach(m => {
                     let isJoined = localStorage.getItem("joined_"+m.id);
                     let isTeamMatch = (m.type.toLowerCase().includes("duo") || m.type.toLowerCase().includes("squad"));
                     let d = m.date ? new Date(m.date).toLocaleDateString('en-GB') : 'TBD';
 
-                    // 🚀 HYBRID FOOTER LOGIC
                     let footerHtml = "";
                     if (isJoined) {
                         let btnText = isTeamMatch ? "ADD TEAMMATE" : "ROOM ID";
                         let btnColor = isTeamMatch ? "#39ff14" : "#00f2fe";
-                        let btnLink = isTeamMatch ? `alert('Duo Mode: Contact Admin for Teammate UID!')` : `window.location.href='room_details.html?matchId=' + encodeURIComponent('${m.id}')`;
+                        let btnLink = isTeamMatch ? `alert('Duo Mode: Contact Admin!')` : `window.location.href='room_details.html?matchId=${m.id}'`;
 
                         footerHtml = `
                         <div class="joined-footer">
-                            <span class="status-text"><i class="fas fa-check-circle"></i> Joined Successfully</span>
+                            <span class="status-text"><i class="fas fa-check-circle"></i> Joined</span>
                             <button class="btn-action" style="background:${btnColor}" onclick="${btnLink}">${btnText}</button>
                         </div>`;
                     }
@@ -168,14 +177,17 @@
             const uid = document.getElementById('gameId').value.trim();
             const user = JSON.parse(localStorage.getItem("rareGamingUser"));
             if(!name || !uid) return alert("Fill details!");
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "Processing..."; btn.disabled = true;
             try {
                 const res = await fetch(scriptURL, { method:'POST', body: new URLSearchParams({'action': 'registerMatch','matchId': currentMatch.id,'userId': user.uid,'playerName': name,'playerId': uid})});
                 const result = await res.json();
                 if (result.status === "Success") {
                     localStorage.setItem("joined_"+currentMatch.id, "true");
                     alert("Joined!"); location.reload();
-                }
+                } else { alert(result.message || "Failed"); }
             } catch (e) { alert("Error!"); }
+            finally { btn.innerText = "Confirm"; btn.disabled = false; }
         }
         function switchTab(t, el) { document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active')); el.classList.add('active'); loadMatches(t); }
         window.onload = () => loadMatches('upcoming');
