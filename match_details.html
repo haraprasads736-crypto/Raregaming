@@ -21,7 +21,7 @@
         .tab { padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
 
-        /* 🚀 LOBBY ROOM BOX (ID Password Sheet Link) */
+        /* 🚀 LOBBY ROOM BOX (Jo tab ke niche dikhega) */
         #topGlobalRoomBox {
             display: none; 
             margin: 0 15px 15px 15px;
@@ -125,8 +125,8 @@
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-                <button class="join-btn" style="background:#2D1B44; padding:12px;" onclick="alert('Syncing Entries...')">My Entries</button>
-                <button class="join-btn" style="background:#2D1B44; padding:12px;" onclick="alert('Loading Participants...')">Participants</button>
+                <button class="join-btn" style="background:#2D1B44; padding:12px;">My Entries</button>
+                <button class="join-btn" style="background:#2D1B44; padding:12px;">Participants</button>
             </div>
 
             <button class="join-btn" id="overlayJoinBtn" style="width:100%; padding: 15px; background:#8B3EEB;" onclick="startFromOverlay()">Join Now</button>
@@ -157,7 +157,8 @@
     <script>
         (function() { if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; } })();
 
-        const scriptURL = "https://script.google.com/macros/s/AKfycbzJH6ENGUJcZkhuOi2d5ip-7RorVmtVHGbbeewrKdtqnz8aGF1Pr0oFT4viaV0eEpNQ4A/exec";
+        // 🚀 NAYA DEPLOYMENT URL (uRcQ)
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwra0VJU6qYQfK4SCZTz5mIfrzv6t3PwvMxmckvZX0tj9WO1jKik0zzeuvNgGu8u1qRcQ/exec";
         
         let allMatches = [];
         let currentMatch = null;
@@ -178,7 +179,7 @@
                 topBox.style.display = 'block';
                 viewBox.style.display = 'block';
                 try {
-                    // Logic linked to 'ID Password' Sheet
+                    // Logic linked to naye 'ID Password' Sheet
                     const res = await fetch(`${scriptURL}?action=getNewRoomDetails&matchId=${joinedId.toString().trim()}`);
                     const data = await res.json();
                     
@@ -298,6 +299,7 @@
             el.classList.add('active'); loadMatches(t);
         }
 
+        // 15 second auto-sync timer
         window.onload = () => { loadMatches('upcoming'); setInterval(syncRoomDetails, 15000); };
     </script>
 </body>
