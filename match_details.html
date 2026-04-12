@@ -3,114 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Lobby - RARE GAMING</title>
+    <title>Match Lobby - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
         
-        body { background-color: #f0f2f5; color: #333; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+        /* 🛠️ RAVEN NIGHT THEME (Black & Purple Premium) */
+        body { background: #000000; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* HEADER */
-        .header { display: flex; align-items: center; padding: 12px 15px; background: #fff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #e0e0e0; }
+        /* 🛠️ HEADER */
+        .header { display: flex; align-items: center; padding: 12px 15px; background: #080112; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid rgba(139, 62, 235, 0.4); }
         .back-btn { font-size: 18px; color: #8B3EEB; cursor: pointer; }
-        .title { font-size: 14px; font-weight: 700; flex: 1; text-align: center; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.5px; }
+        .title { font-size: 15px; font-weight: 700; flex: 1; text-align: center; color: white; text-transform: uppercase; letter-spacing: 1.5px; }
 
-        /* TABS */
-        .tab-container { display: flex; background: #fff; margin: 10px 12px; border-radius: 10px; padding: 4px; border: 1px solid #ddd; }
-        .tab { flex: 1; padding: 7px; border-radius: 8px; font-size: 11px; font-weight: 700; color: #777; cursor: pointer; text-align: center; text-transform: uppercase; }
-        .tab.active { background: #8B3EEB; color: #fff; box-shadow: 0 2px 8px rgba(139, 62, 235, 0.3); }
+        /* 🛠️ SLICK TABS */
+        .tab-container { display: flex; justify-content: space-around; background: #080112; margin: 10px 15px; border-radius: 12px; padding: 3px; border: 1px solid rgba(255,255,255,0.05); }
+        .tab { flex: 1; padding: 8px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; transition: 0.3s; text-align: center; }
+        .tab.active { background: #8B3EEB; color: #fff; box-shadow: 0 4px 10px rgba(139, 62, 235, 0.5); }
 
-        /* MATCH CARD */
+        /* 🚀 TOP GLOBAL ROOM BOX (PREMIUM LIGHTBOX) */
+        #topGlobalRoomBox {
+            display: none; 
+            margin: 0 15px 15px 15px;
+            background: #111;
+            border-radius: 12px;
+            padding: 15px;
+            border-left: 5px solid #00f2fe;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+        .top-room-val { font-size: 16px; font-weight: 800; color: #fff; background: #222; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-top: 5px; }
+
+        /* 🛠️ SLEEK MATCH CARD (BATTLEOP SHAPE, Black THEME) */
         .match-list { padding: 0 12px; }
-        .card { background: #fff; border-radius: 12px; padding: 10px; margin-bottom: 15px; border: 1px solid #eee; box-shadow: 0 3px 10px rgba(0,0,0,0.05); }
+        .card { background: #111; border-radius: 16px; padding: 15px; margin-bottom: 20px; color: white; position: relative; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
         
-        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; border-bottom: 1px solid #f5f5f5; padding-bottom: 8px; }
-        .match-logo { width: 38px; height: 38px; border-radius: 8px; object-fit: cover; background: #8B3EEB; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 14px; }
-        .match-title { font-size: 12px; font-weight: 800; color: #222; margin: 0; }
-        .match-time { font-size: 9px; font-weight: 600; color: #888; display: block; }
-        .view-link { color: #8B3EEB; font-weight: 800; font-size: 10px; cursor:pointer; background: #f0e6ff; padding: 2px 8px; border-radius: 15px; }
+        .card-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #222; padding-bottom: 10px; margin-bottom: 12px; }
+        .match-logo { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; text-shadow: 0 0 5px #ff4500;}
+        .match-logo-bg1 {background: linear-gradient(135deg, #ff4500, #ff8c00);}
+        .match-logo-bg2 {background: linear-gradient(135deg, #32cd32, #adff2f);}
+        .match-title-box { border-radius: 20px; border: 2px solid; color: white; padding: 4px 12px; display: inline-flex; align-items: center; gap: 6px; }
+        .match-title { font-size: 13px; font-weight: 800; color: #fff; margin: 0; text-transform: uppercase; }
+        .match-time { font-size: 9px; font-weight: 600; color: #888; display: block; margin-top: 1px; }
+        .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; cursor:pointer; text-transform: uppercase; margin-left: auto; }
 
-        /* STATS GRID (BATTLE OP STYLE) */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 8px; }
-        .stat-box { background: #fafafa; border: 1px solid #f0f0f0; border-radius: 8px; padding: 5px 2px; text-align: center; }
-        .stat-header { display: flex; align-items: center; justify-content: center; gap: 3px; border-radius: 5px; padding: 3px 0; margin-bottom: 3px; color: #fff; }
-        .label-text { font-size: 7.5px; font-weight: 700; text-transform: uppercase; }
-        .stat-value { font-size: 10px; font-weight: 800; color: #333; }
+        /* 🛠️ PREMIUM STATS GRID (BATTLEOP STYLE, Black BG) */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
+        .stat-box { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 6px 3px; text-align: center; }
+        .stat-box-inner { display: flex; align-items: center; justify-content: center; gap: 4px; border-radius: 6px; padding: 5px 2px; border: 2px solid transparent;}
+        .stat-box.selected .stat-box-inner { border-color: #8B3EEB; background: rgba(139, 62, 235, 0.1); }
+        .stat-box.selected .stat-box-inner-fee { border-color: #2D1B44; background: rgba(45, 27, 68, 0.2); }
+        .label-text { font-size: 8px; font-weight: 700; text-transform: uppercase; color: #aaa; }
+        .stat-value { font-size: 10px; font-weight: 800; margin-top: 2px; display: block; color: #fff; }
 
-        /* PROGRESS & JOIN */
-        .progress-section { margin-top: 5px; display: flex; align-items: center; gap: 8px; }
-        .progress-bar-container { flex: 1; height: 10px; background: #e0e0e0; border-radius: 5px; overflow: hidden; position: relative; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #160826, #2D1B44); transition: 1s ease-in-out; }
-        .count-text { position: absolute; width: 100%; text-align: center; font-size: 8px; font-weight: 800; line-height: 10px; color: #fff; z-index: 2; text-shadow: 0 0 2px #000; }
+        /* 🛠️ PROGRESS & JOIN (Black & Purple) */
+        .progress-section { margin-top: 12px; display: flex; align-items: center; gap: 10px; }
+        .progress-bar-container { flex: 1; height: 12px; background: #222; border-radius: 6px; overflow: hidden; position: relative; }
+        .progress-fill { height: 100%; background: #8B3EEB; border-radius: 6px; transition: 1s ease-in-out; }
+        .player-count-text { position: absolute; width: 100%; text-align: center; font-size: 8.5px; font-weight: 800; line-height: 12px; color: #fff; z-index: 2; }
         
-        .join-btn { background: #8B3EEB; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 800; font-size: 10px; cursor: pointer; }
-        .join-btn:disabled { background: #ccc; }
+        .join-btn { background: #160826; color: white; border: none; padding: 7px 15px; border-radius: 4px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
+        .join-btn:disabled { background: #aaa; color: #fff; }
 
-        /* GLOBAL ROOM ALERT */
-        #topGlobalRoomBox { display: none; margin: 5px 12px 12px; background: #fff; border-radius: 10px; padding: 10px; border-left: 4px solid #00f2fe; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .top-room-val { font-size: 14px; font-weight: 800; color: #333; background: #f4f4f4; padding: 3px 8px; border-radius: 5px; }
-
-        /* MODALS */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 15px; }
-        .modal-card { background: #fff; width: 100%; max-width: 300px; border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        /* 🛠️ MODALS (Black Theme) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; }
+        .modal-card { background: #111; width: 90%; max-width: 310px; border-radius: 12px; padding: 25px; text-align: center; color: #fff; border: 1px solid rgba(255,255,255,0.05); }
+        .modal-card input { width: 100%; background: #000; border: 1px solid #444; padding: 10px; margin: 8px 0; border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
-        <div class="title">Battle Lobby</div>
-    </div>
-    
-    <div class="tab-container">
-        <div class="tab active" onclick="switchTab('upcoming', this)">Upcoming</div>
-        <div class="tab" onclick="switchTab('ongoing', this)">Ongoing</div>
-        <div class="tab" onclick="switchTab('result', this)">Result</div>
-    </div>
-
-    <div id="topGlobalRoomBox">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:11px; font-weight:800; color:#333;">📢 ROOM DETAILS LIVE</span>
-            <i class="fas fa-sync-alt" style="color:#8B3EEB; font-size:11px;" onclick="checkGlobalRoomAlert()"></i>
+    <div id="mainPage">
+        <div class="header">
+            <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
+            <div class="title">FREE FIRE LOBBY</div>
         </div>
-        <div style="display:flex; gap:15px; margin-top:8px;">
-            <div><span style="font-size:8px; color:#999; font-weight:600;">Room ID</span><div id="topRoomID" class="top-room-val">Wait..</div></div>
-            <div><span style="font-size:8px; color:#999; font-weight:600;">Pass</span><div id="topRoomPass" class="top-room-val">Wait..</div></div>
+        
+        <div class="tab-container">
+            <div class="tab active" onclick="switchTab('upcoming', this)">Upcoming</div>
+            <div class="tab" onclick="switchTab('ongoing', this)">Ongoing</div>
+            <div class="tab" onclick="switchTab('result', this)">Result</div>
         </div>
-    </div>
 
-    <div class="match-list" id="matchList"></div>
+        <div id="topGlobalRoomBox">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color:#00f2fe; font-size: 12px; font-weight: 800;">🚀 JOINED MATCH ROOM DETAILS</span>
+                <i class="fas fa-sync-alt fa-spin" style="color:#00f2fe; font-size: 13px;" onclick="checkGlobalRoomAlert()"></i>
+            </div>
+            <p id="topMatchName" style="font-size: 10px; color:#888; margin: 5px 0;">--</p>
+            <div style="display: flex; gap: 20px;">
+                <div><span style="font-size: 9px; color:#AAA; font-weight: 600;">Room ID</span><div id="topRoomID" class="top-room-val">Wait...</div></div>
+                <div><span style="font-size: 9px; color:#AAA; font-weight: 600;">Password</span><div id="topRoomPass" class="top-room-val">Wait...</div></div>
+            </div>
+        </div>
+
+        <div class="match-list" id="matchList"></div>
+    </div>
 
     <div id="walletModal" class="modal-overlay">
         <div class="modal-card">
-            <h3 id="deductText" style="margin:0; font-size:18px;">₹ -- Coins</h3>
-            <p style="font-size:11px; color:#777; margin-top:5px;">Will be debited from your wallet.</p>
+            <h3 id="deductText" style="margin-top:0;">₹ -- will be deduct</h3>
+            <p style="font-size:11px; color:#aaa;"> coins will be debited from your wallet.</p>
             <div style="display:flex; gap:10px; margin-top:20px;">
-                <button onclick="closeModals()" style="flex:1; background:#f0f0f0; border:none; padding:10px; border-radius:8px; font-weight:600;">Cancel</button>
-                <button onclick="showInputModal()" style="flex:1; background:#8B3EEB; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:600;">Join</button>
+                <button onclick="closeModals()" style="flex:1; background:#222; color:#fff; border:none; padding:10px; border-radius:8px;">Cancel</button>
+                <button onclick="showInputModal()" style="flex:1; background:#8B3EEB; color:#fff; border:none; padding:10px; border-radius:8px;">Join</button>
             </div>
         </div>
     </div>
 
     <div id="inputModal" class="modal-overlay">
         <div class="modal-card">
-            <h3 style="margin-top:0;">Player Entry</h3>
-            <input type="text" id="gameName" placeholder="Game Name" style="width:100%; padding:10px; margin:5px 0; border:1px solid #ddd; border-radius:8px; box-sizing:border-box;">
-            <input type="number" id="gameId" placeholder="Game UID" style="width:100%; padding:10px; margin:5px 0; border:1px solid #ddd; border-radius:8px; box-sizing:border-box;">
-            <button id="submitBtn" onclick="finalJoin()" style="width:100%; background:#39ff14; color:#000; padding:12px; border:none; border-radius:8px; font-weight:800; margin-top:10px;">Confirm Join</button>
+            <h3>Player Details</h3>
+            <input type="text" id="gameName" placeholder="In-Game Name">
+            <input type="number" id="gameId" placeholder="In-Game UID">
+            <button id="submitBtn" onclick="finalJoin()" style="width:100%; background:#39ff14; color:#000; padding:12px; border:none; border-radius:8px; font-weight:800; margin-top:10px;">Confirm</button>
         </div>
     </div>
 
     <script>
+        (function() { if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; } })();
+
         const scriptURL = "https://script.google.com/macros/s/AKfycbyRd0GE6nGsyE8L_zKol6aIVt6DRoQ3E-FHGlix4REgY3II9eWPYgBFADafIuz8HZZHDA/exec";
         const matchKey = new URLSearchParams(window.location.search).get('type') || 'LW';
-        let allMatches = [];
         let currentMatch = null;
+        let allMatches = [];
+
+        async function checkGlobalRoomAlert() {
+            const user = JSON.parse(localStorage.getItem("rareGamingUser"));
+            const alertBox = document.getElementById('topGlobalRoomBox');
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if (key.startsWith("joined_")) {
+                    let mId = key.split("_")[1];
+                    try {
+                        const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${mId}&userId=${user.uid}`);
+                        const data = await res.json();
+                        if (data.status === "Success" && data.roomId && data.roomId !== "TBD" && data.roomId !== "") {
+                            alertBox.style.display = 'block';
+                            document.getElementById('topRoomID').innerText = data.roomId;
+                            document.getElementById('topRoomPass').innerText = data.password || "N/A";
+                            document.getElementById('topMatchName').innerText = "Match ID: #" + mId;
+                            return;
+                        }
+                    } catch (e) {}
+                }
+            }
+            alertBox.style.display = 'none';
+        }
 
         async function loadMatches(status = 'upcoming') {
             checkGlobalRoomAlert();
             const container = document.getElementById('matchList');
-            container.innerHTML = `<div style="text-align:center; padding:40px; color:#8B3EEB;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;">Loading matches...</div>`;
             try {
                 const response = await fetch(`${scriptURL}?action=getMatches`);
                 allMatches = await response.json();
@@ -121,71 +164,57 @@
                     container.innerHTML += `
                     <div class="card">
                         <div class="card-header">
-                            <div class="match-logo">RG</div>
+                            <div class="match-logo ${matchKey.toLowerCase() === 'lw' ? 'match-logo-bg1' : 'match-logo-bg2'}">RG</div>
                             <div style="flex:1;">
                                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                                    <p class="match-title">${m.title} #${m.id}</p>
-                                    <span class="view-link" onclick="location.href='match_info.html?id=${m.id}'">INFO</span>
+                                    <div class="match-title-box" style="border-color:${matchKey.toLowerCase() === 'lw' ? '#ff4500' : '#32cd32'};">
+                                        <span>⚔️</span><p class="match-title">${m.title} #${m.id}</p>
+                                    </div>
+                                    <span class="view-link" onclick="location.href='match_info.html?id=${m.id}'">VIEW</span>
                                 </div>
-                                <span class="match-time">${m.date || 'Today'} | ${m.time || ''}</span>
+                                <span class="match-time">${m.date || 'TBD'} | ${m.time || ''}</span>
                             </div>
                         </div>
                         <div class="stats-grid">
-                            <div class="stat-box">
-                                <div class="stat-header" style="background:#ffcc00; color:#000;">🏆 <span class="label-text">Prize</span></div>
+                            <div class="stat-box selected">
+                                <div class="stat-box-inner">
+                                    <span>🏆</span><span class="label-text">Prize</span>
+                                </div>
                                 <span class="stat-value">₹${m.prize}</span>
                             </div>
                             <div class="stat-box">
-                                <div class="stat-header" style="background:#8B3EEB;">👤 <span class="label-text">Kill</span></div>
+                                <div class="stat-box-inner" style="background:#8B3EEB; color:#fff;">
+                                    <span>👤</span><span class="label-text">Kill</span>
+                                </div>
                                 <span class="stat-value">₹${m.perkill || '0'}</span>
                             </div>
-                            <div class="stat-box">
-                                <div class="stat-header" style="background:#222;">🪙 <span class="label-text">Fee</span></div>
+                            <div class="stat-box selected">
+                                <div class="stat-box-inner stat-box-inner-fee">
+                                    <span>🪙</span><span class="label-text">Fee</span>
+                                </div>
                                 <span class="stat-value">₹${m.fee}</span>
                             </div>
-                            <div class="stat-box"><span class="label-text" style="color:#aaa;">Type</span><span class="stat-value">${m.type}</span></div>
-                            <div class="stat-box"><span class="label-text" style="color:#aaa;">Map</span><span class="stat-value">${m.map}</span></div>
-                            <div class="stat-box"><span class="label-text" style="color:#aaa;">Mode</span><span class="stat-value">${m.version || 'TPP'}</span></div>
+                            <div class="stat-box"><span class="label-text">Type</span><span class="stat-value">${m.type}</span></div>
+                            <div class="stat-box"><span class="label-text">Map</span><span class="stat-value">${m.map}</span></div>
+                            <div class="stat-box"><span class="label-text">Version</span><span class="stat-value">${m.version || 'TPP'}</span></div>
                         </div>
                         <div class="progress-section">
                             <div class="progress-bar-container">
-                                <div class="count-text">${m.joined}/${m.max}</div>
+                                <div class="player-count-text">${m.joined}/${m.max}</div>
                                 <div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div>
                             </div>
-                            <button class="join-btn" ${isJoined ? 'disabled' : ''} onclick="openWalletModal('${m.id}')">${isJoined ? 'JOINED' : 'JOIN'}</button>
+                            <button class="join-btn" ${isJoined ? 'disabled style="background:#444"' : ''} onclick="openWalletModal('${m.id}')">${isJoined ? 'JOINED' : 'JOIN'}</button>
                         </div>
                     </div>`;
                 });
-            } catch (e) { container.innerHTML = "Error!"; }
+            } catch (e) { container.innerHTML = "Error loading matches!"; }
         }
 
-        async function checkGlobalRoomAlert() {
-            const user = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!user) return;
-            const alertBox = document.getElementById('topGlobalRoomBox');
-            for (let i = 0; i < localStorage.length; i++) {
-                let key = localStorage.key(i);
-                if (key.startsWith("joined_")) {
-                    let mId = key.split("_")[1];
-                    try {
-                        const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${mId}&userId=${user.uid}`);
-                        const data = await res.json();
-                        if (data.status === "Success" && data.roomId && data.roomId !== "TBD") {
-                            alertBox.style.display = 'block';
-                            document.getElementById('topRoomID').innerText = data.roomId;
-                            document.getElementById('topRoomPass').innerText = data.password || "N/A";
-                            return;
-                        }
-                    } catch (e) {}
-                }
-            }
-            alertBox.style.display = 'none';
-        }
-
+        // Baki Modal functions same rahenge
         function openWalletModal(id) { currentMatch = allMatches.find(x => x.id == id); document.getElementById('deductText').innerText = `₹ ${currentMatch.fee} Coins`; document.getElementById('walletModal').style.display = 'flex'; }
         function showInputModal() { closeModals(); document.getElementById('inputModal').style.display = 'flex'; }
         function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
-        async function finalJoin() { const name = document.getElementById('gameName').value.trim(); const uid = document.getElementById('gameId').value.trim(); const user = JSON.parse(localStorage.getItem("rareGamingUser")); if(!name || !uid) return alert("Fill all!"); document.getElementById('submitBtn').innerText = "Joining..."; try { const res = await fetch(scriptURL, { method:'POST', body: new URLSearchParams({'action': 'registerMatch','matchId': currentMatch.id,'matchFee': currentMatch.fee,'userId': user.uid,'playerName': name,'playerId': uid})}); const result = await res.text(); if (result.includes("Success")) { localStorage.setItem("joined_"+currentMatch.id, "true"); alert("Joined!"); closeModals(); loadMatches('upcoming'); } else { alert(result); } } catch (e) { alert("Error!"); } finally { document.getElementById('submitBtn').innerText = "Confirm Join"; } }
+        async function finalJoin() { const name = document.getElementById('gameName').value.trim(); const uid = document.getElementById('gameId').value.trim(); const user = JSON.parse(localStorage.getItem("rareGamingUser")); if(!name || !uid) return alert("Fill details!"); document.getElementById('submitBtn').innerText = "Joining..."; try { const res = await fetch(scriptURL, { method:'POST', body: new URLSearchParams({'action': 'registerMatch','matchId': currentMatch.id,'matchFee': currentMatch.fee,'userId': user.uid,'playerName': name,'playerId': uid})}); const result = await res.text(); if (result.includes("Success")) { localStorage.setItem("joined_"+currentMatch.id, "true"); alert("Joined!"); closeModals(); loadMatches('upcoming'); } else { alert(result); } } catch (e) { alert("Error!"); } finally { document.getElementById('submitBtn').innerText = "Confirm"; } }
         function switchTab(t, el) { document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active')); el.classList.add('active'); loadMatches(t); }
         window.onload = () => loadMatches('upcoming');
     </script>
