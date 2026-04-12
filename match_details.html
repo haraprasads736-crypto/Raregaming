@@ -95,7 +95,6 @@
             <div class="room-header"><i class="fas fa-key"></i> Joined Match Access</div>
             <div class="room-row"><span class="room-label">Room Id:</span><span id="topRoomID" class="room-val">Wait...</span></div>
             <div class="room-row"><span class="room-label">Password:</span><span id="topRoomPass" class="room-val">Wait...</span></div>
-            <p style="font-size: 8px; color: #8B3EEB; margin-top: 5px; text-align: center;">Details update 15 mins before match start.</p>
         </div>
 
         <div class="match-list" id="matchList"></div>
@@ -119,15 +118,15 @@
             <div class="detail-row"><span class="detail-label">Map :</span><span id="detMap" class="detail-value"></span></div>
             <div class="detail-row"><span class="detail-label">Entry Fee :</span><span id="detFee" class="detail-value"></span></div>
             
-            <div style="margin: 25px 0; background: rgba(139, 62, 235, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(139, 62, 235, 0.2);">
+            <div style="margin: 25px 0; background: rgba(139, 62, 235, 0.1); padding: 15px; border-radius: 8px;">
                 <p style="margin:0; font-size:14px; color:#8B3EEB; font-weight:800;">About This Match</p>
                 <p style="margin:10px 0 5px; font-size:13px; color:#aaa;">WINNER : ₹ 20</p>
                 <p style="margin:5px 0; font-size:13px; color:#aaa;">2nd : ₹ 10</p>
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-                <button class="join-btn" style="background:#2D1B44; padding:12px;" onclick="alert('Entry Details Updated!')">My Entries</button>
-                <button class="join-btn" style="background:#2D1B44; padding:12px;" onclick="alert('Loading Participants...')">Participants</button>
+                <button class="join-btn" style="background:#2D1B44; padding:12px;">My Entries</button>
+                <button class="join-btn" style="background:#2D1B44; padding:12px;">Participants</button>
             </div>
 
             <button class="join-btn" id="overlayJoinBtn" style="width:100%; padding: 15px; background:#8B3EEB;" onclick="startFromOverlay()">Join Now</button>
@@ -176,21 +175,21 @@
             }
 
             if (joinedId) {
+                topBox.style.display = 'block';
+                viewBox.style.display = 'block';
                 try {
                     const res = await fetch(`${scriptURL}?action=getRoomDetails&matchId=${joinedId}&userId=${user.uid}`);
                     const data = await res.json();
-                    if (data.status === "Success" && data.roomId && data.roomId !== "TBD" && data.roomId !== "") {
-                        topBox.style.display = 'block';
-                        viewBox.style.display = 'block';
+                    if (data.status === "Success" && data.roomId && data.roomId !== "Wait...") {
                         document.getElementById('topRoomID').innerText = data.roomId;
                         document.getElementById('topRoomPass').innerText = data.password;
                         document.getElementById('roomID').innerText = data.roomId;
                         document.getElementById('roomPass').innerText = data.password;
-                    } else if (localStorage.getItem("joined_"+joinedId)) {
-                        topBox.style.display = 'block';
-                        viewBox.style.display = 'block';
+                    } else {
                         document.getElementById('topRoomID').innerText = "Wait...";
                         document.getElementById('topRoomPass').innerText = "Wait...";
+                        document.getElementById('roomID').innerText = "Wait...";
+                        document.getElementById('roomPass').innerText = "Wait...";
                     }
                 } catch (e) { console.log("Sync error"); }
             }
@@ -248,6 +247,17 @@
             document.getElementById('detVer').innerText = currentMatch.version || 'TPP';
             document.getElementById('detMap').innerText = currentMatch.map;
             document.getElementById('detFee').innerText = "₹ " + currentMatch.fee;
+            
+            const overlayBtn = document.getElementById('overlayJoinBtn');
+            const isJoined = localStorage.getItem("joined_"+id);
+            if(isJoined){
+                overlayBtn.innerText = "ALREADY JOINED ✅";
+                overlayBtn.disabled = true;
+            } else {
+                overlayBtn.innerText = "Join Now";
+                overlayBtn.disabled = false;
+            }
+            
             document.getElementById('viewOverlay').style.display = 'flex';
             syncRoomDetails();
         }
