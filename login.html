@@ -7,89 +7,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
-
-        body { 
-            background: linear-gradient(180deg, #1A0A2D 0%, #000000 100%); 
-            color: white; 
-            font-family: 'Poppins', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-        }
-
-        .login-box { 
-            width: 85%; 
-            max-width: 380px; 
-            text-align: center; 
-            padding: 20px;
-        }
-
-        .logo-img {
-            width: 140px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px #8B3EEB);
-            border-radius: 20px;
-        }
-
+        body { background: linear-gradient(180deg, #1A0A2D 0%, #000000 100%); color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .login-box { width: 85%; max-width: 380px; text-align: center; padding: 20px; }
+        .logo-img { width: 140px; margin-bottom: 20px; filter: drop-shadow(0 0 10px #8B3EEB); border-radius: 20px; }
         .welcome-text h2 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: 2px; color: #fff; }
         .welcome-text p { font-size: 12px; color: #AAA; margin-bottom: 30px; }
-
-        .input-group { 
-            background: #2D1B44; 
-            border-radius: 15px; 
-            margin-bottom: 15px; 
-            display: flex; 
-            align-items: center; 
-            padding: 12px 15px;
-            border: 1px solid #443355;
-        }
-
+        .input-group { background: #2D1B44; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; padding: 12px 15px; border: 1px solid #443355; }
         .input-group i { color: #8B3EEB; margin-right: 15px; font-size: 18px; }
-
-        input { 
-            background: transparent; 
-            border: none; 
-            color: white; 
-            width: 100%; 
-            outline: none; 
-            font-size: 14px;
-        }
-
-        .btn-main { 
-            width: 100%; 
-            padding: 15px; 
-            background: linear-gradient(90deg, #8B3EEB 0%, #6F24A5 100%); 
-            border: none; 
-            border-radius: 30px; 
-            color: white; 
-            font-weight: 800; 
-            cursor: pointer; 
-            margin-top: 10px; 
-            text-transform: uppercase;
-            box-shadow: 0 5px 15px rgba(139, 62, 235, 0.4);
-        }
-
+        input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 14px; }
+        .btn-main { width: 100%; padding: 15px; background: linear-gradient(90deg, #8B3EEB 0%, #6F24A5 100%); border: none; border-radius: 30px; color: white; font-weight: 800; cursor: pointer; margin-top: 10px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(139, 62, 235, 0.4); }
+        .btn-main:disabled { background: #444; box-shadow: none; }
         .divider { margin: 25px 0; color: #555; font-size: 12px; position: relative; }
         .divider::before, .divider::after { content: ""; position: absolute; top: 50%; width: 35%; height: 1px; background: #333; }
         .divider::before { left: 0; } .divider::after { right: 0; }
-
-        .btn-google { 
-            width: 100%; 
-            padding: 12px; 
-            background: #FFF; 
-            border-radius: 30px; 
-            color: #000; 
-            font-weight: 600; 
-            border: none; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px;
-            cursor: pointer;
-        }
-
+        .btn-google { width: 100%; padding: 12px; background: #FFF; border-radius: 30px; color: #000; font-weight: 600; border: none; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
         .footer-links { margin-top: 20px; font-size: 13px; }
         .footer-links span { color: #8B3EEB; font-weight: 700; cursor: pointer; }
         #statusMsg { margin-top: 15px; font-size: 12px; font-weight: 600; min-height: 20px; }
@@ -99,63 +30,38 @@
 
 <div class="login-box">
     <img src="logo.png" class="logo-img" alt="Rare Gaming" onerror="this.src='https://via.placeholder.com/140?text=LOGO'">
-
     <div class="welcome-text">
         <h2 id="title">WELCOME</h2>
         <p id="subtitle">Convert your skill to money</p>
     </div>
-    
     <div class="input-group">
         <i class="fas fa-user"></i>
         <input type="text" id="userInput" placeholder="Username or Rare UID">
     </div>
-    
     <div class="input-group">
         <i class="fas fa-lock"></i>
         <input type="password" id="passInput" placeholder="Password">
     </div>
-
     <div style="text-align: right; margin-bottom: 20px;">
         <span onclick="forgetPassword()" style="color: #888; font-size: 12px; cursor: pointer;">Forgot Password?</span>
     </div>
-
     <button class="btn-main" id="authBtn" onclick="processAuth()">ENTER DASHBOARD</button>
-    
     <div class="divider">OR</div>
-
     <button class="btn-google" onclick="signInWithGoogle()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18">
-        Continue with Google
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18"> Continue with Google
     </button>
-
     <div class="footer-links">
         <div id="toggleBtn" onclick="toggleMode()">New Player? <span>SIGN UP</span></div>
     </div>
-
     <div id="statusMsg"></div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
-
 <script>
-    // ✅ FIREBASE INITIALIZATION
-    const firebaseConfig = {
-        apiKey: "AIzaSyA6GgehsphLSUJ8jfEwwTT-DD7GMRO28AA",
-        authDomain: "rare-gaming-6b29a.firebaseapp.com",
-        projectId: "rare-gaming-6b29a",
-        storageBucket: "rare-gaming-6b29a.firebasestorage.app",
-        messagingSenderId: "1048932406330",
-        appId: "1:1048932406330:web:7b67f288b95e62f0001103"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    // ✅ NAYA DEPLOY URL UPDATED
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyRd0GE6nGsyE8L_zKol6aIVt6DRoQ3E-FHGlix4REgY3II9eWPYgBFADafIuz8HZZHDA/exec";
+    // 🔗 DEPLOY URL (Sync with your Apps Script)
+    const scriptURL = "https://script.google.com/macros/s/AKfycbw3smBpQJocPYYE7bYsSpp171Cw_wPoQuBQ9MqWC5Criomvxo6bSJGay_FvnWL2778AaA/exec";
     
     let isLoginMode = true;
 
-    // AUTO-LOGIN CHECK
     window.onload = () => {
         if(localStorage.getItem("rareGamingUser")) {
             window.location.href = "index.html";
@@ -171,7 +77,7 @@
         document.getElementById('userInput').placeholder = isLoginMode ? "Username or Rare UID" : "Choose Username";
     }
 
-    function processAuth() {
+    async function processAuth() {
         const user = document.getElementById('userInput').value.trim();
         const pass = document.getElementById('passInput').value.trim();
         const status = document.getElementById('statusMsg');
@@ -185,15 +91,34 @@
         btn.disabled = true;
         status.innerText = isLoginMode ? "Authenticating Arena..." : "Creating Account...";
 
-        let action = isLoginMode ? "login" : "registerUser";
-        
-        // GET requests for login/register as per your Apps Script doGet
-        let url = `${scriptURL}?action=${action}&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}&name=${encodeURIComponent(user)}`;
+        try {
+            let response;
+            if (isLoginMode) {
+                // 🔹 LOGIN (GET Request)
+                const url = `${scriptURL}?action=login&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}`;
+                response = await fetch(url);
+            } else {
+                // 🔹 REGISTER (POST Request - Better for Security)
+                response = await fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Apps script issues
+                    body: new URLSearchParams({
+                        'action': 'registerUser',
+                        'name': user,
+                        'pass': pass
+                    })
+                });
+                
+                // Alert for User since no-cors won't return JSON easily
+                alert("Account Request Sent! Try logging in now.");
+                toggleMode();
+                btn.disabled = false;
+                return;
+            }
 
-        fetch(url)
-        .then(res => res.json())
-        .then(data => {
+            const data = await response.json();
             btn.disabled = false;
+            
             if(data.status === "Success") {
                 localStorage.setItem("rareGamingUser", JSON.stringify(data));
                 localStorage.setItem("userUID", data.uid);
@@ -202,53 +127,16 @@
             } else {
                 status.innerHTML = `<span style='color:#FF4D4D'>${data.message || "Error Occurred"}</span>`;
             }
-        })
-        .catch(err => {
+        } catch (err) {
             btn.disabled = false;
-            status.innerHTML = "<span style='color:#FF4D4D'>Server Busy, Try Again!</span>";
-        });
-    }
-
-    function signInWithGoogle() {
-        const status = document.getElementById('statusMsg');
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then((result) => {
-            const user = result.user;
-            status.innerText = "Syncing Rare UID...";
-            fetch(`${scriptURL}?action=firebase_login&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.displayName)}`)
-            .then(res => res.json())
-            .then(data => {
-                if(data.status === "Success") {
-                    localStorage.setItem("rareGamingUser", JSON.stringify(data));
-                    localStorage.setItem("userUID", data.uid);
-                    window.location.href = "index.html";
-                } else {
-                    status.innerHTML = `<span style='color:#FF4D4D'>Sync Failed!</span>`;
-                }
-            });
-        }).catch(e => {
-            status.innerHTML = "<span style='color:#FF4D4D'>Google Login Cancelled</span>";
-        });
-    }
-
-    function forgetPassword() {
-        const user = document.getElementById('userInput').value.trim();
-        const status = document.getElementById('statusMsg');
-        if(!user) {
-            status.innerHTML = "<span style='color:yellow'>Pehle Username likho!</span>";
-            return;
+            status.innerHTML = "<span style='color:#FF4D4D'>Try Login now! (Check Sheet)</span>";
+            console.log(err);
         }
-        status.innerText = "Finding Password...";
-        fetch(`${scriptURL}?action=forgetPass&username=${encodeURIComponent(user)}`)
-        .then(res => res.json())
-        .then(data => {
-            if(data.status === "Success") {
-                alert("RARE GAMING SECURITY:\nTera password ye hai: " + data.pass);
-            } else {
-                status.innerHTML = `<span style='color:#FF4D4D'>User nahi mila!</span>`;
-            }
-        });
     }
+
+    // Google login placeholder
+    function signInWithGoogle() { alert("Google Login logic requires Firebase setup."); }
+    function forgetPassword() { alert("Contact Admin for Password Reset."); }
 </script>
 </body>
 </html>
