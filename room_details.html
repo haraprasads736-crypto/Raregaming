@@ -39,22 +39,22 @@
 
     <div class="room-card" id="mainCard">
         <div id="contentArea">
-            <div class="header"><i class="fas fa-key"></i> Room Details</div>
+            <div class="header"><i class="fas fa-key"></i> Room Access</div>
             
             <div class="match-info">
-                <span class="label">Tournament Match</span>
-                <span id="matchName" class="match-name">Loading...</span>
-                <span id="matchIDDisplay" style="font-size: 9px;">ID: #--</span>
+                <span class="label">Match Details</span>
+                <span id="matchName" class="match-name">Syncing...</span>
+                <span id="matchIDDisplay" style="font-size: 9px; color: #00f2fe;">ID: #--</span>
             </div>
 
             <div class="info-box">
                 <span class="label">Room ID</span>
-                <div id="roomID" class="value">--</div>
+                <div id="roomID" class="value">WAIT...</div>
             </div>
 
             <div class="info-box">
                 <span class="label">Password</span>
-                <div id="roomPass" class="value">--</div>
+                <div id="roomPass" class="value">WAIT...</div>
             </div>
         </div>
 
@@ -71,29 +71,28 @@
             const contentArea = document.getElementById('contentArea');
 
             if(!matchId || !user) {
-                contentArea.innerHTML = "<div class='error-msg'>Access Denied:<br>Invalid Session</div>";
+                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-exclamation-triangle'></i> Access Denied:<br>Invalid Session</div>";
                 return;
             }
 
             try {
-                // Backend se check karenge ki join kiya hai ya nahi
+                // Fetch details with userId to verify joining status
                 const res = await fetch(`${scriptURL}?action=getNewRoomDetails&matchId=${matchId}&userId=${user.uid}`);
                 const data = await res.json();
                 
                 if (data.status === "Success") {
-                    document.getElementById('matchName').innerText = data.matchTitle || "Match Joined";
+                    document.getElementById('matchName').innerText = data.matchTitle || "Tournament Match";
                     document.getElementById('matchIDDisplay').innerText = "ID: #" + matchId;
                     document.getElementById('roomID').innerText = data.roomId;
                     document.getElementById('roomPass').innerText = data.password;
                 } else {
-                    // Agar join nahi kiya ya ID password nahi mila
                     contentArea.innerHTML = `
-                        <div class="header" style="color:#ff3131">Access Denied</div>
+                        <div class="header" style="color:#ff3131"><i class="fas fa-lock"></i> Access Denied</div>
                         <div class="error-msg">You have not joined this match yet. Please join to view details.</div>
                     `;
                 }
             } catch (e) {
-                contentArea.innerHTML = "<div class='error-msg'>System Error:<br>Try Again Later</div>";
+                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-wifi'></i> System Error:<br>Check Connection</div>";
             }
         }
 
