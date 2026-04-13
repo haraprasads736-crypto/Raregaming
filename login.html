@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - RARE GAMING</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Tera purana CSS yahan rahega (No change) */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
         body { background: linear-gradient(180deg, #1A0A2D 0%, #000000 100%); color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .login-box { width: 85%; max-width: 380px; text-align: center; padding: 20px; }
@@ -57,9 +60,17 @@
 </div>
 
 <script>
-    // 🔗 DEPLOY URL (Sync with your Apps Script)
+    // 🏁 FIREBASE CONFIG
+    const firebaseConfig = {
+        apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
+        authDomain: "rare-gaming-b8875.firebaseapp.com",
+        projectId: "rare-gaming-b8875",
+        databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
     const scriptURL = "https://script.google.com/macros/s/AKfycbw3smBpQJocPYYE7bYsSpp171Cw_wPoQuBQ9MqWC5Criomvxo6bSJGay_FvnWL2778AaA/exec";
-    
     let isLoginMode = true;
 
     window.onload = () => {
@@ -77,6 +88,24 @@
         document.getElementById('userInput').placeholder = isLoginMode ? "Username or Rare UID" : "Choose Username";
     }
 
+    // 🚀 ASLI JADU: WALLET CHECK & SYNC
+    async function syncUserWallet(data) {
+        const playerRef = database.ref('players/' + data.uid);
+        const snapshot = await playerRef.once('value');
+        
+        if (!snapshot.exists()) {
+            // Agar user purana hai ya naya, aur wallet nahi hai, toh create karo
+            // Purane user ka balance Google Sheet se utha kar Firebase mein dalo
+            await playerRef.set({
+                name: data.name,
+                cash: parseFloat(data.coins || 0), // Google Sheet se aaya balance
+                uid: data.uid,
+                joinedMatches: 0
+            });
+            console.log("Firebase Wallet Created/Synced!");
+        }
+    }
+
     async function processAuth() {
         const user = document.getElementById('userInput').value.trim();
         const pass = document.getElementById('passInput').value.trim();
@@ -89,54 +118,43 @@
         }
 
         btn.disabled = true;
-        status.innerText = isLoginMode ? "Authenticating Arena..." : "Creating Account...";
+        status.innerText = isLoginMode ? "Connecting to Arena..." : "Creating Account...";
 
         try {
-            let response;
             if (isLoginMode) {
-                // 🔹 LOGIN (GET Request)
                 const url = `${scriptURL}?action=login&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}`;
-                response = await fetch(url);
-            } else {
-                // 🔹 REGISTER (POST Request - Better for Security)
-                response = await fetch(scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Apps script issues
-                    body: new URLSearchParams({
-                        'action': 'registerUser',
-                        'name': user,
-                        'pass': pass
-                    })
-                });
-                
-                // Alert for User since no-cors won't return JSON easily
-                alert("Account Request Sent! Try logging in now.");
-                toggleMode();
-                btn.disabled = false;
-                return;
-            }
+                const response = await fetch(url);
+                const data = await response.json();
 
-            const data = await response.json();
-            btn.disabled = false;
-            
-            if(data.status === "Success") {
-                localStorage.setItem("rareGamingUser", JSON.stringify(data));
-                localStorage.setItem("userUID", data.uid);
-                status.innerHTML = "<span style='color:#00FF00'>Access Granted! Redirecting...</span>";
-                setTimeout(() => window.location.href = "index.html", 800);
+                if(data.status === "Success") {
+                    // 💸 Yahan balance sync hoga
+                    await syncUserWallet(data);
+                    
+                    localStorage.setItem("rareGamingUser", JSON.stringify(data));
+                    localStorage.setItem("userUID", data.uid);
+                    status.innerHTML = "<span style='color:#00FF00'>Success! Entering Dashboard...</span>";
+                    setTimeout(() => window.location.href = "index.html", 800);
+                } else {
+                    status.innerHTML = `<span style='color:#FF4D4D'>${data.message}</span>`;
+                }
             } else {
-                status.innerHTML = `<span style='color:#FF4D4D'>${data.message || "Error Occurred"}</span>`;
+                // Register logic (POST request)
+                const res = await fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: new URLSearchParams({'action': 'registerUser','name': user,'pass': pass})
+                });
+                alert("Account created! Now login.");
+                toggleMode();
             }
         } catch (err) {
-            btn.disabled = false;
-            status.innerHTML = "<span style='color:#FF4D4D'>Try Login now! (Check Sheet)</span>";
-            console.log(err);
+            status.innerHTML = "<span style='color:#FF4D4D'>Error! Check connection.</span>";
         }
+        btn.disabled = false;
     }
 
-    // Google login placeholder
-    function signInWithGoogle() { alert("Google Login logic requires Firebase setup."); }
-    function forgetPassword() { alert("Contact Admin for Password Reset."); }
+    function signInWithGoogle() { alert("Google Login coming soon!"); }
+    function forgetPassword() { alert("Contact Guru Prasad for Reset!"); }
 </script>
 </body>
 </html>
