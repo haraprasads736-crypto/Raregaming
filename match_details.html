@@ -18,35 +18,33 @@
         .tab.active { background: #8B3EEB; color: #fff; }
         .match-list { padding: 0 12px; }
         
-        /* CARD DESIGN FIX */
-        .card { background: #FFFFFF; border-radius: 8px; margin-bottom: 20px; color: #000; position: relative; border-left: 5px solid #8B3EEB; box-shadow: 0 4px 15px rgba(0,0,0,0.4); overflow: hidden; }
+        .card { background: #FFFFFF; border-radius: 12px; margin-bottom: 20px; color: #000; position: relative; border-left: 6px solid #8B3EEB; box-shadow: 0 4px 20px rgba(0,0,0,0.5); overflow: hidden; }
         .card-inner { padding: 15px; }
         .card-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #F0F0F0; padding-bottom: 10px; margin-bottom: 12px; }
-        .match-logo { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #f0f0f0; border: 1px solid #ddd; }
+        .match-logo { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; background: #222; border: 1px solid #ddd; }
         .header-text { flex: 1; }
-        .match-title { font-size: 13px; font-weight: 800; color: #111; }
-        .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; }
+        .match-title { font-size: 14px; font-weight: 800; color: #111; text-transform: uppercase; }
+        .match-time { font-size: 10px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
         
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-        .stat-box { background: #8B3EEB; border-radius: 4px; padding: 6px 2px; text-align: center; color: white; }
-        .stat-label { font-size: 7px; font-weight: 600; text-transform: uppercase; display: block; opacity: 0.9; }
-        .stat-value { font-size: 10px; font-weight: 800; display: block; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .stat-box { background: #8B3EEB; border-radius: 6px; padding: 8px 2px; text-align: center; color: white; }
+        .stat-label { font-size: 8px; font-weight: 600; text-transform: uppercase; display: block; opacity: 0.9; }
+        .stat-value { font-size: 11px; font-weight: 800; display: block; }
 
-        /* PROGRESS BAR FIX - 48 PLAYERS */
         .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 10px; }
-        .progress-bar { flex: 1; height: 16px; background: #E0D4FF; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
-        .progress-fill { height: 100%; background: #2D1B44; transition: 0.5s ease-in-out; width: 0%; }
-        .player-count { position: absolute; width: 100%; text-align: center; font-size: 9px; font-weight: 800; line-height: 16px; color: #fff; z-index: 2; mix-blend-mode: difference; }
+        .progress-bar { flex: 1; height: 18px; background: #E0D4FF; border-radius: 50px; overflow: hidden; position: relative; border: 1.5px solid #8B3EEB; }
+        .progress-fill { height: 100%; background: #2D1B44; transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 0%; }
+        .player-count { position: absolute; width: 100%; text-align: center; font-size: 10px; font-weight: 800; line-height: 18px; color: #fff; z-index: 2; mix-blend-mode: difference; }
         
-        .join-btn { background: #160826; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
-        .joined-footer { background: #f0f7ff; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #8B3EEB; }
-        .status-text { font-size: 10px; font-weight: 800; color: #2ecc71; text-transform: uppercase; }
-        .btn-action { background: #00f2fe; color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-size: 10px; font-weight: 800; cursor: pointer; }
+        .join-btn { background: #160826; color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 800; font-size: 12px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .joined-footer { background: #f0f7ff; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #8B3EEB; }
+        .status-text { font-size: 11px; font-weight: 800; color: #2ecc71; text-transform: uppercase; }
+        .btn-action { background: #00f2fe; color: #000; border: none; padding: 8px 15px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
-        .modal-card { background: #1A0A2D; width: 100%; max-width: 310px; border-radius: 12px; padding: 30px; text-align: center; color: white; border: 1px solid #2D1B44; }
-        .modal-card input { width: 100%; background: #0F041C; border: 1px solid #8B3EEB; padding: 12px; margin: 10px 0; border-radius: 8px; color: #fff; text-align: center; }
-        .btn-confirm { background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 8px; font-weight: 800; border: none; cursor: pointer; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 4000; }
+        .modal-card { background: #1A0A2D; width: 85%; max-width: 320px; border-radius: 20px; padding: 30px; text-align: center; color: white; border: 1px solid #8B3EEB; }
+        .modal-card input { width: 100%; background: #0F041C; border: 1.5px solid #8B3EEB; padding: 14px; margin: 12px 0; border-radius: 10px; color: #fff; text-align: center; box-sizing: border-box; }
+        .btn-confirm { background: #39ff14; color: #000; width: 100%; padding: 15px; border-radius: 10px; font-weight: 800; border: none; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -54,7 +52,7 @@
     <div id="mainPage">
         <div class="header">
             <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
-            <div class="title" id="pageTitle">TOURNAMENTS</div>
+            <div class="title" id="pageTitle">ARENA</div>
         </div>
         
         <div class="tab-container">
@@ -67,15 +65,16 @@
 
     <div id="inputModal" class="modal-overlay">
         <div class="modal-card">
-            <h3>Player Details</h3>
-            <input type="text" id="gameName" placeholder="In-Game Name">
-            <input type="number" id="gameId" placeholder="In-Game UID">
-            <button class="btn-confirm" id="submitBtn" onclick="finalJoin()">Confirm Join</button>
-            <p onclick="closeModals()" style="color:#aaa; cursor:pointer; margin-top:15px;">Cancel</p>
+            <h3 style="margin-top:0">ENTRY DETAILS</h3>
+            <input type="text" id="gameName" placeholder="FREE FIRE NAME">
+            <input type="number" id="gameId" placeholder="PLAYER UID">
+            <button class="btn-confirm" id="submitBtn" onclick="finalJoin()">Confirm & Join</button>
+            <p onclick="closeModals()" style="color:#ff3131; cursor:pointer; margin-top:20px; font-size:12px; font-weight:700">CANCEL</p>
         </div>
     </div>
 
     <script>
+        // 1. Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -88,64 +87,64 @@
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if(!userData) window.location.href = "login.html";
 
+        // 🔥 GITHUB IMAGE PATH (Yahan apna sahi GitHub Repo path dalo)
+        const githubRawBase = "https://raw.githubusercontent.com/RareGaming/FreeFire/main/"; 
+
         function loadMatches(status = 'upcoming') {
             const container = document.getElementById('matchList');
-            container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:60px; color:#8B3EEB;"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>`;
             
             const urlParams = new URLSearchParams(window.location.search);
             let matchType = urlParams.get('type') || "BR";
-            document.getElementById('pageTitle').innerText = matchType + " ARENA";
+            document.getElementById('pageTitle').innerText = matchType + " BATTLE";
 
             database.ref('matches').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (!data) {
-                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#888;">No matches yet.</div>`;
+                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#666;">No Battle Found.</div>`;
                     return;
                 }
                 container.innerHTML = ""; 
                 Object.keys(data).forEach(id => {
                     const m = data[id];
                     if (m.category === matchType && m.status === status) {
-                        renderCard(m, id, container);
+                        renderCard(m, id, container, matchType);
                     }
                 });
             });
         }
 
-        function renderCard(m, id, container) {
+        function renderCard(m, id, container, type) {
             let isJoined = localStorage.getItem("joined_" + id);
             
-            // 🔥 Live Progress Calculation - FIXED FOR 48
+            // 🚀 Progress Logic
             let totalSlots = 48; 
             let joinedCount = m.participants ? Object.keys(m.participants).length : 0;
             let progressPercent = (joinedCount / totalSlots) * 100;
 
-            // 🔥 GitHub Image Fix Logic
-            let rawImg = m.imgUrl || m.image || 'https://i.imgur.com/uR1Y6T2.jpeg';
-            if(rawImg.includes("github.com") && !rawImg.includes("raw.githubusercontent.com")){
-                rawImg = rawImg.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
-            }
+            // 🔥 IMAGE LOGIC: Agar Firebase mein nahi hai toh GitHub se Category ke hisaab se khichega
+            let finalImg = m.imgUrl || m.image || (githubRawBase + type.toLowerCase() + "_poster.jpg");
 
             container.innerHTML += `
             <div class="card">
                 <div class="card-inner">
                     <div class="card-header">
-                        <img src="${rawImg}" class="match-logo" onerror="this.src='https://i.imgur.com/uR1Y6T2.jpeg'">
+                        <img src="${finalImg}" class="match-logo" onerror="this.src='https://i.imgur.com/uR1Y6T2.jpeg'">
                         <div class="header-text">
-                            <div class="match-title">${m.title} #${id}</div>
-                            <span class="match-time"><i class="far fa-calendar-alt"></i> ${m.date} | ${m.time}</span>
+                            <div class="match-title">${m.title || (type + ' TOURNAMENT')} #${id}</div>
+                            <span class="match-time"><i class="far fa-clock"></i> ${m.date} | ${m.time}</span>
                         </div>
                     </div>
                     <div class="stats-grid">
-                        <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value" style="color:#FFD700">${m.prize}</span></div>
-                        <div class="stat-box"><span class="stat-label">Fee</span><span class="stat-value">${m.fee}</span></div>
-                        <div class="stat-box" style="background:#2D1B44"><span class="stat-label">Per Kill</span><span class="stat-value">${m.perkill || '₹0'}</span></div>
+                        <div class="stat-box"><span class="stat-label">WIN PRIZE</span><span class="stat-value" style="color:#FFD700">${m.prize}</span></div>
+                        <div class="stat-box"><span class="stat-label">ENTRY FEE</span><span class="stat-value">${m.fee}</span></div>
+                        <div class="stat-box" style="background:#2D1B44"><span class="stat-label">PER KILL</span><span class="stat-value">${m.perkill || '₹0'}</span></div>
                     </div>
                     
-                    <div style="display: flex; justify-content: space-between; margin-top: 10px; background: #f9f9f9; padding: 6px; border-radius: 6px; border: 1px dashed #8B3EEB;">
-                        <div style="text-align: center; flex: 1;"><span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Type</span><span style="font-size: 10px; font-weight: 800;">${m.type || 'SOLO'}</span></div>
-                        <div style="text-align: center; flex: 1; border-left: 1px solid #eee; border-right: 1px solid #eee;"><span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Map</span><span style="font-size: 10px; font-weight: 800;">${m.map || 'BERMUDA'}</span></div>
-                        <div style="text-align: center; flex: 1;"><span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Version</span><span style="font-size: 10px; font-weight: 800;">MOBILE</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 12px; background: #f0f0f0; padding: 8px; border-radius: 8px; border: 1px dashed #8B3EEB;">
+                        <div style="text-align: center; flex: 1;"><span style="font-size: 8px; color: #888; text-transform: uppercase; display: block;">TYPE</span><span style="font-size: 11px; font-weight: 800;">${m.type || 'SOLO'}</span></div>
+                        <div style="text-align: center; flex: 1; border-left: 1px solid #ddd; border-right: 1px solid #ddd;"><span style="font-size: 8px; color: #888; text-transform: uppercase; display: block;">MAP</span><span style="font-size: 11px; font-weight: 800;">${m.map || 'BERMUDA'}</span></div>
+                        <div style="text-align: center; flex: 1;"><span style="font-size: 8px; color: #888; text-transform: uppercase; display: block;">VERSION</span><span style="font-size: 11px; font-weight: 800;">MOBILE</span></div>
                     </div>
 
                     <div class="progress-section">
@@ -153,10 +152,10 @@
                             <div class="player-count">${joinedCount}/${totalSlots} Joined</div>
                             <div class="progress-fill" style="width:${progressPercent}%"></div>
                         </div>
-                        ${!isJoined ? `<button class="join-btn" onclick="openJoinModal('${id}', '${m.fee}')">Join</button>` : `<button class="join-btn" style="background:#444" disabled>Joined</button>`}
+                        ${!isJoined ? `<button class="join-btn" onclick="openJoinModal('${id}', '${m.fee}')">Join</button>` : `<button class="join-btn" style="background:#444; box-shadow:none" disabled>Joined</button>`}
                     </div>
                 </div>
-                ${isJoined ? `<div class="joined-footer"><span class="status-text">✅ Registered</span><button class="btn-action" onclick="window.location.href='room_details.html?matchId=${id}'">ROOM ID</button></div>` : ''}
+                ${isJoined ? `<div class="joined-footer"><span class="status-text"><i class="fas fa-check-circle"></i> Registered</span><button class="btn-action" onclick="window.location.href='room_details.html?matchId=${id}'">VIEW ROOM</button></div>` : ''}
             </div>`;
         }
 
@@ -175,7 +174,7 @@
                 const pData = snap.val();
                 const currentCash = parseFloat(pData.cash || 0);
                 if (currentCash < selectedMatch.fee) {
-                    alert("❌ Low Balance!");
+                    alert("❌ Low Balance! Recharge karo.");
                 } else {
                     database.ref('players/' + playerUID).update({ cash: currentCash - selectedMatch.fee });
                     database.ref('matches/' + selectedMatch.id + '/participants/' + playerUID).set({
