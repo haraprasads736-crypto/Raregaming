@@ -8,7 +8,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Tera CSS (No Change) */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         body { background-color: #0F041C; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         .header { display: flex; align-items: center; padding: 15px 20px; background: #160826; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2D1B44; }
@@ -21,19 +20,18 @@
         .card { background: #FFFFFF; border-radius: 8px; padding: 0; margin-bottom: 20px; color: #000; position: relative; border-left: 5px solid #8B3EEB; box-shadow: 0 4px 15px rgba(0,0,0,0.4); overflow: hidden; }
         .card-inner { padding: 15px; }
         .card-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #F0F0F0; padding-bottom: 10px; margin-bottom: 12px; }
-        .match-logo { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+        .match-logo { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; background: #eee; }
         .header-text { flex: 1; }
         .match-title { font-size: 13px; font-weight: 800; color: #111; display: flex; justify-content: space-between; align-items: center; }
         .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
-        .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; border-bottom: 1px solid #8B3EEB; }
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .stat-box { background: #8B3EEB; border-radius: 4px; padding: 6px 2px; text-align: center; color: white; }
         .stat-label { font-size: 7px; font-weight: 600; text-transform: uppercase; display: block; opacity: 0.9; }
         .stat-value { font-size: 10px; font-weight: 800; display: block; margin-top: 1px; }
         .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 10px; }
         .progress-bar { flex: 1; height: 12px; background: #E0D4FF; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
-        .progress-fill { height: 100%; background: #2D1B44; width: 0%; transition: 0.5s ease-in-out; }
-        .player-count { position: absolute; width: 100%; text-align: center; font-size: 8.5px; font-weight: 800; line-height: 12px; color: #fff; z-index: 2; }
+        .progress-fill { height: 100%; background: #2D1B44; transition: 0.5s ease-in-out; }
+        .player-count { position: absolute; width: 100%; text-align: center; font-size: 8.5px; font-weight: 800; line-height: 12px; color: #fff; z-index: 2; mix-blend-mode: difference; }
         .join-btn { background: #160826; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
         .joined-footer { background: #f0f7ff; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #8B3EEB; }
         .status-text { font-size: 10px; font-weight: 800; color: #2ecc71; text-transform: uppercase; }
@@ -57,13 +55,12 @@
             <div class="tab" onclick="switchTab('ongoing', this)">Ongoing</div>
             <div class="tab" onclick="switchTab('result', this)">Result</div>
         </div>
-
         <div class="match-list" id="matchList"></div>
     </div>
 
     <div id="inputModal" class="modal-overlay">
         <div class="modal-card">
-            <h3 style="color:white;">Player Details</h3>
+            <h3>Player Details</h3>
             <input type="text" id="gameName" placeholder="In-Game Name">
             <input type="number" id="gameId" placeholder="In-Game UID">
             <button class="btn-confirm" id="submitBtn" onclick="finalJoin()">Confirm Join</button>
@@ -72,7 +69,6 @@
     </div>
 
     <script>
-        // 1. Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -82,13 +78,11 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Check Login
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if(!userData) window.location.href = "login.html";
 
         let selectedMatch = null;
 
-        // 2. 🚀 LOAD MATCHES
         function loadMatches(status = 'upcoming') {
             const container = document.getElementById('matchList');
             container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;"><i class="fas fa-spinner fa-spin"></i> Loading Arena...</div>`;
@@ -104,7 +98,6 @@
                     container.innerHTML = `<div style="text-align:center; padding:50px; color:#888;">No matches found.</div>`;
                     return;
                 }
-                
                 container.innerHTML = ""; 
                 Object.keys(data).forEach(id => {
                     const m = data[id];
@@ -118,16 +111,19 @@
         function renderCard(m, id, container) {
             let isJoined = localStorage.getItem("joined_" + id);
             
-            // 🔥 Live Progress Calculation
-            let totalSlots = 100; // Total players allowed
+            // 🚀 Player Count logic - SET TO 48
+            let totalSlots = 48; 
             let joinedCount = m.participants ? Object.keys(m.participants).length : 0;
             let progressPercent = (joinedCount / totalSlots) * 100;
+
+            // 🚀 Image Fix logic - Trying multiple field names
+            let matchImg = m.imgUrl || m.image || m.img || 'https://i.imgur.com/uR1Y6T2.jpeg';
 
             container.innerHTML += `
             <div class="card">
                 <div class="card-inner">
                     <div class="card-header">
-                        <img src="${m.imgUrl || 'https://i.imgur.com/uR1Y6T2.jpeg'}" class="match-logo">
+                        <img src="${matchImg}" class="match-logo" onerror="this.src='https://i.imgur.com/uR1Y6T2.jpeg'">
                         <div class="header-text">
                             <div class="match-title">${m.title} #${id}</div>
                             <span class="match-time">${m.date} | ${m.time}</span>
@@ -140,18 +136,9 @@
                     </div>
 
                     <div style="display: flex; justify-content: space-between; margin-top: 10px; background: #f5f5f5; padding: 6px; border-radius: 6px; border: 1px dashed #8B3EEB;">
-                        <div style="text-align: center; flex: 1;">
-                            <span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Type</span>
-                            <span style="font-size: 10px; font-weight: 800; color: #111;">${m.type || 'SOLO'}</span>
-                        </div>
-                        <div style="text-align: center; flex: 1; border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
-                            <span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Map</span>
-                            <span style="font-size: 10px; font-weight: 800; color: #111;">${m.map || 'BERMUDA'}</span>
-                        </div>
-                        <div style="text-align: center; flex: 1;">
-                            <span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Version</span>
-                            <span style="font-size: 10px; font-weight: 800; color: #111;">MOBILE</span>
-                        </div>
+                        <div style="text-align: center; flex: 1;"><span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Type</span><span style="font-size: 10px; font-weight: 800; color: #111;">${m.type || 'SOLO'}</span></div>
+                        <div style="text-align: center; flex: 1; border-left: 1px solid #ddd; border-right: 1px solid #ddd;"><span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Map</span><span style="font-size: 10px; font-weight: 800; color: #111;">${m.map || 'BERMUDA'}</span></div>
+                        <div style="text-align: center; flex: 1;"><span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Version</span><span style="font-size: 10px; font-weight: 800; color: #111;">MOBILE</span></div>
                     </div>
 
                     <div class="progress-section">
@@ -175,13 +162,10 @@
             const gName = document.getElementById('gameName').value.trim();
             const gUID = document.getElementById('gameId').value.trim();
             if(!gName || !gUID) return alert("Bhai, Details dalo!");
-
             const playerUID = userData.uid;
-
             database.ref('players/' + playerUID).once('value', (snap) => {
                 const pData = snap.val();
                 if(!pData) return alert("Error: User Wallet not found!");
-
                 const currentCash = parseFloat(pData.cash || 0);
                 if (currentCash < selectedMatch.fee) {
                     alert("❌ Low Balance!");
