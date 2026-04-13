@@ -26,14 +26,30 @@
         .match-info { font-size: 11px; color: #888; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
         .match-name { color: #fff; font-weight: 700; display: block; font-size: 14px; margin-top: 5px; }
 
-        .info-box { background: rgba(255, 255, 255, 0.03); border-radius: 8px; padding: 12px; margin: 10px 0; border: 1px solid rgba(255,255,255,0.05); }
+        .info-box { 
+            background: rgba(255, 255, 255, 0.03); border-radius: 8px; padding: 12px; 
+            margin: 10px 0; border: 1px solid rgba(255,255,255,0.05); 
+            cursor: pointer; position: relative; transition: 0.3s;
+        }
+        .info-box:active { background: rgba(0, 242, 254, 0.1); }
         .label { font-size: 8px; color: #aaa; text-transform: uppercase; display: block; margin-bottom: 4px; }
         .value { font-size: 20px; font-weight: 800; color: #fff; font-family: monospace; letter-spacing: 2px; }
+        .copy-hint { font-size: 7px; color: #00f2fe; margin-top: 4px; display: block; }
 
         .back-btn { margin-top: 15px; background: #8B3EEB; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
         
         .error-msg { font-size: 12px; color: #ff3131; font-weight: 600; padding: 20px; }
         .loading-icon { color: #00f2fe; font-size: 25px; margin-bottom: 10px; }
+        
+        /* Toast notification for copy */
+        #toast { 
+            visibility: hidden; min-width: 150px; background-color: #333; color: #fff; 
+            text-align: center; border-radius: 5px; padding: 10px; 
+            position: fixed; z-index: 1; bottom: 30px; font-size: 12px; 
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
 <body>
@@ -41,18 +57,27 @@
     <div class="room-card" id="mainCard">
         <div id="contentArea">
             <div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>
-            <p style="font-size: 12px; color: #aaa;">Fetching room credentials...</p>
+            <p style="font-size: 12px; color: #aaa;">Accessing Sheet Data...</p>
         </div>
         <button onclick="goBack()" class="back-btn">EXIT ROOM</button>
     </div>
 
+    <div id="toast">Copied to Clipboard!</div>
+
     <script>
         const scriptURL = "https://script.google.com/macros/s/AKfycbwra0VJU6qYQfK4SCZTz5mIfrzv6t3PwvMxmckvZX0tj9WO1jKik0zzeuvNgGu8u1qRcQ/exec";
         
-        // 🚀 SMART NAVIGATION: Back aane par blank screen nahi dikhegi
         function goBack() {
-            const lastType = localStorage.getItem("lastMatchCategory") || "LW";
+            const lastType = localStorage.getItem("lastType") || "LW";
             window.location.href = "match_details.html?type=" + lastType;
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById("toast");
+                toast.className = "show";
+                setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+            });
         }
 
         async function fetchRoom() {
@@ -62,39 +87,49 @@
             const contentArea = document.getElementById('contentArea');
 
             if(!matchId || !user) {
-                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-ban'></i> Access Denied<br><span style='font-size:10px; color:#666;'>No active match session found.</span></div>";
+                contentArea.innerHTML = "<div class='error-msg'>No active match session found.</div>";
                 return;
             }
 
             try {
+                // 🚀 Fetching specifically from the ID Password logic in your Apps Script
                 const res = await fetch(`${scriptURL}?action=getNewRoomDetails&matchId=${matchId}&userId=${user.uid}`);
                 const data = await res.json();
                 
                 if (data.status === "Success") {
-                    contentArea.innerHTML = `
-                        <div class="header"><i class="fas fa-door-open"></i> Access Granted</div>
-                        <div class="match-tag">Match ID: #${matchId}</div>
-                        <div class="match-info">
-                            <span class="label">Tournament Name</span>
-                            <span class="match-name">${data.matchTitle || "Rare Gaming Pro Match"}</span>
-                        </div>
-                        <div class="info-box">
-                            <span class="label">Room ID</span>
-                            <div class="value">${data.roomId}</div>
-                        </div>
-                        <div class="info-box">
-                            <span class="label">Room Password</span>
-                            <div class="value">${data.password}</div>
-                        </div>
-                    `;
+                    if (data.roomId && data.password) {
+                        contentArea.innerHTML = `
+                            <div class="header"><i class="fas fa-door-open"></i> Access Granted</div>
+                            <div class="match-tag">Match ID: #${matchId}</div>
+                            <div class="match-info">
+                                <span class="label">Tournament Name</span>
+                                <span class="match-name">${data.matchTitle || "Rare Gaming Match"}</span>
+                            </div>
+                            <div class="info-box" onclick="copyToClipboard('${data.roomId}')">
+                                <span class="label">Room ID (Tap to Copy)</span>
+                                <div class="value">${data.roomId}</div>
+                                <span class="copy-hint"><i class="fas fa-copy"></i> Click to Copy</span>
+                            </div>
+                            <div class="info-box" onclick="copyToClipboard('${data.password}')">
+                                <span class="label">Room Password (Tap to Copy)</span>
+                                <div class="value">${data.password}</div>
+                                <span class="copy-hint"><i class="fas fa-copy"></i> Click to Copy</span>
+                            </div>
+                        `;
+                    } else {
+                        contentArea.innerHTML = `
+                            <div class="header" style="color:#f39c12"><i class="fas fa-clock"></i> Not Ready</div>
+                            <div class="error-msg">Admin has not updated the ID/Password yet. Please wait.</div>
+                        `;
+                    }
                 } else {
                     contentArea.innerHTML = `
                         <div class="header" style="color:#ff3131"><i class="fas fa-lock"></i> Locked</div>
-                        <div class="error-msg">You haven't joined Match #${matchId} yet. Join to unlock credentials.</div>
+                        <div class="error-msg">You haven't joined Match #${matchId} yet.</div>
                     `;
                 }
             } catch (e) {
-                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-exclamation-triangle'></i> Connection Error<br><span style='font-size:10px; color:#666;'>Check your internet.</span></div>";
+                contentArea.innerHTML = "<div class='error-msg'>Connection Error! Check your internet.</div>";
             }
         }
 
