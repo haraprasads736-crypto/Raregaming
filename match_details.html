@@ -133,6 +133,8 @@
             
             const urlParams = new URLSearchParams(window.location.search);
             let matchKey = urlParams.get('type');
+            
+            // 🚀 SMART NAVIGATION: Save and retrieve the tournament type
             if (!matchKey) matchKey = localStorage.getItem("lastType") || "LW";
             localStorage.setItem("lastType", matchKey);
             document.getElementById('pageTitle').innerText = matchKey + " TOURNAMENTS";
@@ -157,7 +159,9 @@
                     if (isJoined) {
                         let btnText = isTeamMatch ? "ADD TEAMMATE" : "ROOM ID";
                         let btnColor = isTeamMatch ? "#39ff14" : "#00f2fe";
-                        let btnLink = isTeamMatch ? `alert('Duo Mode: Contact Admin!')` : `window.location.href='room_details.html?matchId=${m.id}'`;
+                        
+                        // 🚀 URL FIX: Added encodeURIComponent to pass the Match ID safely
+                        let btnLink = isTeamMatch ? `alert('Duo Mode: Contact Admin!')` : `window.location.href='room_details.html?matchId=' + encodeURIComponent('${m.id}')`;
 
                         footerHtml = `
                         <div class="joined-footer">
