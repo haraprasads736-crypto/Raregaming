@@ -8,6 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-5695800911065486" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -28,7 +29,7 @@
             background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
         }
 
-        /* HEADER */
+        /* 1. HEADER */
         .header-top { 
             padding: 25px 20px 15px 20px; display: flex; 
             justify-content: space-between; align-items: center;
@@ -44,23 +45,45 @@
             background: rgba(0, 242, 254, 0.05); border: 1.5px solid var(--neon-blue); 
             padding: 8px 15px; border-radius: 50px; color: var(--neon-blue); 
             font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;
+            cursor: pointer;
         }
 
-        /* BANNER & GRID STYLES (Tera purana design) */
-        .money-banner { margin: 20px; padding: 20px; background: linear-gradient(135deg, #0a0a0f 0%, #1a2e1a 100%); border-radius: 24px; border: 1px solid rgba(57, 255, 20, 0.2); }
-        .money-title { font-size: 18px; font-weight: 800; margin: 0; }
-        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; margin-top: 15px; }
+        /* 2. MONEY BANNER */
+        .money-banner {
+            margin: 20px 20px 15px 20px; padding: 20px;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a2e1a 100%);
+            border-radius: 24px; border: 1px solid rgba(57, 255, 20, 0.2);
+            position: relative; overflow: hidden;
+        }
+        .money-tag { background: #39ff14; color: #000; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 50px; display: inline-block; margin-bottom: 10px; text-transform: uppercase; }
+        .money-title { font-size: 18px; font-weight: 800; margin: 0; color: #fff; }
+        .money-desc { font-size: 11px; color: #aaa; margin: 5px 0 15px 0; }
+        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+
+        /* 3. ADMOB BANNER */
+        .ad-container { margin: 10px 20px; height: 60px; background: #000; border-radius: 12px; border: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .ad-label { position: absolute; top: 2px; left: 5px; font-size: 7px; color: #333; letter-spacing: 1px; }
+
+        /* 4. MATCH GRID */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 15px 20px; }
+        .section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-left: 4px solid var(--neon-blue); padding-left: 12px; }
         
         .match-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 15px; }
-        .match-card { position: relative; border-radius: 15px; overflow: hidden; aspect-ratio: 1/1.2; background: #0a0a0f; border: 1px solid var(--border-color); }
+        .match-card { position: relative; border-radius: 15px; overflow: hidden; aspect-ratio: 1/1.2; background: #0a0a0f; border: 1px solid var(--border-color); text-decoration: none; }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .match-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 8px; font-weight: 700; text-transform: uppercase; }
+        .match-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 0 5px #000; text-transform: uppercase; }
+        
+        .coming-soon-badge { position: absolute; top: 5px; right: 5px; background: #ff3131; color: white; font-size: 6px; font-weight: 800; padding: 2px 5px; border-radius: 4px; z-index: 2; }
 
-        /* NAVIGATION */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; border-radius: 20px 20px 0 0; z-index: 1000; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; display: flex; flex-direction: column; align-items: center; }
+        /* 5. NAVIGATION */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;}
         .nav-item.active { color: var(--neon-blue); }
-        .icon-circle { width: 55px; height: 55px; background: #39ff14; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: -35px; border: 4px solid var(--bg-color); }
+        .nav-item i { font-size: 20px; }
+        
+        .center-btn .icon-circle { width: 55px; height: 55px; background: #39ff14; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
+
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
 </head>
 <body>
@@ -69,36 +92,70 @@
         <div class="brand-name">RARE GAMING</div>
         <div style="display: flex; align-items: center; gap: 8px;">
             <div class="wallet-pill" id="walletBal"><i class="fas fa-coins"></i> ₹--</div>
-            <div onclick="window.location.href='payment.html'" style="background: var(--neon-green); color: black; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                <i class="fas fa-plus"></i>
+            <div onclick="window.location.href='payment.html'" style="background: var(--neon-green); color: black; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 10px rgba(57, 255, 20, 0.4);">
+                <i class="fas fa-plus" style="font-size: 14px; font-weight: bold;"></i>
             </div>
         </div>
     </div>
 
     <div class="money-banner">
+        <div class="money-tag">Fast & Secure</div>
         <p class="money-title">Transfer Earnings</p>
-        <button class="money-btn" onclick="location.href='transfer.html'">Send Money Now</button>
+        <p class="money-desc">Send money to your friends instantly within the app.</p>
+        <button class="money-btn" onclick="location.href='transfer.html'">
+            <i class="fas fa-paper-plane"></i> Send Money Now
+        </button>
     </div>
 
+    <div class="ad-container">
+        <div class="ad-label">ADVERTISEMENT</div>
+        <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-5695800911065486" data-ad-slot="5516230371"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="section-header">
+        <div class="section-title">Live Tournaments</div>
+    </div>
+    
     <div class="match-grid">
         <a href="match_details.html?type=BR" class="match-card"><img src="br_poster.jpg"><div class="match-label">BR SQUAD</div></a>
         <a href="match_details.html?type=CS" class="match-card"><img src="cs_poster.jpg"><div class="match-label">CS SQUAD</div></a>
         <a href="match_details.html?type=LW" class="match-card"><img src="lw_poster.jpg"><div class="match-label">LONE WOLF</div></a>
         <a href="match_details.html?type=1V1" class="match-card"><img src="1v1_poster.jpg"><div class="match-label">1V1 BATTLE</div></a>
+        <a href="match_details.html?type=LW2" class="match-card"><img src="lw2_poster.jpg"><div class="match-label">LONE WOLF 2.0</div></a>
+        <a href="match_details.html?type=FREE" class="match-card"><img src="free_poster.jpg"><div class="match-label">FREE MATCH</div></a>
+        <a href="match_details.html?type=1V1HS" class="match-card"><img src="1v1hs_poster.jpg"><div class="match-label">1V1 HEADSHOT</div></a>
+        <a href="match_details.html?type=CSHS" class="match-card"><img src="cshs_poster.jpg"><div class="match-label">CS HEADSHOT</div></a>
+
+        <div class="match-card" onclick="alert('BGMI Tournaments are coming soon! Stay tuned.')" style="cursor: pointer;">
+            <div class="coming-soon-badge">COMING SOON</div>
+            <img src="https://i.imgur.com/8Qp2ZpX.jpeg" style="filter: grayscale(100%);">
+            <div class="match-label">BGMI MOBILE</div>
+        </div>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item">
+        <a href="transfer.html" class="nav-item center-btn">
             <div class="icon-circle"><i class="fas fa-exchange-alt" style="color: #000;"></i></div>
+            <span style="margin-top: 5px; color: #fff;">SEND</span>
         </a>
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
 
+    <div class="system-nav-bar"></div>
+
     <script>
-        // 1. Firebase Configuration
+        // 1. Auth Check
+        (function() {
+            if (!localStorage.getItem("rareGamingUser")) {
+                window.location.href = "login.html";
+            }
+        })();
+
+        // 2. 🏁 FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -108,27 +165,28 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 2. Auth Check
-        const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-        if (!userData) { window.location.href = "login.html"; }
+        // 3. 🚀 LIVE BALANCE SYNC (Google Sheets ki chhutti)
+        function listenToBalance() {
+            const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            if (!userData || !userData.uid) return;
 
-        // 3. 🚀 LIVE WALLET SYNC LOGIC
-        function syncLiveBalance() {
-            const userId = userData.uid;
-            const walletEl = document.getElementById('walletBal');
+            const balEl = document.getElementById('walletBal');
 
-            // Firebase Listener: Jab bhi balance badlega, ye apne aap chalega
-            database.ref('players/' + userId + '/cash').on('value', (snapshot) => {
+            // Firebase Real-time Listener: No need for setInterval anymore
+            database.ref('players/' + userData.uid + '/cash').on('value', (snapshot) => {
                 const balance = snapshot.val();
                 if (balance !== null) {
-                    walletEl.innerHTML = `<i class="fas fa-coins"></i> ₹${balance}`;
+                    balEl.innerHTML = `<i class="fas fa-coins"></i> ₹${balance}`;
+                    // Update Local Storage for other pages
+                    userData.cash = balance;
+                    localStorage.setItem("rareGamingUser", JSON.stringify(userData));
                 } else {
-                    walletEl.innerHTML = `<i class="fas fa-coins"></i> ₹0`;
+                    balEl.innerHTML = `<i class="fas fa-coins"></i> ₹0`;
                 }
             });
         }
 
-        window.onload = syncLiveBalance;
+        window.onload = listenToBalance;
     </script>
 </body>
 </html>
