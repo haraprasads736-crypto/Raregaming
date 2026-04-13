@@ -45,7 +45,7 @@
         #toast {
             visibility: hidden; min-width: 200px; background-color: #333; color: #fff;
             text-align: center; border-radius: 5px; padding: 10px;
-            position: fixed; z-index: 1; bottom: 30px; font-size: 12px;
+            position: fixed; z-index: 100; bottom: 30px; font-size: 12px;
         }
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
@@ -57,7 +57,7 @@
     <div class="room-card" id="mainCard">
         <div id="contentArea">
             <div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>
-            <p style="font-size: 12px; color: #aaa;">Verifying Entry...</p>
+            <p style="font-size: 12px; color: #aaa;">Syncing match credentials...</p>
         </div>
         <button onclick="goBack()" class="back-btn">EXIT ROOM</button>
     </div>
@@ -65,7 +65,8 @@
     <div id="toast">Copied to Clipboard!</div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwra0VJU6qYQfK4SCZTz5mIfrzv6t3PwvMxmckvZX0tj9WO1jKik0zzeuvNgGu8u1qRcQ/exec";
+        // 🚀 UPDATED DEPLOY URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwXTjlNStatYaz4VefCnqzbDUizrw8MsPnkld9wgGWw4zBSJQsZsjsNkLivOo_S_M-3dA/exec";
         
         function goBack() {
             const lastType = localStorage.getItem("lastType") || "LW";
@@ -86,27 +87,27 @@
             const user = JSON.parse(localStorage.getItem("rareGamingUser"));
             const contentArea = document.getElementById('contentArea');
 
-            // 🚀 Logic to prevent blank screen if matchId is missing
-            if(!matchId || matchId === "null") {
+            if(!matchId || !user) {
                 contentArea.innerHTML = `
                     <div class="header" style="color:#ff3131"><i class="fas fa-exclamation-circle"></i> Error</div>
-                    <div class="error-msg">Match ID missing!<br><span style="font-size:10px; color:#666;">Please go back and try again.</span></div>
+                    <div class="error-msg">Match session not found!<br><span style="font-size:10px; color:#666;">Go back and re-enter.</span></div>
                 `;
                 return;
             }
 
             try {
+                // 🚀 Backend call using the new v3.0 script logic
                 const res = await fetch(`${scriptURL}?action=getNewRoomDetails&matchId=${matchId}&userId=${user.uid}`);
                 const data = await res.json();
                 
                 if (data.status === "Success") {
-                    if (data.roomId && data.password && data.roomId !== "") {
+                    if (data.roomId && data.password && data.roomId !== "WAIT") {
                         contentArea.innerHTML = `
-                            <div class="header"><i class="fas fa-unlock-alt"></i> Room Details</div>
+                            <div class="header"><i class="fas fa-unlock-alt"></i> Access Granted</div>
                             <div class="match-tag">Match #${matchId}</div>
                             <div class="match-info">
                                 <span class="label">Tournament</span>
-                                <span class="match-name">${data.matchTitle || "Rare Gaming Pro"}</span>
+                                <span class="match-name">${data.matchTitle || "Rare Gaming Pro Match"}</span>
                             </div>
                             <div class="info-box" onclick="copyTxt('${data.roomId}')">
                                 <span class="label">Room ID (Tap to copy)</span>
@@ -121,18 +122,19 @@
                         `;
                     } else {
                         contentArea.innerHTML = `
-                            <div class="header" style="color:#f1c40f"><i class="fas fa-clock"></i> Pending</div>
-                            <div class="error-msg">Admin has not updated the Room ID yet. Check 15 mins before match.</div>
+                            <div class="header" style="color:#f1c40f"><i class="fas fa-clock"></i> Not Ready</div>
+                            <div class="error-msg">Admin hasn't updated details yet.<br>Check 15 mins before match.</div>
                         `;
                     }
                 } else {
+                    // This handles the "Not Joined" error from the script
                     contentArea.innerHTML = `
                         <div class="header" style="color:#ff3131"><i class="fas fa-user-lock"></i> No Access</div>
-                        <div class="error-msg">You have not joined this match. Access denied for User: ${user.uid}</div>
+                        <div class="error-msg">${data.message || "You have not joined this match."}</div>
                     `;
                 }
             } catch (e) {
-                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-wifi'></i> Connection Error</div>";
+                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-wifi'></i> Connection Error<br><span style='font-size:10px; color:#666;'>Check your internet.</span></div>";
             }
         }
 
