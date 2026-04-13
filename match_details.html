@@ -4,26 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Match Details - RARE GAMING</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Tera purana CSS ekdum sahi hai, use mitaane ki zaroorat nahi */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-        
         body { background-color: #0F041C; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
-        
-        /* HEADER */
         .header { display: flex; align-items: center; padding: 15px 20px; background: #160826; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2D1B44; }
         .back-btn { font-size: 18px; color: #fff; cursor: pointer; }
         .title { font-size: 15px; font-weight: 700; flex: 1; text-align: center; margin-right: 20px; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* TABS */
         .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 15px; border-radius: 8px; padding: 4px; border: 1px solid #2D1B44; }
         .tab { padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
-
-        /* CARD STYLE */
         .match-list { padding: 0 12px; }
         .card { background: #FFFFFF; border-radius: 8px; padding: 0; margin-bottom: 20px; color: #000; position: relative; border-left: 5px solid #8B3EEB; box-shadow: 0 4px 15px rgba(0,0,0,0.4); overflow: hidden; }
-        
         .card-inner { padding: 15px; }
         .card-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #F0F0F0; padding-bottom: 10px; margin-bottom: 12px; }
         .match-logo { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
@@ -31,33 +26,23 @@
         .match-title { font-size: 13px; font-weight: 800; color: #111; display: flex; justify-content: space-between; align-items: center; }
         .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
         .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; border-bottom: 1px solid #8B3EEB; }
-
-        /* STATS GRID */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .stat-box { background: #8B3EEB; border-radius: 4px; padding: 6px 2px; text-align: center; color: white; }
         .stat-label { font-size: 7px; font-weight: 600; text-transform: uppercase; display: block; opacity: 0.9; }
         .stat-value { font-size: 10px; font-weight: 800; display: block; margin-top: 1px; }
-
-        /* PROGRESS & JOIN */
         .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 10px; }
         .progress-bar { flex: 1; height: 12px; background: #E0D4FF; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
         .progress-fill { height: 100%; background: #2D1B44; width: 0%; transition: 0.5s ease-in-out; }
         .player-count { position: absolute; width: 100%; text-align: center; font-size: 8.5px; font-weight: 800; line-height: 12px; color: #fff; z-index: 2; }
-        
         .join-btn { background: #160826; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
-
-        /* HYBRID FOOTER */
         .joined-footer { background: #f0f7ff; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #8B3EEB; }
         .status-text { font-size: 10px; font-weight: 800; color: #2ecc71; text-transform: uppercase; }
         .btn-action { background: #00f2fe; color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-size: 10px; font-weight: 800; cursor: pointer; }
-
-        /* MODALS & OVERLAYS */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0F041C; display: none; flex-direction: column; z-index: 2000; overflow-y: auto; }
         .overlay-content { padding: 25px; padding-bottom: 50px; }
         .detail-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .detail-label { color: #AAA; font-size: 14px; }
         .detail-value { font-weight: 700; color: #00f2fe; }
-
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
         .modal-card { background: #1A0A2D; width: 100%; max-width: 310px; border-radius: 12px; padding: 30px; text-align: center; color: white; border: 1px solid #2D1B44; }
         .modal-card input { width: 100%; background: #0F041C; border: 1px solid #8B3EEB; padding: 12px; margin: 10px 0; border-radius: 8px; color: #fff; text-align: center; }
@@ -81,181 +66,124 @@
         <div class="match-list" id="matchList"></div>
     </div>
 
-    <div id="viewOverlay" class="overlay">
-        <div class="header">
-            <i class="fas fa-arrow-left back-btn" onclick="closeView()"></i>
-            <div class="title" id="viewTitle">MATCH DETAILS</div>
-        </div>
-        <div class="overlay-content">
-            <div class="detail-row"><span class="detail-label">Match Type :</span><span id="detType" class="detail-value"></span></div>
-            <div class="detail-row"><span class="detail-label">Mode :</span><span id="detVer" class="detail-value"></span></div>
-            <div class="detail-row"><span class="detail-label">Map :</span><span id="detMap" class="detail-value"></span></div>
-            <div class="detail-row"><span class="detail-label">Entry Fee :</span><span id="detFee" class="detail-value"></span></div>
-            
-            <div style="margin: 25px 0; background: rgba(139, 62, 235, 0.1); padding: 15px; border-radius: 8px;">
-                <p style="margin:0; font-size:14px; color:#8B3EEB; font-weight:800;">Prize Pool Details</p>
-                <p style="margin:10px 0 5px; font-size:13px; color:#aaa;" id="detPrize"></p>
-            </div>
-
-            <button class="join-btn" id="overlayJoinBtn" style="width:100%; padding: 15px; background:#8B3EEB;" onclick="startFromOverlay()">Join Now</button>
-        </div>
-    </div>
-
-    <div id="walletModal" class="modal-overlay">
-        <div class="modal-card">
-            <h3 id="deductText" style="color: white;"></h3>
-            <button onclick="showInputModal()" class="btn-confirm">Join Now</button>
-            <p onclick="closeModals()" style="color:#aaa; cursor:pointer; margin-top:15px;">Cancel</p>
-        </div>
-    </div>
-
+    <div id="viewOverlay" class="overlay">... (same as before) ...</div>
+    <div id="walletModal" class="modal-overlay">... (same as before) ...</div>
     <div id="inputModal" class="modal-overlay">
         <div class="modal-card">
             <h3 style="color:white;">Player Details</h3>
             <input type="text" id="gameName" placeholder="In-Game Name">
             <input type="number" id="gameId" placeholder="In-Game UID">
-            <button class="btn-confirm" id="submitBtn" onclick="finalJoin()">Confirm</button>
+            <button class="btn-confirm" id="submitBtn" onclick="finalJoin()">Confirm Join</button>
+            <p onclick="closeModals()" style="color:#aaa; cursor:pointer; margin-top:15px;">Cancel</p>
         </div>
     </div>
 
     <script>
-        (function() { if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; } })();
+        // 1. Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
+            authDomain: "rare-gaming-b8875.firebaseapp.com",
+            projectId: "rare-gaming-b8875",
+            databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-        // 🚀 SMART URL: Naya Deployment URL yahan pehle se hai
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwXTjlNStatYaz4VefCnqzbDUizrw8MsPnkld9wgGWw4zBSJQsZsjsNkLivOo_S_M-3dA/exec";
-        let allMatches = [];
-        let currentMatch = null;
+        const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+        if(!userData) window.location.href = "login.html";
 
-        async function loadMatches(status = 'upcoming') {
+        let allMatches = {};
+        let selectedMatch = null;
+
+        // 2. 🚀 LIVE MATCH LOADER (Firebase)
+        function loadMatches(status = 'upcoming') {
             const container = document.getElementById('matchList');
             container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>`;
             
             const urlParams = new URLSearchParams(window.location.search);
-            let matchKey = urlParams.get('type');
-            if (!matchKey) matchKey = localStorage.getItem("lastType") || "LW";
+            let matchKey = urlParams.get('type') || localStorage.getItem("lastType") || "BR";
             localStorage.setItem("lastType", matchKey);
             document.getElementById('pageTitle').innerText = matchKey + " TOURNAMENTS";
 
-            try {
-                const response = await fetch(`${scriptURL}?action=getMatches`);
-                allMatches = await response.json();
-                const filtered = allMatches.filter(m => m.category === matchKey && m.status === status);
-                
-                if (filtered.length === 0) {
-                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#888;">No ${status} matches found.</div>`;
+            database.ref('matches').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (!data) {
+                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#888;">No matches found.</div>`;
                     return;
                 }
-
+                
+                allMatches = data;
                 container.innerHTML = ""; 
-                filtered.forEach(m => {
-                    let isJoined = localStorage.getItem("joined_"+m.id);
-                    let isTeamMatch = (m.type.toLowerCase().includes("duo") || m.type.toLowerCase().includes("squad"));
-                    let d = m.date ? new Date(m.date).toLocaleDateString('en-GB') : 'TBD';
-
-                    let footerHtml = "";
-                    if (isJoined) {
-                        let btnText = isTeamMatch ? "ADD TEAMMATE" : "ROOM ID";
-                        let btnColor = isTeamMatch ? "#39ff14" : "#00f2fe";
-                        
-                        // 🚀 ROOM DETAILS NAVIGATION FIX
-                        let btnLink = isTeamMatch ? `alert('Duo Mode: Contact Admin!')` : `window.location.href='room_details.html?matchId=' + encodeURIComponent('${m.id}')`;
-
-                        footerHtml = `
-                        <div class="joined-footer">
-                            <span class="status-text"><i class="fas fa-check-circle"></i> Joined Successfully</span>
-                            <button class="btn-action" style="background:${btnColor}" onclick="${btnLink}">${btnText}</button>
-                        </div>`;
+                Object.keys(data).forEach(id => {
+                    const m = data[id];
+                    if (m.category === matchKey && m.status === status) {
+                        renderCard(m, id, container);
                     }
+                });
+            });
+        }
 
-                    container.innerHTML += `
-                    <div class="card">
-                        <div class="card-inner">
-                            <div class="card-header">
-                                <img src="${matchKey.toLowerCase()}_poster.jpg" class="match-logo" onerror="this.src='https://i.imgur.com/uR1Y6T2.jpeg'">
-                                <div class="header-text">
-                                    <div class="match-title">${m.title} #${m.id} <span class="view-link" onclick="openView('${m.id}')">view</span></div>
-                                    <span class="match-time">${d} | ${m.time || ''}</span>
-                                </div>
-                            </div>
-                            <div class="stats-grid">
-                                <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${m.prize}</span></div>
-                                <div class="stat-box"><span class="stat-label">Fee</span><span class="stat-value">₹${m.fee}</span></div>
-                                <div class="stat-box" style="background:#2D1B44"><span class="stat-label">Type</span><span class="stat-value">${m.type}</span></div>
-                            </div>
-                            <div class="progress-section">
-                                <div class="progress-bar"><div class="player-count">${m.joined}/${m.max}</div><div class="progress-fill" style="width:${(m.joined/m.max)*100}%"></div></div>
-                                ${!isJoined ? `<button class="join-btn" onclick="openWalletModal('${m.id}')">Join</button>` : `<button class="join-btn" style="background:#444" disabled>Joined</button>`}
-                            </div>
+        function renderCard(m, id, container) {
+            let isJoined = localStorage.getItem("joined_" + id);
+            
+            container.innerHTML += `
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-header">
+                        <img src="https://via.placeholder.com/45" class="match-logo">
+                        <div class="header-text">
+                            <div class="match-title">${m.title} #${id}</div>
+                            <span class="match-time">${m.date} | ${m.time}</span>
                         </div>
-                        ${footerHtml}
-                    </div>`;
-                });
-            } catch (e) { container.innerHTML = "Error loading matches!"; }
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">${m.prize}</span></div>
+                        <div class="stat-box"><span class="stat-label">Fee</span><span class="stat-value">${m.fee}</span></div>
+                        <div class="stat-box" style="background:#2D1B44"><span class="stat-label">Type</span><span class="stat-value">${m.type}</span></div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-bar"><div class="player-count">Joining Open</div><div class="progress-fill" style="width:20%"></div></div>
+                        ${!isJoined ? `<button class="join-btn" onclick="openJoinModal('${id}', '${m.fee}')">Join</button>` : `<button class="join-btn" style="background:#444" disabled>Joined</button>`}
+                    </div>
+                </div>
+                ${isJoined ? `<div class="joined-footer"><span class="status-text">✅ Joined</span><button class="btn-action" onclick="window.location.href='room_details.html?matchId=${id}'">ROOM ID</button></div>` : ''}
+            </div>`;
         }
 
-        function openView(id) {
-            currentMatch = allMatches.find(x => x.id == id);
-            document.getElementById('viewTitle').innerText = currentMatch.title;
-            document.getElementById('detType').innerText = currentMatch.type;
-            document.getElementById('detVer').innerText = currentMatch.version || 'TPP';
-            document.getElementById('detMap').innerText = currentMatch.map;
-            document.getElementById('detFee').innerText = "₹ " + currentMatch.fee;
-            document.getElementById('detPrize').innerText = "Winner Prize: ₹ " + currentMatch.prize;
-            
-            const overlayJoinBtn = document.getElementById('overlayJoinBtn');
-            const isJoined = localStorage.getItem("joined_"+id);
-            if(isJoined) {
-                overlayJoinBtn.innerText = "ALREADY JOINED ✅";
-                overlayJoinBtn.disabled = true;
-                overlayJoinBtn.style.background = "#444";
-            } else {
-                overlayJoinBtn.innerText = "Join Now";
-                overlayJoinBtn.disabled = false;
-                overlayJoinBtn.style.background = "#8B3EEB";
-            }
-            document.getElementById('viewOverlay').style.display = 'flex';
+        function openJoinModal(id, fee) {
+            selectedMatch = { id, fee: parseFloat(fee.replace('₹', '')) };
+            document.getElementById('inputModal').style.display = 'flex';
         }
 
-        function closeView() { document.getElementById('viewOverlay').style.display = 'none'; }
-        function startFromOverlay() { closeView(); openWalletModal(currentMatch.id); }
+        // 3. 🚀 FINAL JOIN LOGIC (Wallet + Firebase)
+        function finalJoin() {
+            const gName = document.getElementById('gameName').value.trim();
+            const gUID = document.getElementById('gameId').value.trim();
+            if(!gName || !gUID) return alert("Bhai, data toh dalo!");
 
-        function openWalletModal(id) {
-            currentMatch = allMatches.find(x => x.id == id);
-            document.getElementById('deductText').innerText = `₹ ${currentMatch.fee} will be deducted from wallet`;
-            document.getElementById('walletModal').style.display = 'flex';
+            database.ref('players/' + userData.uid).once('value', (snap) => {
+                const pData = snap.val();
+                const currentCash = pData ? parseFloat(pData.cash || 0) : 0;
+
+                if (currentCash < selectedMatch.fee) {
+                    alert("❌ Balance kam hai! Recharge karo.");
+                } else {
+                    const newBalance = currentCash - selectedMatch.fee;
+                    // Deduct Money
+                    database.ref('players/' + userData.uid).update({ cash: newBalance });
+                    // Register Match
+                    database.ref('matches/' + selectedMatch.id + '/participants/' + userData.uid).set({
+                        name: gName, uid: gUID, time: new Date().toLocaleString()
+                    }).then(() => {
+                        localStorage.setItem("joined_" + selectedMatch.id, "true");
+                        alert("✅ Match Joined Successfully!");
+                        location.reload();
+                    });
+                }
+            });
         }
-        function showInputModal() { closeModals(); document.getElementById('inputModal').style.display = 'flex'; }
+
         function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
-        
-        async function finalJoin() {
-            const name = document.getElementById('gameName').value.trim();
-            const uid = document.getElementById('gameId').value.trim();
-            const user = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!name || !uid) return alert("Enter Game Details!");
-            
-            const btn = document.getElementById('submitBtn');
-            btn.innerText = "Processing..."; btn.disabled = true;
-            try {
-                // 🚀 JOIN LOGIC WITH WALLET CHECK
-                const res = await fetch(scriptURL, { 
-                    method:'POST', 
-                    body: new URLSearchParams({
-                        'action': 'registerMatch',
-                        'matchId': currentMatch.id,
-                        'matchFee': currentMatch.fee,
-                        'userId': user.uid,
-                        'playerName': name,
-                        'playerId': uid
-                    })
-                });
-                const result = await res.json();
-                if (result.status === "Success") {
-                    localStorage.setItem("joined_"+currentMatch.id, "true");
-                    alert("Joined successfully!"); location.reload();
-                } else { alert(result.message || "Insufficient Balance!"); }
-            } catch (e) { alert("Server Connection Error!"); }
-            finally { btn.innerText = "Confirm"; btn.disabled = false; }
-        }
         function switchTab(t, el) { document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active')); el.classList.add('active'); loadMatches(t); }
         window.onload = () => loadMatches('upcoming');
     </script>
