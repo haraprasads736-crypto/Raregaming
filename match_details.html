@@ -20,7 +20,7 @@
         .card { background: #FFFFFF; border-radius: 8px; padding: 0; margin-bottom: 20px; color: #000; position: relative; border-left: 5px solid #8B3EEB; box-shadow: 0 4px 15px rgba(0,0,0,0.4); overflow: hidden; }
         .card-inner { padding: 15px; }
         .card-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #F0F0F0; padding-bottom: 10px; margin-bottom: 12px; }
-        .match-logo { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; background: #eee; }
+        .match-logo { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; background: #eee; border: 1px solid #ddd; }
         .header-text { flex: 1; }
         .match-title { font-size: 13px; font-weight: 800; color: #111; display: flex; justify-content: space-between; align-items: center; }
         .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
@@ -29,9 +29,9 @@
         .stat-label { font-size: 7px; font-weight: 600; text-transform: uppercase; display: block; opacity: 0.9; }
         .stat-value { font-size: 10px; font-weight: 800; display: block; margin-top: 1px; }
         .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 10px; }
-        .progress-bar { flex: 1; height: 12px; background: #E0D4FF; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
-        .progress-fill { height: 100%; background: #2D1B44; transition: 0.5s ease-in-out; }
-        .player-count { position: absolute; width: 100%; text-align: center; font-size: 8.5px; font-weight: 800; line-height: 12px; color: #fff; z-index: 2; mix-blend-mode: difference; }
+        .progress-bar { flex: 1; height: 14px; background: #E0D4FF; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
+        .progress-fill { height: 100%; background: #2D1B44; transition: 0.5s ease-in-out; width: 0%; } /* Initial 0 for JS to handle */
+        .player-count { position: absolute; width: 100%; text-align: center; font-size: 9px; font-weight: 800; line-height: 14px; color: #fff; z-index: 2; mix-blend-mode: difference; }
         .join-btn { background: #160826; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
         .joined-footer { background: #f0f7ff; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #8B3EEB; }
         .status-text { font-size: 10px; font-weight: 800; color: #2ecc71; text-transform: uppercase; }
@@ -81,17 +81,10 @@
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if(!userData) window.location.href = "login.html";
 
-        let selectedMatch = null;
-
         function loadMatches(status = 'upcoming') {
             const container = document.getElementById('matchList');
             container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;"><i class="fas fa-spinner fa-spin"></i> Loading Arena...</div>`;
             
-            const urlParams = new URLSearchParams(window.location.search);
-            let matchKey = urlParams.get('type') || localStorage.getItem("lastType") || "BR";
-            localStorage.setItem("lastType", matchKey);
-            document.getElementById('pageTitle').innerText = matchKey + " TOURNAMENTS";
-
             database.ref('matches').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (!data) {
@@ -101,7 +94,8 @@
                 container.innerHTML = ""; 
                 Object.keys(data).forEach(id => {
                     const m = data[id];
-                    if (m.category === matchKey && m.status === status) {
+                    // Tab status match filter
+                    if (m.status === status) {
                         renderCard(m, id, container);
                     }
                 });
@@ -110,14 +104,15 @@
 
         function renderCard(m, id, container) {
             let isJoined = localStorage.getItem("joined_" + id);
-            
-            // 🚀 Player Count logic - SET TO 48
             let totalSlots = 48; 
             let joinedCount = m.participants ? Object.keys(m.participants).length : 0;
             let progressPercent = (joinedCount / totalSlots) * 100;
 
-            // 🚀 Image Fix logic - Trying multiple field names
-            let matchImg = m.imgUrl || m.image || m.img || 'https://i.imgur.com/uR1Y6T2.jpeg';
+            // 🔥 GITHUB IMAGE FIX: Convert normal GitHub link to Raw link
+            let matchImg = m.imgUrl || m.image || 'https://i.imgur.com/uR1Y6T2.jpeg';
+            if(matchImg.includes('github.com') && !matchImg.includes('raw.githubusercontent.com')) {
+                matchImg = matchImg.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+            }
 
             container.innerHTML += `
             <div class="card">
@@ -184,7 +179,11 @@
         }
 
         function closeModals() { document.getElementById('inputModal').style.display = 'none'; }
-        function switchTab(t, el) { document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active')); el.classList.add('active'); loadMatches(t); }
+        function switchTab(t, el) { 
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active')); 
+            el.classList.add('active'); 
+            loadMatches(t); 
+        }
         window.onload = () => loadMatches('upcoming');
     </script>
 </body>
