@@ -31,6 +31,7 @@
         .header-text { flex: 1; }
         .match-title { font-size: 13px; font-weight: 800; color: #111; display: flex; justify-content: space-between; align-items: center; }
         .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
+        .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; border-bottom: 1px solid #8B3EEB; }
 
         /* 🛠️ STATS GRID */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -50,6 +51,13 @@
         .joined-footer { background: #f0f7ff; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #8B3EEB; }
         .status-text { font-size: 10px; font-weight: 800; color: #2ecc71; text-transform: uppercase; }
         .btn-action { background: #00f2fe; color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-size: 10px; font-weight: 800; cursor: pointer; }
+
+        /* 🛠️ VIEW OVERLAY */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0F041C; display: none; flex-direction: column; z-index: 2000; overflow-y: auto; }
+        .overlay-content { padding: 25px; padding-bottom: 50px; }
+        .detail-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .detail-label { color: #AAA; font-size: 14px; }
+        .detail-value { font-weight: 700; color: #00f2fe; }
 
         /* 🛠️ MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
@@ -73,6 +81,26 @@
         </div>
 
         <div class="match-list" id="matchList"></div>
+    </div>
+
+    <div id="viewOverlay" class="overlay">
+        <div class="header">
+            <i class="fas fa-arrow-left back-btn" onclick="closeView()"></i>
+            <div class="title" id="viewTitle">MATCH DETAILS</div>
+        </div>
+        <div class="overlay-content">
+            <div class="detail-row"><span class="detail-label">Match Type :</span><span id="detType" class="detail-value"></span></div>
+            <div class="detail-row"><span class="detail-label">Mode :</span><span id="detVer" class="detail-value"></span></div>
+            <div class="detail-row"><span class="detail-label">Map :</span><span id="detMap" class="detail-value"></span></div>
+            <div class="detail-row"><span class="detail-label">Entry Fee :</span><span id="detFee" class="detail-value"></span></div>
+            
+            <div style="margin: 25px 0; background: rgba(139, 62, 235, 0.1); padding: 15px; border-radius: 8px;">
+                <p style="margin:0; font-size:14px; color:#8B3EEB; font-weight:800;">Prize Pool Details</p>
+                <p style="margin:10px 0 5px; font-size:13px; color:#aaa;" id="detPrize"></p>
+            </div>
+
+            <button class="join-btn" id="overlayJoinBtn" style="width:100%; padding: 15px; background:#8B3EEB;" onclick="startFromOverlay()">Join Now</button>
+        </div>
     </div>
 
     <div id="walletModal" class="modal-overlay">
@@ -103,7 +131,6 @@
             const container = document.getElementById('matchList');
             container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;">Loading matches...</div>`;
             
-            // 🚀 CATEGORY LOGIC
             const urlParams = new URLSearchParams(window.location.search);
             let matchKey = urlParams.get('type');
             if (!matchKey) matchKey = localStorage.getItem("lastType") || "LW";
@@ -145,7 +172,7 @@
                             <div class="card-header">
                                 <img src="${matchKey.toLowerCase()}_poster.jpg" class="match-logo" onerror="this.src='https://i.imgur.com/uR1Y6T2.jpeg'">
                                 <div class="header-text">
-                                    <div class="match-title">${m.title} #${m.id}</div>
+                                    <div class="match-title">${m.title} #${m.id} <span class="view-link" onclick="openView('${m.id}')">view</span></div>
                                     <span class="match-time">${d} | ${m.time || ''}</span>
                                 </div>
                             </div>
@@ -164,6 +191,32 @@
                 });
             } catch (e) { container.innerHTML = "Error loading matches!"; }
         }
+
+        function openView(id) {
+            currentMatch = allMatches.find(x => x.id == id);
+            document.getElementById('viewTitle').innerText = currentMatch.title;
+            document.getElementById('detType').innerText = currentMatch.type;
+            document.getElementById('detVer').innerText = currentMatch.version || 'TPP';
+            document.getElementById('detMap').innerText = currentMatch.map;
+            document.getElementById('detFee').innerText = "₹ " + currentMatch.fee;
+            document.getElementById('detPrize').innerText = "Winner Prize: ₹ " + currentMatch.prize;
+            
+            const overlayJoinBtn = document.getElementById('overlayJoinBtn');
+            const isJoined = localStorage.getItem("joined_"+id);
+            if(isJoined) {
+                overlayJoinBtn.innerText = "ALREADY JOINED ✅";
+                overlayJoinBtn.disabled = true;
+                overlayJoinBtn.style.background = "#444";
+            } else {
+                overlayJoinBtn.innerText = "Join Now";
+                overlayJoinBtn.disabled = false;
+                overlayJoinBtn.style.background = "#8B3EEB";
+            }
+            document.getElementById('viewOverlay').style.display = 'flex';
+        }
+
+        function closeView() { document.getElementById('viewOverlay').style.display = 'none'; }
+        function startFromOverlay() { closeView(); openWalletModal(currentMatch.id); }
 
         function openWalletModal(id) {
             currentMatch = allMatches.find(x => x.id == id);
