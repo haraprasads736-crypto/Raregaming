@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Access - RARE GAMING</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
@@ -12,40 +14,35 @@
             background-color: #030305; color: white; font-family: 'Poppins', sans-serif; 
             margin: 0; display: flex; align-items: center; justify-content: center; 
             height: 100vh; overflow: hidden;
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
         }
 
         .room-card { 
             background: #0a0a0f; border: 1px solid rgba(0, 242, 254, 0.3); 
-            border-radius: 15px; padding: 20px; width: 290px; 
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1); text-align: center;
+            border-radius: 20px; padding: 25px; width: 300px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center;
         }
 
-        .header { color: #00f2fe; font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
+        .header { font-size: 14px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
         
-        .match-tag { background: #8B3EEB; color: white; font-size: 9px; padding: 3px 10px; border-radius: 50px; display: inline-block; margin-bottom: 10px; }
-        .match-info { font-size: 11px; color: #888; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
-        .match-name { color: #fff; font-weight: 700; display: block; font-size: 14px; margin-top: 5px; }
+        .match-tag { background: #8B3EEB; color: white; font-size: 9px; padding: 3px 12px; border-radius: 50px; display: inline-block; margin-bottom: 10px; }
 
         .info-box { 
-            background: rgba(255, 255, 255, 0.03); border-radius: 8px; padding: 12px; 
-            margin: 10px 0; border: 1px solid rgba(255,255,255,0.05); 
+            background: rgba(255, 255, 255, 0.03); border-radius: 12px; padding: 15px; 
+            margin: 12px 0; border: 1px solid rgba(255,255,255,0.05); 
             cursor: pointer; transition: 0.3s;
         }
-        .info-box:active { background: rgba(0, 242, 254, 0.2); }
-        .label { font-size: 8px; color: #aaa; text-transform: uppercase; display: block; margin-bottom: 4px; }
-        .value { font-size: 20px; font-weight: 800; color: #fff; font-family: monospace; letter-spacing: 2px; }
-        .copy-icon { font-size: 10px; color: #00f2fe; margin-top: 5px; display: block; }
-
-        .back-btn { margin-top: 15px; background: #8B3EEB; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
+        .info-box:active { background: rgba(0, 242, 254, 0.2); transform: scale(0.98); }
         
-        .error-msg { font-size: 12px; color: #ff3131; font-weight: 600; padding: 20px; }
-        .loading-icon { color: #00f2fe; font-size: 25px; margin-bottom: 10px; }
+        .label { font-size: 8px; color: #aaa; text-transform: uppercase; display: block; margin-bottom: 5px; }
+        .value { font-size: 22px; font-weight: 800; color: #fff; font-family: monospace; letter-spacing: 2px; }
 
-        /* Toast for Copy Feedback */
+        .back-btn { margin-top: 20px; background: #1a1a2e; color: #888; border: 1px solid #333; padding: 10px 25px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; width: 100%; box-sizing: border-box; }
+        
         #toast {
-            visibility: hidden; min-width: 200px; background-color: #333; color: #fff;
-            text-align: center; border-radius: 5px; padding: 10px;
-            position: fixed; z-index: 100; bottom: 30px; font-size: 12px;
+            visibility: hidden; min-width: 200px; background-color: #39ff14; color: #000;
+            text-align: center; border-radius: 50px; padding: 10px;
+            position: fixed; z-index: 100; bottom: 30px; font-size: 12px; font-weight: 800;
         }
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
@@ -56,20 +53,27 @@
 
     <div class="room-card" id="mainCard">
         <div id="contentArea">
-            <div class="loading-icon"><i class="fas fa-circle-notch fa-spin"></i></div>
-            <p style="font-size: 12px; color: #aaa;">Syncing match credentials...</p>
+            <div style="color:#00f2fe; font-size:30px;"><i class="fas fa-shield-alt fa-spin"></i></div>
+            <p style="font-size: 12px; color: #aaa; margin-top: 15px;">Verifying Access...</p>
         </div>
-        <button onclick="goBack()" class="back-btn">EXIT ROOM</button>
+        <button onclick="goBack()" class="back-btn">GO BACK</button>
     </div>
 
-    <div id="toast">Copied to Clipboard!</div>
+    <div id="toast">Copied! ✅</div>
 
     <script>
-        // 🚀 UPDATED DEPLOY URL
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwXTjlNStatYaz4VefCnqzbDUizrw8MsPnkld9wgGWw4zBSJQsZsjsNkLivOo_S_M-3dA/exec";
-        
+        // 1. Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
+            authDomain: "rare-gaming-b8875.firebaseapp.com",
+            projectId: "rare-gaming-b8875",
+            databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
         function goBack() {
-            const lastType = localStorage.getItem("lastType") || "LW";
+            const lastType = localStorage.getItem("lastType") || "BR";
             window.location.href = "match_details.html?type=" + lastType;
         }
 
@@ -81,64 +85,68 @@
             });
         }
 
-        async function fetchRoom() {
+        // 2. 🚀 SECURED LIVE LISTENER
+        function checkAndListen() {
             const urlParams = new URLSearchParams(window.location.search);
             const matchId = urlParams.get('matchId');
             const user = JSON.parse(localStorage.getItem("rareGamingUser"));
             const contentArea = document.getElementById('contentArea');
 
             if(!matchId || !user) {
-                contentArea.innerHTML = `
-                    <div class="header" style="color:#ff3131"><i class="fas fa-exclamation-circle"></i> Error</div>
-                    <div class="error-msg">Match session not found!<br><span style="font-size:10px; color:#666;">Go back and re-enter.</span></div>
-                `;
+                contentArea.innerHTML = `<p style="color:#ff3131;">Invalid Session!</p>`;
                 return;
             }
 
-            try {
-                // 🚀 Backend call using the new v3.0 script logic
-                const res = await fetch(`${scriptURL}?action=getNewRoomDetails&matchId=${matchId}&userId=${user.uid}`);
-                const data = await res.json();
-                
-                if (data.status === "Success") {
-                    if (data.roomId && data.password && data.roomId !== "WAIT") {
-                        contentArea.innerHTML = `
-                            <div class="header"><i class="fas fa-unlock-alt"></i> Access Granted</div>
-                            <div class="match-tag">Match #${matchId}</div>
-                            <div class="match-info">
-                                <span class="label">Tournament</span>
-                                <span class="match-name">${data.matchTitle || "Rare Gaming Pro Match"}</span>
-                            </div>
-                            <div class="info-box" onclick="copyTxt('${data.roomId}')">
-                                <span class="label">Room ID (Tap to copy)</span>
-                                <div class="value">${data.roomId}</div>
-                                <span class="copy-icon"><i class="fas fa-copy"></i> Click to Copy</span>
-                            </div>
-                            <div class="info-box" onclick="copyTxt('${data.password}')">
-                                <span class="label">Password (Tap to copy)</span>
-                                <div class="value">${data.password}</div>
-                                <span class="copy-icon"><i class="fas fa-copy"></i> Click to Copy</span>
-                            </div>
-                        `;
-                    } else {
-                        contentArea.innerHTML = `
-                            <div class="header" style="color:#f1c40f"><i class="fas fa-clock"></i> Not Ready</div>
-                            <div class="error-msg">Admin hasn't updated details yet.<br>Check 15 mins before match.</div>
-                        `;
-                    }
-                } else {
-                    // This handles the "Not Joined" error from the script
+            // --- SECURITY CHECK ---
+            // Pehle check karo ki kya user participants list mein hai
+            const participantRef = database.ref('matches/' + matchId + '/participants/' + user.uid);
+            
+            participantRef.once('value').then((snap) => {
+                if (!snap.exists()) {
+                    // ❌ Access Denied
                     contentArea.innerHTML = `
-                        <div class="header" style="color:#ff3131"><i class="fas fa-user-lock"></i> No Access</div>
-                        <div class="error-msg">${data.message || "You have not joined this match."}</div>
+                        <div class="header" style="color:#ff3131;"><i class="fas fa-user-lock"></i> NO ACCESS</div>
+                        <div class="match-tag">Match #${matchId}</div>
+                        <p style="font-size:12px; color:#888; padding:15px;">Aapne is match mein join nahi kiya hai. Pehle join karein!</p>
                     `;
+                } else {
+                    // ✅ Access Granted - Listen for Live Room Info
+                    database.ref('matches/' + matchId).on('value', (snapshot) => {
+                        const data = snapshot.val();
+                        if (data) {
+                            if (data.roomId && data.roomId !== "WAIT") {
+                                contentArea.innerHTML = `
+                                    <div class="header" style="color:#39ff14;"><i class="fas fa-unlock-alt"></i> ROOM READY</div>
+                                    <div class="match-tag">#${matchId}</div>
+                                    <p style="font-size:11px; color:#aaa; margin-bottom:10px;">${data.title || 'Pro Match'}</p>
+                                    
+                                    <div class="info-box" onclick="copyTxt('${data.roomId}')">
+                                        <span class="label">Room ID</span>
+                                        <div class="value">${data.roomId}</div>
+                                        <span style="font-size:8px; color:#00f2fe;">Tap to Copy</span>
+                                    </div>
+                                    
+                                    <div class="info-box" onclick="copyTxt('${data.password}')">
+                                        <span class="label">Password</span>
+                                        <div class="value">${data.password}</div>
+                                        <span style="font-size:8px; color:#00f2fe;">Tap to Copy</span>
+                                    </div>
+                                `;
+                            } else {
+                                // ⏳ Waiting for Admin
+                                contentArea.innerHTML = `
+                                    <div class="header" style="color:#f1c40f;"><i class="fas fa-history"></i> WAITING...</div>
+                                    <div class="match-tag">#${matchId}</div>
+                                    <p style="font-size:12px; color:#888; padding:20px;">Room ID/Pass abhi update nahi hua hai. <br><br><b>Refresh mat karna,</b> yahan automatic dikhega.</p>
+                                `;
+                            }
+                        }
+                    });
                 }
-            } catch (e) {
-                contentArea.innerHTML = "<div class='error-msg'><i class='fas fa-wifi'></i> Connection Error<br><span style='font-size:10px; color:#666;'>Check your internet.</span></div>";
-            }
+            });
         }
 
-        window.onload = fetchRoom;
+        window.onload = checkAndListen;
     </script>
 </body>
 </html>
