@@ -8,20 +8,19 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         
-        /* 🛠️ DARK THEME BASE */
         body { background-color: #0F041C; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* 🛠️ HEADER */
+        /* HEADER */
         .header { display: flex; align-items: center; padding: 15px 20px; background: #160826; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2D1B44; }
         .back-btn { font-size: 18px; color: #fff; cursor: pointer; }
         .title { font-size: 15px; font-weight: 700; flex: 1; text-align: center; margin-right: 20px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* 🛠️ TABS */
+        /* TABS */
         .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 15px; border-radius: 8px; padding: 4px; border: 1px solid #2D1B44; }
         .tab { padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; transition: 0.3s; }
         .tab.active { background: #8B3EEB; color: #fff; }
 
-        /* 🛠️ CARD STYLE */
+        /* CARD STYLE */
         .match-list { padding: 0 12px; }
         .card { background: #FFFFFF; border-radius: 8px; padding: 0; margin-bottom: 20px; color: #000; position: relative; border-left: 5px solid #8B3EEB; box-shadow: 0 4px 15px rgba(0,0,0,0.4); overflow: hidden; }
         
@@ -33,13 +32,13 @@
         .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
         .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; border-bottom: 1px solid #8B3EEB; }
 
-        /* 🛠️ STATS GRID */
+        /* STATS GRID */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .stat-box { background: #8B3EEB; border-radius: 4px; padding: 6px 2px; text-align: center; color: white; }
         .stat-label { font-size: 7px; font-weight: 600; text-transform: uppercase; display: block; opacity: 0.9; }
         .stat-value { font-size: 10px; font-weight: 800; display: block; margin-top: 1px; }
 
-        /* 🛠️ PROGRESS & JOIN */
+        /* PROGRESS & JOIN */
         .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 10px; }
         .progress-bar { flex: 1; height: 12px; background: #E0D4FF; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
         .progress-fill { height: 100%; background: #2D1B44; width: 0%; transition: 0.5s ease-in-out; }
@@ -47,19 +46,18 @@
         
         .join-btn { background: #160826; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
 
-        /* 🚀 BATTLE OP HYBRID FOOTER */
+        /* HYBRID FOOTER */
         .joined-footer { background: #f0f7ff; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #8B3EEB; }
         .status-text { font-size: 10px; font-weight: 800; color: #2ecc71; text-transform: uppercase; }
         .btn-action { background: #00f2fe; color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-size: 10px; font-weight: 800; cursor: pointer; }
 
-        /* 🛠️ VIEW OVERLAY */
+        /* MODALS & OVERLAYS */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0F041C; display: none; flex-direction: column; z-index: 2000; overflow-y: auto; }
         .overlay-content { padding: 25px; padding-bottom: 50px; }
         .detail-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .detail-label { color: #AAA; font-size: 14px; }
         .detail-value { font-weight: 700; color: #00f2fe; }
 
-        /* 🛠️ MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
         .modal-card { background: #1A0A2D; width: 100%; max-width: 310px; border-radius: 12px; padding: 30px; text-align: center; color: white; border: 1px solid #2D1B44; }
         .modal-card input { width: 100%; background: #0F041C; border: 1px solid #8B3EEB; padding: 12px; margin: 10px 0; border-radius: 8px; color: #fff; text-align: center; }
@@ -123,18 +121,17 @@
     <script>
         (function() { if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; } })();
 
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwra0VJU6qYQfK4SCZTz5mIfrzv6t3PwvMxmckvZX0tj9WO1jKik0zzeuvNgGu8u1qRcQ/exec";
+        // 🚀 UPDATED DEPLOY URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwXTjlNStatYaz4VefCnqzbDUizrw8MsPnkld9wgGWw4zBSJQsZsjsNkLivOo_S_M-3dA/exec";
         let allMatches = [];
         let currentMatch = null;
 
         async function loadMatches(status = 'upcoming') {
             const container = document.getElementById('matchList');
-            container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;">Loading matches...</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>`;
             
             const urlParams = new URLSearchParams(window.location.search);
             let matchKey = urlParams.get('type');
-            
-            // 🚀 SMART NAVIGATION: Save and retrieve the tournament type
             if (!matchKey) matchKey = localStorage.getItem("lastType") || "LW";
             localStorage.setItem("lastType", matchKey);
             document.getElementById('pageTitle').innerText = matchKey + " TOURNAMENTS";
@@ -160,12 +157,12 @@
                         let btnText = isTeamMatch ? "ADD TEAMMATE" : "ROOM ID";
                         let btnColor = isTeamMatch ? "#39ff14" : "#00f2fe";
                         
-                        // 🚀 URL FIX: Added encodeURIComponent to pass the Match ID safely
+                        // 🚀 URL FIX: encodeURIComponent added for safety
                         let btnLink = isTeamMatch ? `alert('Duo Mode: Contact Admin!')` : `window.location.href='room_details.html?matchId=' + encodeURIComponent('${m.id}')`;
 
                         footerHtml = `
                         <div class="joined-footer">
-                            <span class="status-text"><i class="fas fa-check-circle"></i> Joined</span>
+                            <span class="status-text"><i class="fas fa-check-circle"></i> Joined Successfully</span>
                             <button class="btn-action" style="background:${btnColor}" onclick="${btnLink}">${btnText}</button>
                         </div>`;
                     }
@@ -224,26 +221,38 @@
 
         function openWalletModal(id) {
             currentMatch = allMatches.find(x => x.id == id);
-            document.getElementById('deductText').innerText = `₹ ${currentMatch.fee} will be deduct`;
+            document.getElementById('deductText').innerText = `₹ ${currentMatch.fee} will be deducted from wallet`;
             document.getElementById('walletModal').style.display = 'flex';
         }
         function showInputModal() { closeModals(); document.getElementById('inputModal').style.display = 'flex'; }
         function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
+        
         async function finalJoin() {
             const name = document.getElementById('gameName').value.trim();
             const uid = document.getElementById('gameId').value.trim();
             const user = JSON.parse(localStorage.getItem("rareGamingUser"));
-            if(!name || !uid) return alert("Fill details!");
+            if(!name || !uid) return alert("Enter Game Details!");
+            
             const btn = document.getElementById('submitBtn');
             btn.innerText = "Processing..."; btn.disabled = true;
             try {
-                const res = await fetch(scriptURL, { method:'POST', body: new URLSearchParams({'action': 'registerMatch','matchId': currentMatch.id,'userId': user.uid,'playerName': name,'playerId': uid})});
+                const res = await fetch(scriptURL, { 
+                    method:'POST', 
+                    body: new URLSearchParams({
+                        'action': 'registerMatch',
+                        'matchId': currentMatch.id,
+                        'matchFee': currentMatch.fee,
+                        'userId': user.uid,
+                        'playerName': name,
+                        'playerId': uid
+                    })
+                });
                 const result = await res.json();
                 if (result.status === "Success") {
                     localStorage.setItem("joined_"+currentMatch.id, "true");
-                    alert("Joined!"); location.reload();
-                } else { alert(result.message || "Failed"); }
-            } catch (e) { alert("Error!"); }
+                    alert("Joined successfully!"); location.reload();
+                } else { alert(result.message || "Insufficient Balance!"); }
+            } catch (e) { alert("Server Error!"); }
             finally { btn.innerText = "Confirm"; btn.disabled = false; }
         }
         function switchTab(t, el) { document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active')); el.classList.add('active'); loadMatches(t); }
