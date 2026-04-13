@@ -121,7 +121,7 @@
     <script>
         (function() { if (!localStorage.getItem("rareGamingUser")) { window.location.href = "login.html"; } })();
 
-        // 🚀 UPDATED DEPLOY URL
+        // 🚀 SMART URL: Naya Deployment URL yahan pehle se hai
         const scriptURL = "https://script.google.com/macros/s/AKfycbwXTjlNStatYaz4VefCnqzbDUizrw8MsPnkld9wgGWw4zBSJQsZsjsNkLivOo_S_M-3dA/exec";
         let allMatches = [];
         let currentMatch = null;
@@ -157,7 +157,7 @@
                         let btnText = isTeamMatch ? "ADD TEAMMATE" : "ROOM ID";
                         let btnColor = isTeamMatch ? "#39ff14" : "#00f2fe";
                         
-                        // 🚀 URL FIX: encodeURIComponent added for safety
+                        // 🚀 ROOM DETAILS NAVIGATION FIX
                         let btnLink = isTeamMatch ? `alert('Duo Mode: Contact Admin!')` : `window.location.href='room_details.html?matchId=' + encodeURIComponent('${m.id}')`;
 
                         footerHtml = `
@@ -236,6 +236,7 @@
             const btn = document.getElementById('submitBtn');
             btn.innerText = "Processing..."; btn.disabled = true;
             try {
+                // 🚀 JOIN LOGIC WITH WALLET CHECK
                 const res = await fetch(scriptURL, { 
                     method:'POST', 
                     body: new URLSearchParams({
@@ -252,7 +253,7 @@
                     localStorage.setItem("joined_"+currentMatch.id, "true");
                     alert("Joined successfully!"); location.reload();
                 } else { alert(result.message || "Insufficient Balance!"); }
-            } catch (e) { alert("Server Error!"); }
+            } catch (e) { alert("Server Connection Error!"); }
             finally { btn.innerText = "Confirm"; btn.disabled = false; }
         }
         function switchTab(t, el) { document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active')); el.classList.add('active'); loadMatches(t); }
