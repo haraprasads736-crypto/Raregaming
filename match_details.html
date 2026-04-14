@@ -2,213 +2,234 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Match Details - RARE GAMING</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RG ADMIN PRO - MASTER CONTROL</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Tera CSS (No Change) */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-        body { background-color: #0F041C; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
-        .header { display: flex; align-items: center; padding: 15px 20px; background: #160826; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2D1B44; }
-        .back-btn { font-size: 18px; color: #fff; cursor: pointer; }
-        .title { font-size: 15px; font-weight: 700; flex: 1; text-align: center; margin-right: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 15px; border-radius: 8px; padding: 4px; border: 1px solid #2D1B44; }
-        .tab { padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #888; cursor: pointer; transition: 0.3s; }
-        .tab.active { background: #8B3EEB; color: #fff; }
-        .match-list { padding: 0 12px; }
-        .card { background: #FFFFFF; border-radius: 8px; padding: 0; margin-bottom: 20px; color: #000; position: relative; border-left: 5px solid #8B3EEB; box-shadow: 0 4px 15px rgba(0,0,0,0.4); overflow: hidden; }
-        .card-inner { padding: 15px; }
-        .card-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #F0F0F0; padding-bottom: 10px; margin-bottom: 12px; }
-        .match-logo { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
-        .header-text { flex: 1; }
-        .match-title { font-size: 13px; font-weight: 800; color: #111; display: flex; justify-content: space-between; align-items: center; }
-        .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
-        .view-link { color: #8B3EEB; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; border-bottom: 1px solid #8B3EEB; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-        .stat-box { background: #8B3EEB; border-radius: 4px; padding: 6px 2px; text-align: center; color: white; }
-        .stat-label { font-size: 7px; font-weight: 600; text-transform: uppercase; display: block; opacity: 0.9; }
-        .stat-value { font-size: 10px; font-weight: 800; display: block; margin-top: 1px; }
-        .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 10px; }
-        .progress-bar { flex: 1; height: 12px; background: #E0D4FF; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
-        .progress-fill { height: 100%; background: #2D1B44; width: 0%; transition: 0.5s ease-in-out; }
-        .player-count { position: absolute; width: 100%; text-align: center; font-size: 8.5px; font-weight: 800; line-height: 12px; color: #fff; z-index: 2; mix-blend-mode: difference; }
-        .join-btn { background: #160826; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 800; font-size: 11px; cursor: pointer; text-transform: uppercase; }
-        .joined-footer { background: #f0f7ff; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #8B3EEB; }
-        .status-text { font-size: 10px; font-weight: 800; color: #2ecc71; text-transform: uppercase; }
-        .btn-action { background: #00f2fe; color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-size: 10px; font-weight: 800; cursor: pointer; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 20px; }
-        .modal-card { background: #1A0A2D; width: 100%; max-width: 310px; border-radius: 12px; padding: 30px; text-align: center; color: white; border: 1px solid #2D1B44; }
-        .modal-card input { width: 100%; background: #0F041C; border: 1px solid #8B3EEB; padding: 12px; margin: 10px 0; border-radius: 8px; color: #fff; text-align: center; }
-        .btn-confirm { background: #39ff14; color: #000; width: 100%; padding: 12px; border-radius: 8px; font-weight: 800; border: none; cursor: pointer; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { background: #030305; color: white; font-family: 'Poppins', sans-serif; padding: 15px; }
+        .admin-box { max-width: 450px; margin: auto; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn { flex: 1; min-width: 80px; padding: 12px; border-radius: 12px; border: none; background: #1a1a2e; color: #888; font-weight: 700; font-size: 10px; cursor: pointer; transition: 0.3s; white-space: nowrap; }
+        .tab-btn.active { background: #00f2fe; color: #000; }
+        .card { background: #0a0a0f; padding: 20px; border-radius: 20px; border: 1px solid #1a1a2e; display: none; }
+        .card.active { display: block; }
+        h3 { margin-top: 0; font-size: 16px; color: #ffd700; text-transform: uppercase; letter-spacing: 1px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .input-group { margin-bottom: 12px; }
+        label { display: block; font-size: 9px; color: #00f2fe; font-weight: 700; margin-bottom: 5px; text-transform: uppercase; }
+        input, select { width: 100%; background: #111; border: 1px solid #222; padding: 10px; border-radius: 10px; color: white; outline: none; font-size: 13px; box-sizing: border-box; }
+        .btn-post { width: 100%; background: #39ff14; color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: 800; margin-top: 10px; cursor: pointer; text-transform: uppercase; }
+        .list-container { max-height: 250px; overflow-y: auto; background: #050505; border-radius: 10px; padding: 10px; border: 1px solid #111; margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { text-align: left; color: #00f2fe; padding: 5px; border-bottom: 1px solid #222; }
+        td { padding: 8px 5px; border-bottom: 1px solid #111; }
+        .approve-btn { background: #39ff14; color: #000; border: none; padding: 4px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="mainPage">
-        <div class="header">
-            <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
-            <div class="title" id="pageTitle">LOADING...</div>
+<div class="admin-box">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('matchTab', this)">MATCH</button>
+        <button class="tab-btn" onclick="switchTab('roomTab', this)">ROOM</button>
+        <button class="tab-btn" onclick="switchTab('playerTab', this)">PLAYERS</button>
+        <button class="tab-btn" onclick="switchTab('payTab', this)">PAYMENTS</button>
+        <button class="tab-btn" onclick="switchTab('walletTab', this)">WALLETS</button>
+        <button class="tab-btn" onclick="switchTab('userTab', this)">ADD USER</button>
+    </div>
+
+    <div id="matchTab" class="card active">
+        <h3>🏆 Create Dynamic Match</h3>
+        <div class="grid">
+            <div class="input-group"><label>Match ID</label><input type="number" id="m_id" placeholder="101"></div>
+            <div class="input-group"><label>Category</label><input type="text" id="m_cat" placeholder="BR/CS"></div>
         </div>
+        <div class="input-group"><label>Match Title</label><input type="text" id="m_title" placeholder="BR Squad Pro"></div>
         
-        <div class="tab-container">
-            <div class="tab active" onclick="switchTab('upcoming', this)">Upcoming</div>
-            <div class="tab" onclick="switchTab('ongoing', this)">Ongoing</div>
-            <div class="tab" onclick="switchTab('result', this)">Result</div>
+        <div class="grid">
+            <div class="input-group"><label>Entry Fee</label><input type="text" id="m_fee" value="₹"></div>
+            <div class="input-group"><label>Win Prize</label><input type="text" id="m_prize" value="₹"></div>
+            <div class="input-group"><label>Per Kill</label><input type="text" id="m_kill" value="₹"></div>
+            <div class="input-group"><label>Map Name</label><input type="text" id="m_map" value="BERMUDA"></div>
         </div>
 
-        <div class="match-list" id="matchList"></div>
+        <div class="grid">
+            <div class="input-group"><label>Type (Solo/Duo)</label><input type="text" id="m_type" placeholder="SOLO"></div>
+            <div class="input-group"><label>Image URL (GitHub)</label><input type="text" id="m_img" placeholder="Paste link here"></div>
+        </div>
+
+        <div class="grid">
+            <div class="input-group"><label>Date</label><input type="date" id="m_date"></div>
+            <div class="input-group"><label>Time</label><input type="time" id="m_time"></div>
+        </div>
+        <button class="btn-post" onclick="postMatch()">Post Dynamic Match 🚀</button>
     </div>
 
-    <div id="inputModal" class="modal-overlay">
-        <div class="modal-card">
-            <h3 style="color:white;">Player Details</h3>
-            <input type="text" id="gameName" placeholder="In-Game Name">
-            <input type="number" id="gameId" placeholder="In-Game UID">
-            <button class="btn-confirm" id="submitBtn" onclick="finalJoin()">Confirm Join</button>
-            <p onclick="closeModals()" style="color:#aaa; cursor:pointer; margin-top:15px;">Cancel</p>
+    <div id="roomTab" class="card">
+        <h3>🔑 Room Access</h3>
+        <input type="number" id="r_match_id" placeholder="Match ID">
+        <input type="text" id="r_id" placeholder="Room ID">
+        <input type="text" id="r_pass" placeholder="Password">
+        <select id="r_status">
+            <option value="upcoming">UPCOMING</option>
+            <option value="ongoing">LIVE NOW</option>
+            <option value="result">MATCH ENDED</option>
+        </select>
+        <button class="btn-post" style="background:#f1c40f" onclick="updateRoom()">Update Room ⚡</button>
+    </div>
+
+    <div id="playerTab" class="card">
+        <h3>👥 Joined Players</h3>
+        <div class="input-group">
+            <label>Check by Match ID</label>
+            <div style="display: flex; gap: 5px;">
+                <input type="number" id="p_id" placeholder="Ex: 101">
+                <button onclick="loadJoined()" style="width: 80px; padding: 0; background: #00f2fe; border:none; border-radius:10px;">VIEW</button>
+            </div>
+        </div>
+        <div class="list-container">
+            <table><thead><tr><th>Name</th><th>Game UID</th><th>Time</th></tr></thead><tbody id="joinedList"></tbody></table>
         </div>
     </div>
 
-    <script>
-        // 1. Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
-            authDomain: "rare-gaming-b8875.firebaseapp.com",
-            projectId: "rare-gaming-b8875",
-            databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+    <div id="payTab" class="card">
+        <h3>💰 Deposit Requests</h3>
+        <p style="font-size: 10px; color: #888;">UTR verify karke Approve button dabayein.</p>
+        <div class="list-container">
+            <table><thead><tr><th>User</th><th>Amount</th><th>UTR</th><th>Action</th></tr></thead><tbody id="payReqList"></tbody></table>
+        </div>
+    </div>
 
-        // Check Login
-        const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-        if(!userData) window.location.href = "login.html";
+    <div id="walletTab" class="card">
+        <h3>💰 Live Balances</h3>
+        <div class="list-container">
+            <table><thead><tr><th>Name</th><th>Cash</th><th>UID</th></tr></thead><tbody id="walletList"></tbody></table>
+        </div>
+    </div>
 
-        let selectedMatch = null;
+    <div id="userTab" class="card">
+        <h3>👤 Manual Entry</h3>
+        <input type="text" id="u_name" placeholder="Name">
+        <input type="text" id="u_pass" placeholder="Password">
+        <input type="number" id="u_cash" placeholder="Balance">
+        <input type="text" id="u_uid" placeholder="Rare UID">
+        <button class="btn-post" style="background:#ff3131; color:white;" onclick="manualUser()">ADD USER 📥</button>
+    </div>
+</div>
 
-        // 2. 🚀 LOAD MATCHES
-        function loadMatches(status = 'upcoming') {
-            const container = document.getElementById('matchList');
-            container.innerHTML = `<div style="text-align:center; padding:50px; color:#8B3EEB;"><i class="fas fa-spinner fa-spin"></i> Loading Arena...</div>`;
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
+        authDomain: "rare-gaming-b8875.firebaseapp.com",
+        projectId: "rare-gaming-b8875",
+        databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+        if(tabId === 'walletTab') loadWallets();
+        if(tabId === 'payTab') loadPaymentRequests();
+    }
+
+    // 🔥 FIX: Added Dynamic Fields (imgUrl, type)
+    function postMatch() {
+        const id = document.getElementById('m_id').value;
+        if(!id) return alert("ID dalo!");
+
+        database.ref('matches/' + id).update({
+            title: document.getElementById('m_title').value,
+            fee: document.getElementById('m_fee').value,
+            prize: document.getElementById('m_prize').value,
+            perkill: document.getElementById('m_kill').value,
+            map: document.getElementById('m_map').value,
+            category: document.getElementById('m_cat').value,
+            date: document.getElementById('m_date').value,
+            time: document.getElementById('m_time').value,
             
-            const urlParams = new URLSearchParams(window.location.search);
-            let matchKey = urlParams.get('type') || localStorage.getItem("lastType") || "BR";
-            localStorage.setItem("lastType", matchKey);
-            document.getElementById('pageTitle').innerText = matchKey + " TOURNAMENTS";
-
-            database.ref('matches').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (!data) {
-                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#888;">No matches found.</div>`;
-                    return;
-                }
-                
-                container.innerHTML = ""; 
-                Object.keys(data).forEach(id => {
-                    const m = data[id];
-                    if (m.category === matchKey && m.status === status) {
-                        renderCard(m, id, container);
-                    }
-                });
-            });
-        }
-
-        function renderCard(m, id, container) {
-            let isJoined = localStorage.getItem("joined_" + id);
+            // 🔥 The missing links
+            type: document.getElementById('m_type').value || "SOLO",
+            imgUrl: document.getElementById('m_img').value || "https://i.imgur.com/uR1Y6T2.jpeg", 
             
-            // 🚀 Logic for 48 Players Progress
-            let totalSlots = 48;
-            let joinedCount = m.participants ? Object.keys(m.participants).length : 0;
-            let progressPercent = (joinedCount / totalSlots) * 100;
+            status: "upcoming"
+        }).then(() => {
+            alert("Perfect! Match details with dynamic map/image posted! 🔥");
+        }).catch((error) => {
+            alert("Error: " + error.message);
+        });
+    }
 
-            // 🚀 GitHub Image Bypass Logic
-            let matchImg = m.imgUrl || m.image || 'https://i.imgur.com/uR1Y6T2.jpeg';
-            if(matchImg.includes('github.com') && !matchImg.includes('raw.githubusercontent.com')) {
-                matchImg = matchImg.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
-            }
+    function updateRoom() {
+        const id = document.getElementById('r_match_id').value;
+        database.ref('matches/' + id).update({
+            roomId: document.getElementById('r_id').value || "WAIT",
+            password: document.getElementById('r_pass').value || "WAIT",
+            status: document.getElementById('r_status').value
+        }).then(() => alert("Room ID/Pass Updated! ✅"));
+    }
 
-            container.innerHTML += `
-            <div class="card">
-                <div class="card-inner">
-                    <div class="card-header">
-                        <img src="${matchImg}" class="match-logo" onerror="this.src='https://i.imgur.com/uR1Y6T2.jpeg'">
-                        <div class="header-text">
-                            <div class="match-title">${m.title} #${id}</div>
-                            <span class="match-time">${m.date} | ${m.time}</span>
-                        </div>
-                    </div>
-                    <div class="stats-grid">
-                        <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value" style="color:#FFD700">${m.prize}</span></div>
-                        <div class="stat-box"><span class="stat-label">Fee</span><span class="stat-value">${m.fee}</span></div>
-                        <div class="stat-box" style="background:#2D1B44"><span class="stat-label">Per Kill</span><span class="stat-value">${m.perkill || '₹0'}</span></div>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; margin-top: 10px; background: #f5f5f5; padding: 6px; border-radius: 6px; border: 1px dashed #8B3EEB;">
-                        <div style="text-align: center; flex: 1;">
-                            <span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Type</span>
-                            <span style="font-size: 10px; font-weight: 800; color: #111;">${m.type || 'SOLO'}</span>
-                        </div>
-                        <div style="text-align: center; flex: 1; border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
-                            <span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Map</span>
-                            <span style="font-size: 10px; font-weight: 800; color: #111;">${m.map || 'BERMUDA'}</span>
-                        </div>
-                        <div style="text-align: center; flex: 1;">
-                            <span style="font-size: 7px; color: #888; text-transform: uppercase; display: block;">Version</span>
-                            <span style="font-size: 10px; font-weight: 800; color: #111;">MOBILE</span>
-                        </div>
-                    </div>
-
-                    <div class="progress-section">
-                        <div class="progress-bar">
-                            <div class="player-count">${joinedCount}/${totalSlots} Joined</div>
-                            <div class="progress-fill" style="width:${progressPercent}%"></div>
-                        </div>
-                        ${!isJoined ? `<button class="join-btn" onclick="openJoinModal('${id}', '${m.fee}')">Join</button>` : `<button class="join-btn" style="background:#444" disabled>Joined</button>`}
-                    </div>
-                </div>
-                ${isJoined ? `<div class="joined-footer"><span class="status-text">✅ Joined</span><button class="btn-action" onclick="window.location.href='room_details.html?matchId=${id}'">ROOM ID</button></div>` : ''}
-            </div>`;
-        }
-
-        function openJoinModal(id, fee) {
-            selectedMatch = { id, fee: parseFloat(fee.replace('₹', '')) };
-            document.getElementById('inputModal').style.display = 'flex';
-        }
-
-        function finalJoin() {
-            const gName = document.getElementById('gameName').value.trim();
-            const gUID = document.getElementById('gameId').value.trim();
-            if(!gName || !gUID) return alert("Bhai, Details dalo!");
-
-            const playerUID = userData.uid;
-
-            database.ref('players/' + playerUID).once('value', (snap) => {
-                const pData = snap.val();
-                if(!pData) return alert("Error: User Wallet not found. Contact Admin!");
-
-                const currentCash = parseFloat(pData.cash || 0);
-
-                if (currentCash < selectedMatch.fee) {
-                    alert("❌ Low Balance! Recharge karo.");
-                } else {
-                    const newBalance = currentCash - selectedMatch.fee;
-                    database.ref('players/' + playerUID).update({ cash: newBalance });
-                    database.ref('matches/' + selectedMatch.id + '/participants/' + playerUID).set({
-                        name: gName, uid: gUID, time: new Date().toLocaleString()
-                    }).then(() => {
-                        localStorage.setItem("joined_" + selectedMatch.id, "true");
-                        alert("✅ Arena Joined Successfully!");
-                        location.reload();
-                    });
-                }
+    function loadJoined() {
+        const id = document.getElementById('p_id').value;
+        const list = document.getElementById('joinedList');
+        database.ref('matches/' + id + '/participants').on('value', (snap) => {
+            const data = snap.val(); list.innerHTML = "";
+            if(!data) { list.innerHTML = "<tr><td colspan='3'>No players</td></tr>"; return; }
+            Object.keys(data).forEach(key => {
+                const p = data[key]; list.innerHTML += `<tr><td>${p.name}</td><td>${p.uid}</td><td>${p.time}</td></tr>`;
             });
-        }
+        });
+    }
 
-        function closeModals() { document.getElementById('inputModal').style.display = 'none'; }
-        function switchTab(t, el) { document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active')); el.classList.add('active'); loadMatches(t); }
-        window.onload = () => loadMatches('upcoming');
-    </script>
+    function loadPaymentRequests() {
+        const list = document.getElementById('payReqList');
+        database.ref('payment_requests').on('value', (snap) => {
+            const reqs = snap.val(); list.innerHTML = "";
+            if(!reqs) { list.innerHTML = "<tr><td colspan='4'>No pending requests</td></tr>"; return; }
+            Object.keys(reqs).forEach(id => {
+                const r = reqs[id];
+                list.innerHTML += `<tr><td>${r.userName}<br><small>${r.userId.substring(0,6)}</small></td><td style="color:#39ff14">₹${r.amount}</td><td>${r.utr}</td><td><button class="approve-btn" onclick="approveDeposit('${id}', '${r.userId}', ${r.amount})">APPROVE</button></td></tr>`;
+            });
+        });
+    }
+
+    function approveDeposit(reqId, uid, amt) {
+        if(!confirm("Approve ₹" + amt + "?")) return;
+        const userRef = database.ref('players/' + uid);
+        userRef.child('cash').once('value', (snap) => {
+            let currentBal = parseFloat(snap.val() || 0);
+            userRef.update({ cash: currentBal + amt }).then(() => {
+                database.ref('payment_requests/' + reqId).remove();
+                alert("Success!");
+            });
+        });
+    }
+
+    function loadWallets() {
+        const list = document.getElementById('walletList');
+        database.ref('players').on('value', (snap) => {
+            const data = snap.val(); list.innerHTML = "";
+            if(!data) return;
+            Object.keys(data).forEach(uid => {
+                const p = data[uid];
+                list.innerHTML += `<tr><td>${p.name}</td><td style="color:#39ff14">₹${p.cash}</td><td>${uid.substring(0,6)}</td></tr>`;
+            });
+        });
+    }
+
+    function manualUser() {
+        const uid = document.getElementById('u_uid').value;
+        database.ref('players/' + uid).set({
+            name: document.getElementById('u_name').value, password: document.getElementById('u_pass').value,
+            cash: parseFloat(document.getElementById('u_cash').value || 0), uid: uid
+        }).then(() => alert("User Added!"));
+    }
+</script>
 </body>
 </html>
