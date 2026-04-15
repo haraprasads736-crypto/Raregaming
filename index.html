@@ -111,12 +111,6 @@
         <a href="match_details.html?type=FREE" class="match-card"><img src="free_poster.jpg"><div class="match-label">FREE MATCH</div></a>
         <a href="match_details.html?type=1V1HS" class="match-card"><img src="1v1hs_poster.jpg"><div class="match-label">1V1 HEADSHOT</div></a>
         <a href="match_details.html?type=CSHS" class="match-card"><img src="cshs_poster.jpg"><div class="match-label">CS HEADSHOT</div></a>
-
-        <div class="match-card" onclick="alert('BGMI Tournaments are coming soon!')" style="cursor: pointer;">
-            <div class="coming-soon-badge">COMING SOON</div>
-            <img src="https://i.imgur.com/8Qp2ZpX.jpeg" style="filter: grayscale(100%);">
-            <div class="match-label">BGMI MOBILE</div>
-        </div>
     </div>
 
     <nav class="bottom-nav">
@@ -154,7 +148,6 @@
         // 3. 🚀 LIVE BALANCE SYNC
         function startLiveDashboard() {
             const balEl = document.getElementById('walletBal');
-            // Path checks 'players/' path for real-time wallet sync
             database.ref('players/' + userUID).on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
