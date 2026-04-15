@@ -36,43 +36,43 @@
         .gender-select-box { margin-top: 8px; }
         #genderSelector { background: #111; color: var(--neon); border: 1px solid #333; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 700; outline: none; cursor: pointer; text-transform: uppercase; }
 
+        /* BATTLE CARD TRIGGER */
         .battlecard-trigger { margin: 10px 20px 20px; background: linear-gradient(90deg, #1a1a2e, #0a0a0f); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
+        .battlecard-trigger:active { transform: scale(0.95); }
+
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
         .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
         .stat-label { font-size: 9px; color: #888; text-transform: uppercase; }
         .stat-value { font-size: 18px; font-weight: 800; color: #fff; margin-top: 5px; }
 
+        .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
+
         /* --- PROFESSIONAL BATTLE CARD OVERLAY --- */
         #bcOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 5000; align-items: center; justify-content: center; flex-direction: column; backdrop-filter: blur(12px); }
         .bc-container { position: relative; width: 330px; height: 500px; perspective: 1200px; }
         .bc-card { width: 100%; height: 100%; background: #000; border: 2.5px solid var(--gold); border-radius: 30px; display: flex; flex-direction: column; align-items: center; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.5); transition: 0.1s; transform-style: preserve-3d; }
-        
         .bc-thematic-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0.35; z-index: 0; }
-        
         .bc-header { width: 100%; padding: 25px; display: flex; justify-content: space-between; align-items: flex-start; z-index: 2; }
         .bc-tag { background: var(--gold); color: #000; padding: 3px 12px; border-radius: 4px; font-weight: 900; font-size: 10px; letter-spacing: 1px; }
-
-        /* Small Professional Avatar Top Right */
-        .bc-avatar-mini { width: 60px; height: 60px; border-radius: 12px; border: 2px solid #fff; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-
-        /* Name and Gender shifted to Bottom */
-        .bc-bottom-info { width: 100%; margin-top: auto; padding: 0 25px; z-index: 2; text-align: left; }
+        .bc-avatar-mini { width: 60px; height: 60px; border-radius: 12px; border: 2px solid #fff; object-fit: cover; }
+        .bc-bottom-info { width: 100%; margin-top: auto; padding: 0 25px; z-index: 2; }
         .bc-name-row { display: flex; align-items: center; gap: 10px; }
-        .bc-name { font-size: 28px; font-weight: 900; color: #fff; text-transform: uppercase; margin: 0; letter-spacing: 1px; }
-        .bc-verify-icon { font-size: 20px; }
+        .bc-name { font-size: 28px; font-weight: 900; color: #fff; text-transform: uppercase; margin: 0; }
         .bc-gender-txt { font-size: 12px; font-weight: 700; letter-spacing: 3px; margin: 5px 0 15px; }
-
         .bc-stats-row { width: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: space-around; padding: 20px 0; border-top: 1px solid rgba(255,215,0,0.3); z-index: 2; }
         .bc-stat-box { text-align: center; }
         .bc-stat-box b { font-size: 20px; color: var(--green); display: block; font-weight: 900; }
-        .bc-stat-box small { font-size: 9px; color: #777; font-weight: 700; text-transform: uppercase; }
+        .bc-stat-box small { font-size: 9px; color: #777; }
 
-        /* BOTTOM NAV STYLING */
+        /* NAV STYLES */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
         .nav-item.active { color: var(--neon); }
         .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; }
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 6000; padding: 20px; }
     </style>
 </head>
 <body>
@@ -114,19 +114,21 @@
         <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--gold);">0</div></div>
     </div>
 
+    <div class="options-container">
+        <a href="earn.html" class="option-item"><i class="fas fa-wallet"></i> Wallet History</a>
+        <a href="transfer.html" class="option-item"><i class="fas fa-exchange-alt"></i> Transfer Records</a>
+        <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
+        <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
+    </div>
+
     <div id="bcOverlay">
         <div class="bc-container">
             <div id="bcCard" class="bc-card">
                 <div id="bcThematicBg" class="bc-thematic-bg"></div>
-                
                 <div class="bc-header">
-                    <div>
-                        <b style="color:#fff; display:block; font-size:14px;">RARE GAMING</b>
-                        <span class="bc-tag">LEGEND</span>
-                    </div>
+                    <div><b style="color:#fff; display:block; font-size:14px;">RARE GAMING</b><span class="bc-tag">LEGEND</span></div>
                     <img id="bcAvatar" src="" class="bc-avatar-mini">
                 </div>
-
                 <div class="bc-bottom-info">
                     <div class="bc-name-row">
                         <h2 class="bc-name" id="bcName">--</h2>
@@ -134,7 +136,6 @@
                     </div>
                     <div id="bcGender" class="bc-gender-txt">MALE</div>
                 </div>
-
                 <div class="bc-stats-row">
                     <div class="bc-stat-box"><b id="bcKD">0.0</b><small>K/D Ratio</small></div>
                     <div class="bc-stat-box"><b id="bcWin">0%</b><small>Win Rate</small></div>
@@ -142,13 +143,21 @@
                 </div>
             </div>
         </div>
-        <button onclick="closeBattleCard()" style="margin-top:30px; background:rgba(255,255,255,0.1); border:1px solid #444; color:#fff; padding:12px 40px; border-radius:12px; font-weight:800; text-transform:uppercase;">Dismiss</button>
+        <button onclick="closeBattleCard()" style="margin-top:30px; background:rgba(255,255,255,0.1); border:1px solid #444; color:#fff; padding:12px 40px; border-radius:12px; font-weight:800;">DISMISS</button>
+    </div>
+
+    <div id="cropModal">
+        <div id="cropContainer" style="height: 60vh;"></div>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button onclick="closeCrop()" style="flex:1; padding:15px; background:#222; color:#fff; border:none; border-radius:12px;">CANCEL</button>
+            <button onclick="saveCrop()" style="flex:1; padding:15px; background:var(--neon); color:#000; border:none; border-radius:12px;">DONE</button>
+        </div>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div></a>
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
@@ -225,6 +234,33 @@
 
         function closeBattleCard() { document.getElementById('bcOverlay').style.display = 'none'; }
         function updateGender() { database.ref('players/' + userData.uid).update({ gender: document.getElementById('genderSelector').value }); }
+
+        // DP CROP LOGIC (FIXED)
+        let croppieInstance;
+        document.getElementById('uploadInput').onchange = function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('cropModal').style.display = 'block';
+                if(croppieInstance) croppieInstance.destroy();
+                croppieInstance = new Croppie(document.getElementById('cropContainer'), {
+                    viewport: { width: 200, height: 200, type: 'circle' },
+                    boundary: { width: 300, height: 350 },
+                    showZoomer: true
+                });
+                croppieInstance.bind({ url: event.target.result });
+            };
+            reader.readAsDataURL(file);
+        };
+        function saveCrop() {
+            croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 } }).then(b64 => {
+                database.ref('players/' + userData.uid).update({ dp: b64 }).then(() => {
+                    document.getElementById('dpPreview').src = b64;
+                    closeCrop();
+                });
+            });
+        }
+        function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
         function logout() { if(confirm("Logout?")) { localStorage.clear(); window.location.href="login.html"; } }
 
         window.onload = loadProfileLive;
