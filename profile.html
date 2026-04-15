@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
         :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; --purple: #8B3EEB; }
         
         * { box-sizing: border-box; }
@@ -21,13 +21,23 @@
         .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
 
-        .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
-        .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: 0 auto 15px; cursor: pointer; }
-        #dpPreview { width: 90px; height: 90px; border-radius: 50%; border: 2.5px solid var(--neon); object-fit: cover; background: #111; }
-        .edit-badge { position: absolute; bottom: 2px; right: 2px; background: var(--neon); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11px; border: 2px solid var(--panel); }
+        .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; position: relative; }
+        .avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; cursor: pointer; }
+        #dpPreview { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--neon); object-fit: cover; background: #111; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+        
+        .avatar-pulse { position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid var(--green); border-radius: 50%; animation: pulse 2s infinite; pointer-events: none; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.3); opacity: 0; } }
 
-        .player-name { font-size: 20px; font-weight: 800; margin: 0; text-transform: uppercase; }
-        .player-uid { font-size: 12px; color: #666; font-weight: 700; margin-top: 5px; letter-spacing: 1px; }
+        .name-container { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; }
+        .player-name { font-size: 22px; font-weight: 900; margin: 0; text-transform: uppercase; color: #fff; }
+        .verified-badge { color: var(--neon); font-size: 18px; display: none; text-shadow: 0 0 10px var(--neon); }
+        
+        .gender-box { font-size: 12px; font-weight: 700; color: #888; margin-top: 4px; letter-spacing: 1px; }
+        .gender-box i { margin-right: 5px; }
+        .gender-male { color: #00f2fe; }
+        .gender-female { color: #ff007f; }
+
+        .player-uid { font-size: 11px; color: #555; font-weight: 700; margin-top: 8px; letter-spacing: 1px; }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
         .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
@@ -38,13 +48,19 @@
         .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
         .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
 
-        /* 🟢 NAVIGATION STYLING (Same as Index & Transfer) */
+        /* TERMS MODAL STYLING */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 5000; padding: 20px; backdrop-filter: blur(8px); }
+        .terms-modal { background: #121217; border: 2px solid var(--purple); border-radius: 28px; width: 100%; max-width: 400px; max-height: 80vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 30px rgba(139, 62, 235, 0.3); }
+        .terms-header { padding: 20px; background: var(--purple); color: #fff; font-weight: 800; text-align: center; font-size: 18px; text-transform: uppercase; }
+        .terms-content { padding: 20px; overflow-y: auto; font-size: 13px; line-height: 1.6; color: #ccc; }
+        .terms-content b { color: var(--neon); }
+        .terms-content p { margin-bottom: 15px; }
+        .close-terms-btn { padding: 15px; background: var(--purple); color: white; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
+
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
         .nav-item.active { color: var(--neon); }
-        .nav-item i { font-size: 20px; }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
-        .center-btn i { color: #000 !important; font-size: 22px; }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; }
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
 
         #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; padding: 20px; }
@@ -57,10 +73,22 @@
     <div class="profile-card">
         <div class="avatar-wrapper" onclick="document.getElementById('uploadInput').click()">
             <img id="dpPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-            <div class="edit-badge"><i class="fas fa-camera"></i></div>
+            <div class="avatar-pulse"></div>
+            <div style="position: absolute; bottom: 0; right: 0; background: var(--neon); width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 10px; border: 2px solid var(--panel);">
+                <i class="fas fa-camera"></i>
+            </div>
         </div>
         <input type="file" id="uploadInput" style="display:none;" accept="image/*">
-        <p class="player-name" id="userName">PLAYER</p>
+        
+        <div class="name-container">
+            <p class="player-name" id="userName">PLAYER</p>
+            <i class="fas fa-check-circle verified-badge" id="vBadge"></i>
+        </div>
+
+        <div class="gender-box" id="userGender">
+            <i class="fas fa-mars"></i> MALE
+        </div>
+
         <p class="player-uid" id="userUID">UID: --</p>
     </div>
 
@@ -72,8 +100,24 @@
     <div class="options-container">
         <a href="earn.html" class="option-item"><i class="fas fa-wallet"></i> Wallet History</a>
         <a href="transfer.html" class="option-item"><i class="fas fa-exchange-alt"></i> Transfer Records</a>
+        <div class="option-item" onclick="openTerms()"><i class="fas fa-file-signature"></i> Terms & Conditions</div>
         <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
         <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
+    </div>
+
+    <div id="termsOverlay" class="modal-overlay">
+        <div class="terms-modal">
+            <div class="terms-header">Terms & Conditions</div>
+            <div class="terms-content">
+                <p><b>1. Eligibility:</b> No new Esports Accounts allowed. Accounts with less than 50 matches played every season and Level less than 40 are not allowed to participate.</p>
+                <p><b>2. Performance:</b> Headshot percentage should not be more than 28%. Violators will be kicked without a refund.</p>
+                <p><b>3. Punctuality:</b> Match starts 8 mins after Room ID sharing. If you fail to join on time, we are not responsible and no refund will be processed.</p>
+                <p><b>4. Fair Play:</b> Sharing Room ID/Password with non-participants will lead to account termination and loss of winnings. Griefing and Teaming are strictly against the rules.</p>
+                <p><b>5. Device & Hacks:</b> Use only Mobile Devices. No Hacks or Emulators allowed. Violators will be banned immediately.</p>
+                <p><b>6. Registration:</b> Spots are given on a First Come First Served basis. Every individual must register separately for paid matches.</p>
+            </div>
+            <button class="close-terms-btn" onclick="closeTerms()">I Understand</button>
+        </div>
     </div>
 
     <div id="cropModal">
@@ -94,7 +138,6 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // 🏁 FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -104,32 +147,35 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Check Login Status (Simple check, no infinite redirect)
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-        if(!userData) {
-            window.location.href = "login.html";
-        }
+        if(!userData) window.location.href = "login.html";
 
-        // 🔥 LIVE DATA SYNC
+        function openTerms() { document.getElementById('termsOverlay').style.display = 'flex'; }
+        function closeTerms() { document.getElementById('termsOverlay').style.display = 'none'; }
+
         function loadProfileLive() {
             if(!userData || !userData.uid) return;
-
-            // Using 'players/' path as per index.html
             const playerRef = database.ref('players/' + userData.uid);
-            
             playerRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
                     document.getElementById('userName').innerText = data.name || userData.name;
-                    document.getElementById('userUID').innerText = "UID: " + userData.uid;
+                    document.getElementById('userUID').innerText = "UID: " + (data.uid || userData.uid);
                     document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
                     document.getElementById('coinVal').innerText = (data.coins || 0);
                     if(data.dp) document.getElementById('dpPreview').src = data.dp;
+                    const genderEl = document.getElementById('userGender');
+                    if(data.gender === "Female") {
+                        genderEl.innerHTML = '<i class="fas fa-venus gender-female"></i> FEMALE';
+                    } else {
+                        genderEl.innerHTML = '<i class="fas fa-mars gender-male"></i> MALE';
+                    }
+                    const vBadge = document.getElementById('vBadge');
+                    if(data.isVerified === true) { vBadge.style.display = "block"; } else { vBadge.style.display = "none"; }
                 }
             });
         }
 
-        // DP CROP & SAVE LOGIC
         let croppieInstance;
         document.getElementById('uploadInput').onchange = function(e) {
             const file = e.target.files[0];
