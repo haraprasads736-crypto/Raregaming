@@ -14,48 +14,38 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; --purple: #8B3EEB; }
-        
         * { box-sizing: border-box; }
         body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; overflow-x: hidden; background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%); }
 
+        /* Header & Cards */
         .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
-
         .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
         .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: 0 auto 15px; cursor: pointer; }
         #dpPreview { width: 90px; height: 90px; border-radius: 50%; border: 2.5px solid var(--neon); object-fit: cover; background: #111; }
         .edit-badge { position: absolute; bottom: 2px; right: 2px; background: var(--neon); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11px; border: 2px solid var(--panel); }
-
         .player-name { font-size: 20px; font-weight: 800; margin: 0; text-transform: uppercase; }
         .player-uid { font-size: 12px; color: #666; font-weight: 700; margin-top: 5px; letter-spacing: 1px; }
 
-        .about-box { margin: 0 20px 20px; padding: 15px; background: var(--panel); border-radius: 20px; border: 1px solid rgba(255,255,255,0.03); }
-        .about-box h3 { font-size: 10px; color: var(--neon); text-transform: uppercase; margin: 0 0 8px; letter-spacing: 1px; }
-        #aboutText { font-size: 13px; color: #bbb; margin: 0; line-height: 1.5; }
-
+        /* Stats Grid */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
         .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
         .stat-label { font-size: 9px; color: #888; text-transform: uppercase; }
         .stat-value { font-size: 18px; font-weight: 800; color: #fff; margin-top: 5px; }
 
-        .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
-        .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
-
-        /* MODALS */
-        .terms-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 11000; padding: 20px; }
-        .terms-card { background: #121212; width: 100%; max-width: 360px; max-height: 80vh; border-radius: 24px; border: 1px solid var(--purple); padding: 25px; overflow-y: auto; }
-        .close-btn { background: var(--purple); color: white; border: none; padding: 12px; width: 100%; border-radius: 12px; font-weight: 800; margin-top: 10px; cursor: pointer; }
-
-        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 12000; padding: 20px; }
-        .crop-btns { display: flex; gap: 10px; margin-top: 20px; }
-        .btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; }
-
+        /* Bottom Navigation */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
         .nav-item.active { color: var(--neon); }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+        
+        /* Options */
+        .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
+        
+        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; padding: 20px; }
     </style>
 </head>
 <body>
@@ -68,48 +58,34 @@
             <div class="edit-badge"><i class="fas fa-camera"></i></div>
         </div>
         <input type="file" id="uploadInput" style="display:none;" accept="image/*">
-        <p class="player-name" id="userName">LOADING...</p>
+        <p class="player-name" id="userName">PLAYER</p>
         <p class="player-uid" id="userUID">UID: --</p>
     </div>
 
-    <div class="about-box">
-        <h3>About Me</h3>
-        <p id="aboutText">Rare Gaming Member | Esports Enthusiast</p>
-    </div>
-
     <div class="stats-grid">
-        <div class="stat-box"><div class="stat-label">Total Cash</div><div class="stat-value" id="cashVal">₹--</div></div>
-        <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--gold);">--</div></div>
+        <div class="stat-box"><div class="stat-label">Total Cash</div><div class="stat-value" id="cashVal">₹0</div></div>
+        <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--gold);">0</div></div>
     </div>
 
     <div class="options-container">
         <a href="earn.html" class="option-item"><i class="fas fa-wallet"></i> Wallet History</a>
         <a href="transfer.html" class="option-item"><i class="fas fa-exchange-alt"></i> Transfer Records</a>
         <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
-        <div class="option-item" onclick="openTerms()"><i class="fas fa-file-contract"></i> Terms & Conditions</div>
-        <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131; border-bottom:none;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
-    </div>
-
-    <div id="termsOverlay" class="terms-overlay">
-        <div class="terms-card">
-            <h4 style="color:var(--neon)">Rules & Policy</h4>
-            <p style="font-size:12px; color:#ccc;">Level 40+ Match participation rules apply.</p>
-            <button class="close-btn" onclick="closeTerms()">I ACCEPT</button>
-        </div>
+        <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
     </div>
 
     <div id="cropModal">
         <div id="cropContainer" style="height: 60vh;"></div>
-        <div class="crop-btns">
-            <button class="btn" style="background:#222; color:#fff;" onclick="closeCrop()">CANCEL</button>
-            <button class="btn" style="background:var(--neon); color:#000;" onclick="saveCrop()">DONE</button>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button onclick="closeCrop()" style="flex:1; padding:15px; background:#222; color:#fff; border:none; border-radius:12px; font-weight:800;">CANCEL</button>
+            <button onclick="saveCrop()" style="flex:1; padding:15px; background:var(--neon); color:#000; border:none; border-radius:12px; font-weight:800;">DONE</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
@@ -126,41 +102,27 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 🛡️ AUTH CHECK (Fix: checking both keys just in case)
-        const userUID = localStorage.getItem("userUID");
+        // Check Login
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+        if(!userData || !userData.uid) window.location.href = "login.html";
 
+        // 🔥 REAL-TIME DATA (Corrected Path: 'players/')
         function loadProfileLive() {
-            // Agar UID nahi hai toh wapas login pe bhejo
-            if(!userUID) {
-                window.location.href = "login.html";
-                return;
-            }
-
-            // 🔥 LIVE SYNC FROM 'players/' PATH (Wahi path jo index.html mein hai)
-            const playerRef = database.ref('players/' + userUID);
-            
+            const playerRef = database.ref('players/' + userData.uid);
             playerRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
-                    document.getElementById('userName').innerText = data.name || (userData ? userData.name : "PLAYER");
-                    document.getElementById('userUID').innerText = "UID: " + userUID;
+                    document.getElementById('userName').innerText = data.name || userData.name;
+                    document.getElementById('userUID').innerText = "UID: " + userData.uid;
                     document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
+                    // Coins system fix
                     document.getElementById('coinVal').innerText = (data.coins || 0);
-                    
-                    // Profile Picture Sync
-                    if(data.dp) {
-                        document.getElementById('dpPreview').src = data.dp;
-                    }
-                    // About Sync
-                    if(data.about) {
-                        document.getElementById('aboutText').innerText = data.about;
-                    }
+                    if(data.dp) document.getElementById('dpPreview').src = data.dp;
                 }
             });
         }
 
-        // DP CROP LOGIC
+        // Image Crop & Save
         let croppieInstance;
         document.getElementById('uploadInput').onchange = function(e) {
             const file = e.target.files[0];
@@ -180,25 +142,16 @@
 
         function saveCrop() {
             croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 } }).then(function(base64) {
-                // Save DP back to 'players/' path
-                database.ref('players/' + userUID).update({ dp: base64 }).then(() => {
+                database.ref('players/' + userData.uid).update({ dp: base64 }).then(() => {
                     document.getElementById('dpPreview').src = base64;
                     closeCrop();
                 });
             });
         }
 
-        function openTerms() { document.getElementById('termsOverlay').style.display = 'flex'; }
-        function closeTerms() { document.getElementById('termsOverlay').style.display = 'none'; }
         function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
+        function logout() { if(confirm("Logout?")) { localStorage.clear(); window.location.href = "login.html"; } }
         
-        function logout() { 
-            if(confirm("Logout karna chahte ho?")) { 
-                localStorage.clear(); 
-                window.location.href = "login.html"; 
-            } 
-        }
-
         window.onload = loadProfileLive;
     </script>
 </body>
