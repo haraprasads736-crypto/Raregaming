@@ -42,26 +42,15 @@
         .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
         .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
 
-        /* MODALS */
-        .terms-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 11000; padding: 20px; }
-        .terms-card { background: #121212; width: 100%; max-width: 360px; max-height: 80vh; border-radius: 24px; border: 1px solid var(--purple); padding: 25px; overflow-y: auto; position: relative; animation: popUp 0.3s ease-out; }
-        @keyframes popUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .terms-header { color: var(--neon); font-weight: 800; font-size: 18px; margin-bottom: 15px; display: flex; justify-content: space-between; }
-        .terms-section { margin-bottom: 15px; text-align: left; }
-        .terms-section h4 { font-size: 13px; color: var(--gold); margin-bottom: 5px; text-transform: uppercase; }
-        .terms-section p, .terms-section li { font-size: 12px; color: #ccc; line-height: 1.4; margin-bottom: 5px; }
-        .close-btn { background: var(--purple); color: white; border: none; padding: 12px; width: 100%; border-radius: 12px; font-weight: 800; margin-top: 10px; cursor: pointer; }
-
-        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 12000; padding: 20px; }
-        .crop-btns { display: flex; gap: 10px; margin-top: 20px; }
-        .btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; }
-
-        /* NAV */
+        /* Navigation Style (Copied from Dashboard) */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;}
         .nav-item.active { color: var(--neon); }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
+        .nav-item i { font-size: 20px; }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: #39ff14; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+
+        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; padding: 20px; }
     </style>
 </head>
 <body>
@@ -74,8 +63,8 @@
             <div class="edit-badge"><i class="fas fa-camera"></i></div>
         </div>
         <input type="file" id="uploadInput" style="display:none;" accept="image/*">
-        <p class="player-name" id="userName">PLAYER_NAME</p>
-        <p class="player-uid" id="userUID">UID: RGXXXXXX</p>
+        <p class="player-name" id="userName">PLAYER</p>
+        <p class="player-uid" id="userUID">UID: --</p>
     </div>
 
     <div class="about-box">
@@ -92,41 +81,30 @@
         <a href="earn.html" class="option-item"><i class="fas fa-wallet"></i> Wallet History</a>
         <a href="transfer.html" class="option-item"><i class="fas fa-exchange-alt"></i> Transfer Records</a>
         <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
-        <div class="option-item" onclick="openTerms()"><i class="fas fa-file-contract"></i> Terms & Conditions</div>
-        <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131; border-bottom:none;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
-    </div>
-
-    <div id="termsOverlay" class="terms-overlay">
-        <div class="terms-card">
-            <div class="terms-header"><span>Rules & Policy</span><i class="fas fa-times" onclick="closeTerms()" style="cursor:pointer;"></i></div>
-            <div class="terms-section">
-                <h4>Match Participation</h4>
-                <p>• Account must be Level 40 or above.</p>
-                <p>• Headshot rate must be under 28%.</p>
-            </div>
-            <button class="close-btn" onclick="closeTerms()">I ACCEPT</button>
-        </div>
-    </div>
-
-    <div id="cropModal">
-        <div id="cropContainer" style="height: 60vh;"></div>
-        <div class="crop-btns">
-            <button class="btn" style="background:#222; color:#fff;" onclick="closeCrop()">CANCEL</button>
-            <button class="btn" style="background:var(--neon); color:#000;" onclick="saveCrop()">DONE</button>
-        </div>
+        <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="transfer.html" class="nav-item center-btn">
+            <div class="icon-circle"><i class="fas fa-exchange-alt" style="color: #000;"></i></div>
+            <span style="margin-top: 5px; color: #fff;">SEND</span>
+        </a>
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
 
+    <div id="cropModal">
+        <div id="cropContainer" style="height: 60vh;"></div>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button onclick="closeCrop()" style="flex:1; padding:15px; background:#222; color:#fff; border:none; border-radius:12px; font-weight:800;">CANCEL</button>
+            <button onclick="saveCrop()" style="flex:1; padding:15px; background:var(--neon); color:#000; border:none; border-radius:12px; font-weight:800;">DONE</button>
+        </div>
+    </div>
+
     <script>
-        // 🏁 CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -136,22 +114,17 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Check Login
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if(!userData) window.location.href = "login.html";
 
-        // 🔥 FIREBASE REAL-TIME SYNC
         function loadProfileLive() {
-            // LocalStorage se pehle basic data dikhao
-            document.getElementById('userName').innerText = userData.name || "PLAYER";
-            
-            // Firebase se latest data uthao
-            const userRef = database.ref('users/' + userData.uid);
+            // Path checks both 'players' and local UID
+            const userRef = database.ref('players/' + userData.uid);
             userRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
                     document.getElementById('userName').innerText = data.name || userData.name;
-                    document.getElementById('userUID').innerText = "UID: " + (data.uid || "RGXXXXXX");
+                    document.getElementById('userUID').innerText = "UID: " + userData.uid;
                     document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
                     document.getElementById('coinVal').innerText = (data.coins || 0);
                     if(data.dp) document.getElementById('dpPreview').src = data.dp;
@@ -159,7 +132,6 @@
             });
         }
 
-        // DP CROP LOGIC
         let croppieInstance;
         document.getElementById('uploadInput').onchange = function(e) {
             const file = e.target.files[0];
@@ -179,18 +151,16 @@
 
         function saveCrop() {
             croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 } }).then(function(base64) {
-                database.ref('users/' + userData.uid).update({ dp: base64 }).then(() => {
+                database.ref('players/' + userData.uid).update({ dp: base64 }).then(() => {
                     document.getElementById('dpPreview').src = base64;
                     closeCrop();
                 });
             });
         }
 
-        function openTerms() { document.getElementById('termsOverlay').style.display = 'flex'; }
-        function closeTerms() { document.getElementById('termsOverlay').style.display = 'none'; }
         function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
         function logout() { if(confirm("Logout?")) { localStorage.clear(); window.location.href = "login.html"; } }
-
+        
         window.onload = loadProfileLive;
     </script>
 </body>
