@@ -5,137 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>My Profile - RARE GAMING</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
-        :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; --purple: #8B3EEB; }
+        :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; }
         
-        * { box-sizing: border-box; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; overflow-x: hidden; background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%); }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 120px; overflow-x: hidden; background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%); }
 
-        .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
+        .header { padding: 25px; text-align: center; }
+        .header h2 { font-size: 20px; color: var(--gold); text-transform: uppercase; margin: 0; letter-spacing: 2px; }
 
-        .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; position: relative; }
-        .avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; cursor: pointer; }
-        #dpPreview { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--neon); object-fit: cover; background: #111; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+        /* PROFILE TOP CARD */
+        .profile-main-card { margin: 15px; padding: 20px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: 0 auto 15px; }
+        #dpPreview { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--neon); object-fit: cover; }
         
-        .avatar-pulse { position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid var(--green); border-radius: 50%; animation: pulse 2s infinite; pointer-events: none; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.3); opacity: 0; } }
+        .name-row { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .player-name { font-size: 22px; font-weight: 800; margin: 0; text-transform: uppercase; }
+        .verified-badge { color: var(--neon); display: none; }
 
-        .name-container { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; }
-        .player-name { font-size: 22px; font-weight: 900; margin: 0; text-transform: uppercase; color: #fff; }
-        .verified-badge { color: var(--neon); font-size: 18px; display: none; text-shadow: 0 0 10px var(--neon); }
-        
-        .gender-box { font-size: 12px; font-weight: 700; color: #888; margin-top: 4px; letter-spacing: 1px; }
-        .gender-box i { margin-right: 5px; }
-        .gender-male { color: #00f2fe; }
-        .gender-female { color: #ff007f; }
+        /* GENDER SELECTION DROPDOWN */
+        .gender-select-box { margin-top: 10px; }
+        #genderSelector { background: #111; color: var(--neon); border: 1px solid #333; padding: 5px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; outline: none; cursor: pointer; }
 
-        .player-uid { font-size: 11px; color: #555; font-weight: 700; margin-top: 8px; letter-spacing: 1px; }
+        /* BATTLECARD (Tumhara Maanga Hua Card) */
+        .battlecard-mini { margin: 20px 15px; background: linear-gradient(135deg, #0a0a0f 0%, #1a0000 100%); border: 2px solid var(--gold); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); }
+        .card-stats { width: 100%; display: flex; justify-content: space-around; margin-top: 15px; border-top: 1px solid rgba(255,215,0,0.2); padding-top: 10px; }
+        .stat-item { text-align: center; }
+        .stat-item small { font-size: 9px; color: #888; display: block; }
+        .stat-item b { font-size: 16px; color: var(--green); }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
-        .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
-        .stat-label { font-size: 9px; color: #888; text-transform: uppercase; }
-        .stat-value { font-size: 18px; font-weight: 800; color: #fff; margin-top: 5px; }
+        /* WALLET STATS */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 15px; }
+        .wallet-box { background: var(--panel); padding: 15px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.03); text-align: center; }
+        .wallet-box small { font-size: 10px; color: #666; text-transform: uppercase; }
+        .wallet-box h3 { margin: 5px 0 0; font-size: 18px; color: #fff; }
 
-        .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
-        .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
-
-        /* TERMS MODAL STYLING */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 5000; padding: 20px; backdrop-filter: blur(8px); }
-        .terms-modal { background: #121217; border: 2px solid var(--purple); border-radius: 28px; width: 100%; max-width: 400px; max-height: 80vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 30px rgba(139, 62, 235, 0.3); }
-        .terms-header { padding: 20px; background: var(--purple); color: #fff; font-weight: 800; text-align: center; font-size: 18px; text-transform: uppercase; }
-        .terms-content { padding: 20px; overflow-y: auto; font-size: 13px; line-height: 1.6; color: #ccc; }
-        .terms-content b { color: var(--neon); }
-        .terms-content p { margin-bottom: 15px; }
-        .close-terms-btn { padding: 15px; background: var(--purple); color: white; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
-
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        /* NAVIGATION (Fixed Design for All Pages) */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.98); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; transition: 0.3s; }
         .nav-item.active { color: var(--neon); }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; }
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
-
-        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; padding: 20px; }
+        .nav-item i { font-size: 22px; }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
+        .center-btn i { color: #000 !important; font-size: 24px; }
     </style>
 </head>
 <body>
 
-    <div class="header"><h2>Account Profile</h2></div>
+    <div class="header"><h2>ACCOUNT PROFILE</h2></div>
 
-    <div class="profile-card">
-        <div class="avatar-wrapper" onclick="document.getElementById('uploadInput').click()">
+    <div class="profile-main-card">
+        <div class="avatar-wrapper">
             <img id="dpPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-            <div class="avatar-pulse"></div>
-            <div style="position: absolute; bottom: 0; right: 0; background: var(--neon); width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 10px; border: 2px solid var(--panel);">
-                <i class="fas fa-camera"></i>
-            </div>
         </div>
-        <input type="file" id="uploadInput" style="display:none;" accept="image/*">
-        
-        <div class="name-container">
-            <p class="player-name" id="userName">PLAYER</p>
+        <div class="name-row">
+            <h1 class="player-name" id="userName">PLAYER</h1>
             <i class="fas fa-check-circle verified-badge" id="vBadge"></i>
         </div>
 
-        <div class="gender-box" id="userGender">
-            <i class="fas fa-mars"></i> MALE
+        <div class="gender-select-box">
+            <select id="genderSelector" onchange="updateGender()">
+                <option value="Male">♂ MALE</option>
+                <option value="Female">♀ FEMALE</option>
+                <option value="Other">⚧ OTHER</option>
+            </select>
         </div>
+        <p style="color: #444; font-size: 10px; margin-top: 10px;" id="userUID">UID: --</p>
+    </div>
 
-        <p class="player-uid" id="userUID">UID: --</p>
+    <div class="battlecard-mini">
+        <small style="color: var(--gold); letter-spacing: 2px; font-weight: 800;">RARE BATTLECARD</small>
+        <div class="card-stats">
+            <div class="stat-item"><small>K/D</small><b id="statKD">4.2</b></div>
+            <div class="stat-item"><small>WIN RATE</small><b id="statWin">85%</b></div>
+            <div class="stat-item"><small>TIER</small><b id="statTier">ELITE</b></div>
+        </div>
     </div>
 
     <div class="stats-grid">
-        <div class="stat-box"><div class="stat-label">Total Cash</div><div class="stat-value" id="cashVal">₹0</div></div>
-        <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--gold);">0</div></div>
-    </div>
-
-    <div class="options-container">
-        <a href="earn.html" class="option-item"><i class="fas fa-wallet"></i> Wallet History</a>
-        <a href="transfer.html" class="option-item"><i class="fas fa-exchange-alt"></i> Transfer Records</a>
-        <div class="option-item" onclick="openTerms()"><i class="fas fa-file-signature"></i> Terms & Conditions</div>
-        <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
-        <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
-    </div>
-
-    <div id="termsOverlay" class="modal-overlay">
-        <div class="terms-modal">
-            <div class="terms-header">Terms & Conditions</div>
-            <div class="terms-content">
-                <p><b>1. Eligibility:</b> No new Esports Accounts allowed. Accounts with less than 50 matches played every season and Level less than 40 are not allowed to participate.</p>
-                <p><b>2. Performance:</b> Headshot percentage should not be more than 28%. Violators will be kicked without a refund.</p>
-                <p><b>3. Punctuality:</b> Match starts 8 mins after Room ID sharing. If you fail to join on time, we are not responsible and no refund will be processed.</p>
-                <p><b>4. Fair Play:</b> Sharing Room ID/Password with non-participants will lead to account termination and loss of winnings. Griefing and Teaming are strictly against the rules.</p>
-                <p><b>5. Device & Hacks:</b> Use only Mobile Devices. No Hacks or Emulators allowed. Violators will be banned immediately.</p>
-                <p><b>6. Registration:</b> Spots are given on a First Come First Served basis. Every individual must register separately for paid matches.</p>
-            </div>
-            <button class="close-terms-btn" onclick="closeTerms()">I Understand</button>
-        </div>
-    </div>
-
-    <div id="cropModal">
-        <div id="cropContainer" style="height: 60vh;"></div>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button onclick="closeCrop()" style="flex:1; padding:15px; background:#222; color:#fff; border:none; border-radius:12px; font-weight:800;">CANCEL</button>
-            <button onclick="saveCrop()" style="flex:1; padding:15px; background:var(--neon); color:#000; border:none; border-radius:12px; font-weight:800;">DONE</button>
-        </div>
+        <div class="wallet-box"><small>Cash</small><h3 id="cashVal">₹0</h3></div>
+        <div class="wallet-box"><small>Coins</small><h3 id="coinVal" style="color: var(--gold);">0</h3></div>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="transfer.html" class="nav-item center-btn">
+            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
+            <span style="margin-top:5px; color:#fff;">SEND</span>
+        </a>
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
-    <div class="system-nav-bar"></div>
 
     <script>
         const firebaseConfig = {
@@ -150,61 +114,35 @@
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if(!userData) window.location.href = "login.html";
 
-        function openTerms() { document.getElementById('termsOverlay').style.display = 'flex'; }
-        function closeTerms() { document.getElementById('termsOverlay').style.display = 'none'; }
-
         function loadProfileLive() {
-            if(!userData || !userData.uid) return;
-            const playerRef = database.ref('players/' + userData.uid);
-            playerRef.on('value', (snapshot) => {
+            database.ref('players/' + userData.uid).on('value', (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
-                    document.getElementById('userName').innerText = data.name || userData.name;
-                    document.getElementById('userUID').innerText = "UID: " + (data.uid || userData.uid);
+                    document.getElementById('userName').innerText = data.name || "PLAYER";
+                    document.getElementById('userUID').innerText = "UID: " + userData.uid;
                     document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
                     document.getElementById('coinVal').innerText = (data.coins || 0);
                     if(data.dp) document.getElementById('dpPreview').src = data.dp;
-                    const genderEl = document.getElementById('userGender');
-                    if(data.gender === "Female") {
-                        genderEl.innerHTML = '<i class="fas fa-venus gender-female"></i> FEMALE';
-                    } else {
-                        genderEl.innerHTML = '<i class="fas fa-mars gender-male"></i> MALE';
-                    }
-                    const vBadge = document.getElementById('vBadge');
-                    if(data.isVerified === true) { vBadge.style.display = "block"; } else { vBadge.style.display = "none"; }
+                    
+                    // Set Gender Dropdown
+                    if(data.gender) document.getElementById('genderSelector').value = data.gender;
+                    
+                    // Set Verification
+                    document.getElementById('vBadge').style.display = data.isVerified ? "block" : "none";
+
+                    // Battlecard Stats
+                    document.getElementById('statKD').innerText = data.kd || "0.0";
+                    document.getElementById('statWin').innerText = (data.winRate || "0") + "%";
+                    document.getElementById('statTier').innerText = data.tier || "BRONZE";
                 }
             });
         }
 
-        let croppieInstance;
-        document.getElementById('uploadInput').onchange = function(e) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('cropModal').style.display = 'block';
-                if(croppieInstance) croppieInstance.destroy();
-                croppieInstance = new Croppie(document.getElementById('cropContainer'), {
-                    viewport: { width: 200, height: 200, type: 'circle' },
-                    boundary: { width: 300, height: 350 },
-                    showZoomer: true
-                });
-                croppieInstance.bind({ url: event.target.result });
-            };
-            reader.readAsDataURL(file);
-        };
-
-        function saveCrop() {
-            croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 } }).then(function(base64) {
-                database.ref('players/' + userData.uid).update({ dp: base64 }).then(() => {
-                    document.getElementById('dpPreview').src = base64;
-                    closeCrop();
-                });
-            });
+        function updateGender() {
+            const newGender = document.getElementById('genderSelector').value;
+            database.ref('players/' + userData.uid).update({ gender: newGender });
         }
 
-        function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
-        function logout() { if(confirm("Logout karna chahte ho?")) { localStorage.clear(); window.location.href = "login.html"; } }
-        
         window.onload = loadProfileLive;
     </script>
 </body>
