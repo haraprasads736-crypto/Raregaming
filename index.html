@@ -57,8 +57,7 @@
         }
         .money-tag { background: #39ff14; color: #000; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 50px; display: inline-block; margin-bottom: 10px; text-transform: uppercase; }
         .money-title { font-size: 18px; font-weight: 800; margin: 0; color: #fff; }
-        .money-desc { font-size: 11px; color: #aaa; margin: 5px 0 15px 0; }
-        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-top: 10px; }
 
         /* MATCH GRID */
         .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 15px 20px; }
@@ -134,6 +133,7 @@
     <div class="system-nav-bar"></div>
 
     <script>
+        // 1. 🔥 FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -143,17 +143,24 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        // 2. 🛡️ AUTH CHECK (Fix: checking both possible keys)
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-        if (!userData || !userData.uid) {
+        const userUID = localStorage.getItem("userUID") || (userData ? userData.uid : null);
+
+        if (!userUID) {
             window.location.href = "login.html";
         }
 
+        // 3. 🚀 LIVE BALANCE SYNC
         function startLiveDashboard() {
             const balEl = document.getElementById('walletBal');
-            database.ref('players/' + userData.uid).on('value', (snapshot) => {
+            // Path checks 'players/' path for real-time wallet sync
+            database.ref('players/' + userUID).on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
                     balEl.innerHTML = `<i class="fas fa-coins"></i> ₹${data.cash || 0}`;
+                } else {
+                    balEl.innerHTML = `<i class="fas fa-coins"></i> ₹0`;
                 }
             });
         }
