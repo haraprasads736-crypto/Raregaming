@@ -63,6 +63,7 @@
         /* MATCH GRID */
         .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 15px 20px; }
         .section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-left: 4px solid var(--neon-blue); padding-left: 12px; }
+        
         .match-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 15px; }
         .match-card { position: relative; border-radius: 15px; overflow: hidden; aspect-ratio: 1/1.2; background: #0a0a0f; border: 1px solid var(--border-color); text-decoration: none; }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
@@ -92,7 +93,6 @@
     <div class="money-banner">
         <div class="money-tag">Fast & Secure</div>
         <p class="money-title">Transfer Earnings</p>
-        <p class="money-desc">Send money to your friends instantly.</p>
         <button class="money-btn" onclick="location.href='transfer.html'">
             <i class="fas fa-paper-plane"></i> Send Money Now
         </button>
@@ -106,14 +106,17 @@
         <a href="match_details.html?type=BR" class="match-card"><img src="br_poster.jpg"><div class="match-label">BR SQUAD</div></a>
         <a href="match_details.html?type=CS" class="match-card"><img src="cs_poster.jpg"><div class="match-label">CS SQUAD</div></a>
         <a href="match_details.html?type=LW" class="match-card"><img src="lw_poster.jpg"><div class="match-label">LONE WOLF</div></a>
+        <a href="match_details.html?type=1V1" class="match-card"><img src="1v1_poster.jpg"><div class="match-label">1V1 BATTLE</div></a>
+        <a href="match_details.html?type=FREE" class="match-card"><img src="free_poster.jpg"><div class="match-label">FREE MATCH</div></a>
+        <a href="match_details.html?type=CSHS" class="match-card"><img src="cshs_poster.jpg"><div class="match-label">CS HEADSHOT</div></a>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
         <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div>
-            <span style="margin-top:5px; color:#fff;">SEND</span>
+            <div class="icon-circle"><i class="fas fa-exchange-alt" style="color: #000;"></i></div>
+            <span style="margin-top: 5px; color: #fff;">SEND</span>
         </a>
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
@@ -140,8 +143,10 @@
 
         // 3. 🚀 LIVE BALANCE SYNC
         function startLiveDashboard() {
+            if (!userData.uid) return;
+            
             const balEl = document.getElementById('walletBal');
-            // Path checks 'players/' path for real-time wallet sync
+            // Path: 'players/' + UID (Same as Profile)
             database.ref('players/' + userData.uid).on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
