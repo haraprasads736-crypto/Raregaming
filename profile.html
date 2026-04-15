@@ -24,7 +24,7 @@
         /* PROFILE CARD MAIN */
         .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; position: relative; }
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; cursor: pointer; }
-        #dpPreview { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--neon); object-fit: cover; background: #111; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+        #dpPreview { width: 100px; height: 100px; border-radius: 50%; border: 2.5px solid var(--neon); object-fit: cover; background: #111; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
         
         .avatar-pulse { position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid var(--green); border-radius: 50%; animation: pulse 2s infinite; pointer-events: none; }
         @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.3); opacity: 0; } }
@@ -37,6 +37,7 @@
         #genderSelector { background: #111; color: var(--neon); border: 1px solid #333; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 700; outline: none; cursor: pointer; text-transform: uppercase; }
 
         .battlecard-trigger { margin: 10px 20px 20px; background: linear-gradient(90deg, #1a1a2e, #0a0a0f); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
+        .battlecard-trigger:active { transform: scale(0.95); }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
         .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
@@ -48,7 +49,7 @@
         .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
 
         /* --- PROFESSIONAL BATTLE CARD OVERLAY --- */
-        #bcOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 5000; align-items: center; justify-content: center; flex-direction: column; backdrop-filter: blur(15px); }
+        #bcOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 5000; align-items: center; justify-content: center; flex-direction: column; backdrop-filter: blur(12px); }
         .bc-container { position: relative; width: 330px; height: 500px; perspective: 1200px; }
         .bc-card { width: 100%; height: 100%; background: #000; border: 2.5px solid var(--gold); border-radius: 30px; display: flex; flex-direction: column; align-items: center; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.5); transition: 0.1s; transform-style: preserve-3d; }
         .bc-thematic-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0.35; z-index: 0; }
@@ -65,18 +66,18 @@
         .bc-stat-box b { font-size: 20px; color: var(--green); display: block; font-weight: 900; }
         .bc-stat-box small { font-size: 9px; color: #777; }
 
-        /* ACTION BUTTONS */
-        .bc-actions { display: flex; gap: 15px; margin-top: 25px; width: 330px; }
-        .bc-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; text-transform: uppercase; }
-        .btn-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
-        .btn-share { background: #fff; color: #000; }
-
-        /* NAV STYLES */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        /* 🟢 FIXED NAVIGATION (No more small buttons) */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
+        .nav-item { text-decoration: none; color: #666; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 20%; height: 100%; justify-content: center; }
         .nav-item.active { color: var(--neon); }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; }
+        .nav-item i { font-size: 22px; }
+        .nav-item span { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
+        
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -45px; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
+        .center-btn i { color: #000 !important; font-size: 24px; }
+        
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+
         #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 6000; padding: 20px; }
     </style>
 </head>
@@ -142,18 +143,13 @@
                     <div id="bcGender" class="bc-gender-txt">MALE</div>
                 </div>
                 <div class="bc-stats-row">
-                    <div class="bc-stat-box"><b id="bcKD">0.0</b><small>K/D</small></div>
-                    <div class="bc-stat-box"><b id="bcWin">0%</b><small>WIN RATE</small></div>
-                    <div class="bc-stat-box"><b id="bcTier">GOLD</b><small>TIER</small></div>
+                    <div class="bc-stat-box"><b id="bcKD">0.0</b><small>K/D Ratio</small></div>
+                    <div class="bc-stat-box"><b id="bcWin">0%</b><small>Win Rate</small></div>
+                    <div class="bc-stat-box"><b id="bcTier">GOLD</b><small>Rank Tier</small></div>
                 </div>
             </div>
         </div>
-        
-        <div class="bc-actions">
-            <button class="bc-btn btn-share" onclick="shareCard()"><i class="fas fa-share-alt"></i> Share</button>
-            <button class="bc-btn btn-insta" onclick="openInsta()"><i class="fab fa-instagram"></i> Add to Story</button>
-        </div>
-        <button onclick="closeBattleCard()" style="margin-top:20px; color:#555; background:none; border:none; font-weight:700;">CLOSE VIEW</button>
+        <button onclick="closeBattleCard()" style="margin-top:30px; background:rgba(255,255,255,0.1); border:1px solid #444; color:#fff; padding:12px 40px; border-radius:12px; font-weight:800; text-transform:uppercase;">Dismiss</button>
     </div>
 
     <div id="cropModal">
@@ -165,11 +161,28 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div></a>
-        <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>HOME</span>
+        </a>
+        <a href="earn.html" class="nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>EARN</span>
+        </a>
+        <a href="transfer.html" class="nav-item">
+            <div class="center-btn">
+                <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
+            </div>
+            <span style="margin-top: 5px;">SEND</span>
+        </a>
+        <a href="chat_list.html" class="nav-item">
+            <i class="fas fa-comments"></i>
+            <span>CHAT</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user-alt"></i>
+            <span>PROFILE</span>
+        </a>
     </nav>
     <div class="system-nav-bar"></div>
 
@@ -244,39 +257,6 @@
 
         function closeBattleCard() { document.getElementById('bcOverlay').style.display = 'none'; }
         function updateGender() { database.ref('players/' + userData.uid).update({ gender: document.getElementById('genderSelector').value }); }
-
-        // --- UPDATED SOCIAL LOGIC ---
-        function shareCard() {
-            const shareUrl = window.location.href;
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Rare Gaming Battle Card',
-                    text: `Check out my Esports Stats: K/D ${currentData.kd || '0.0'}`,
-                    url: shareUrl
-                }).catch(err => console.log('Share error:', err));
-            } else {
-                const dummy = document.createElement('input');
-                document.body.appendChild(dummy);
-                dummy.value = shareUrl;
-                dummy.select();
-                document.execCommand('copy');
-                document.body.removeChild(dummy);
-                alert("Link Copied! Ab aap kahin bhi share kar sakte hain.");
-            }
-        }
-
-        function openInsta() {
-            // Instagram Camera/Story Deep Link
-            const instaAppUrl = "instagram://camera";
-            window.location.href = instaAppUrl;
-            
-            // Backup logic: Agar 2 sec mein app nahi khula, toh browser pe bhej do
-            setTimeout(() => {
-                if (document.visibilityState === 'visible') {
-                    window.location.href = "https://www.instagram.com/";
-                }
-            }, 2000);
-        }
 
         // DP Logic
         let croppieInstance;
