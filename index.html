@@ -68,6 +68,7 @@
         .match-card { position: relative; border-radius: 15px; overflow: hidden; aspect-ratio: 1/1.2; background: #0a0a0f; border: 1px solid var(--border-color); text-decoration: none; }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
         .match-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 0 5px #000; text-transform: uppercase; }
+        .coming-soon-badge { position: absolute; top: 5px; right: 5px; background: #ff3131; color: white; font-size: 6px; font-weight: 800; padding: 2px 5px; border-radius: 4px; z-index: 2; }
 
         /* NAVIGATION */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
@@ -107,16 +108,24 @@
         <a href="match_details.html?type=CS" class="match-card"><img src="cs_poster.jpg"><div class="match-label">CS SQUAD</div></a>
         <a href="match_details.html?type=LW" class="match-card"><img src="lw_poster.jpg"><div class="match-label">LONE WOLF</div></a>
         <a href="match_details.html?type=1V1" class="match-card"><img src="1v1_poster.jpg"><div class="match-label">1V1 BATTLE</div></a>
+        <a href="match_details.html?type=LW2" class="match-card"><img src="lw2_poster.jpg"><div class="match-label">LONE WOLF 2.0</div></a>
         <a href="match_details.html?type=FREE" class="match-card"><img src="free_poster.jpg"><div class="match-label">FREE MATCH</div></a>
+        <a href="match_details.html?type=1V1HS" class="match-card"><img src="1v1hs_poster.jpg"><div class="match-label">1V1 HEADSHOT</div></a>
         <a href="match_details.html?type=CSHS" class="match-card"><img src="cshs_poster.jpg"><div class="match-label">CS HEADSHOT</div></a>
+
+        <div class="match-card" onclick="alert('BGMI Tournaments are coming soon!')" style="cursor: pointer;">
+            <div class="coming-soon-badge">COMING SOON</div>
+            <img src="https://i.imgur.com/8Qp2ZpX.jpeg" style="filter: grayscale(100%);">
+            <div class="match-label">BGMI MOBILE</div>
+        </div>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
         <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle"><i class="fas fa-exchange-alt" style="color: #000;"></i></div>
-            <span style="margin-top: 5px; color: #fff;">SEND</span>
+            <div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div>
+            <span style="margin-top:5px; color:#fff;">SEND</span>
         </a>
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
@@ -125,7 +134,6 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // 1. 🔥 FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -135,18 +143,13 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 2. 🛡️ AUTH CHECK
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if (!userData || !userData.uid) {
             window.location.href = "login.html";
         }
 
-        // 3. 🚀 LIVE BALANCE SYNC
         function startLiveDashboard() {
-            if (!userData.uid) return;
-            
             const balEl = document.getElementById('walletBal');
-            // Path: 'players/' + UID (Same as Profile)
             database.ref('players/' + userData.uid).on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
