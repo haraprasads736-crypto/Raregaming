@@ -3,119 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>My Profile - RARE GAMING</title>
+    <title>Dashboard - RARE GAMING</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-5695800911065486" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-        :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; --purple: #8B3EEB; }
         
-        * { box-sizing: border-box; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; overflow-x: hidden; background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%); }
+        :root {
+            --bg-color: #030305;
+            --neon-blue: #00f2fe;
+            --neon-green: #39ff14;
+            --panel-color: #0a0a0f;
+            --border-color: rgba(255, 255, 255, 0.05);
+        }
 
-        .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
+        body { 
+            background-color: var(--bg-color); color: white; 
+            font-family: 'Poppins', sans-serif; margin: 0; padding: 0; 
+            overflow-x: hidden; padding-bottom: 160px;
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
+        }
 
-        .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
-        .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: 0 auto 15px; cursor: pointer; }
-        #dpPreview { width: 90px; height: 90px; border-radius: 50%; border: 2.5px solid var(--neon); object-fit: cover; background: #111; }
-        .edit-badge { position: absolute; bottom: 2px; right: 2px; background: var(--neon); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11px; border: 2px solid var(--panel); }
+        /* HEADER */
+        .header-top { 
+            padding: 25px 20px 15px 20px; display: flex; 
+            justify-content: space-between; align-items: center;
+            position: sticky; top: 0; background: rgba(3, 3, 5, 0.9);
+            backdrop-filter: blur(10px); z-index: 999;
+        }
+        .brand-name { 
+            font-size: 22px; font-weight: 800; text-transform: uppercase; 
+            letter-spacing: 2px; background: linear-gradient(to right, #ffffff, #00f2fe);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .wallet-pill { 
+            background: rgba(0, 242, 254, 0.05); border: 1.5px solid var(--neon-blue); 
+            padding: 8px 15px; border-radius: 50px; color: var(--neon-blue); 
+            font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;
+            cursor: pointer;
+        }
 
-        .player-name { font-size: 20px; font-weight: 800; margin: 0; text-transform: uppercase; }
-        .player-uid { font-size: 12px; color: #666; font-weight: 700; margin-top: 5px; letter-spacing: 1px; }
+        /* MONEY BANNER */
+        .money-banner {
+            margin: 20px 20px 15px 20px; padding: 20px;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a2e1a 100%);
+            border-radius: 24px; border: 1px solid rgba(57, 255, 20, 0.2);
+            position: relative; overflow: hidden;
+        }
+        .money-tag { background: #39ff14; color: #000; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 50px; display: inline-block; margin-bottom: 10px; text-transform: uppercase; }
+        .money-title { font-size: 18px; font-weight: 800; margin: 0; color: #fff; }
+        .money-desc { font-size: 11px; color: #aaa; margin: 5px 0 15px 0; }
+        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
-        .about-box { margin: 0 20px 20px; padding: 15px; background: var(--panel); border-radius: 20px; border: 1px solid rgba(255,255,255,0.03); }
-        .about-box h3 { font-size: 10px; color: var(--neon); text-transform: uppercase; margin: 0 0 8px; letter-spacing: 1px; }
-        #aboutText { font-size: 13px; color: #bbb; margin: 0; line-height: 1.5; }
+        /* MATCH GRID */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 15px 20px; }
+        .section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-left: 4px solid var(--neon-blue); padding-left: 12px; }
+        .match-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 15px; }
+        .match-card { position: relative; border-radius: 15px; overflow: hidden; aspect-ratio: 1/1.2; background: #0a0a0f; border: 1px solid var(--border-color); text-decoration: none; }
+        .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .match-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 0 5px #000; text-transform: uppercase; }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
-        .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
-        .stat-label { font-size: 9px; color: #888; text-transform: uppercase; }
-        .stat-value { font-size: 18px; font-weight: 800; color: #fff; margin-top: 5px; }
-
-        .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
-        .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
-
-        .terms-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 11000; padding: 20px; }
-        .terms-card { background: #121212; width: 100%; max-width: 360px; max-height: 80vh; border-radius: 24px; border: 1px solid var(--purple); padding: 25px; overflow-y: auto; }
-        .close-btn { background: var(--purple); color: white; border: none; padding: 12px; width: 100%; border-radius: 12px; font-weight: 800; margin-top: 10px; cursor: pointer; }
-
-        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 12000; padding: 20px; }
-        .crop-btns { display: flex; gap: 10px; margin-top: 20px; }
-        .btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; }
-
+        /* NAVIGATION */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
-        .nav-item.active { color: var(--neon); }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;}
+        .nav-item.active { color: var(--neon-blue); }
+        .nav-item i { font-size: 20px; }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: #39ff14; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
 </head>
 <body>
 
-    <div class="header"><h2>Account Profile</h2></div>
-
-    <div class="profile-card">
-        <div class="avatar-wrapper" onclick="document.getElementById('uploadInput').click()">
-            <img id="dpPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-            <div class="edit-badge"><i class="fas fa-camera"></i></div>
-        </div>
-        <input type="file" id="uploadInput" style="display:none;" accept="image/*">
-        <p class="player-name" id="userName">PLAYER</p>
-        <p class="player-uid" id="userUID">UID: RGXXXXXX</p>
-    </div>
-
-    <div class="about-box">
-        <h3>About Me</h3>
-        <p id="aboutText">Rare Gaming Member | Esports Enthusiast</p>
-    </div>
-
-    <div class="stats-grid">
-        <div class="stat-box"><div class="stat-label">Total Cash</div><div class="stat-value" id="cashVal">₹0</div></div>
-        <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--gold);">0</div></div>
-    </div>
-
-    <div class="options-container">
-        <a href="earn.html" class="option-item"><i class="fas fa-wallet"></i> Wallet History</a>
-        <a href="transfer.html" class="option-item"><i class="fas fa-exchange-alt"></i> Transfer Records</a>
-        <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
-        <div class="option-item" onclick="openTerms()"><i class="fas fa-file-contract"></i> Terms & Conditions</div>
-        <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131; border-bottom:none;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
-    </div>
-
-    <div id="termsOverlay" class="terms-overlay">
-        <div class="terms-card">
-            <div class="terms-header"><span>Rules & Policy</span><i class="fas fa-times" onclick="closeTerms()" style="cursor:pointer;"></i></div>
-            <p style="font-size:12px; color:#ccc;">Level 40+ Match participation rules apply.</p>
-            <button class="close-btn" onclick="closeTerms()">I ACCEPT</button>
+    <div class="header-top">
+        <div class="brand-name">RARE GAMING</div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="wallet-pill" id="walletBal"><i class="fas fa-coins"></i> ₹--</div>
+            <div onclick="window.location.href='payment.html'" style="background: var(--neon-green); color: black; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <i class="fas fa-plus"></i>
+            </div>
         </div>
     </div>
 
-    <div id="cropModal">
-        <div id="cropContainer" style="height: 60vh;"></div>
-        <div class="crop-btns">
-            <button class="btn" style="background:#222; color:#fff;" onclick="closeCrop()">CANCEL</button>
-            <button class="btn" style="background:var(--neon); color:#000;" onclick="saveCrop()">DONE</button>
-        </div>
+    <div class="money-banner">
+        <div class="money-tag">Fast & Secure</div>
+        <p class="money-title">Transfer Earnings</p>
+        <p class="money-desc">Send money to your friends instantly.</p>
+        <button class="money-btn" onclick="location.href='transfer.html'">
+            <i class="fas fa-paper-plane"></i> Send Money Now
+        </button>
+    </div>
+
+    <div class="section-header">
+        <div class="section-title">Live Tournaments</div>
+    </div>
+    
+    <div class="match-grid">
+        <a href="match_details.html?type=BR" class="match-card"><img src="br_poster.jpg"><div class="match-label">BR SQUAD</div></a>
+        <a href="match_details.html?type=CS" class="match-card"><img src="cs_poster.jpg"><div class="match-label">CS SQUAD</div></a>
+        <a href="match_details.html?type=LW" class="match-card"><img src="lw_poster.jpg"><div class="match-label">LONE WOLF</div></a>
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="transfer.html" class="nav-item center-btn">
+            <div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div>
+            <span style="margin-top:5px; color:#fff;">SEND</span>
+        </a>
         <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
+
     <div class="system-nav-bar"></div>
 
     <script>
-        // 🏁 FIREBASE CONFIG (Rare Gaming)
+        // 1. 🔥 FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -125,66 +132,25 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Check Login
+        // 2. 🛡️ AUTH CHECK
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-        if(!userData) window.location.href = "login.html";
+        if (!userData || !userData.uid) {
+            window.location.href = "login.html";
+        }
 
-        // 🔥 LIVE DATA SYNC (UID Recognition & Balance display)
-        function loadProfileLive() {
-            // Path players/ UID ka dhyan rakhna (Index.html mein 'players/' use ho raha hai)
-            const userRef = database.ref('players/' + userData.uid);
-            
-            userRef.on('value', (snapshot) => {
+        // 3. 🚀 LIVE BALANCE SYNC
+        function startLiveDashboard() {
+            const balEl = document.getElementById('walletBal');
+            // Path checks 'players/' path for real-time wallet sync
+            database.ref('players/' + userData.uid).on('value', (snapshot) => {
                 const data = snapshot.val();
-                if(data) {
-                    document.getElementById('userName').innerText = data.name || userData.name;
-                    document.getElementById('userUID').innerText = "UID: " + (data.uid || userData.uid);
-                    document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
-                    document.getElementById('coinVal').innerText = (data.coins || 0);
-                    
-                    // About section update agar database mein hai
-                    if(data.about) document.getElementById('aboutText').innerText = data.about;
-                    
-                    // DP update from same path ya separate path (Database sync)
-                    if(data.dp) document.getElementById('dpPreview').src = data.dp;
+                if (data) {
+                    balEl.innerHTML = `<i class="fas fa-coins"></i> ₹${data.cash || 0}`;
                 }
             });
         }
 
-        // DP CROP LOGIC
-        let croppieInstance;
-        document.getElementById('uploadInput').onchange = function(e) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('cropModal').style.display = 'block';
-                if(croppieInstance) croppieInstance.destroy();
-                croppieInstance = new Croppie(document.getElementById('cropContainer'), {
-                    viewport: { width: 200, height: 200, type: 'circle' },
-                    boundary: { width: 300, height: 350 },
-                    showZoomer: true
-                });
-                croppieInstance.bind({ url: event.target.result });
-            };
-            reader.readAsDataURL(file);
-        };
-
-        function saveCrop() {
-            croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 } }).then(function(base64) {
-                // Same players path update
-                database.ref('players/' + userData.uid).update({ dp: base64 }).then(() => {
-                    document.getElementById('dpPreview').src = base64;
-                    closeCrop();
-                });
-            });
-        }
-
-        function openTerms() { document.getElementById('termsOverlay').style.display = 'flex'; }
-        function closeTerms() { document.getElementById('termsOverlay').style.display = 'none'; }
-        function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
-        function logout() { if(confirm("Logout karna chahte ho?")) { localStorage.clear(); window.location.href = "login.html"; } }
-
-        window.onload = loadProfileLive;
+        window.onload = startLiveDashboard;
     </script>
 </body>
 </html>
