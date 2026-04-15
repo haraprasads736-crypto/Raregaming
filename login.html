@@ -2,159 +2,204 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - RARE GAMING</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>My Profile - RARE GAMING</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        /* Tera purana CSS yahan rahega (No change) */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
-        body { background: linear-gradient(180deg, #1A0A2D 0%, #000000 100%); color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .login-box { width: 85%; max-width: 380px; text-align: center; padding: 20px; }
-        .logo-img { width: 140px; margin-bottom: 20px; filter: drop-shadow(0 0 10px #8B3EEB); border-radius: 20px; }
-        .welcome-text h2 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: 2px; color: #fff; }
-        .welcome-text p { font-size: 12px; color: #AAA; margin-bottom: 30px; }
-        .input-group { background: #2D1B44; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; padding: 12px 15px; border: 1px solid #443355; }
-        .input-group i { color: #8B3EEB; margin-right: 15px; font-size: 18px; }
-        input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 14px; }
-        .btn-main { width: 100%; padding: 15px; background: linear-gradient(90deg, #8B3EEB 0%, #6F24A5 100%); border: none; border-radius: 30px; color: white; font-weight: 800; cursor: pointer; margin-top: 10px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(139, 62, 235, 0.4); }
-        .btn-main:disabled { background: #444; box-shadow: none; }
-        .divider { margin: 25px 0; color: #555; font-size: 12px; position: relative; }
-        .divider::before, .divider::after { content: ""; position: absolute; top: 50%; width: 35%; height: 1px; background: #333; }
-        .divider::before { left: 0; } .divider::after { right: 0; }
-        .btn-google { width: 100%; padding: 12px; background: #FFF; border-radius: 30px; color: #000; font-weight: 600; border: none; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
-        .footer-links { margin-top: 20px; font-size: 13px; }
-        .footer-links span { color: #8B3EEB; font-weight: 700; cursor: pointer; }
-        #statusMsg { margin-top: 15px; font-size: 12px; font-weight: 600; min-height: 20px; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+        :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; --purple: #8B3EEB; }
+        
+        * { box-sizing: border-box; }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; overflow-x: hidden; background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%); }
+
+        .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
+
+        .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
+        .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: 0 auto 15px; cursor: pointer; }
+        #dpPreview { width: 90px; height: 90px; border-radius: 50%; border: 2.5px solid var(--neon); object-fit: cover; background: #111; }
+        .edit-badge { position: absolute; bottom: 2px; right: 2px; background: var(--neon); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11px; border: 2px solid var(--panel); }
+
+        .player-name { font-size: 20px; font-weight: 800; margin: 0; text-transform: uppercase; }
+        .player-uid { font-size: 12px; color: #666; font-weight: 700; margin-top: 5px; letter-spacing: 1px; }
+
+        .about-box { margin: 0 20px 20px; padding: 15px; background: var(--panel); border-radius: 20px; border: 1px solid rgba(255,255,255,0.03); }
+        .about-box h3 { font-size: 10px; color: var(--neon); text-transform: uppercase; margin: 0 0 8px; letter-spacing: 1px; }
+        #aboutText { font-size: 13px; color: #bbb; margin: 0; line-height: 1.5; }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
+        .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
+        .stat-label { font-size: 9px; color: #888; text-transform: uppercase; }
+        .stat-value { font-size: 18px; font-weight: 800; color: #fff; margin-top: 5px; }
+
+        .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
+
+        /* MODALS */
+        .terms-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 11000; padding: 20px; }
+        .terms-card { background: #121212; width: 100%; max-width: 360px; max-height: 80vh; border-radius: 24px; border: 1px solid var(--purple); padding: 25px; overflow-y: auto; }
+        .close-btn { background: var(--purple); color: white; border: none; padding: 12px; width: 100%; border-radius: 12px; font-weight: 800; margin-top: 10px; cursor: pointer; }
+
+        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 12000; padding: 20px; }
+        .crop-btns { display: flex; gap: 10px; margin-top: 20px; }
+        .btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; }
+
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        .nav-item.active { color: var(--neon); }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
 </head>
 <body>
 
-<div class="login-box">
-    <img src="logo.png" class="logo-img" alt="Rare Gaming" onerror="this.src='https://via.placeholder.com/140?text=LOGO'">
-    <div class="welcome-text">
-        <h2 id="title">WELCOME</h2>
-        <p id="subtitle">Convert your skill to money</p>
+    <div class="header"><h2>Account Profile</h2></div>
+
+    <div class="profile-card">
+        <div class="avatar-wrapper" onclick="document.getElementById('uploadInput').click()">
+            <img id="dpPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+            <div class="edit-badge"><i class="fas fa-camera"></i></div>
+        </div>
+        <input type="file" id="uploadInput" style="display:none;" accept="image/*">
+        <p class="player-name" id="userName">LOADING...</p>
+        <p class="player-uid" id="userUID">UID: --</p>
     </div>
-    <div class="input-group">
-        <i class="fas fa-user"></i>
-        <input type="text" id="userInput" placeholder="Username or Rare UID">
+
+    <div class="about-box">
+        <h3>About Me</h3>
+        <p id="aboutText">Rare Gaming Member | Esports Enthusiast</p>
     </div>
-    <div class="input-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="passInput" placeholder="Password">
+
+    <div class="stats-grid">
+        <div class="stat-box"><div class="stat-label">Total Cash</div><div class="stat-value" id="cashVal">₹--</div></div>
+        <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--gold);">--</div></div>
     </div>
-    <div style="text-align: right; margin-bottom: 20px;">
-        <span onclick="forgetPassword()" style="color: #888; font-size: 12px; cursor: pointer;">Forgot Password?</span>
+
+    <div class="options-container">
+        <a href="earn.html" class="option-item"><i class="fas fa-wallet"></i> Wallet History</a>
+        <a href="transfer.html" class="option-item"><i class="fas fa-exchange-alt"></i> Transfer Records</a>
+        <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
+        <div class="option-item" onclick="openTerms()"><i class="fas fa-file-contract"></i> Terms & Conditions</div>
+        <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131; border-bottom:none;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
     </div>
-    <button class="btn-main" id="authBtn" onclick="processAuth()">ENTER DASHBOARD</button>
-    <div class="divider">OR</div>
-    <button class="btn-google" onclick="signInWithGoogle()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18"> Continue with Google
-    </button>
-    <div class="footer-links">
-        <div id="toggleBtn" onclick="toggleMode()">New Player? <span>SIGN UP</span></div>
+
+    <div id="termsOverlay" class="terms-overlay">
+        <div class="terms-card">
+            <h4 style="color:var(--neon)">Rules & Policy</h4>
+            <p style="font-size:12px; color:#ccc;">Level 40+ Match participation rules apply.</p>
+            <button class="close-btn" onclick="closeTerms()">I ACCEPT</button>
+        </div>
     </div>
-    <div id="statusMsg"></div>
-</div>
 
-<script>
-    // 🏁 FIREBASE CONFIG
-    const firebaseConfig = {
-        apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
-        authDomain: "rare-gaming-b8875.firebaseapp.com",
-        projectId: "rare-gaming-b8875",
-        databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    <div id="cropModal">
+        <div id="cropContainer" style="height: 60vh;"></div>
+        <div class="crop-btns">
+            <button class="btn" style="background:#222; color:#fff;" onclick="closeCrop()">CANCEL</button>
+            <button class="btn" style="background:var(--neon); color:#000;" onclick="saveCrop()">DONE</button>
+        </div>
+    </div>
 
-    const scriptURL = "https://script.google.com/macros/s/AKfycbw3smBpQJocPYYE7bYsSpp171Cw_wPoQuBQ9MqWC5Criomvxo6bSJGay_FvnWL2778AaA/exec";
-    let isLoginMode = true;
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
+        <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
+    </nav>
+    <div class="system-nav-bar"></div>
 
-    window.onload = () => {
-        if(localStorage.getItem("rareGamingUser")) {
-            window.location.href = "index.html";
-        }
-    }
+    <script>
+        // 🏁 FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
+            authDomain: "rare-gaming-b8875.firebaseapp.com",
+            projectId: "rare-gaming-b8875",
+            databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-    function toggleMode() {
-        isLoginMode = !isLoginMode;
-        document.getElementById('title').innerText = isLoginMode ? "WELCOME" : "JOIN US";
-        document.getElementById('subtitle').innerText = isLoginMode ? "Convert your skill to money" : "Create an account to start earning";
-        document.getElementById('authBtn').innerText = isLoginMode ? "ENTER DASHBOARD" : "REGISTER NOW";
-        document.getElementById('toggleBtn').innerHTML = isLoginMode ? "New Player? <span>SIGN UP</span>" : "Already a Player? <span>LOGIN</span>";
-        document.getElementById('userInput').placeholder = isLoginMode ? "Username or Rare UID" : "Choose Username";
-    }
+        // 🛡️ AUTH CHECK (Fix: checking both keys just in case)
+        const userUID = localStorage.getItem("userUID");
+        const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
 
-    // 🚀 ASLI JADU: WALLET CHECK & SYNC
-    async function syncUserWallet(data) {
-        const playerRef = database.ref('players/' + data.uid);
-        const snapshot = await playerRef.once('value');
-        
-        if (!snapshot.exists()) {
-            // Agar user purana hai ya naya, aur wallet nahi hai, toh create karo
-            // Purane user ka balance Google Sheet se utha kar Firebase mein dalo
-            await playerRef.set({
-                name: data.name,
-                cash: parseFloat(data.coins || 0), // Google Sheet se aaya balance
-                uid: data.uid,
-                joinedMatches: 0
-            });
-            console.log("Firebase Wallet Created/Synced!");
-        }
-    }
-
-    async function processAuth() {
-        const user = document.getElementById('userInput').value.trim();
-        const pass = document.getElementById('passInput').value.trim();
-        const status = document.getElementById('statusMsg');
-        const btn = document.getElementById('authBtn');
-
-        if(!user || !pass) {
-            status.innerHTML = "<span style='color:#FF4D4D'>Dono box bharo, bhai!</span>";
-            return;
-        }
-
-        btn.disabled = true;
-        status.innerText = isLoginMode ? "Connecting to Arena..." : "Creating Account...";
-
-        try {
-            if (isLoginMode) {
-                const url = `${scriptURL}?action=login&username=${encodeURIComponent(user)}&pass=${encodeURIComponent(pass)}`;
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if(data.status === "Success") {
-                    // 💸 Yahan balance sync hoga
-                    await syncUserWallet(data);
-                    
-                    localStorage.setItem("rareGamingUser", JSON.stringify(data));
-                    localStorage.setItem("userUID", data.uid);
-                    status.innerHTML = "<span style='color:#00FF00'>Success! Entering Dashboard...</span>";
-                    setTimeout(() => window.location.href = "index.html", 800);
-                } else {
-                    status.innerHTML = `<span style='color:#FF4D4D'>${data.message}</span>`;
-                }
-            } else {
-                // Register logic (POST request)
-                const res = await fetch(scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: new URLSearchParams({'action': 'registerUser','name': user,'pass': pass})
-                });
-                alert("Account created! Now login.");
-                toggleMode();
+        function loadProfileLive() {
+            // Agar UID nahi hai toh wapas login pe bhejo
+            if(!userUID) {
+                window.location.href = "login.html";
+                return;
             }
-        } catch (err) {
-            status.innerHTML = "<span style='color:#FF4D4D'>Error! Check connection.</span>";
-        }
-        btn.disabled = false;
-    }
 
-    function signInWithGoogle() { alert("Google Login coming soon!"); }
-    function forgetPassword() { alert("Contact Guru Prasad for Reset!"); }
-</script>
+            // 🔥 LIVE SYNC FROM 'players/' PATH (Wahi path jo index.html mein hai)
+            const playerRef = database.ref('players/' + userUID);
+            
+            playerRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if(data) {
+                    document.getElementById('userName').innerText = data.name || (userData ? userData.name : "PLAYER");
+                    document.getElementById('userUID').innerText = "UID: " + userUID;
+                    document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
+                    document.getElementById('coinVal').innerText = (data.coins || 0);
+                    
+                    // Profile Picture Sync
+                    if(data.dp) {
+                        document.getElementById('dpPreview').src = data.dp;
+                    }
+                    // About Sync
+                    if(data.about) {
+                        document.getElementById('aboutText').innerText = data.about;
+                    }
+                }
+            });
+        }
+
+        // DP CROP LOGIC
+        let croppieInstance;
+        document.getElementById('uploadInput').onchange = function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('cropModal').style.display = 'block';
+                if(croppieInstance) croppieInstance.destroy();
+                croppieInstance = new Croppie(document.getElementById('cropContainer'), {
+                    viewport: { width: 200, height: 200, type: 'circle' },
+                    boundary: { width: 300, height: 350 },
+                    showZoomer: true
+                });
+                croppieInstance.bind({ url: event.target.result });
+            };
+            reader.readAsDataURL(file);
+        };
+
+        function saveCrop() {
+            croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 } }).then(function(base64) {
+                // Save DP back to 'players/' path
+                database.ref('players/' + userUID).update({ dp: base64 }).then(() => {
+                    document.getElementById('dpPreview').src = base64;
+                    closeCrop();
+                });
+            });
+        }
+
+        function openTerms() { document.getElementById('termsOverlay').style.display = 'flex'; }
+        function closeTerms() { document.getElementById('termsOverlay').style.display = 'none'; }
+        function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
+        
+        function logout() { 
+            if(confirm("Logout karna chahte ho?")) { 
+                localStorage.clear(); 
+                window.location.href = "login.html"; 
+            } 
+        }
+
+        window.onload = loadProfileLive;
+    </script>
 </body>
 </html>
