@@ -21,7 +21,7 @@
         .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
 
-        /* PROFILE CARD */
+        /* PROFILE CARD MAIN */
         .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; position: relative; }
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; cursor: pointer; }
         #dpPreview { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--neon); object-fit: cover; background: #111; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
@@ -36,53 +36,43 @@
         .gender-select-box { margin-top: 8px; }
         #genderSelector { background: #111; color: var(--neon); border: 1px solid #333; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 700; outline: none; cursor: pointer; text-transform: uppercase; }
 
-        /* BATTLE CARD TRIGGER BUTTON */
         .battlecard-trigger { margin: 10px 20px 20px; background: linear-gradient(90deg, #1a1a2e, #0a0a0f); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
-        .battlecard-trigger:active { transform: scale(0.95); }
-        .battlecard-trigger i { color: var(--gold); font-size: 20px; }
-
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
         .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
         .stat-label { font-size: 9px; color: #888; text-transform: uppercase; }
         .stat-value { font-size: 18px; font-weight: 800; color: #fff; margin-top: 5px; }
 
-        .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
-        .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
+        /* --- PROFESSIONAL BATTLE CARD OVERLAY --- */
+        #bcOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 5000; align-items: center; justify-content: center; flex-direction: column; backdrop-filter: blur(12px); }
+        .bc-container { position: relative; width: 330px; height: 500px; perspective: 1200px; }
+        .bc-card { width: 100%; height: 100%; background: #000; border: 2.5px solid var(--gold); border-radius: 30px; display: flex; flex-direction: column; align-items: center; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.5); transition: 0.1s; transform-style: preserve-3d; }
+        
+        .bc-thematic-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0.35; z-index: 0; }
+        
+        .bc-header { width: 100%; padding: 25px; display: flex; justify-content: space-between; align-items: flex-start; z-index: 2; }
+        .bc-tag { background: var(--gold); color: #000; padding: 3px 12px; border-radius: 4px; font-weight: 900; font-size: 10px; letter-spacing: 1px; }
 
-        /* --- 3D BATTLE CARD OVERLAY --- */
-        #bcOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; flex-direction: column; backdrop-filter: blur(10px); }
-        .bc-container { position: relative; width: 320px; height: 480px; perspective: 1000px; }
-        .bc-card { width: 100%; height: 100%; background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%); border: 3px solid var(--gold); border-radius: 25px; display: flex; flex-direction: column; align-items: center; overflow: hidden; box-shadow: 0 0 30px rgba(255,215,0,0.2); transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1); transform-style: preserve-3d; }
-        
-        /* THEMATIC BACKGROUND (Male/Female PNGs) */
-        .bc-thematic-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0.15; z-index: 0; filter: grayscale(1); }
-        
-        .bc-header { width: 100%; padding: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 2; }
-        .bc-avatar-wrap { position: relative; width: 130px; height: 130px; margin-top: 10px; z-index: 2; }
-        .bc-avatar { width: 100%; height: 100%; border-radius: 50%; border: 4px solid #fff; object-fit: cover; }
-        .bc-pulse-ring { position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px; border: 3px solid var(--neon); border-radius: 50%; animation: pulse 2s infinite; }
-        
-        .bc-name-row { display: flex; align-items: center; gap: 8px; margin-top: 15px; z-index: 2; }
-        .bc-name { font-size: 24px; font-weight: 900; color: #fff; text-transform: uppercase; margin: 0; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
-        .bc-verify-icon { color: var(--neon); display: none; font-size: 18px; }
-        .bc-gender-txt { font-size: 12px; font-weight: 700; color: #888; margin-top: 5px; letter-spacing: 2px; z-index: 2; }
+        /* Small Professional Avatar Top Right */
+        .bc-avatar-mini { width: 60px; height: 60px; border-radius: 12px; border: 2px solid #fff; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
 
-        .bc-stats-row { width: 100%; background: rgba(255,255,255,0.03); display: flex; justify-content: space-around; padding: 20px 0; margin-top: auto; border-top: 1px solid rgba(255,215,0,0.2); backdrop-filter: blur(5px); z-index: 2; }
+        /* Name and Gender shifted to Bottom */
+        .bc-bottom-info { width: 100%; margin-top: auto; padding: 0 25px; z-index: 2; text-align: left; }
+        .bc-name-row { display: flex; align-items: center; gap: 10px; }
+        .bc-name { font-size: 28px; font-weight: 900; color: #fff; text-transform: uppercase; margin: 0; letter-spacing: 1px; }
+        .bc-verify-icon { font-size: 20px; }
+        .bc-gender-txt { font-size: 12px; font-weight: 700; letter-spacing: 3px; margin: 5px 0 15px; }
+
+        .bc-stats-row { width: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: space-around; padding: 20px 0; border-top: 1px solid rgba(255,215,0,0.3); z-index: 2; }
         .bc-stat-box { text-align: center; }
-        .bc-stat-box b { font-size: 18px; color: var(--green); display: block; }
-        .bc-stat-box small { font-size: 10px; color: #aaa; }
+        .bc-stat-box b { font-size: 20px; color: var(--green); display: block; font-weight: 900; }
+        .bc-stat-box small { font-size: 9px; color: #777; font-weight: 700; text-transform: uppercase; }
 
-        /* NAVIGATION FIXED */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
+        /* BOTTOM NAV STYLING */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
         .nav-item.active { color: var(--neon); }
-        .nav-item i { font-size: 20px; }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
-        .center-btn i { color: #000 !important; font-size: 22px; }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; }
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
-
-        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 6000; padding: 20px; }
     </style>
 </head>
 <body>
@@ -98,12 +88,10 @@
             </div>
         </div>
         <input type="file" id="uploadInput" style="display:none;" accept="image/*">
-        
         <div class="name-container">
             <p class="player-name" id="userName">PLAYER</p>
             <i class="fas fa-check-circle verified-badge" id="vBadge"></i>
         </div>
-
         <div class="gender-select-box">
             <select id="genderSelector" onchange="updateGender()">
                 <option value="Male">♂ MALE</option>
@@ -115,13 +103,10 @@
 
     <div class="battlecard-trigger" onclick="openBattleCard()">
         <div style="display:flex; align-items:center; gap:12px;">
-            <i class="fas fa-id-card"></i>
-            <div>
-                <b style="display:block; font-size:14px;">My Battle Card</b>
-                <small style="color:#666;">View 3D Esports Card</small>
-            </div>
+            <i class="fas fa-id-card" style="color:var(--gold);"></i>
+            <div><b style="font-size:14px;">View Battle Card</b><br><small style="color:#666;">Pro Esports ID</small></div>
         </div>
-        <i class="fas fa-chevron-right" style="font-size:14px; opacity:0.3;"></i>
+        <i class="fas fa-chevron-right" style="color:#333;"></i>
     </div>
 
     <div class="stats-grid">
@@ -129,39 +114,35 @@
         <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--gold);">0</div></div>
     </div>
 
-    <div class="options-container">
-        <a href="earn.html" class="option-item"><i class="fas fa-wallet"></i> Wallet History</a>
-        <a href="transfer.html" class="option-item"><i class="fas fa-exchange-alt"></i> Transfer Records</a>
-        <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
-        <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
-    </div>
-
     <div id="bcOverlay">
         <div class="bc-container">
             <div id="bcCard" class="bc-card">
                 <div id="bcThematicBg" class="bc-thematic-bg"></div>
-
+                
                 <div class="bc-header">
-                    <b style="color:var(--gold);">RARE GAMING</b>
-                    <span style="background:var(--gold); color:#000; padding:2px 10px; border-radius:50px; font-weight:900; font-size:10px;">LEGEND</span>
+                    <div>
+                        <b style="color:#fff; display:block; font-size:14px;">RARE GAMING</b>
+                        <span class="bc-tag">LEGEND</span>
+                    </div>
+                    <img id="bcAvatar" src="" class="bc-avatar-mini">
                 </div>
-                <div class="bc-avatar-wrap">
-                    <img id="bcAvatar" src="" class="bc-avatar">
-                    <div id="bcPulse" class="bc-pulse-ring"></div>
+
+                <div class="bc-bottom-info">
+                    <div class="bc-name-row">
+                        <h2 class="bc-name" id="bcName">--</h2>
+                        <i class="fas fa-check-circle bc-verify-icon" id="bcVerify"></i>
+                    </div>
+                    <div id="bcGender" class="bc-gender-txt">MALE</div>
                 </div>
-                <div class="bc-name-row">
-                    <h2 class="bc-name" id="bcName">--</h2>
-                    <i class="fas fa-check-circle bc-verify-icon" id="bcVerify"></i>
-                </div>
-                <div id="bcGender" class="bc-gender-txt">MALE</div>
+
                 <div class="bc-stats-row">
-                    <div class="bc-stat-box"><b id="bcKD">0.0</b><small>K/D</small></div>
-                    <div class="bc-stat-box"><b id="bcWin">0%</b><small>WIN RATE</small></div>
-                    <div class="bc-stat-box"><b id="bcTier">GOLD</b><small>TIER</small></div>
+                    <div class="bc-stat-box"><b id="bcKD">0.0</b><small>K/D Ratio</small></div>
+                    <div class="bc-stat-box"><b id="bcWin">0%</b><small>Win Rate</small></div>
+                    <div class="bc-stat-box"><b id="bcTier">GOLD</b><small>Rank Tier</small></div>
                 </div>
             </div>
         </div>
-        <button onclick="closeBattleCard()" style="margin-top:25px; background:none; border:2px solid #444; color:#fff; padding:8px 30px; border-radius:50px; font-weight:700;">CLOSE</button>
+        <button onclick="closeBattleCard()" style="margin-top:30px; background:rgba(255,255,255,0.1); border:1px solid #444; color:#fff; padding:12px 40px; border-radius:12px; font-weight:800; text-transform:uppercase;">Dismiss</button>
     </div>
 
     <nav class="bottom-nav">
@@ -187,10 +168,6 @@
 
         let currentData = {};
 
-        // PNG Background URLs
-        const malePng = "image_7.png"; // Gojo PNG
-        const femalePng = "image_8.png"; // Anime Girl PNG
-
         function loadProfileLive() {
             database.ref('players/' + userData.uid).on('value', (snap) => {
                 const data = snap.val();
@@ -209,92 +186,45 @@
 
         function openBattleCard() {
             const d = currentData;
-            const bcOverlay = document.getElementById('bcOverlay');
             const bcCard = document.getElementById('bcCard');
             const bcThematicBg = document.getElementById('bcThematicBg');
-            const bcPulse = document.getElementById('bcPulse');
             const bcGender = document.getElementById('bcGender');
             const bcVerify = document.getElementById('bcVerify');
 
-            // Set Static Data
             document.getElementById('bcName').innerText = d.name || "PLAYER";
             document.getElementById('bcAvatar').src = d.dp || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
             document.getElementById('bcKD').innerText = d.kd || "0.0";
             document.getElementById('bcWin').innerText = (d.winRate || "0") + "%";
             document.getElementById('bcTier').innerText = d.tier || "BRONZE";
             
-            // Gender Thematic Logic
             const gender = d.gender || "Male";
             bcGender.innerText = gender.toUpperCase();
 
             if(gender === "Female") {
-                // Female Style (Pink & Female PNG)
-                bcThematicBg.style.backgroundImage = `url(${femalePng})`;
+                bcThematicBg.style.backgroundImage = "url('image_8.png')";
                 bcGender.style.color = "var(--pink)";
-                bcPulse.style.borderColor = "var(--pink)";
                 bcVerify.style.color = "var(--pink)";
-                bcCard.style.boxShadow = "0 0 40px rgba(255, 0, 127, 0.25)";
+                bcCard.style.borderColor = "var(--pink)";
             } else {
-                // Male Style (Neon Blue & Male PNG)
-                bcThematicBg.style.backgroundImage = `url(${malePng})`;
+                bcThematicBg.style.backgroundImage = "url('image_7.png')";
                 bcGender.style.color = "var(--neon)";
-                bcPulse.style.borderColor = "var(--neon)";
                 bcVerify.style.color = "var(--neon)";
-                bcCard.style.boxShadow = "0 0 40px rgba(0, 242, 254, 0.25)";
+                bcCard.style.borderColor = "var(--gold)";
             }
 
-            // Verification Check
             bcVerify.style.display = d.isVerified ? "block" : "none";
+            document.getElementById('bcOverlay').style.display = 'flex';
 
-            // Open Overlay
-            bcOverlay.style.display = 'flex';
-
-            // Add 3D Tilt Effect on Hover
-            bcOverlay.addEventListener('mousemove', (e) => {
-                const bcRect = bcCard.getBoundingClientRect();
-                const xAxis = (bcRect.left + bcRect.width / 2 - e.clientX) / 15;
-                const yAxis = (bcRect.top + bcRect.height / 2 - e.clientY) / 15;
-                bcCard.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateY(-10px)`;
-            });
-
-            bcOverlay.addEventListener('mouseleave', () => {
-                bcCard.style.transform = "rotateY(0deg) rotateX(0deg) translateY(0)";
-            });
+            document.getElementById('bcOverlay').onmousemove = (e) => {
+                const rect = bcCard.getBoundingClientRect();
+                const x = (rect.left + rect.width/2 - e.clientX) / 20;
+                const y = (rect.top + rect.height/2 - e.clientY) / 20;
+                bcCard.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+            };
         }
 
         function closeBattleCard() { document.getElementById('bcOverlay').style.display = 'none'; }
-        
-        function updateGender() {
-            const g = document.getElementById('genderSelector').value;
-            database.ref('players/' + userData.uid).update({ gender: g });
-        }
-
-        // Standard DP Logic
-        let croppieInstance;
-        document.getElementById('uploadInput').onchange = function(e) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('cropModal').style.display = 'block';
-                if(croppieInstance) croppieInstance.destroy();
-                croppieInstance = new Croppie(document.getElementById('cropContainer'), {
-                    viewport: { width: 200, height: 200, type: 'circle' },
-                    boundary: { width: 300, height: 350 },
-                    showZoomer: true
-                });
-                croppieInstance.bind({ url: event.target.result });
-            };
-            reader.readAsDataURL(file);
-        };
-        function saveCrop() {
-            croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 } }).then(b64 => {
-                database.ref('players/' + userData.uid).update({ dp: b64 }).then(() => {
-                    document.getElementById('dpPreview').src = b64;
-                    document.getElementById('cropModal').style.display = 'none';
-                });
-            });
-        }
-        function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
+        function updateGender() { database.ref('players/' + userData.uid).update({ gender: document.getElementById('genderSelector').value }); }
         function logout() { if(confirm("Logout?")) { localStorage.clear(); window.location.href="login.html"; } }
 
         window.onload = loadProfileLive;
