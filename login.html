@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RARE GAMING - Unified Login</title>
+    <title>RARE GAMING - Final Login Fix</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -75,46 +75,40 @@
 
             let foundUser = null;
 
-            // 1. Sabse pehle UID se check karo (Direct path: players/RG...)
+            // 1. UID Check (Direct node: players/RG639031)
             const uidSnap = await database.ref('players/' + inputId).once('value');
             if(uidSnap.exists()) {
-                const data = uidSnap.val();
+                let data = uidSnap.val();
                 if(String(data.pass) === String(inputPass)) {
                     foundUser = data;
                 }
             }
 
-            // 2. Agar UID se nahi mila, toh Phone Number se search karo
+            // 2. Phone Search (Loop laga diya taaki purani ID miss na ho)
             if(!foundUser) {
                 const phoneSnap = await database.ref('players').orderByChild('phone').equalTo(inputId).once('value');
-                if(phoneSnap.exists()) {
-                    const snapVal = phoneSnap.val();
-                    const key = Object.keys(snapVal)[0];
-                    if(String(snapVal[key].pass) === String(inputPass)) {
-                        foundUser = snapVal[key];
-                    }
-                }
+                phoneSnap.forEach((child) => {
+                    let data = child.val();
+                    if(String(data.pass) === String(inputPass)) foundUser = data;
+                });
             }
 
-            // 3. Agar abhi bhi nahi mila, toh Email se search karo (Purane users)
+            // 3. Email Search (Purane users ke liye loop)
             if(!foundUser) {
                 const emailSnap = await database.ref('players').orderByChild('email').equalTo(inputId).once('value');
-                if(emailSnap.exists()) {
-                    const snapVal = emailSnap.val();
-                    const key = Object.keys(snapVal)[0];
-                    if(String(snapVal[key].pass) === String(inputPass)) {
-                        foundUser = snapVal[key];
-                    }
-                }
+                emailSnap.forEach((child) => {
+                    let data = child.val();
+                    if(String(data.pass) === String(inputPass)) foundUser = data;
+                });
             }
 
-            // --- Authentication Check ---
+            // --- Login Result ---
             if(foundUser) {
                 localStorage.setItem("rareGamingUser", JSON.stringify(foundUser));
                 alert("Welcome back, " + foundUser.name + "!");
                 window.location.href = "index.html";
             } else {
-                alert("Login Fail! ❌\nSahi UID (RG...) aur Password check karein.");
+                alert("Login Fail! ❌\nSahi UID aur Password dalo.");
             }
         }
 
@@ -124,24 +118,18 @@
             const uid = document.getElementById('sUID').value.trim();
             const pass = document.getElementById('sPass').value.trim();
 
-            if(!name || !phone || !uid || !pass) return alert("Bhai, saare dabbe bharo!");
+            if(!name || !phone || !uid || !pass) return alert("Pura form bharo!");
 
-            // Check if UID exists
             const checkUid = await database.ref('players/' + uid).once('value');
-            if(checkUid.exists()) return alert("Ye UID pehle se hai, kuch aur try karo!");
+            if(checkUid.exists()) return alert("Ye UID pehle se hai!");
 
             const userData = {
-                name: name,
-                phone: phone,
-                uid: uid,
-                pass: pass,
-                cash: 0,
-                coins: 0,
-                dp: ""
+                name: name, phone: phone, uid: uid, pass: pass,
+                cash: 0, coins: 0, dp: ""
             };
 
             await database.ref('players/' + uid).set(userData);
-            alert("Account Ban Gaya! ✅ Ab Login Karo.");
+            alert("Account Ban Gaya! ✅");
             showSection('login');
         }
     </script>
