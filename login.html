@@ -3,135 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RARE GAMING - Final Login Fix</title>
+    <title>RG ADMIN PRO - FINAL</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        :root { --neon: #00f2fe; --gold: #ffd700; --bg: #030305; --panel: #0a0a0f; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .auth-card { width: 90%; max-width: 400px; background: var(--panel); padding: 30px; border-radius: 24px; border: 1px solid #1a1a2e; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        h2 { text-align: center; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
-        .input-group { margin-bottom: 15px; }
-        input { width: 100%; padding: 12px; background: #000; border: 1px solid #222; border-radius: 12px; color: white; outline: none; box-sizing: border-box; }
-        input:focus { border-color: var(--neon); }
-        .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
-        .btn-primary { background: var(--neon); color: #000; }
-        .toggle-txt { text-align: center; font-size: 13px; color: #888; margin-top: 20px; cursor: pointer; }
-        .hidden { display: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+        body { background: #030305; color: white; font-family: 'Poppins', sans-serif; padding: 15px; margin: 0; }
+        .admin-box { max-width: 600px; margin: auto; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { flex: 1; min-width: 90px; padding: 12px; border-radius: 12px; border: none; background: #1a1a2e; color: #888; font-weight: 700; font-size: 10px; cursor: pointer; transition: 0.3s; white-space: nowrap; text-transform: uppercase; }
+        .tab-btn.active { background: #00f2fe; color: #000; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+        .card { background: #0a0a0f; padding: 20px; border-radius: 24px; border: 1px solid #1a1a2e; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card.active { display: block; animation: fadeIn 0.4s ease; }
+        h3 { margin-top: 0; font-size: 18px; color: #ffd700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #1a1a2e; padding-bottom: 10px; margin-bottom: 15px; }
+        input { width: 100%; background: #111; border: 1px solid #222; padding: 12px; border-radius: 12px; color: white; outline: none; font-size: 13px; box-sizing: border-box; margin-bottom: 10px; }
+        .btn-post { width: 100%; background: #39ff14; color: #000; border: none; padding: 16px; border-radius: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .list-container { max-height: 450px; overflow-y: auto; background: #050505; border-radius: 15px; padding: 5px; border: 1px solid #111; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: #00f2fe; padding: 12px 10px; font-size: 10px; text-transform: uppercase; border-bottom: 1px solid #222; }
+        td { padding: 12px 10px; border-bottom: 1px solid #111; font-size: 11px; }
+        .pass-text { color: #ffd700; font-weight: 600; font-family: monospace; background: #1a1a2e; padding: 3px 6px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
-    <div class="auth-card">
-        <h2 id="formTitle">Login</h2>
+<div class="admin-box">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('allUsersTab', this)">Users List</button>
+        <button class="tab-btn" onclick="switchTab('userTab', this)">Add User</button>
+    </div>
 
-        <div id="loginForm">
-            <div class="input-group">
-                <input type="text" id="loginId" placeholder="UID (RG...), Phone or Email">
-            </div>
-            <div class="input-group">
-                <input type="password" id="loginPass" placeholder="Enter Password">
-            </div>
-            <button class="btn btn-primary" onclick="handleLogin()">Login Now</button>
-            <p class="toggle-txt" onclick="showSection('signup')">New here? Create Account</p>
-        </div>
-
-        <div id="signupForm" class="hidden">
-            <input type="text" id="sName" placeholder="Full Name" style="margin-bottom:12px;">
-            <input type="number" id="sPhone" placeholder="Phone Number" style="margin-bottom:12px;">
-            <input type="text" id="sUID" placeholder="Create UID (Example: RG123)" style="margin-bottom:12px;">
-            <input type="password" id="sPass" placeholder="Set Password" style="margin-bottom:12px;">
-            <button class="btn btn-primary" onclick="handleSignup()">Create Account</button>
-            <p class="toggle-txt" onclick="showSection('login')">Already have an account? Login</p>
+    <div id="allUsersTab" class="card active">
+        <h3>👥 All Players Data</h3>
+        <input type="text" id="userSearch" placeholder="Search by Name, UID or Phone..." onkeyup="filterUsers()">
+        <div class="list-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Player Info</th>
+                        <th>Password</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody id="allUsersList"></tbody>
+            </table>
         </div>
     </div>
 
-    <script>
-        // --- Firebase Config ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
-            authDomain: "rare-gaming-b8875.firebaseapp.com",
-            projectId: "rare-gaming-b8875",
-            databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+    <div id="userTab" class="card">
+        <h3>👤 Manual Entry</h3>
+        <input type="text" id="u_name" placeholder="Name">
+        <input type="text" id="u_pass" placeholder="Password">
+        <input type="number" id="u_cash" placeholder="Cash Balance">
+        <input type="text" id="u_uid" placeholder="Rare UID">
+        <button class="btn-post" style="background:#ff3131; color:white;" onclick="manualUser()">Save User 📥</button>
+    </div>
+</div>
 
-        function showSection(type) {
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('signupForm').classList.add('hidden');
-            if(type === 'login') { document.getElementById('loginForm').classList.remove('hidden'); document.getElementById('formTitle').innerText = "Login"; }
-            if(type === 'signup') { document.getElementById('signupForm').classList.remove('hidden'); document.getElementById('formTitle').innerText = "Signup"; }
-        }
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
+        authDomain: "rare-gaming-b8875.firebaseapp.com",
+        projectId: "rare-gaming-b8875",
+        databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-        async function handleLogin() {
-            const inputId = document.getElementById('loginId').value.trim();
-            const inputPass = document.getElementById('loginPass').value.trim();
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+        if(tabId === 'allUsersTab') loadAllUsers();
+    }
 
-            if(!inputId || !inputPass) return alert("Bhai, ID aur Password dono dalo!");
+    // 🔥 SUPER SEARCHER LOAD FUNCTION
+    function loadAllUsers() {
+        const list = document.getElementById('allUsersList');
+        database.ref('players').on('value', (snap) => {
+            const data = snap.val();
+            list.innerHTML = "";
+            if(!data) return;
 
-            let foundUser = null;
+            Object.keys(data).forEach(uid => {
+                const p = data[uid];
+                // Check both possible password fields
+                let userPass = p.pass || p.password || "N/A";
+                let contact = p.phone || p.email || "No Contact";
 
-            // 1. UID Check (Direct node: players/RG639031)
-            const uidSnap = await database.ref('players/' + inputId).once('value');
-            if(uidSnap.exists()) {
-                let data = uidSnap.val();
-                if(String(data.pass) === String(inputPass)) {
-                    foundUser = data;
-                }
-            }
+                list.innerHTML += `
+                    <tr class="user-row">
+                        <td>
+                            <b style="font-size:12px;">${p.name || 'User'}</b>
+                            <span style="color:#00f2fe; display:block; font-size:9px;">UID: ${uid}</span>
+                            <span style="color:#555; display:block; font-size:9px;">${contact}</span>
+                        </td>
+                        <td><span class="pass-text">${userPass}</span></td>
+                        <td style="color:#39ff14; font-weight:700;">₹${p.cash || 0}</td>
+                    </tr>`;
+            });
+        });
+    }
 
-            // 2. Phone Search (Loop laga diya taaki purani ID miss na ho)
-            if(!foundUser) {
-                const phoneSnap = await database.ref('players').orderByChild('phone').equalTo(inputId).once('value');
-                phoneSnap.forEach((child) => {
-                    let data = child.val();
-                    if(String(data.pass) === String(inputPass)) foundUser = data;
-                });
-            }
+    function filterUsers() {
+        let input = document.getElementById('userSearch').value.toLowerCase();
+        let rows = document.querySelectorAll('.user-row');
+        rows.forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
+        });
+    }
 
-            // 3. Email Search (Purane users ke liye loop)
-            if(!foundUser) {
-                const emailSnap = await database.ref('players').orderByChild('email').equalTo(inputId).once('value');
-                emailSnap.forEach((child) => {
-                    let data = child.val();
-                    if(String(data.pass) === String(inputPass)) foundUser = data;
-                });
-            }
+    function manualUser() {
+        const uid = document.getElementById('u_uid').value;
+        if(!uid) return alert("UID required");
+        database.ref('players/' + uid).set({
+            name: document.getElementById('u_name').value, 
+            pass: document.getElementById('u_pass').value,
+            cash: parseFloat(document.getElementById('u_cash').value || 0), 
+            uid: uid
+        }).then(() => alert("User Saved!"));
+    }
 
-            // --- Login Result ---
-            if(foundUser) {
-                localStorage.setItem("rareGamingUser", JSON.stringify(foundUser));
-                alert("Welcome back, " + foundUser.name + "!");
-                window.location.href = "index.html";
-            } else {
-                alert("Login Fail! ❌\nSahi UID aur Password dalo.");
-            }
-        }
-
-        async function handleSignup() {
-            const name = document.getElementById('sName').value.trim();
-            const phone = document.getElementById('sPhone').value.trim();
-            const uid = document.getElementById('sUID').value.trim();
-            const pass = document.getElementById('sPass').value.trim();
-
-            if(!name || !phone || !uid || !pass) return alert("Pura form bharo!");
-
-            const checkUid = await database.ref('players/' + uid).once('value');
-            if(checkUid.exists()) return alert("Ye UID pehle se hai!");
-
-            const userData = {
-                name: name, phone: phone, uid: uid, pass: pass,
-                cash: 0, coins: 0, dp: ""
-            };
-
-            await database.ref('players/' + uid).set(userData);
-            alert("Account Ban Gaya! ✅");
-            showSection('login');
-        }
-    </script>
+    // Auto load on start
+    loadAllUsers();
+</script>
 </body>
 </html>
