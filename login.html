@@ -83,8 +83,8 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         
-        // ❗ EMAILJS INITIALIZE
-        emailjs.init("YOUR_PUBLIC_KEY"); 
+        // 🔥 PUBLIC KEY UPDATED BY GEMINI
+        emailjs.init("PE_OAn6p8-wU5j8oF"); 
 
         let generatedOTP = null;
 
@@ -99,13 +99,14 @@
 
         // 📧 SEND OTP (Signup)
         function sendVerificationCode() {
-            const email = document.getElementById('sEmail').value;
-            const name = document.getElementById('sName').value;
+            const email = document.getElementById('sEmail').value.trim();
+            const name = document.getElementById('sName').value.trim();
             if(!email.includes("@gmail.com") || !name) return alert("Pehle Name aur Sahi Gmail dalo!");
             
             generatedOTP = Math.floor(100000 + Math.random() * 900000);
             const btn = document.getElementById('sendOtpBtn');
             btn.innerText = "Sending...";
+            btn.disabled = true;
 
             emailjs.send("service_yh1lf0p", "template_2883fpo", {
                 to_email: email,
@@ -115,6 +116,12 @@
                 alert("Signup OTP sent to your Gmail! ✅");
                 document.getElementById('otpSection').classList.remove('hidden');
                 btn.innerText = "OTP Sent";
+                btn.disabled = false;
+            }).catch((err) => {
+                alert("Error sending OTP. Make sure EmailJS is connected properly.");
+                btn.innerText = "Verify Gmail";
+                btn.disabled = false;
+                console.log(err);
             });
         }
 
@@ -162,7 +169,8 @@
             if(!code) return;
             const snap = await database.ref('players').orderByChild('uid').equalTo(code).once('value');
             if(snap.exists()) {
-                document.getElementById('referStatus').innerText = "✅ Valid Code (Rare User)";
+                const referrer = Object.values(snap.val())[0];
+                document.getElementById('referStatus').innerText = "✅ Valid Code: " + referrer.name;
                 document.getElementById('referStatus').style.color = "#39ff14";
             } else {
                 document.getElementById('referStatus').innerText = "❌ Invalid Referral Code";
@@ -172,13 +180,13 @@
 
         // 📝 SIGNUP LOGIC
         async function handleSignup() {
-            const name = document.getElementById('sName').value;
-            const email = document.getElementById('sEmail').value;
-            const uid = document.getElementById('sUID').value;
+            const name = document.getElementById('sName').value.trim();
+            const email = document.getElementById('sEmail').value.trim();
+            const uid = document.getElementById('sUID').value.trim();
             const pass = document.getElementById('sPass').value;
             const otp = document.getElementById('sOtp').value;
 
-            if(otp != generatedOTP) return alert("OTP galat hai!");
+            if(!generatedOTP || otp != generatedOTP) return alert("OTP galat hai!");
 
             const emailSnap = await database.ref('players').orderByChild('email').equalTo(email).once('value');
             const uidSnap = await database.ref('players/' + uid).once('value');
@@ -193,20 +201,27 @@
             showSection('login');
         }
 
-        // 🔑 LOGIN LOGIC
+        // 🔑 LOGIN LOGIC (Fixed for old accounts)
         async function handleLogin() {
             const id = document.getElementById('loginId').value.trim();
             const pass = document.getElementById('loginPass').value;
             let foundUser = null;
 
+            // Step 1: Check by UID directly
             const uidSnap = await database.ref('players/' + id).once('value');
             if(uidSnap.exists() && uidSnap.val().pass === pass) {
                 foundUser = uidSnap.val();
             } else {
+                // Step 2: Check by Email
                 const emailSnap = await database.ref('players').orderByChild('email').equalTo(id).once('value');
                 if(emailSnap.exists()) {
-                    const data = Object.values(emailSnap.val())[0];
-                    if(data.pass === pass) foundUser = data;
+                    const playersData = emailSnap.val();
+                    for (let key in playersData) {
+                        if (playersData[key].pass === pass) {
+                            foundUser = playersData[key];
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -214,7 +229,7 @@
                 localStorage.setItem("rareGamingUser", JSON.stringify(foundUser));
                 window.location.href = "index.html";
             } else {
-                alert("Galat Password ya ID!");
+                alert("Galat Password ya ID! Please check again.");
             }
         }
     </script>
