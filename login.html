@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RARE GAMING - Secure Login</title>
+    <title>RARE GAMING - Fast Login</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -16,12 +14,11 @@
         body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         .auth-card { width: 90%; max-width: 400px; background: var(--panel); padding: 30px; border-radius: 24px; border: 1px solid #1a1a2e; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
         h2 { text-align: center; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
-        .input-group { margin-bottom: 15px; position: relative; }
+        .input-group { margin-bottom: 15px; }
         input { width: 100%; padding: 12px; background: #000; border: 1px solid #222; border-radius: 12px; color: white; outline: none; box-sizing: border-box; }
         input:focus { border-color: var(--neon); }
         .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
         .btn-primary { background: var(--neon); color: #000; }
-        .btn-otp { background: #1a1a2e; color: var(--neon); font-size: 11px; padding: 8px; margin-top: 5px; width: 100%; }
         .toggle-txt { text-align: center; font-size: 13px; color: #888; margin-top: 20px; cursor: pointer; }
         .hidden { display: none; }
     </style>
@@ -33,47 +30,31 @@
 
         <div id="loginForm">
             <div class="input-group">
-                <input type="text" id="loginId" placeholder="Enter Email or UID">
+                <input type="text" id="loginId" placeholder="Phone Number or UID">
             </div>
             <div class="input-group">
                 <input type="password" id="loginPass" placeholder="Enter Password">
             </div>
             <button class="btn btn-primary" onclick="handleLogin()">Login Now</button>
-            <p class="toggle-txt" onclick="showSection('forgot')">Forgot Password?</p>
             <p class="toggle-txt" onclick="showSection('signup')">New here? Create Account</p>
         </div>
 
         <div id="signupForm" class="hidden">
-            <input type="text" id="sName" placeholder="Full Name" style="margin-bottom:10px;">
-            <div class="input-group">
-                <input type="email" id="sEmail" placeholder="Gmail ID">
-                <button class="btn btn-otp" id="sendOtpBtn" onclick="sendVerificationCode()">Verify Gmail</button>
-            </div>
-            <div id="otpSection" class="hidden">
-                <input type="number" id="sOtp" placeholder="Enter 6-Digit OTP" style="margin-bottom:10px;">
-            </div>
-            <input type="text" id="sUID" placeholder="Create Unique UID" style="margin-bottom:10px;">
-            <input type="password" id="sPass" placeholder="Set Password" style="margin-bottom:10px;">
-            <input type="text" id="sRefer" placeholder="Referral Code (Optional)" onblur="verifyReferral()">
-            <span id="referStatus" style="font-size:10px; display:block; margin-bottom:10px;"></span>
+            <input type="text" id="sName" placeholder="Full Name" style="margin-bottom:12px;">
+            <input type="number" id="sPhone" placeholder="Phone Number" style="margin-bottom:12px;">
+            <input type="text" id="sUID" placeholder="Create Unique UID" style="margin-bottom:12px;">
+            <input type="password" id="sPass" placeholder="Set Password" style="margin-bottom:12px;">
+            
+            <input type="text" id="sRefer" placeholder="Referral Code (Optional)" onblur="verifyReferral()" style="margin-bottom:5px;">
+            <span id="referStatus" style="font-size:10px; display:block; margin-bottom:15px;"></span>
 
-            <button class="btn btn-primary" id="signupBtn" onclick="handleSignup()">Complete Signup</button>
+            <button class="btn btn-primary" onclick="handleSignup()">Create Account</button>
             <p class="toggle-txt" onclick="showSection('login')">Already have an account? Login</p>
-        </div>
-
-        <div id="forgotForm" class="hidden">
-            <input type="email" id="fEmail" placeholder="Your Registered Gmail">
-            <button class="btn btn-otp" id="fOtpBtn" onclick="sendForgotOTP()">Get Reset Code</button>
-            <div id="forgotVerifySection" class="hidden">
-                <input type="number" id="fOtp" placeholder="Enter OTP" style="margin-top:10px;">
-                <input type="password" id="fNewPass" placeholder="New Password" style="margin-top:10px;">
-                <button class="btn btn-primary" onclick="resetPassword()">Update Password</button>
-            </div>
-            <p class="toggle-txt" onclick="showSection('login')">Back to Login</p>
         </div>
     </div>
 
     <script>
+        // --- CONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -82,99 +63,21 @@
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        
-        // --- EmailJS Config ---
-        const PUBLIC_KEY = "PE_OAn6p8-wU5j8oF";
-        const SERVICE_ID = "service_yh1lf0p";
-        const SIGNUP_TEMPLATE = "template_2883fpo";
-        const RESET_TEMPLATE = "template_us919es";
-
-        let generatedOTP = null;
 
         function showSection(type) {
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('signupForm').classList.add('hidden');
-            document.getElementById('forgotForm').classList.add('hidden');
             if(type === 'login') { document.getElementById('loginForm').classList.remove('hidden'); document.getElementById('formTitle').innerText = "Login"; }
             if(type === 'signup') { document.getElementById('signupForm').classList.remove('hidden'); document.getElementById('formTitle').innerText = "Signup"; }
-            if(type === 'forgot') { document.getElementById('forgotForm').classList.remove('hidden'); document.getElementById('formTitle').innerText = "Reset"; }
-        }
-
-        // 📧 SEND OTP (Signup)
-        function sendVerificationCode() {
-            const email = document.getElementById('sEmail').value.trim();
-            const name = document.getElementById('sName').value.trim();
-            if(!email.includes("@gmail.com") || !name) return alert("Pehle Name aur Sahi Gmail dalo!");
-            
-            generatedOTP = Math.floor(100000 + Math.random() * 900000);
-            const btn = document.getElementById('sendOtpBtn');
-            btn.innerText = "SENDING...";
-            btn.disabled = true;
-
-            emailjs.init(PUBLIC_KEY);
-            emailjs.send(SERVICE_ID, SIGNUP_TEMPLATE, {
-                to_email: email,
-                user_name: name,
-                otp_code: generatedOTP
-            }).then(() => {
-                alert("Signup OTP sent to your Gmail! ✅");
-                document.getElementById('otpSection').classList.remove('hidden');
-                btn.innerText = "OTP SENT";
-            }).catch((err) => {
-                btn.innerText = "VERIFY GMAIL";
-                btn.disabled = false;
-                alert("Mail Failed: " + JSON.stringify(err));
-            });
-        }
-
-        // 🔑 SEND OTP (Forgot Password)
-        async function sendForgotOTP() {
-            const email = document.getElementById('fEmail').value.trim();
-            if(!email) return alert("Pehle registered Gmail dalo!");
-
-            const snap = await database.ref('players').orderByChild('email').equalTo(email).once('value');
-            if(snap.exists()) {
-                const userData = Object.values(snap.val())[0];
-                generatedOTP = Math.floor(100000 + Math.random() * 900000);
-                
-                emailjs.init(PUBLIC_KEY);
-                emailjs.send(SERVICE_ID, RESET_TEMPLATE, {
-                    to_email: email,
-                    user_name: userData.name,
-                    otp_code: generatedOTP
-                }).then(() => {
-                    alert("Reset OTP sent to your Gmail! 🔑");
-                    document.getElementById('forgotVerifySection').classList.remove('hidden');
-                }).catch((err) => alert("Error: " + JSON.stringify(err)));
-            } else {
-                alert("Ye Email registered nahi hai!");
-            }
-        }
-
-        // 🛠 RESET PASSWORD FINAL
-        async function resetPassword() {
-            const email = document.getElementById('fEmail').value.trim();
-            const otp = document.getElementById('fOtp').value;
-            const newPass = document.getElementById('fNewPass').value;
-
-            if(otp != generatedOTP) return alert("Galat OTP!");
-            const snap = await database.ref('players').orderByChild('email').equalTo(email).once('value');
-            if(!snap.exists()) return alert("User not found!");
-            
-            const uid = Object.keys(snap.val())[0];
-            await database.ref('players/' + uid).update({ pass: newPass });
-            alert("Password Updated! Ab Login karo.");
-            showSection('login');
         }
 
         // ✅ VERIFY REFERRAL
         async function verifyReferral() {
             const code = document.getElementById('sRefer').value.trim();
             if(!code) return;
-            const snap = await database.ref('players').orderByChild('uid').equalTo(code).once('value');
+            const snap = await database.ref('players/' + code).once('value');
             if(snap.exists()) {
-                const referrer = Object.values(snap.val())[0];
-                document.getElementById('referStatus').innerText = "✅ Valid Code: " + referrer.name;
+                document.getElementById('referStatus').innerText = "✅ Valid: " + snap.val().name;
                 document.getElementById('referStatus').style.color = "#39ff14";
             } else {
                 document.getElementById('referStatus').innerText = "❌ Invalid Referral Code";
@@ -182,48 +85,55 @@
             }
         }
 
-        // 📝 SIGNUP LOGIC
+        // 📝 SIGNUP LOGIC (No OTP)
         async function handleSignup() {
             const name = document.getElementById('sName').value.trim();
-            const email = document.getElementById('sEmail').value.trim();
+            const phone = document.getElementById('sPhone').value.trim();
             const uid = document.getElementById('sUID').value.trim();
-            const pass = document.getElementById('sPass').value;
-            const otp = document.getElementById('sOtp').value;
+            const pass = document.getElementById('sPass').value.trim();
 
-            if(!generatedOTP || otp != generatedOTP) return alert("OTP galat hai!");
+            if(!name || !phone || !uid || !pass) return alert("Pura dabba bharo bhai!");
+            if(phone.length < 10) return alert("Sahi Phone number dalo!");
 
-            const emailSnap = await database.ref('players').orderByChild('email').equalTo(email).once('value');
+            // Check if UID or Phone already exists
             const uidSnap = await database.ref('players/' + uid).once('value');
+            const phoneSnap = await database.ref('players').orderByChild('phone').equalTo(phone).once('value');
 
-            if(emailSnap.exists() || uidSnap.exists()) return alert("Gmail or UID already use ho chuka hai!");
+            if(uidSnap.exists()) return alert("Ye UID pehle se koi le chuka hai!");
+            if(phoneSnap.exists()) return alert("Ye Phone number pehle se registered hai!");
 
-            await database.ref('players/' + uid).set({
-                name: name, email: email, uid: uid, pass: pass,
-                cash: 0, coins: 0, dp: ""
-            });
-            alert("Account Created! Login Now.");
+            const userData = {
+                name: name,
+                phone: phone,
+                uid: uid,
+                pass: pass,
+                cash: 0,
+                coins: 0,
+                dp: ""
+            };
+
+            await database.ref('players/' + uid).set(userData);
+            alert("Account Created! 🚀 Ab Login karo.");
             showSection('login');
         }
 
-        // 🔑 LOGIN LOGIC
+        // 🔑 LOGIN LOGIC (UID or Phone)
         async function handleLogin() {
             const id = document.getElementById('loginId').value.trim();
             const pass = document.getElementById('loginPass').value;
+
             let foundUser = null;
 
+            // Try UID login
             const uidSnap = await database.ref('players/' + id).once('value');
             if(uidSnap.exists() && uidSnap.val().pass === pass) {
                 foundUser = uidSnap.val();
             } else {
-                const emailSnap = await database.ref('players').orderByChild('email').equalTo(id).once('value');
-                if(emailSnap.exists()) {
-                    const playersData = emailSnap.val();
-                    for (let key in playersData) {
-                        if (playersData[key].pass === pass) {
-                            foundUser = playersData[key];
-                            break;
-                        }
-                    }
+                // Try Phone login
+                const phoneSnap = await database.ref('players').orderByChild('phone').equalTo(id).once('value');
+                if(phoneSnap.exists()) {
+                    const data = Object.values(phoneSnap.val())[0];
+                    if(data.pass === pass) foundUser = data;
                 }
             }
 
@@ -231,7 +141,7 @@
                 localStorage.setItem("rareGamingUser", JSON.stringify(foundUser));
                 window.location.href = "index.html";
             } else {
-                alert("Galat Password ya ID! Please check again.");
+                alert("Galat Password ya ID! ❌");
             }
         }
     </script>
