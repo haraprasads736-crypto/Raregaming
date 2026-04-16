@@ -133,17 +133,24 @@
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if(!userData) window.location.href = "login.html";
 
-        // Hum UID ka use karke unique code banayenge
-        const referralCode = userData.uid.substring(0, 8).toUpperCase();
-        document.getElementById('myCode').innerText = referralCode;
+        // 🔥 HAR USER KA ALAG UNIQUE CODE (UID ke aakhri 6 characters)
+        // Isse har kisi ka ID alag aur professional dikhega
+        const referralCode = userData.uid.substring(userData.uid.length - 6).toUpperCase();
+        document.getElementById('myCode').innerText = "RG-" + referralCode;
 
         function copyCode() {
-            navigator.clipboard.writeText(referralCode);
+            const fullCode = document.getElementById('myCode').innerText;
+            navigator.clipboard.writeText(fullCode);
             alert("Refer Code Copied! 🔥");
         }
 
         function shareToWhatsApp() {
-            const msg = `Hey! Join *Rare Gaming Esports* and win daily cash prizes! 🏆\n\nUse my Referral Code: *${referralCode}*\n\nDownload App Now: ${window.location.origin}`;
+            const fullCode = document.getElementById('myCode').innerText;
+            // 🔥 TERA GITHUB LINK ADD KAR DIYA HAI
+            const appLink = "https://raregaming.github.io/";
+            
+            const msg = `Hey! Join *Rare Gaming Esports* and win daily cash prizes! 🏆\n\nUse my Referral Code: *${fullCode}*\n\nDownload App Now: ${appLink}`;
+            
             window.open(`whatsapp://send?text=${encodeURIComponent(msg)}`);
         }
     </script>
