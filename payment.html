@@ -106,6 +106,9 @@
             const transId = document.getElementById('transNumber').value;
             const amount = document.getElementById('payAmount').value;
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+            
+            // Referral code capture logic
+            const usedReferCode = localStorage.getItem("pendingReferral") || "NONE";
 
             if(transId.length !== 12) return alert("12-digit UTR number sahi se dalo!");
 
@@ -113,12 +116,13 @@
             btn.disabled = true;
             btn.innerText = "Sending Request...";
 
-            // Push to Firebase payment_requests
+            // Push to Firebase payment_requests (Including Refer Code)
             database.ref('payment_requests').push({
                 userId: userData.uid,
                 userName: userData.name,
                 amount: parseFloat(amount),
                 utr: transId,
+                referUsed: usedReferCode, // Isse admin ko pata chalega ki kisne refer kiya
                 time: new Date().toLocaleString(),
                 status: "pending"
             }).then(() => {
