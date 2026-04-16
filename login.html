@@ -2,97 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>My Profile - RARE GAMING</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RARE GAMING - Secure Login</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-        :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; --purple: #8B3EEB; }
-        * { box-sizing: border-box; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; overflow-x: hidden; background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%); }
-
-        /* Header & Cards */
-        .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
-        .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
-        .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: 0 auto 15px; cursor: pointer; }
-        #dpPreview { width: 90px; height: 90px; border-radius: 50%; border: 2.5px solid var(--neon); object-fit: cover; background: #111; }
-        .edit-badge { position: absolute; bottom: 2px; right: 2px; background: var(--neon); width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 11px; border: 2px solid var(--panel); }
-        .player-name { font-size: 20px; font-weight: 800; margin: 0; text-transform: uppercase; }
-        .player-uid { font-size: 12px; color: #666; font-weight: 700; margin-top: 5px; letter-spacing: 1px; }
-
-        /* Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
-        .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
-        .stat-label { font-size: 9px; color: #888; text-transform: uppercase; }
-        .stat-value { font-size: 18px; font-weight: 800; color: #fff; margin-top: 5px; }
-
-        /* Bottom Navigation */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
-        .nav-item.active { color: var(--neon); }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
-        
-        /* Options */
-        .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
-        .option-item i { width: 20px; color: var(--neon); font-size: 18px; }
-        
-        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; padding: 20px; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        :root { --neon: #00f2fe; --gold: #ffd700; --bg: #030305; --panel: #0a0a0f; }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .auth-card { width: 90%; max-width: 400px; background: var(--panel); padding: 30px; border-radius: 24px; border: 1px solid #1a1a2e; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        h2 { text-align: center; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
+        .input-group { margin-bottom: 15px; position: relative; }
+        input { width: 100%; padding: 12px; background: #000; border: 1px solid #222; border-radius: 12px; color: white; outline: none; box-sizing: border-box; }
+        input:focus { border-color: var(--neon); }
+        .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
+        .btn-primary { background: var(--neon); color: #000; }
+        .btn-otp { background: #1a1a2e; color: var(--neon); font-size: 11px; padding: 8px; margin-top: 5px; }
+        .toggle-txt { text-align: center; font-size: 13px; color: #888; margin-top: 20px; cursor: pointer; }
+        .hidden { display: none; }
+        .verify-badge { color: #39ff14; font-size: 11px; margin-top: 5px; display: block; }
     </style>
 </head>
 <body>
 
-    <div class="header"><h2>Account Profile</h2></div>
+    <div class="auth-card">
+        <h2 id="formTitle">Login</h2>
 
-    <div class="profile-card">
-        <div class="avatar-wrapper" onclick="document.getElementById('uploadInput').click()">
-            <img id="dpPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-            <div class="edit-badge"><i class="fas fa-camera"></i></div>
+        <div id="loginForm">
+            <div class="input-group">
+                <input type="text" id="loginId" placeholder="Enter Email or UID">
+            </div>
+            <div class="input-group">
+                <input type="password" id="loginPass" placeholder="Enter Password">
+            </div>
+            <button class="btn btn-primary" onclick="handleLogin()">Login Now</button>
+            <p class="toggle-txt" onclick="showSection('forgot')">Forgot Password?</p>
+            <p class="toggle-txt" onclick="showSection('signup')">New here? Create Account</p>
         </div>
-        <input type="file" id="uploadInput" style="display:none;" accept="image/*">
-        <p class="player-name" id="userName">PLAYER</p>
-        <p class="player-uid" id="userUID">UID: --</p>
-    </div>
 
-    <div class="stats-grid">
-        <div class="stat-box"><div class="stat-label">Total Cash</div><div class="stat-value" id="cashVal">₹0</div></div>
-        <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--gold);">0</div></div>
-    </div>
+        <div id="signupForm" class="hidden">
+            <input type="text" id="sName" placeholder="Full Name" style="margin-bottom:10px;">
+            <div class="input-group">
+                <input type="email" id="sEmail" placeholder="Gmail ID">
+                <button class="btn btn-otp" id="sendOtpBtn" onclick="sendVerificationCode()">Verify Gmail</button>
+            </div>
+            <div id="otpSection" class="hidden">
+                <input type="number" id="sOtp" placeholder="Enter 6-Digit OTP" style="margin-bottom:10px;">
+            </div>
+            <input type="text" id="sUID" placeholder="Create Unique UID" style="margin-bottom:10px;">
+            <input type="password" id="sPass" placeholder="Set Password" style="margin-bottom:10px;">
+            <input type="text" id="sRefer" placeholder="Referral Code (Optional)" onblur="verifyReferral()">
+            <span id="referStatus" style="font-size:10px; display:block; margin-bottom:10px;"></span>
 
-    <div class="options-container">
-        <a href="earn.html" class="option-item"><i class="fas fa-wallet"></i> Wallet History</a>
-        <a href="transfer.html" class="option-item"><i class="fas fa-exchange-alt"></i> Transfer Records</a>
-        <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
-        <a href="javascript:void(0)" class="option-item" onclick="logout()" style="color:#ff3131;"><i class="fas fa-sign-out-alt"></i> Logout System</a>
-    </div>
+            <button class="btn btn-primary" id="signupBtn" onclick="handleSignup()">Complete Signup</button>
+            <p class="toggle-txt" onclick="showSection('login')">Already have an account? Login</p>
+        </div>
 
-    <div id="cropModal">
-        <div id="cropContainer" style="height: 60vh;"></div>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button onclick="closeCrop()" style="flex:1; padding:15px; background:#222; color:#fff; border:none; border-radius:12px; font-weight:800;">CANCEL</button>
-            <button onclick="saveCrop()" style="flex:1; padding:15px; background:var(--neon); color:#000; border:none; border-radius:12px; font-weight:800;">DONE</button>
+        <div id="forgotForm" class="hidden">
+            <input type="email" id="fEmail" placeholder="Your Registered Gmail">
+            <button class="btn btn-otp" onclick="sendForgotOTP()">Get Reset Code</button>
+            <div id="forgotVerifySection" class="hidden">
+                <input type="number" id="fOtp" placeholder="Enter OTP" style="margin-top:10px;">
+                <input type="password" id="fNewPass" placeholder="New Password" style="margin-top:10px;">
+                <button class="btn btn-primary" onclick="resetPassword()">Update Password</button>
+            </div>
+            <p class="toggle-txt" onclick="showSection('login')">Back to Login</p>
         </div>
     </div>
-
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
-        <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
-        <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
-    </nav>
-    <div class="system-nav-bar"></div>
 
     <script>
-        // 🏁 FIREBASE CONFIG
+        // 🏁 CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -101,58 +83,102 @@
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // ❗ EmailJS me account banakar yahan public key dalen
 
-        // Check Login
-        const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-        if(!userData || !userData.uid) window.location.href = "login.html";
+        let generatedOTP = null;
+        let isVerified = false;
 
-        // 🔥 REAL-TIME DATA (Corrected Path: 'players/')
-        function loadProfileLive() {
-            const playerRef = database.ref('players/' + userData.uid);
-            playerRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if(data) {
-                    document.getElementById('userName').innerText = data.name || userData.name;
-                    document.getElementById('userUID').innerText = "UID: " + userData.uid;
-                    document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
-                    // Coins system fix
-                    document.getElementById('coinVal').innerText = (data.coins || 0);
-                    if(data.dp) document.getElementById('dpPreview').src = data.dp;
-                }
-            });
+        function showSection(type) {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('signupForm').classList.add('hidden');
+            document.getElementById('forgotForm').classList.add('hidden');
+            if(type === 'login') { document.getElementById('loginForm').classList.remove('hidden'); document.getElementById('formTitle').innerText = "Login"; }
+            if(type === 'signup') { document.getElementById('signupForm').classList.remove('hidden'); document.getElementById('formTitle').innerText = "Signup"; }
+            if(type === 'forgot') { document.getElementById('forgotForm').classList.remove('hidden'); document.getElementById('formTitle').innerText = "Reset"; }
         }
 
-        // Image Crop & Save
-        let croppieInstance;
-        document.getElementById('uploadInput').onchange = function(e) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('cropModal').style.display = 'block';
-                if(croppieInstance) croppieInstance.destroy();
-                croppieInstance = new Croppie(document.getElementById('cropContainer'), {
-                    viewport: { width: 200, height: 200, type: 'circle' },
-                    boundary: { width: 300, height: 350 },
-                    showZoomer: true
-                });
-                croppieInstance.bind({ url: event.target.result });
+        // 📧 SEND OTP (EmailJS)
+        function sendVerificationCode() {
+            const email = document.getElementById('sEmail').value;
+            if(!email.includes("@gmail.com")) return alert("Sahi Gmail dalo!");
+            
+            generatedOTP = Math.floor(100000 + Math.random() * 900000);
+            alert("Developing Mode: Your OTP is " + generatedOTP); // Production me ise hata dena
+            document.getElementById('otpSection').classList.remove('hidden');
+            document.getElementById('sendOtpBtn').innerText = "OTP Sent!";
+            
+            // EmailJS Logic yahan aayega
+        }
+
+        // ✅ VERIFY REFERRAL
+        async function verifyReferral() {
+            const code = document.getElementById('sRefer').value.trim();
+            if(!code) return;
+            const snap = await database.ref('players').orderByChild('uid').equalTo(code).once('value');
+            if(snap.exists()) {
+                document.getElementById('referStatus').innerText = "✅ Valid Code (Rare User)";
+                document.getElementById('referStatus').style.color = "#39ff14";
+            } else {
+                document.getElementById('referStatus').innerText = "❌ Invalid Referral Code";
+                document.getElementById('referStatus').style.color = "#ff3131";
+            }
+        }
+
+        // 📝 SIGNUP LOGIC
+        async function handleSignup() {
+            const name = document.getElementById('sName').value;
+            const email = document.getElementById('sEmail').value;
+            const uid = document.getElementById('sUID').value;
+            const pass = document.getElementById('sPass').value;
+            const otp = document.getElementById('sOtp').value;
+
+            if(otp != generatedOTP) return alert("OTP galat hai!");
+
+            // Check if user already exists
+            const emailSnap = await database.ref('players').orderByChild('email').equalTo(email).once('value');
+            const uidSnap = await database.ref('players/' + uid).once('value');
+
+            if(emailSnap.exists() || uidSnap.exists()) return alert("Gmail or UID already use ho chuka hai!");
+
+            const userData = {
+                name: name, email: email, uid: uid, pass: pass,
+                cash: 0, coins: 0, dp: ""
             };
-            reader.readAsDataURL(file);
-        };
 
-        function saveCrop() {
-            croppieInstance.result({ type: 'base64', size: { width: 300, height: 300 } }).then(function(base64) {
-                database.ref('players/' + userData.uid).update({ dp: base64 }).then(() => {
-                    document.getElementById('dpPreview').src = base64;
-                    closeCrop();
-                });
-            });
+            await database.ref('players/' + uid).set(userData);
+            alert("Account Created! Now Login.");
+            showSection('login');
         }
 
-        function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
-        function logout() { if(confirm("Logout?")) { localStorage.clear(); window.location.href = "login.html"; } }
+        // 🔑 LOGIN LOGIC (Double Check Email & UID)
+        async function handleLogin() {
+            const id = document.getElementById('loginId').value.trim();
+            const pass = document.getElementById('loginPass').value;
+
+            let foundUser = null;
+
+            // Check if UID
+            const uidSnap = await database.ref('players/' + id).once('value');
+            if(uidSnap.exists() && uidSnap.val().pass === pass) {
+                foundUser = uidSnap.val();
+            } else {
+                // Check if Email
+                const emailSnap = await database.ref('players').orderByChild('email').equalTo(id).once('value');
+                if(emailSnap.exists()) {
+                    const data = Object.values(emailSnap.val())[0];
+                    if(data.pass === pass) foundUser = data;
+                }
+            }
+
+            if(foundUser) {
+                localStorage.setItem("rareGamingUser", JSON.stringify(foundUser));
+                window.location.href = "index.html";
+            } else {
+                alert("Galat Password ya ID!");
+            }
+        }
         
-        window.onload = loadProfileLive;
+        // ❗ Forgot Pass functionality similar to signup OTP...
     </script>
 </body>
 </html>
