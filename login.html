@@ -6,7 +6,8 @@
     <title>RARE GAMING - Secure Login</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -73,7 +74,6 @@
     </div>
 
     <script>
-        // --- CONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -83,8 +83,11 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         
-        // 🔥 PUBLIC KEY UPDATED BY GEMINI
-        emailjs.init("PE_OAn6p8-wU5j8oF"); 
+        // --- EmailJS Config ---
+        const PUBLIC_KEY = "PE_OAn6p8-wU5j8oF";
+        const SERVICE_ID = "service_yh1lf0p";
+        const SIGNUP_TEMPLATE = "template_2883fpo";
+        const RESET_TEMPLATE = "template_us919es";
 
         let generatedOTP = null;
 
@@ -105,23 +108,22 @@
             
             generatedOTP = Math.floor(100000 + Math.random() * 900000);
             const btn = document.getElementById('sendOtpBtn');
-            btn.innerText = "Sending...";
+            btn.innerText = "SENDING...";
             btn.disabled = true;
 
-            emailjs.send("service_yh1lf0p", "template_2883fpo", {
+            emailjs.init(PUBLIC_KEY);
+            emailjs.send(SERVICE_ID, SIGNUP_TEMPLATE, {
                 to_email: email,
                 user_name: name,
                 otp_code: generatedOTP
             }).then(() => {
                 alert("Signup OTP sent to your Gmail! ✅");
                 document.getElementById('otpSection').classList.remove('hidden');
-                btn.innerText = "OTP Sent";
-                btn.disabled = false;
+                btn.innerText = "OTP SENT";
             }).catch((err) => {
-                alert("Error sending OTP. Make sure EmailJS is connected properly.");
-                btn.innerText = "Verify Gmail";
+                btn.innerText = "VERIFY GMAIL";
                 btn.disabled = false;
-                console.log(err);
+                alert("Mail Failed: " + JSON.stringify(err));
             });
         }
 
@@ -135,14 +137,15 @@
                 const userData = Object.values(snap.val())[0];
                 generatedOTP = Math.floor(100000 + Math.random() * 900000);
                 
-                emailjs.send("service_yh1lf0p", "template_us919es", {
+                emailjs.init(PUBLIC_KEY);
+                emailjs.send(SERVICE_ID, RESET_TEMPLATE, {
                     to_email: email,
                     user_name: userData.name,
                     otp_code: generatedOTP
                 }).then(() => {
                     alert("Reset OTP sent to your Gmail! 🔑");
                     document.getElementById('forgotVerifySection').classList.remove('hidden');
-                });
+                }).catch((err) => alert("Error: " + JSON.stringify(err)));
             } else {
                 alert("Ye Email registered nahi hai!");
             }
@@ -156,8 +159,9 @@
 
             if(otp != generatedOTP) return alert("Galat OTP!");
             const snap = await database.ref('players').orderByChild('email').equalTo(email).once('value');
+            if(!snap.exists()) return alert("User not found!");
+            
             const uid = Object.keys(snap.val())[0];
-
             await database.ref('players/' + uid).update({ pass: newPass });
             alert("Password Updated! Ab Login karo.");
             showSection('login');
@@ -201,18 +205,16 @@
             showSection('login');
         }
 
-        // 🔑 LOGIN LOGIC (Fixed for old accounts)
+        // 🔑 LOGIN LOGIC
         async function handleLogin() {
             const id = document.getElementById('loginId').value.trim();
             const pass = document.getElementById('loginPass').value;
             let foundUser = null;
 
-            // Step 1: Check by UID directly
             const uidSnap = await database.ref('players/' + id).once('value');
             if(uidSnap.exists() && uidSnap.val().pass === pass) {
                 foundUser = uidSnap.val();
             } else {
-                // Step 2: Check by Email
                 const emailSnap = await database.ref('players').orderByChild('email').equalTo(id).once('value');
                 if(emailSnap.exists()) {
                     const playersData = emailSnap.val();
