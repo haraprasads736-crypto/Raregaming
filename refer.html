@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Refer & Earn - RARE GAMING</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
+        
+        :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; }
+        
+        * { box-sizing: border-box; }
+        body { 
+            background: var(--bg); color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding-bottom: 160px; text-align: center;
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
+        }
+
+        .container { padding: 40px 25px; }
+        
+        /* Hero Section */
+        .gift-icon-wrap { 
+            width: 120px; height: 120px; background: rgba(0, 242, 254, 0.1); 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; margin: 0 auto 20px;
+            border: 2px solid var(--neon); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+        }
+        .gift-icon-wrap i { font-size: 50px; color: var(--neon); }
+        
+        h1 { font-size: 26px; font-weight: 900; margin: 10px 0; letter-spacing: 1px; }
+        .sub-text { color: #888; font-size: 13px; line-height: 1.6; margin-bottom: 30px; }
+
+        /* Refer Box */
+        .refer-card { 
+            background: var(--panel); border-radius: 24px; padding: 30px 20px; 
+            border: 1px solid rgba(255,255,255,0.05); position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .label { font-size: 10px; color: var(--gold); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+        
+        .code-row { 
+            display: flex; align-items: center; justify-content: center; 
+            gap: 15px; margin: 15px 0 25px; background: #000; 
+            padding: 15px; border-radius: 15px; border: 1px dashed #333;
+        }
+        #myCode { font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; }
+        .copy-btn { color: var(--neon); font-size: 20px; cursor: pointer; }
+
+        .btn-invite { 
+            background: var(--green); color: #000; border: none; padding: 18px; 
+            border-radius: 15px; width: 100%; font-weight: 900; font-size: 15px; 
+            text-transform: uppercase; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(57, 255, 20, 0.2);
+        }
+
+        /* Steps */
+        .how-it-works { text-align: left; margin-top: 40px; }
+        .step-item { display: flex; gap: 15px; margin-bottom: 25px; align-items: flex-start; }
+        .step-num { 
+            background: #1a1a2e; width: 30px; height: 30px; border-radius: 8px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 800; color: var(--neon); border: 1px solid var(--neon); flex-shrink: 0;
+        }
+        .step-info b { display: block; font-size: 14px; color: #fff; margin-bottom: 2px; }
+        .step-info p { font-size: 11px; color: #777; margin: 0; }
+
+        /* Navigation Bar */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        .nav-item.active { color: var(--neon); }
+        .nav-item i { font-size: 20px; }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="gift-icon-wrap">
+            <i class="fas fa-gift"></i>
+        </div>
+        <h1>Invite & Earn Cash</h1>
+        <p class="sub-text">Share your code with friends. When they join their first match, you get ₹5 and they get ₹2 bonus!</p>
+
+        <div class="refer-card">
+            <div class="label">Your Referral Code</div>
+            <div class="code-row">
+                <span id="myCode">LOADING...</span>
+                <i class="far fa-copy copy-btn" onclick="copyCode()"></i>
+            </div>
+            <button class="btn-invite" onclick="shareToWhatsApp()">
+                <i class="fab fa-whatsapp"></i> Send Invite
+            </button>
+        </div>
+
+        <div class="how-it-works">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-info">
+                    <b>Share Code</b>
+                    <p>Send your referral code to your friends or gaming groups.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-info">
+                    <b>Friend Joins</b>
+                    <p>Your friend registers and plays their first paid match.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-info">
+                    <b>Get Rewards</b>
+                    <p>You receive ₹5 instantly in your Main Wallet!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="refer.html" class="nav-item active"><i class="fas fa-gift"></i><span>REFER</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
+    </nav>
+    <div class="system-nav-bar"></div>
+
+    <script>
+        const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
+        if(!userData) window.location.href = "login.html";
+
+        // Hum UID ka use karke unique code banayenge
+        const referralCode = userData.uid.substring(0, 8).toUpperCase();
+        document.getElementById('myCode').innerText = referralCode;
+
+        function copyCode() {
+            navigator.clipboard.writeText(referralCode);
+            alert("Refer Code Copied! 🔥");
+        }
+
+        function shareToWhatsApp() {
+            const msg = `Hey! Join *Rare Gaming Esports* and win daily cash prizes! 🏆\n\nUse my Referral Code: *${referralCode}*\n\nDownload App Now: ${window.location.origin}`;
+            window.open(`whatsapp://send?text=${encodeURIComponent(msg)}`);
+        }
+    </script>
+</body>
+</html>
