@@ -20,10 +20,9 @@
         input:focus { border-color: var(--neon); }
         .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.3s; }
         .btn-primary { background: var(--neon); color: #000; }
-        .btn-otp { background: #1a1a2e; color: var(--neon); font-size: 11px; padding: 8px; margin-top: 5px; }
+        .btn-otp { background: #1a1a2e; color: var(--neon); font-size: 11px; padding: 8px; margin-top: 5px; width: 100%; }
         .toggle-txt { text-align: center; font-size: 13px; color: #888; margin-top: 20px; cursor: pointer; }
         .hidden { display: none; }
-        .verify-badge { color: #39ff14; font-size: 11px; margin-top: 5px; display: block; }
     </style>
 </head>
 <body>
@@ -63,7 +62,7 @@
 
         <div id="forgotForm" class="hidden">
             <input type="email" id="fEmail" placeholder="Your Registered Gmail">
-            <button class="btn btn-otp" onclick="sendForgotOTP()">Get Reset Code</button>
+            <button class="btn btn-otp" id="fOtpBtn" onclick="sendForgotOTP()">Get Reset Code</button>
             <div id="forgotVerifySection" class="hidden">
                 <input type="number" id="fOtp" placeholder="Enter OTP" style="margin-top:10px;">
                 <input type="password" id="fNewPass" placeholder="New Password" style="margin-top:10px;">
@@ -74,7 +73,7 @@
     </div>
 
     <script>
-        // 🏁 CONFIGURATION
+        // --- CONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -83,10 +82,11 @@
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // ❗ EmailJS me account banakar yahan public key dalen
+        
+        // ❗ EMAILJS INITIALIZE
+        emailjs.init("YOUR_PUBLIC_KEY"); 
 
         let generatedOTP = null;
-        let isVerified = false;
 
         function showSection(type) {
             document.getElementById('loginForm').classList.add('hidden');
@@ -97,17 +97,63 @@
             if(type === 'forgot') { document.getElementById('forgotForm').classList.remove('hidden'); document.getElementById('formTitle').innerText = "Reset"; }
         }
 
-        // 📧 SEND OTP (EmailJS)
+        // 📧 SEND OTP (Signup)
         function sendVerificationCode() {
             const email = document.getElementById('sEmail').value;
-            if(!email.includes("@gmail.com")) return alert("Sahi Gmail dalo!");
+            const name = document.getElementById('sName').value;
+            if(!email.includes("@gmail.com") || !name) return alert("Pehle Name aur Sahi Gmail dalo!");
             
             generatedOTP = Math.floor(100000 + Math.random() * 900000);
-            alert("Developing Mode: Your OTP is " + generatedOTP); // Production me ise hata dena
-            document.getElementById('otpSection').classList.remove('hidden');
-            document.getElementById('sendOtpBtn').innerText = "OTP Sent!";
-            
-            // EmailJS Logic yahan aayega
+            const btn = document.getElementById('sendOtpBtn');
+            btn.innerText = "Sending...";
+
+            emailjs.send("service_yh1lf0p", "template_2883fpo", {
+                to_email: email,
+                user_name: name,
+                otp_code: generatedOTP
+            }).then(() => {
+                alert("Signup OTP sent to your Gmail! ✅");
+                document.getElementById('otpSection').classList.remove('hidden');
+                btn.innerText = "OTP Sent";
+            });
+        }
+
+        // 🔑 SEND OTP (Forgot Password)
+        async function sendForgotOTP() {
+            const email = document.getElementById('fEmail').value.trim();
+            if(!email) return alert("Pehle registered Gmail dalo!");
+
+            const snap = await database.ref('players').orderByChild('email').equalTo(email).once('value');
+            if(snap.exists()) {
+                const userData = Object.values(snap.val())[0];
+                generatedOTP = Math.floor(100000 + Math.random() * 900000);
+                
+                emailjs.send("service_yh1lf0p", "template_us919es", {
+                    to_email: email,
+                    user_name: userData.name,
+                    otp_code: generatedOTP
+                }).then(() => {
+                    alert("Reset OTP sent to your Gmail! 🔑");
+                    document.getElementById('forgotVerifySection').classList.remove('hidden');
+                });
+            } else {
+                alert("Ye Email registered nahi hai!");
+            }
+        }
+
+        // 🛠 RESET PASSWORD FINAL
+        async function resetPassword() {
+            const email = document.getElementById('fEmail').value.trim();
+            const otp = document.getElementById('fOtp').value;
+            const newPass = document.getElementById('fNewPass').value;
+
+            if(otp != generatedOTP) return alert("Galat OTP!");
+            const snap = await database.ref('players').orderByChild('email').equalTo(email).once('value');
+            const uid = Object.keys(snap.val())[0];
+
+            await database.ref('players/' + uid).update({ pass: newPass });
+            alert("Password Updated! Ab Login karo.");
+            showSection('login');
         }
 
         // ✅ VERIFY REFERRAL
@@ -134,35 +180,29 @@
 
             if(otp != generatedOTP) return alert("OTP galat hai!");
 
-            // Check if user already exists
             const emailSnap = await database.ref('players').orderByChild('email').equalTo(email).once('value');
             const uidSnap = await database.ref('players/' + uid).once('value');
 
             if(emailSnap.exists() || uidSnap.exists()) return alert("Gmail or UID already use ho chuka hai!");
 
-            const userData = {
+            await database.ref('players/' + uid).set({
                 name: name, email: email, uid: uid, pass: pass,
                 cash: 0, coins: 0, dp: ""
-            };
-
-            await database.ref('players/' + uid).set(userData);
-            alert("Account Created! Now Login.");
+            });
+            alert("Account Created! Login Now.");
             showSection('login');
         }
 
-        // 🔑 LOGIN LOGIC (Double Check Email & UID)
+        // 🔑 LOGIN LOGIC
         async function handleLogin() {
             const id = document.getElementById('loginId').value.trim();
             const pass = document.getElementById('loginPass').value;
-
             let foundUser = null;
 
-            // Check if UID
             const uidSnap = await database.ref('players/' + id).once('value');
             if(uidSnap.exists() && uidSnap.val().pass === pass) {
                 foundUser = uidSnap.val();
             } else {
-                // Check if Email
                 const emailSnap = await database.ref('players').orderByChild('email').equalTo(id).once('value');
                 if(emailSnap.exists()) {
                     const data = Object.values(emailSnap.val())[0];
@@ -177,8 +217,6 @@
                 alert("Galat Password ya ID!");
             }
         }
-        
-        // ❗ Forgot Pass functionality similar to signup OTP...
     </script>
 </body>
 </html>
