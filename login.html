@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RARE GAMING - Fast Login</title>
+    <title>RARE GAMING - Unified Login</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -30,7 +30,7 @@
 
         <div id="loginForm">
             <div class="input-group">
-                <input type="text" id="loginId" placeholder="Phone Number or UID">
+                <input type="text" id="loginId" placeholder="UID (RG...), Phone or Email">
             </div>
             <div class="input-group">
                 <input type="password" id="loginPass" placeholder="Enter Password">
@@ -42,19 +42,15 @@
         <div id="signupForm" class="hidden">
             <input type="text" id="sName" placeholder="Full Name" style="margin-bottom:12px;">
             <input type="number" id="sPhone" placeholder="Phone Number" style="margin-bottom:12px;">
-            <input type="text" id="sUID" placeholder="Create Unique UID" style="margin-bottom:12px;">
+            <input type="text" id="sUID" placeholder="Create UID (Example: RG123)" style="margin-bottom:12px;">
             <input type="password" id="sPass" placeholder="Set Password" style="margin-bottom:12px;">
-            
-            <input type="text" id="sRefer" placeholder="Referral Code (Optional)" onblur="verifyReferral()" style="margin-bottom:5px;">
-            <span id="referStatus" style="font-size:10px; display:block; margin-bottom:15px;"></span>
-
             <button class="btn btn-primary" onclick="handleSignup()">Create Account</button>
             <p class="toggle-txt" onclick="showSection('login')">Already have an account? Login</p>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURATION ---
+        // --- Firebase Config ---
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -71,36 +67,68 @@
             if(type === 'signup') { document.getElementById('signupForm').classList.remove('hidden'); document.getElementById('formTitle').innerText = "Signup"; }
         }
 
-        // ✅ VERIFY REFERRAL
-        async function verifyReferral() {
-            const code = document.getElementById('sRefer').value.trim();
-            if(!code) return;
-            const snap = await database.ref('players/' + code).once('value');
-            if(snap.exists()) {
-                document.getElementById('referStatus').innerText = "✅ Valid: " + snap.val().name;
-                document.getElementById('referStatus').style.color = "#39ff14";
+        async function handleLogin() {
+            const inputId = document.getElementById('loginId').value.trim();
+            const inputPass = document.getElementById('loginPass').value.trim();
+
+            if(!inputId || !inputPass) return alert("Bhai, ID aur Password dono dalo!");
+
+            let foundUser = null;
+
+            // 1. Sabse pehle UID se check karo (Direct path: players/RG...)
+            const uidSnap = await database.ref('players/' + inputId).once('value');
+            if(uidSnap.exists()) {
+                const data = uidSnap.val();
+                if(String(data.pass) === String(inputPass)) {
+                    foundUser = data;
+                }
+            }
+
+            // 2. Agar UID se nahi mila, toh Phone Number se search karo
+            if(!foundUser) {
+                const phoneSnap = await database.ref('players').orderByChild('phone').equalTo(inputId).once('value');
+                if(phoneSnap.exists()) {
+                    const snapVal = phoneSnap.val();
+                    const key = Object.keys(snapVal)[0];
+                    if(String(snapVal[key].pass) === String(inputPass)) {
+                        foundUser = snapVal[key];
+                    }
+                }
+            }
+
+            // 3. Agar abhi bhi nahi mila, toh Email se search karo (Purane users)
+            if(!foundUser) {
+                const emailSnap = await database.ref('players').orderByChild('email').equalTo(inputId).once('value');
+                if(emailSnap.exists()) {
+                    const snapVal = emailSnap.val();
+                    const key = Object.keys(snapVal)[0];
+                    if(String(snapVal[key].pass) === String(inputPass)) {
+                        foundUser = snapVal[key];
+                    }
+                }
+            }
+
+            // --- Authentication Check ---
+            if(foundUser) {
+                localStorage.setItem("rareGamingUser", JSON.stringify(foundUser));
+                alert("Welcome back, " + foundUser.name + "!");
+                window.location.href = "index.html";
             } else {
-                document.getElementById('referStatus').innerText = "❌ Invalid Referral Code";
-                document.getElementById('referStatus').style.color = "#ff3131";
+                alert("Login Fail! ❌\nSahi UID (RG...) aur Password check karein.");
             }
         }
 
-        // 📝 SIGNUP LOGIC (No OTP)
         async function handleSignup() {
             const name = document.getElementById('sName').value.trim();
             const phone = document.getElementById('sPhone').value.trim();
             const uid = document.getElementById('sUID').value.trim();
             const pass = document.getElementById('sPass').value.trim();
 
-            if(!name || !phone || !uid || !pass) return alert("Pura dabba bharo bhai!");
-            if(phone.length < 10) return alert("Sahi Phone number dalo!");
+            if(!name || !phone || !uid || !pass) return alert("Bhai, saare dabbe bharo!");
 
-            // Check if UID or Phone already exists
-            const uidSnap = await database.ref('players/' + uid).once('value');
-            const phoneSnap = await database.ref('players').orderByChild('phone').equalTo(phone).once('value');
-
-            if(uidSnap.exists()) return alert("Ye UID pehle se koi le chuka hai!");
-            if(phoneSnap.exists()) return alert("Ye Phone number pehle se registered hai!");
+            // Check if UID exists
+            const checkUid = await database.ref('players/' + uid).once('value');
+            if(checkUid.exists()) return alert("Ye UID pehle se hai, kuch aur try karo!");
 
             const userData = {
                 name: name,
@@ -113,36 +141,8 @@
             };
 
             await database.ref('players/' + uid).set(userData);
-            alert("Account Created! 🚀 Ab Login karo.");
+            alert("Account Ban Gaya! ✅ Ab Login Karo.");
             showSection('login');
-        }
-
-        // 🔑 LOGIN LOGIC (UID or Phone)
-        async function handleLogin() {
-            const id = document.getElementById('loginId').value.trim();
-            const pass = document.getElementById('loginPass').value;
-
-            let foundUser = null;
-
-            // Try UID login
-            const uidSnap = await database.ref('players/' + id).once('value');
-            if(uidSnap.exists() && uidSnap.val().pass === pass) {
-                foundUser = uidSnap.val();
-            } else {
-                // Try Phone login
-                const phoneSnap = await database.ref('players').orderByChild('phone').equalTo(id).once('value');
-                if(phoneSnap.exists()) {
-                    const data = Object.values(phoneSnap.val())[0];
-                    if(data.pass === pass) foundUser = data;
-                }
-            }
-
-            if(foundUser) {
-                localStorage.setItem("rareGamingUser", JSON.stringify(foundUser));
-                window.location.href = "index.html";
-            } else {
-                alert("Galat Password ya ID! ❌");
-            }
         }
     </script>
 </body>
