@@ -24,10 +24,18 @@
         .header-text { flex: 1; }
         .match-title { font-size: 13px; font-weight: 800; color: #111; }
         .match-time { font-size: 9px; font-weight: 700; color: #666; display: block; margin-top: 2px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        
+        /* Stats Styling */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
         .stat-box { background: #8B3EEB; border-radius: 4px; padding: 6px 2px; text-align: center; color: white; }
         .stat-label { font-size: 7px; font-weight: 600; text-transform: uppercase; display: block; opacity: 0.9; }
         .stat-value { font-size: 10px; font-weight: 800; display: block; margin-top: 1px; }
+        
+        /* 🔥 New Info Bar for Map, Version, Type */
+        .info-bar { display: flex; justify-content: space-between; background: #f9f9f9; padding: 8px 10px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #eee; }
+        .info-item { font-size: 9px; font-weight: 700; color: #444; }
+        .info-item span { color: #8B3EEB; text-transform: uppercase; }
+
         .progress-section { margin-top: 15px; display: flex; align-items: center; gap: 10px; }
         .progress-bar { flex: 1; height: 12px; background: #E0D4FF; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #8B3EEB; }
         .progress-fill { height: 100%; background: #2D1B44; width: 15%; transition: 0.5s ease-in-out; }
@@ -91,7 +99,7 @@
                 const data = snapshot.val();
                 container.innerHTML = ""; 
                 if (!data) {
-                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#888;">No matches available.</div>`;
+                    container.innerHTML = `<div style="text-align:center; padding:50px; color:#888;">No matches found.</div>`;
                     return;
                 }
                 
@@ -109,26 +117,32 @@
 
         function renderCard(m, id, container) {
             let isJoined = localStorage.getItem("joined_" + id);
-            // Stable Image Link with cache buster
-            const imgLink = "https://i.imgur.com/8Qp2ZpX.jpeg";
+            const imgLink = "br_poster.jpg"; 
             
             const cardHTML = `
             <div class="card">
                 <div class="card-inner">
                     <div class="card-header">
-                        <img src="${imgLink}" class="match-logo" onerror="this.src='https://via.placeholder.com/50x50?text=RG'">
+                        <img src="${imgLink}" class="match-logo" onerror="this.src='icon.png'">
                         <div class="header-text">
                             <div class="match-title">${m.title} #${id}</div>
                             <span class="match-time">${m.date} | ${m.time}</span>
                         </div>
                     </div>
+
+                    <div class="info-bar">
+                        <div class="info-item">TYPE: <span>${m.category || 'BR'}</span></div>
+                        <div class="info-item">VERSION: <span>TPP</span></div>
+                        <div class="info-item">MAP: <span>${m.map || 'BERMUDA'}</span></div>
+                    </div>
+
                     <div class="stats-grid">
                         <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">${m.prize}</span></div>
                         <div class="stat-box"><span class="stat-label">Fee</span><span class="stat-value">${m.fee}</span></div>
                         <div class="stat-box" style="background:#2D1B44"><span class="stat-label">Per Kill</span><span class="stat-value">${m.perkill || '₹0'}</span></div>
                     </div>
                     <div class="progress-section">
-                        <div class="progress-bar"><div class="player-count">Joined Soon</div><div class="progress-fill"></div></div>
+                        <div class="progress-bar"><div class="player-count">Arena Filling...</div><div class="progress-fill"></div></div>
                         ${!isJoined ? `<button class="join-btn" onclick="openJoinModal('${id}', '${m.fee}')">Join</button>` : `<button class="join-btn" style="background:#444" disabled>Joined</button>`}
                     </div>
                 </div>
@@ -145,19 +159,19 @@
         function finalJoin() {
             const gName = document.getElementById('gameName').value.trim();
             const gUID = document.getElementById('gameId').value.trim();
-            if(!gName || !gUID) return alert("Details dalo bhai!");
+            if(!gName || !gUID) return alert("Bhai, Details dalo!");
 
             database.ref('players/' + userData.uid).once('value', (snap) => {
                 const pData = snap.val();
                 const currentCash = parseFloat(pData.cash || 0);
-                if (currentCash < selectedMatch.fee) return alert("❌ Low Balance!");
+                if (currentCash < selectedMatch.fee) return alert("❌ Balance Kam Hai!");
 
                 database.ref('players/' + userData.uid).update({ cash: currentCash - selectedMatch.fee });
                 database.ref('matches/' + selectedMatch.id + '/participants/' + userData.uid).set({
                     name: gName, uid: gUID, time: new Date().toLocaleString()
                 }).then(() => {
                     localStorage.setItem("joined_" + selectedMatch.id, "true");
-                    alert("✅ Joined!");
+                    alert("✅ Registration Successful!");
                     location.reload();
                 });
             });
