@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Deposit - Rare Gaming</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* Tera Pura CSS (No Change) */
-        body { background: linear-gradient(to bottom, #1b103c, #a1368b); font-family: 'Poppins', sans-serif; color: white; margin: 0; padding: 0; min-height: 100vh; padding-bottom: 100px; }
+        body { background: linear-gradient(to bottom, #1b103c, #a1368b); font-family: 'Poppins', sans-serif; color: white; margin: 0; padding: 0; min-height: 100vh; padding-bottom: 120px; /* Thodi space badhai nav ke liye */ }
         .container { padding: 20px; max-width: 400px; margin: 0 auto; }
         .header { display: flex; align-items: center; margin-bottom: 30px; }
         .back-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; margin-right: 15px; }
@@ -22,9 +22,9 @@
         .verify-btn { background: #4caf50; color: white; width: 100%; padding: 12px; margin-top: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .hindi-text { font-size: 12px; color: #444; display: block; margin-top: 5px; }
 
-        /* 🌟 NAVIGATION (Consistent with other pages) 🌟 */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        /* 🌟 NAVIGATION (Matched Style) 🌟 */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; transition: 0.3s; }
         .nav-item.active { color: #00f2fe; }
         .nav-item i { font-size: 20px; }
     </style>
