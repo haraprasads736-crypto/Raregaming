@@ -46,7 +46,7 @@
         .card-footer { padding: 0 12px 10px; display: flex; justify-content: flex-end; }
         .btn-join { background: #160826; color: #fff; border: none; padding: 7px 25px; border-radius: 6px; font-weight: 900; font-size: 10px; text-transform: uppercase; cursor: pointer; }
 
-        /* Overlay (Clean No Hindi) */
+        /* Overlay */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0F041C; z-index: 1000; display: none; overflow-y: auto; padding-bottom: 40px; }
         .overlay-header { padding: 15px 20px; background: #160826; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2D1B44; }
         .overlay-body { padding: 20px; }
@@ -167,11 +167,12 @@
                                     <div class="progress-fill" style="width:${percent}%"></div>
                                 </div>
                             </div>
+                            ${status === 'upcoming' ? `
                             <div class="card-footer">
                                 ${localStorage.getItem('joined_'+id) 
                                 ? `<button class="btn-join" style="background:#555">JOINED</button>` 
                                 : `<button class="btn-join" onclick="openJoinModal('${id}', '${m.fee}')">JOIN</button>`}
-                            </div>
+                            </div>` : ''}
                         </div>`;
                     }
                 });
@@ -235,11 +236,20 @@
                 if(bal < selectedFee) return alert("Insufficient Balance!");
 
                 database.ref('players/' + userData.uid).update({ cash: bal - selectedFee });
+                
+                // Match ke andar participants data save karna
                 database.ref('matches/' + activeMatchId + '/participants/' + userData.uid).set({
                     name: name, uid: uid, time: new Date().toLocaleTimeString()
+                });
+
+                // 🔥 Admin Panel ke liye 'match_joins' folder mein RG ID ke saath save karna
+                database.ref('match_joins/' + activeMatchId + '/' + userData.uid).set({
+                    name: name, 
+                    uid: uid,
+                    joinedAt: new Date().toISOString()
                 }).then(() => {
                     localStorage.setItem('joined_' + activeMatchId, "true");
-                    alert("Joined successfully!");
+                    alert("Joined successfully! ✅ Check participants tab in admin.");
                     location.reload();
                 });
             });
