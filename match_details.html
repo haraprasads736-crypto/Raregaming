@@ -94,7 +94,6 @@
             let matchesHtml = "";
             let serial = 1001;
 
-            // Fetch JOIN data once to prevent blinking
             const matchJoinsSnap = await database.ref(`match_joins`).once('value');
             const allJoins = matchJoinsSnap.val() || {};
 
@@ -105,7 +104,6 @@
                     let matchId = `${matchType}${serial}`;
                     let timeText = formatAMPM(h, m);
                     
-                    // Logic Setup
                     let fee = 10, prize = 80, perkill = 0, slots = 48, map = "BERMUDA", type = "SOLO";
                     if (matchType === "BR") {
                         prize = 380;
@@ -120,7 +118,6 @@
                         else { fee = 10; prize = 15; }
                     } else if (matchType === "CSHS") { slots = 8; fee = 10; prize = 65; type = "SQUAD"; }
 
-                    // Status Logic
                     let status = 'upcoming';
                     let mTime = new Date(displayDate); mTime.setHours(h, m, 0);
                     let diff = (now - mTime) / (1000 * 60);
@@ -160,7 +157,7 @@
                                 ${currentTab === 'upcoming' ? 
                                     (isJoined ? `<button class="btn-join" style="background:#444">JOINED ✅</button>` : 
                                     (pCount >= slots ? `<button class="btn-join" style="background:#ff3131">FULL</button>` : 
-                                    `<button class="btn-join" onclick="openJoinModal('${matchId}', ${fee})">JOIN</button>`)) 
+                                    `<button class="btn-join" onclick="openJoinModal('${matchId}', ${fee}, ${prize}, ${perkill})">JOIN</button>`)) 
                                 : `<button class="btn-join" style="background:var(--primary)">${currentTab.toUpperCase()}</button>`}
                             </div>
                         </div>`;
@@ -171,25 +168,38 @@
             container.innerHTML = matchesHtml || `<div style="text-align:center; margin-top:50px; opacity:0.5;"><p>No matches found.</p></div>`;
         }
 
-        function openJoinModal(id, fee) {
-            selectedMatchData = { id, fee };
+        // 🔥 MODAL OPEN WITH DATA PASSING FOR BOT SYNC
+        function openJoinModal(id, fee, prize, perkill) {
+            selectedMatchData = { id, fee, prize, perkill };
             document.getElementById('feeText').innerText = "Joining Fee: ₹" + fee;
             document.getElementById('joinModal').style.display = "flex";
         }
 
         function closeModal() { document.getElementById('joinModal').style.display = "none"; }
 
+        // 💰 BOT-SYNC ENABLED JOIN PROCESS
         async function processJoin() {
             const name = document.getElementById('gName').value.trim();
             const uid = document.getElementById('gID').value.trim();
             if(!name || !uid) return alert("Enter all details!");
+            
             const playerRef = database.ref('players/' + userData.uid);
             const snap = await playerRef.once('value');
             const balance = snap.val().cash || 0;
+            
             if(balance < selectedMatchData.fee) return alert("Low balance!");
+
+            // --- 🔥 BOT SYNC LOGIC: Create Match in Firebase if not exists ---
+            await database.ref('matches/' + selectedMatchData.id).update({
+                prize: selectedMatchData.prize.toString(),
+                perkill: selectedMatchData.perkill.toString(),
+                status: 'upcoming'
+            });
+
             await playerRef.update({ cash: balance - selectedMatchData.fee });
             await database.ref(`match_joins/${selectedMatchData.id}/${userData.uid}`).set({ name, uid, joinedAt: new Date().toISOString() });
-            alert("Joined Successfully!");
+            
+            alert("Joined Successfully! Match added for Bot Sync.");
             closeModal(); renderMatches();
         }
 
