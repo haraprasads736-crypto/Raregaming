@@ -48,15 +48,16 @@
             cursor: pointer;
         }
 
-        /* 📸 UPDATED SLIDING BANNER SYSTEM */
+        /* 📸 COMPACT SLIDING BANNER */
         .slider-container {
-            margin: 15px 20px;
+            margin: 10px 25px; /* Thoda side se aur gap diya */
             position: relative;
-            border-radius: 20px;
+            border-radius: 18px; /* Slightly smoother corners */
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            aspect-ratio: 16/8;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            aspect-ratio: 16/7; /* Pehle 16/8 tha, ab Chhota (Compact) hai */
             touch-action: pan-y;
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
         .slides {
             display: flex;
@@ -76,22 +77,22 @@
         }
         .slider-dots {
             position: absolute;
-            bottom: 10px;
+            bottom: 8px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
         .dot {
-            width: 8px;
-            height: 8px;
-            background: rgba(255,255,255,0.3);
+            width: 6px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
             border-radius: 50%;
             transition: 0.3s;
         }
         .dot.active {
             background: var(--neon-blue);
-            width: 20px;
+            width: 15px;
             border-radius: 10px;
         }
 
@@ -169,10 +170,7 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">
-            <i class="fas fa-home"></i>
-            <span>HOME</span>
-        </a>
+        <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item">
             <i class="fas fa-wallet"></i>
             <span>EARN</span>
@@ -190,7 +188,7 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ⚡ SLIDER + TOUCH LOGIC
+        // ⚡ AUTO + TOUCH SLIDE LOGIC
         const slider = document.getElementById('slider');
         const dots = document.querySelectorAll('.dot');
         let currentIndex = 0;
@@ -209,41 +207,30 @@
             slideTimer = setInterval(() => {
                 currentIndex = (currentIndex + 1) % totalSlides;
                 updateSlider();
-            }, 3000); // 3 seconds interval
+            }, 3000);
         }
 
-        function resetTimer() {
-            clearInterval(slideTimer);
-            startAutoSlide();
-        }
-
-        // --- Touch Events for Hand Sliding ---
         const sliderBox = document.getElementById('sliderBox');
-
         sliderBox.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
-            clearInterval(slideTimer); // Pause auto-slide on touch
+            clearInterval(slideTimer);
         });
 
         sliderBox.addEventListener('touchend', (e) => {
             const endX = e.changedTouches[0].clientX;
             const diff = startX - endX;
-
-            if (Math.abs(diff) > 50) { // Minimum swipe distance
-                if (diff > 0) {
-                    currentIndex = (currentIndex + 1) % totalSlides;
-                } else {
-                    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-                }
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) currentIndex = (currentIndex + 1) % totalSlides;
+                else currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
             }
             updateSlider();
-            resetTimer(); // Restart auto-slide
+            clearInterval(slideTimer);
+            startAutoSlide();
         });
 
-        // Initialize Auto Slide
         startAutoSlide();
 
-        // 🔗 FIREBASE & DASHBOARD
+        // 🔗 FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -252,26 +239,18 @@
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         const userUID = localStorage.getItem("userUID") || (userData ? userData.uid : null);
 
-        if (!userUID) {
-            window.location.href = "login.html";
-        }
+        if (!userUID) window.location.href = "login.html";
 
         function startLiveDashboard() {
             const balEl = document.getElementById('walletBal');
             database.ref('players/' + userUID).on('value', (snapshot) => {
                 const data = snapshot.val();
-                if (data) {
-                    balEl.innerHTML = `<i class="fas fa-coins"></i> ₹${data.cash || 0}`;
-                } else {
-                    balEl.innerHTML = `<i class="fas fa-coins"></i> ₹0`;
-                }
+                if (data) balEl.innerHTML = `<i class="fas fa-coins"></i> ₹${data.cash || 0}`;
             });
         }
-
         window.onload = startLiveDashboard;
     </script>
 </body>
