@@ -92,7 +92,12 @@
             const dateStr = displayDate.toLocaleDateString('en-GB');
 
             let matchesHtml = "";
-            let serial = 1001;
+            
+            // 🔥 UNIQUE SERIAL LOGIC
+            let serial = 1001; 
+            if(matchType.includes("CS")) serial = 2001;
+            else if(matchType.includes("1V1") || matchType.includes("LW")) serial = 3001;
+            else if(matchType === "FREE") serial = 4001;
 
             const matchJoinsSnap = await database.ref(`match_joins`).once('value');
             const allJoins = matchJoinsSnap.val() || {};
@@ -168,7 +173,6 @@
             container.innerHTML = matchesHtml || `<div style="text-align:center; margin-top:50px; opacity:0.5;"><p>No matches found.</p></div>`;
         }
 
-        // 🔥 MODAL OPEN WITH DATA PASSING FOR BOT SYNC
         function openJoinModal(id, fee, prize, perkill) {
             selectedMatchData = { id, fee, prize, perkill };
             document.getElementById('feeText').innerText = "Joining Fee: ₹" + fee;
@@ -177,19 +181,15 @@
 
         function closeModal() { document.getElementById('joinModal').style.display = "none"; }
 
-        // 💰 BOT-SYNC ENABLED JOIN PROCESS
         async function processJoin() {
             const name = document.getElementById('gName').value.trim();
             const uid = document.getElementById('gID').value.trim();
             if(!name || !uid) return alert("Enter all details!");
-            
             const playerRef = database.ref('players/' + userData.uid);
             const snap = await playerRef.once('value');
             const balance = snap.val().cash || 0;
-            
             if(balance < selectedMatchData.fee) return alert("Low balance!");
 
-            // --- 🔥 BOT SYNC LOGIC: Create Match in Firebase if not exists ---
             await database.ref('matches/' + selectedMatchData.id).update({
                 prize: selectedMatchData.prize.toString(),
                 perkill: selectedMatchData.perkill.toString(),
@@ -198,8 +198,7 @@
 
             await playerRef.update({ cash: balance - selectedMatchData.fee });
             await database.ref(`match_joins/${selectedMatchData.id}/${userData.uid}`).set({ name, uid, joinedAt: new Date().toISOString() });
-            
-            alert("Joined Successfully! Match added for Bot Sync.");
+            alert("Joined Successfully!");
             closeModal(); renderMatches();
         }
 
@@ -214,3 +213,4 @@
     </script>
 </body>
 </html>
+
