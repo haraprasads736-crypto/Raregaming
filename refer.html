@@ -3,67 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Refer & Earn - RARE GAMING</title>
+    <title>Earn & Wallet - RARE GAMING</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         
-        :root { --bg: #030305; --neon-blue: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; }
-        
-        * { box-sizing: border-box; }
+        :root {
+            --bg-color: #030305;
+            --neon-blue: #00f2fe;
+            --rare-gold: #ffd700;
+            --transfer-green: #39ff14;
+            --panel-color: #0a0a0f;
+        }
+
         body { 
-            background: var(--bg); color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding-bottom: 160px; text-align: center;
+            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 160px; 
             background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
         }
-
-        .container { padding: 40px 25px; }
         
-        .gift-icon-wrap { 
-            width: 120px; height: 120px; background: rgba(0, 242, 254, 0.1); 
-            border-radius: 50%; display: flex; align-items: center; 
-            justify-content: center; margin: 0 auto 20px;
-            border: 2px solid var(--neon-blue); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
-        }
-        .gift-icon-wrap i { font-size: 50px; color: var(--neon-blue); }
+        .header-top { padding: 30px 20px; text-align: center; color: var(--rare-gold); font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; }
+
+        .balance-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px 20px; }
+        .bal-card { background: var(--panel-color); border: 1.5px solid var(--rare-gold); border-radius: 20px; padding: 18px; text-align: center; box-shadow: 0 5px 15px rgba(255, 215, 0, 0.05); }
+        .bal-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .bal-amount { font-size: 22px; font-weight: 800; margin-top: 5px; }
+
+        .wallet-panel { background: var(--panel-color); border-radius: 20px; padding: 20px; border: 1px solid #1f1f25; margin: 0 20px 20px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .panel-title { font-size: 14px; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
         
-        h1 { font-size: 26px; font-weight: 900; margin: 10px 0; letter-spacing: 1px; }
-        .sub-text { color: #888; font-size: 13px; line-height: 1.6; margin-bottom: 30px; }
-
-        .refer-card { 
-            background: var(--panel); border-radius: 24px; padding: 30px 20px; 
-            border: 1px solid rgba(255,255,255,0.05); position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .label { font-size: 10px; color: var(--gold); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+        input { width: 100%; padding: 14px; background: #000; border: 1px solid #2a2a30; color: #fff; border-radius: 12px; margin-bottom: 12px; box-sizing: border-box; font-family: 'Poppins'; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 242, 254, 0.1); }
         
-        .code-row { 
-            display: flex; align-items: center; justify-content: center; 
-            gap: 15px; margin: 15px 0 25px; background: #000; 
-            padding: 15px; border-radius: 15px; border: 1px dashed #333;
-        }
-        #myCode { font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; }
-        .copy-btn { color: var(--neon-blue); font-size: 20px; cursor: pointer; }
+        .btn-action { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-blue { background: var(--neon-blue); color: #000; }
+        .btn-yellow { background: var(--rare-gold); color: #000; }
+        .btn-action:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .btn-invite { 
-            background: var(--green); color: #000; border: none; padding: 18px; 
-            border-radius: 15px; width: 100%; font-weight: 900; font-size: 15px; 
-            text-transform: uppercase; cursor: pointer; display: flex; 
-            align-items: center; justify-content: center; gap: 10px;
-            box-shadow: 0 5px 15px rgba(57, 255, 20, 0.2);
-        }
-
-        .how-it-works { text-align: left; margin-top: 40px; }
-        .step-item { display: flex; gap: 15px; margin-bottom: 25px; align-items: flex-start; }
-        .step-num { 
-            background: #1a1a2e; width: 30px; height: 30px; border-radius: 8px; 
-            display: flex; align-items: center; justify-content: center; 
-            font-weight: 800; color: var(--neon-blue); border: 1px solid var(--neon-blue); flex-shrink: 0;
-        }
-        .step-info b { display: block; font-size: 14px; color: #fff; margin-bottom: 2px; }
-        .step-info p { font-size: 11px; color: #777; margin: 0; }
-
-        /* 🟢 UNIFORM NAVIGATION SYSTEM (Matches index.html) */
+        /* 🟢 UNIFORM NAVIGATION SYSTEM (Exactly from index.html) */
         .bottom-nav { 
             position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
             background: rgba(10, 10, 15, 0.95); display: flex; 
@@ -92,87 +73,56 @@
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <div class="gift-icon-wrap">
-            <i class="fas fa-gift"></i>
-        </div>
-        <h1>Invite & Earn Cash</h1>
-        <p class="sub-text">Share your code with friends. When they join their first match, you get ₹5 and they get ₹2 bonus!</p>
-
-        <div class="refer-card">
-            <div class="label">Your Referral Code</div>
-            <div class="code-row">
-                <span id="myCode">LOADING...</span>
-                <i class="far fa-copy copy-btn" onclick="copyCode()"></i>
-            </div>
-            <button class="btn-invite" onclick="shareToWhatsApp()">
-                <i class="fab fa-whatsapp"></i> Send Invite
-            </button>
-        </div>
-
-        <div class="how-it-works">
-            <div class="step-item">
-                <div class="step-num">1</div>
-                <div class="step-info"><b>Share Code</b><p>Send your referral code to your friends or gaming groups.</p></div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">2</div>
-                <div class="step-info"><b>Friend Joins</b><p>Your friend registers and plays their first paid match.</p></div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">3</div>
-                <div class="step-info"><b>Get Rewards</b><p>You receive ₹5 instantly in your Main Wallet!</p></div>
+    <div class="header-top">RARE EARN</div>
+    <div class="balance-container">
+        <div class="bal-card">
+            <div class="bal-label">Main Wallet</div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <div class="bal-amount" id="mainBal">₹0</div>
+                <div onclick="window.location.href='payment.html'" style="background: var(--transfer-green); color: black; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-top: 5px;"><i class="fas fa-plus"></i></div>
             </div>
         </div>
+        <div class="bal-card" style="border-color: var(--rare-gold);"><div class="bal-label">Rare Coins</div><div class="bal-amount" id="rareCoins" style="color: var(--rare-gold);">0</div></div>
+    </div>
+    <div class="wallet-panel">
+        <div class="panel-title" style="color:var(--neon-blue);"><i class="fas fa-money-bill-wave"></i> Withdraw Cash</div>
+        <input type="number" id="witAmt" placeholder="Amount (Min ₹50)"><input type="text" id="witUpi" placeholder="UPI ID (e.g. name@upi)"><button class="btn-action btn-blue" id="btnWithdraw" onclick="withdraw()">Withdraw Now</button>
+    </div>
+    <div class="wallet-panel" style="border: 1px solid var(--rare-gold);">
+        <div class="panel-title" style="color:var(--rare-gold);"><i class="fas fa-coins"></i> Redeem Coins</div>
+        <p style="font-size: 11px; color: #888; margin-top: -5px;">100 Rare Coins = ₹2 Cash</p><button class="btn-action btn-yellow" id="btnRedeem" onclick="redeemCoins()">Redeem 100 Coins</button>
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>HOME</span>
-        </a>
-        <a href="earn.html" class="nav-item">
-            <i class="fas fa-wallet"></i>
-            <span>EARN</span>
-        </a>
-        <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle">
-                <i class="fas fa-exchange-alt"></i>
-            </div>
-            <span style="margin-top:5px; color:#fff;">SEND</span>
-        </a>
-        <a href="refer.html" class="nav-item active">
-            <i class="fas fa-gift"></i>
-            <span>REFER</span>
-        </a>
-        <a href="profile.html" class="nav-item">
-            <i class="fas fa-user-alt"></i>
-            <span>PROFILE</span>
-        </a>
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item active"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="refer.html" class="nav-item"><i class="fas fa-gift"></i><span>REFER</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
-
     <div class="system-nav-bar"></div>
 
     <script>
+        const firebaseConfig = { apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk", authDomain: "rare-gaming-b8875.firebaseapp.com", projectId: "rare-gaming-b8875", databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com" };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-        if(!userData) window.location.href = "login.html";
+        if (!userData) window.location.href = "login.html";
 
-        const referralCode = userData.uid.substring(userData.uid.length - 6).toUpperCase();
-        document.getElementById('myCode').innerText = "RG-" + referralCode;
-
-        function copyCode() {
-            const fullCode = document.getElementById('myCode').innerText;
-            navigator.clipboard.writeText(fullCode);
-            alert("Refer Code Copied! 🔥");
+        function startLiveSync() {
+            database.ref('players/' + userData.uid).on('value', (snapshot) => {
+                const data = snapshot.val();
+                if(data) {
+                    document.getElementById('mainBal').innerText = "₹" + (data.cash || 0);
+                    document.getElementById('rareCoins').innerText = (data.coins || 0);
+                    userData.cash = data.cash; userData.coins = data.coins;
+                    localStorage.setItem("rareGamingUser", JSON.stringify(userData));
+                }
+            });
         }
-
-        function shareToWhatsApp() {
-            const fullCode = document.getElementById('myCode').innerText;
-            const appLink = "https://raregaming.github.io/";
-            const msg = `Hey! Join *Rare Gaming Esports* and win daily cash prizes! 🏆\n\nUse my Referral Code: *${fullCode}*\n\nDownload App Now: ${appLink}`;
-            window.open(`whatsapp://send?text=${encodeURIComponent(msg)}`);
-        }
+        async function withdraw() { /* ... withdraw logic ... */ }
+        async function redeemCoins() { /* ... redeem logic ... */ }
+        window.onload = startLiveSync;
     </script>
 </body>
 </html>
