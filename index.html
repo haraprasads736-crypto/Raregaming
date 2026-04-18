@@ -48,7 +48,7 @@
             cursor: pointer;
         }
 
-        /* 📸 SWIPEABLE SLIDER */
+        /* 📸 UPDATED SLIDING BANNER SYSTEM */
         .slider-container {
             margin: 15px 20px;
             position: relative;
@@ -56,24 +56,23 @@
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             aspect-ratio: 16/8;
-            touch-action: pan-y; /* Allows vertical scrolling while swiping horizontal */
+            touch-action: pan-y;
         }
         .slides {
             display: flex;
             width: 100%;
             height: 100%;
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .slide {
             min-width: 100%;
             height: 100%;
-            user-select: none;
         }
         .slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            pointer-events: none; /* Prevents dragging image instead of slider */
+            pointer-events: none;
         }
         .slider-dots {
             position: absolute;
@@ -135,7 +134,7 @@
         </div>
     </div>
 
-    <div class="slider-container" id="swipeArea">
+    <div class="slider-container" id="sliderBox">
         <div class="slides" id="slider">
             <div class="slide"><img src="banner1.jpg" alt="Banner 1"></div>
             <div class="slide" onclick="window.location.href='https://t.me/Raregaming_7'">
@@ -146,7 +145,7 @@
                 <img src="banner4.jpg" alt="Banner 4">
             </div>
         </div>
-        <div class="slider-dots" id="dots">
+        <div class="slider-dots" id="dotsBox">
             <div class="dot active"></div>
             <div class="dot"></div>
             <div class="dot"></div>
@@ -170,28 +169,34 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>HOME</span>
+        </a>
         <a href="earn.html" class="nav-item">
-            <i class="fas fa-wallet"></i><span>EARN</span>
+            <i class="fas fa-wallet"></i>
+            <span>EARN</span>
         </a>
         <a href="refer.html" class="nav-item">
-            <i class="fas fa-gift"></i><span>REFER</span>
+            <i class="fas fa-gift"></i>
+            <span>REFER</span>
         </a>
         <a href="profile.html" class="nav-item">
-            <i class="fas fa-user-alt"></i><span>PROFILE</span>
+            <i class="fas fa-user-alt"></i>
+            <span>PROFILE</span>
         </a>
     </nav>
 
     <div class="system-nav-bar"></div>
 
     <script>
-        // ⚡ SLIDER + SWIPE LOGIC
-        let currentIndex = 0;
+        // ⚡ SLIDER + TOUCH LOGIC
         const slider = document.getElementById('slider');
         const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
         const totalSlides = 4;
         let startX = 0;
-        let isDragging = false;
+        let slideTimer;
 
         function updateSlider() {
             slider.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -200,41 +205,45 @@
             });
         }
 
-        function nextSlide() {
-            currentIndex = (currentIndex + 1) % totalSlides;
-            updateSlider();
+        function startAutoSlide() {
+            slideTimer = setInterval(() => {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateSlider();
+            }, 3000); // 3 seconds interval
         }
 
-        // Auto Slide Timer
-        let slideInterval = setInterval(nextSlide, 3500);
+        function resetTimer() {
+            clearInterval(slideTimer);
+            startAutoSlide();
+        }
 
         // --- Touch Events for Hand Sliding ---
-        const swipeArea = document.getElementById('swipeArea');
+        const sliderBox = document.getElementById('sliderBox');
 
-        swipeArea.addEventListener('touchstart', (e) => {
+        sliderBox.addEventListener('touchstart', (e) => {
             startX = e.touches[0].clientX;
-            clearInterval(slideInterval); // Stop auto-slide when user touches
+            clearInterval(slideTimer); // Pause auto-slide on touch
         });
 
-        swipeArea.addEventListener('touchend', (e) => {
-            let endX = e.changedTouches[0].clientX;
-            let diff = startX - endX;
+        sliderBox.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const diff = startX - endX;
 
-            if (Math.abs(diff) > 50) { // Threshold for swipe
+            if (Math.abs(diff) > 50) { // Minimum swipe distance
                 if (diff > 0) {
-                    // Swiped Left -> Next
                     currentIndex = (currentIndex + 1) % totalSlides;
                 } else {
-                    // Swiped Right -> Prev
                     currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
                 }
-                updateSlider();
             }
-            // Restart auto-slide
-            slideInterval = setInterval(nextSlide, 3500);
+            updateSlider();
+            resetTimer(); // Restart auto-slide
         });
 
-        // 🔗 FIREBASE LOGIC
+        // Initialize Auto Slide
+        startAutoSlide();
+
+        // 🔗 FIREBASE & DASHBOARD
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -247,7 +256,9 @@
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         const userUID = localStorage.getItem("userUID") || (userData ? userData.uid : null);
 
-        if (!userUID) window.location.href = "login.html";
+        if (!userUID) {
+            window.location.href = "login.html";
+        }
 
         function startLiveDashboard() {
             const balEl = document.getElementById('walletBal');
@@ -255,6 +266,8 @@
                 const data = snapshot.val();
                 if (data) {
                     balEl.innerHTML = `<i class="fas fa-coins"></i> ₹${data.cash || 0}`;
+                } else {
+                    balEl.innerHTML = `<i class="fas fa-coins"></i> ₹0`;
                 }
             });
         }
