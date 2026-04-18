@@ -10,39 +10,48 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         body { background: #0F041C; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 50px; }
+        
         .header { display: flex; align-items: center; padding: 12px 20px; background: #160826; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2D1B44; }
         .back-btn { font-size: 18px; color: #fff; cursor: pointer; }
         .title { font-size: 13px; font-weight: 800; flex: 1; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin-right: 20px; }
-        .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 12px; border-radius: 50px; padding: 4px; border: 1px solid #2D1B44; }
-        .tab { padding: 6px 15px; border-radius: 50px; font-size: 10px; font-weight: 700; color: #888; cursor: pointer; }
+        
+        .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 10px 12px; border-radius: 50px; padding: 3px; border: 1px solid #2D1B44; }
+        .tab { padding: 5px 12px; border-radius: 50px; font-size: 9px; font-weight: 700; color: #888; cursor: pointer; text-transform: uppercase; }
         .tab.active { background: #8B3EEB; color: #fff; }
-        .match-list { padding: 0 12px; }
-        .card { background: #FFFFFF; border-radius: 15px; margin-bottom: 15px; color: #000; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .card-top { padding: 12px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #eee; }
-        .match-logo { width: 40px; height: 40px; border-radius: 8px; border: 1.5px solid #8B3EEB; object-fit: cover; }
-        .match-name { font-size: 11px; font-weight: 900; text-transform: uppercase; margin: 0; }
-        .match-dt { font-size: 9px; color: #666; font-weight: 600; display: block; margin-top: 2px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 10px 12px; }
-        .stat-box { background: #8B3EEB; border-radius: 8px; padding: 6px 4px; text-align: center; color: white; }
-        .stat-box.light { background: #F3EEFF; color: #000; border: 0.5px solid #ddd; }
-        .stat-label { font-size: 7px; font-weight: 700; text-transform: uppercase; display: block; opacity: 0.9; }
-        .stat-value { font-size: 10px; font-weight: 900; display: block; }
-        .progress-box { padding: 0 12px 10px; }
-        .progress-bar-bg { width: 100%; height: 14px; background: #E0D4FF; border-radius: 20px; position: relative; overflow: hidden; }
+
+        /* 📸 BATTLE OP COMPACT DESIGN */
+        .match-list { padding: 0 10px; }
+        .card { background: #FFFFFF; border-radius: 12px; margin-bottom: 12px; color: #000; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 1px solid #ddd; }
+        .card-top { padding: 8px 10px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #f0f0f0; }
+        .match-logo { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; border: 1px solid #8B3EEB; }
+        .match-name { font-size: 10px; font-weight: 800; text-transform: uppercase; margin: 0; color: #111; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .match-dt { font-size: 8px; color: #777; font-weight: 600; display: block; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px 10px; }
+        .stat-box { background: #8B3EEB; border-radius: 5px; padding: 4px 2px; text-align: center; color: white; }
+        .stat-box.light { background: #F3EEFF; color: #000; border: 0.5px solid #e0e0e0; }
+        .stat-label { font-size: 6.5px; font-weight: 700; text-transform: uppercase; display: block; opacity: 0.9; }
+        .stat-value { font-size: 9px; font-weight: 900; display: block; }
+
+        .progress-box { padding: 0 10px 8px; }
+        .progress-bar-bg { width: 100%; height: 10px; background: #E0D4FF; border-radius: 10px; position: relative; overflow: hidden; }
         .progress-fill { height: 100%; background: #8B3EEB; width: 0%; transition: 1s; }
-        .progress-text { position: absolute; width: 100%; text-align: center; font-size: 8px; font-weight: 900; line-height: 14px; color: #fff; z-index: 2; text-shadow: 0 1px 2px #000; }
-        .card-footer { padding: 0 12px 12px; display: flex; justify-content: flex-end; }
-        .btn-join { background: #160826; color: #fff; border: none; padding: 8px 25px; border-radius: 8px; font-weight: 900; font-size: 10px; text-transform: uppercase; cursor: pointer; }
+        .progress-text { position: absolute; width: 100%; text-align: center; font-size: 7.5px; font-weight: 900; line-height: 10px; color: #fff; z-index: 2; text-shadow: 0 1px 1px #000; }
+
+        .card-footer { padding: 0 10px 8px; display: flex; justify-content: flex-end; }
+        .btn-join { background: #160826; color: #fff; border: none; padding: 6px 20px; border-radius: 6px; font-weight: 900; font-size: 9px; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
+        .btn-join:active { transform: scale(0.95); }
+
         .mini-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .mini-card { background: #1A0A2D; width: 100%; max-width: 300px; border-radius: 15px; padding: 20px; border: 1px solid #8B3EEB; text-align: center; color: white; }
-        .mini-card input { width: 100%; padding: 10px; background: #000; border: 1px solid #8B3EEB; border-radius: 6px; color: #fff; margin: 8px 0; box-sizing: border-box; }
+        .mini-card input { width: 100%; padding: 10px; background: #000; border: 1px solid #8B3EEB; border-radius: 6px; color: #fff; margin: 8px 0; box-sizing: border-box; font-family: 'Poppins'; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
-        <div class="title" id="pageTitle">TOURNAMENTS</div>
+        <div class="title" id="pageTitle">ARENA</div>
     </div>
 
     <div class="tab-container">
@@ -55,11 +64,11 @@
 
     <div id="joinModal" class="mini-modal">
         <div class="mini-card">
-            <h3 style="margin:0 0 15px;">Confirm Entry</h3>
-            <p id="feeText" style="font-size:12px; color:#8B3EEB; font-weight:700;"></p>
-            <input type="text" id="gName" placeholder="Game Name">
-            <input type="number" id="gID" placeholder="Game UID">
-            <button onclick="processJoin()" style="background:#39ff14; color:#000; width:100%; padding:12px; border-radius:8px; border:none; font-weight:900;">PAY & JOIN</button>
+            <h3 style="margin:0 0 15px; font-size:15px;">Confirm Entry</h3>
+            <p id="feeText" style="font-size:11px; color:#8B3EEB; font-weight:700;"></p>
+            <input type="text" id="gName" placeholder="Free Fire Name">
+            <input type="number" id="gID" placeholder="Free Fire UID">
+            <button onclick="processJoin()" style="background:#39ff14; color:#000; width:100%; padding:10px; border-radius:8px; border:none; font-weight:900; margin-top:5px; font-size:11px;">PAY & JOIN</button>
             <p onclick="closeModal()" style="margin-top:12px; font-size:10px; color:#888; cursor:pointer;">Cancel</p>
         </div>
     </div>
@@ -90,13 +99,15 @@
                     let matchId = `${matchType}_${dateStr.replace(/\//g, '')}_${timeStr.replace(':', '')}`;
                     
                     let fee = 10, prize = 80, perkill = 0, slots = 48, map = "BERMUDA", type = "SOLO";
+                    let logo = matchType.toLowerCase() + "_poster.jpg";
 
                     if (matchType === "BR") {
                         prize = 380;
-                        if (m === 0) { fee = 5; perkill = 3; }
-                        else if (m === 15) { fee = 7; perkill = 5; }
-                        else if (m === 30) { fee = 10; perkill = 7; }
-                        else { fee = 5; perkill = 3; }
+                        // BR Solo/Duo/Squad Rotation
+                        if (m === 0) { fee = 5; perkill = 3; type = "SOLO"; }
+                        else if (m === 15) { fee = 7; perkill = 5; type = "DUO"; }
+                        else if (m === 30) { fee = 10; perkill = 7; type = "SQUAD"; }
+                        else { fee = 5; perkill = 3; type = "SOLO"; }
                     } 
                     else if (["1V1", "LW", "LW2", "1V1HS", "ONLE HEAD"].includes(matchType)) {
                         slots = 2; map = "LONE WOLF";
@@ -108,14 +119,8 @@
                         if (h !== 12 || m !== 0) continue; 
                         fee = 0; prize = 1000; perkill = 1;
                     }
-                    // --- CSHS ARENA LOGIC UPDATED ---
                     else if (matchType === "CSHS") {
-                        slots = 8; map = "BERMUDA";
-                        fee = 10; prize = 65; type = "SQUAD";
-                    }
-                    else if (matchType.includes("CS")) {
-                        slots = 8; map = "BERMUDA";
-                        fee = 10; prize = 80;
+                        slots = 8; map = "BERMUDA"; fee = 10; prize = 65; type = "SQUAD";
                     }
 
                     let status = 'upcoming';
@@ -125,7 +130,7 @@
                     if (diff >= 0 && diff < 20) status = 'ongoing';
                     else if (diff >= 20) status = 'result';
 
-                    matches.push({ id: matchId, title: `${matchType} TOURNAMENT`, time: timeStr, date: dateStr, fee: fee, prize: prize, perkill: perkill, status: status, slots: slots, map: map, type: type });
+                    matches.push({ id: matchId, title: `${matchType} TOURNAMENT`, time: timeStr, date: dateStr, fee: fee, prize: prize, perkill: perkill, status: status, slots: slots, map: map, type: type, logo: logo });
                 }
             }
             return matches;
@@ -137,7 +142,7 @@
             const matches = generateMatches().filter(m => m.status === currentTab);
 
             if(matches.length === 0) {
-                container.innerHTML = `<center style="padding:50px; color:#888; font-size:11px;">No matches in ${currentTab} tab.</center>`;
+                container.innerHTML = `<center style="padding:50px; color:#888; font-size:10px;">No matches in ${currentTab} tab.</center>`;
                 return;
             }
 
@@ -150,7 +155,7 @@
                 container.innerHTML += `
                 <div class="card">
                     <div class="card-top">
-                        <img src="icon.png" class="match-logo">
+                        <img src="${m.logo}" class="match-logo" onerror="this.src='icon.png'">
                         <div style="flex:1">
                             <p class="match-name">${m.title} #${m.id.split('_').pop()}</p>
                             <span class="match-dt">${m.date} | ${m.time}</span>
@@ -172,7 +177,7 @@
                     </div>
                     <div class="card-footer">
                         ${currentTab === 'upcoming' ? 
-                            (isJoined ? `<button class="btn-join" style="background:#444">JOINED ✅</button>` : 
+                            (isJoined ? `<button class="btn-join" style="background:#555">JOINED ✅</button>` : 
                             (pCount >= m.slots ? `<button class="btn-join" style="background:#ff3131">FULL</button>` : `<button class="btn-join" onclick="openJoinModal('${m.id}', ${m.fee})">JOIN</button>`)) 
                         : `<button class="btn-join" style="background:#8B3EEB">${currentTab.toUpperCase()}</button>`}
                     </div>
