@@ -10,34 +10,48 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         body { background: #0F041C; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 50px; }
+        
         .header { display: flex; align-items: center; padding: 12px 20px; background: #160826; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2D1B44; }
         .back-btn { font-size: 18px; color: #fff; cursor: pointer; }
         .title { font-size: 13px; font-weight: 800; flex: 1; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin-right: 20px; }
+        
         .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 12px; border-radius: 50px; padding: 4px; border: 1px solid #2D1B44; }
         .tab { padding: 6px 15px; border-radius: 50px; font-size: 10px; font-weight: 700; color: #888; cursor: pointer; }
         .tab.active { background: #8B3EEB; color: #fff; }
+
+        /* 📸 MATCH CARD UI (IMAGE STYLE) */
         .match-list { padding: 0 12px; }
-        .card { background: #FFFFFF; border-radius: 12px; margin-bottom: 15px; color: #000; overflow: hidden; }
-        .card-top { padding: 10px 12px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f0f0f0; }
-        .match-logo { width: 35px; height: 35px; border-radius: 50%; border: 1.5px solid #8B3EEB; }
-        .match-name { font-size: 11px; font-weight: 900; text-transform: uppercase; margin: 0; }
-        .match-dt { font-size: 9px; color: #777; font-weight: 600; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 10px 12px; }
-        .stat-box { background: #8B3EEB; border-radius: 6px; padding: 5px 2px; text-align: center; color: white; }
+        .card { background: #FFFFFF; border-radius: 15px; margin-bottom: 15px; color: #000; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .card-top { padding: 12px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #eee; }
+        .match-logo { width: 40px; height: 40px; border-radius: 8px; border: 1px solid #8B3EEB; }
+        .match-name { font-size: 11px; font-weight: 900; text-transform: uppercase; margin: 0; color: #000; }
+        .match-dt { font-size: 9px; color: #666; font-weight: 600; display: block; margin-top: 2px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 10px 12px; }
+        .stat-box { background: #8B3EEB; border-radius: 8px; padding: 6px 4px; text-align: center; color: white; }
         .stat-box.light { background: #F3EEFF; color: #000; border: 0.5px solid #ddd; }
-        .stat-label { font-size: 7px; font-weight: 700; text-transform: uppercase; }
-        .stat-value { font-size: 9px; font-weight: 900; }
-        .btn-join { background: #160826; color: #fff; border: none; padding: 8px 25px; border-radius: 6px; font-weight: 900; font-size: 10px; text-transform: uppercase; width: 100%; cursor: pointer; }
+        .stat-label { font-size: 7px; font-weight: 700; text-transform: uppercase; display: block; opacity: 0.9; }
+        .stat-value { font-size: 10px; font-weight: 900; display: block; margin-top: 1px; }
+
+        /* Progress Bar */
+        .progress-box { padding: 0 12px 10px; }
+        .progress-bar-bg { width: 100%; height: 14px; background: #E0D4FF; border-radius: 20px; position: relative; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(to right, #8B3EEB, #6219c4); width: 40%; transition: 1s; }
+        .progress-text { position: absolute; width: 100%; text-align: center; font-size: 8px; font-weight: 900; line-height: 14px; color: #fff; z-index: 2; text-shadow: 0 1px 2px #000; }
+
+        .card-footer { padding: 0 12px 12px; display: flex; justify-content: flex-end; }
+        .btn-join { background: #160826; color: #fff; border: none; padding: 8px 25px; border-radius: 8px; font-weight: 900; font-size: 10px; text-transform: uppercase; cursor: pointer; }
+
         .mini-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .mini-card { background: #1A0A2D; width: 100%; max-width: 300px; border-radius: 15px; padding: 20px; border: 1px solid #8B3EEB; text-align: center; color: white; }
-        .mini-card input { width: 100%; padding: 10px; background: #000; border: 1px solid #8B3EEB; border-radius: 6px; color: #fff; margin: 8px 0; box-sizing: border-box; }
+        .mini-card input { width: 100%; padding: 10px; background: #000; border: 1px solid #8B3EEB; border-radius: 6px; color: #fff; margin: 8px 0; box-sizing: border-box; outline: none; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
-        <div class="title" id="pageTitle">LOADING...</div>
+        <div class="title" id="pageTitle">TOURNAMENTS</div>
     </div>
 
     <div class="tab-container">
@@ -50,12 +64,12 @@
 
     <div id="joinModal" class="mini-modal">
         <div class="mini-card">
-            <h3 style="margin:0 0 15px;">Confirm Entry</h3>
-            <p id="feeText" style="font-size:12px; color:#8B3EEB;"></p>
+            <h3 style="margin:0 0 15px; font-size: 16px;">Confirm Entry</h3>
+            <p id="feeText" style="font-size:12px; color:#8B3EEB; font-weight: 700;"></p>
             <input type="text" id="gName" placeholder="Free Fire Name">
             <input type="number" id="gID" placeholder="Free Fire UID">
-            <button onclick="processJoin()" style="background:#39ff14; color:#000; width:100%; padding:10px; border-radius:6px; border:none; font-weight:900;">PAY & JOIN</button>
-            <p onclick="closeModal()" style="margin-top:12px; font-size:10px; cursor:pointer;">Cancel</p>
+            <button onclick="processJoin()" style="background:#39ff14; color:#000; width:100%; padding:12px; border-radius:8px; border:none; font-weight:900; margin-top: 5px;">PAY & JOIN</button>
+            <p onclick="closeModal()" style="margin-top:12px; font-size:10px; color: #888; cursor:pointer;">Cancel</p>
         </div>
     </div>
 
@@ -75,52 +89,35 @@
             const matches = [];
             const now = new Date();
             let displayDate = new Date();
-            
-            // Agar raat ke 9 baj gaye hain, toh kal ke matches dikhao
-            if (now.getHours() >= 21) {
-                displayDate.setDate(now.getDate() + 1);
-            }
-
+            if (now.getHours() >= 21) displayDate.setDate(now.getDate() + 1);
             const dateStr = displayDate.toLocaleDateString('en-GB');
 
-            // 9:00 AM to 9:00 PM matches (Har 15 mins)
             for (let h = 9; h <= 21; h++) {
                 for (let m = 0; m < 60; m += 15) {
                     if (h === 21 && m > 0) break;
-
                     let timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
                     let matchId = `${matchType}_${dateStr.replace(/\//g, '')}_${timeStr.replace(':', '')}`;
                     
-                    // Match Settings Logic
-                    let fee = 0, prize = 0, perkill = 0;
+                    let fee = 10, prize = 380, perkill = 3;
                     if (matchType === "BR") {
-                        prize = 380;
                         if (m === 0) { fee = 5; perkill = 3; }
                         else if (m === 15) { fee = 7; perkill = 5; }
                         else if (m === 30) { fee = 10; perkill = 7; }
-                        else { fee = 5; perkill = 3; }
                     } else if (matchType === "1V1") {
                         perkill = 0;
                         if (m === 0) { fee = 20; prize = 30; }
                         else if (m === 15) { fee = 30; prize = 40; }
                         else { fee = 10; prize = 15; }
-                    } else if (matchType === "FREE") {
-                        fee = 0; prize = 1000; perkill = 1;
-                        if (h !== 12 || m !== 0) continue; // Din mein sirf ek free match 12 baje
-                    } else {
-                        fee = 10; prize = 80; perkill = 0; // Default for others
                     }
 
-                    // Status Logic
                     let status = 'upcoming';
                     let matchTime = new Date(displayDate);
                     matchTime.setHours(h, m, 0);
-                    
-                    let diff = (now - matchTime) / (1000 * 60); // minutes mein difference
+                    let diff = (now - matchTime) / (1000 * 60);
                     if (diff >= 0 && diff < 20) status = 'ongoing';
                     else if (diff >= 20) status = 'result';
 
-                    matches.push({ id: matchId, title: matchType + " Tournament", time: timeStr, date: dateStr, fee: fee, prize: prize, perkill: perkill, status: status });
+                    matches.push({ id: matchId, title: `FREE FIRE ${matchType} MATCH`, time: timeStr, date: dateStr, fee: fee, prize: prize, perkill: perkill, status: status });
                 }
             }
             return matches;
@@ -129,12 +126,19 @@
         async function renderMatches() {
             const container = document.getElementById('matchList');
             container.innerHTML = "";
+            
+            // 🔥 Abhi Ongoing aur Result tab ko empty dikhayenge
+            if(currentTab !== 'upcoming') {
+                container.innerHTML = `<center style="padding:50px; color:#888; font-size:11px;">Matches will appear here after they start.</center>`;
+                return;
+            }
+
             const matches = generateMatches().filter(m => m.status === currentTab);
 
             for (let m of matches) {
-                // Check if already joined from Firebase
                 const joinedSnap = await database.ref(`match_joins/${m.id}/${userData.uid}`).once('value');
                 const isJoined = joinedSnap.exists();
+                const pCount = Math.floor(Math.random() * 20); // Dummy count for progress UI
 
                 container.innerHTML += `
                 <div class="card">
@@ -142,19 +146,26 @@
                         <img src="icon.png" class="match-logo">
                         <div style="flex:1">
                             <p class="match-name">${m.title} #${m.id.split('_').pop()}</p>
-                            <span class="match-dt">${m.date} | ${m.time}</span>
+                            <span class="match-dt">Date: ${m.date} | Time: ${m.time}</span>
                         </div>
                     </div>
                     <div class="stats-grid">
-                        <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${m.prize}</span></div>
+                        <div class="stat-box"><span class="stat-label">Prize Pool</span><span class="stat-value">₹${m.prize}</span></div>
                         <div class="stat-box"><span class="stat-label">Per Kill</span><span class="stat-value">₹${m.perkill}</span></div>
-                        <div class="stat-box"><span class="stat-label">Entry</span><span class="stat-value">${m.fee === 0 ? 'FREE' : '₹'+m.fee}</span></div>
+                        <div class="stat-box"><span class="stat-label">Entry Fee</span><span class="stat-value">${m.fee === 0 ? 'FREE' : '₹'+m.fee}</span></div>
+                        <div class="stat-box light"><span class="stat-label">Type</span><span class="stat-value">${matchType}</span></div>
+                        <div class="stat-box light"><span class="stat-label">Version</span><span class="stat-value">TPP</span></div>
+                        <div class="stat-box light"><span class="stat-label">Map</span><span class="stat-value">BERMUDA</span></div>
                     </div>
-                    <div style="padding:10px">
-                        ${currentTab === 'upcoming' ? 
-                            (isJoined ? `<button class="btn-join" style="background:#555">JOINED ✅</button>` : 
-                            `<button class="btn-join" onclick="openJoinModal('${m.id}', ${m.fee})">JOIN NOW</button>`) 
-                        : `<button class="btn-join" style="background:#8B3EEB">${currentTab.toUpperCase()}</button>`}
+                    <div class="progress-box">
+                        <div class="progress-bar-bg">
+                            <div class="progress-text">${pCount}/48 Slots Filled</div>
+                            <div class="progress-fill" style="width:${(pCount/48)*100}%"></div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        ${isJoined ? `<button class="btn-join" style="background:#444">JOINED ✅</button>` : 
+                        `<button class="btn-join" onclick="openJoinModal('${m.id}', ${m.fee})">JOIN</button>`}
                     </div>
                 </div>`;
             }
@@ -162,7 +173,7 @@
 
         function openJoinModal(id, fee) {
             selectedMatchData = { id, fee };
-            document.getElementById('feeText').innerText = "Entry Fee: ₹" + fee;
+            document.getElementById('feeText').innerText = "Joining Fee: ₹" + fee;
             document.getElementById('joinModal').style.display = "flex";
         }
 
@@ -171,23 +182,20 @@
         async function processJoin() {
             const name = document.getElementById('gName').value;
             const uid = document.getElementById('gID').value;
-            if(!name || !uid) return alert("Fill details!");
+            if(!name || !uid) return alert("Please enter Game Name and UID!");
 
             const playerRef = database.ref('players/' + userData.uid);
             const snap = await playerRef.once('value');
             const balance = snap.val().cash || 0;
 
-            if(balance < selectedMatchData.fee) return alert("Insufficient Balance!");
+            if(balance < selectedMatchData.fee) return alert("Low Balance! Please add money.");
 
-            // Deduct Balance
             await playerRef.update({ cash: balance - selectedMatchData.fee });
-            
-            // Save Join Data
             await database.ref(`match_joins/${selectedMatchData.id}/${userData.uid}`).set({
                 name, uid, joinedAt: new Date().toISOString()
             });
 
-            alert("Joined Successfully!");
+            alert("Joined Successfully! Good Luck.");
             closeModal();
             renderMatches();
         }
@@ -200,8 +208,6 @@
         }
 
         window.onload = renderMatches;
-        // Har minute refresh taaki status change ho sake automatically
-        setInterval(renderMatches, 60000);
     </script>
 </body>
 </html>
