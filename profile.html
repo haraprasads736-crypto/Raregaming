@@ -26,10 +26,8 @@
             background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
         }
         
-        /* Earn Style Header */
         .header-top { padding: 30px 20px; text-align: center; color: var(--rare-gold); font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Profile Main Card */
         .profile-panel { background: var(--panel-color); border-radius: 24px; padding: 25px; border: 1px solid #1f1f25; margin: 0 20px 20px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; }
@@ -39,31 +37,46 @@
         
         select { width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; color: var(--neon-blue); border-radius: 12px; margin-top: 10px; font-family: 'Poppins'; font-weight: 700; outline: none; }
 
-        /* Stats Grid like Earn Balance */
         .balance-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px 20px; }
         .bal-card { background: var(--panel-color); border: 1.5px solid var(--rare-gold); border-radius: 20px; padding: 18px; text-align: center; }
         .bal-label { font-size: 10px; color: #888; text-transform: uppercase; }
         .bal-amount { font-size: 20px; font-weight: 800; margin-top: 5px; }
 
-        /* Action Buttons */
         .btn-action { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
         .btn-gold { background: var(--rare-gold); color: #000; }
         .btn-blue { background: var(--neon-blue); color: #000; }
         .btn-red { background: #ff3131; color: #fff; }
 
-        /* Battle Card Overlay */
         #bcOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 5000; align-items: center; justify-content: center; flex-direction: column; backdrop-filter: blur(12px); }
         .bc-card { width: 300px; height: 450px; background: #000; border: 2.5px solid var(--rare-gold); border-radius: 30px; position: relative; overflow: hidden; text-align: center; }
         .bc-back-btn { margin-top: 20px; background: #fff; color: #000; padding: 10px 25px; border-radius: 50px; font-weight: 800; border: none; }
 
-        /* 🟢 NAVIGATION SYSTEM (EXACTLY FROM EARN/INDEX) */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
-        .nav-item i { font-size: 20px; }
+        /* 🟢 UNIFORM NAVIGATION SYSTEM (Exactly from index.html) */
+        .bottom-nav { 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
+            background: rgba(10, 10, 15, 0.95); display: flex; 
+            justify-content: space-around; align-items: center; 
+            backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000; border-radius: 20px 20px 0 0; 
+        }
+        .nav-item { 
+            text-decoration: none; color: #666; font-size: 10px; font-weight: 700; 
+            display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;
+        }
         .nav-item.active { color: var(--neon-blue); }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #050508; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
+        .nav-item i { font-size: 20px; }
+
+        .center-btn .icon-circle { 
+            width: 55px; height: 55px; background: #39ff14; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 4px solid #030305; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
+            margin-top: -35px; 
+        }
         .center-btn i { color: #000 !important; font-size: 22px; }
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+        .system-nav-bar { 
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; 
+            background-color: #1a1b22; z-index: 1001; 
+        }
     </style>
 </head>
 <body>
@@ -122,15 +135,30 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
-            <span style="margin-top: 5px; color: #fff;">SEND</span>
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>HOME</span>
         </a>
-        <a href="refer.html" class="nav-item"><i class="fas fa-gift"></i><span>REFER</span></a>
-        <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
+        <a href="earn.html" class="nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>EARN</span>
+        </a>
+        <a href="transfer.html" class="nav-item center-btn">
+            <div class="icon-circle">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+            <span style="margin-top:5px; color:#fff;">SEND</span>
+        </a>
+        <a href="refer.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>REFER</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user-alt"></i>
+            <span>PROFILE</span>
+        </a>
     </nav>
+
     <div class="system-nav-bar"></div>
 
     <script>
