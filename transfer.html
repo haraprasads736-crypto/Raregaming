@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Transfer - RARE GAMING</title>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-5695800911065486" crossorigin="anonymous"></script>
-
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbackend.js?client=ca-app-pub-5695800911065486" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         
@@ -48,13 +48,15 @@
 
         #verifyName { font-weight: 700; margin-bottom: 15px; min-height: 20px; font-size: 13px; text-align: center; }
 
-        /* NAVIGATION BAR */
+        /* 🟢 NAVIGATION BAR (Dashboard Style) */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;}
         .nav-item i { font-size: 20px; }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #050508; box-shadow: 0 0 20px rgba(57, 255, 20, 0.4); margin-top: -35px; }
+        .nav-item.active { color: var(--neon-blue); }
+        
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #050508; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
         .center-btn i { color: #000 !important; font-size: 22px; }
-        .center-btn span { color: #fff; margin-top: 5px; font-weight: 800; }
+        
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
 </head>
@@ -79,15 +81,17 @@
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span>SEND</span></a>
-        <a href="chat_list.html" class="nav-item"><i class="fas fa-comments"></i><span>CHAT</span></a>
+        <a href="transfer.html" class="nav-item active center-btn">
+            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
+            <span style="margin-top: 5px; color: #fff;">SEND</span>
+        </a>
+        <a href="refer.html" class="nav-item"><i class="fas fa-gift"></i><span>REFER</span></a>
         <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
     
     <div class="system-nav-bar"></div>
 
     <script>
-        // 🟢 FIXED SCRIPT
         const scriptURL = "https://script.google.com/macros/s/AKfycbxkNQ1Zc4mrOV3oAT-FEW7yJbp2c1WL5T80hHa5lTth5K1I5OloyJ3ddbc-pDAl1JHSeQ/exec";
         let user = JSON.parse(localStorage.getItem("rareGamingUser"));
 
@@ -107,7 +111,7 @@
                 .then(name => {
                     if(name !== "Not Found") {
                         nameBox.innerText = "To: " + name;
-                        nameBox.style.color = "#39ff14"; // Fixed color variable
+                        nameBox.style.color = "#39ff14";
                         btn.disabled = false;
                     } else {
                         nameBox.innerText = "Invalid ID! No player found.";
