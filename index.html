@@ -48,32 +48,30 @@
             cursor: pointer;
         }
 
-        /* 📸 COMPACT SLIDING BANNER */
+        /* 📸 UPDATED SLIDER (No Crop System) */
         .slider-container {
-            margin: 10px 25px; /* Thoda side se aur gap diya */
+            margin: 10px 20px;
             position: relative;
-            border-radius: 18px; /* Slightly smoother corners */
+            border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-            aspect-ratio: 16/7; /* Pehle 16/8 tha, ab Chhota (Compact) hai */
+            /* Aspect ratio hata diya taaki poster ki height ke hisab se adjust ho */
             touch-action: pan-y;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            background: #000;
         }
         .slides {
             display: flex;
             width: 100%;
-            height: 100%;
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .slide {
             min-width: 100%;
-            height: 100%;
         }
         .slide img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            pointer-events: none;
+            display: block;
+            /* object-fit: contain se character kabhi nahi kategi */
+            object-fit: contain; 
         }
         .slider-dots {
             position: absolute;
@@ -188,7 +186,6 @@
     <div class="system-nav-bar"></div>
 
     <script>
-        // ⚡ AUTO + TOUCH SLIDE LOGIC
         const slider = document.getElementById('slider');
         const dots = document.querySelectorAll('.dot');
         let currentIndex = 0;
@@ -230,7 +227,6 @@
 
         startAutoSlide();
 
-        // 🔗 FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
