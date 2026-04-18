@@ -19,7 +19,7 @@
         .match-list { padding: 0 12px; }
         .card { background: #FFFFFF; border-radius: 15px; margin-bottom: 15px; color: #000; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .card-top { padding: 12px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #eee; }
-        .match-logo { width: 40px; height: 40px; border-radius: 8px; border: 1.5px solid #8B3EEB; }
+        .match-logo { width: 40px; height: 40px; border-radius: 8px; border: 1.5px solid #8B3EEB; object-fit: cover; }
         .match-name { font-size: 11px; font-weight: 900; text-transform: uppercase; margin: 0; }
         .match-dt { font-size: 9px; color: #666; font-weight: 600; display: block; margin-top: 2px; }
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 10px 12px; }
@@ -89,9 +89,8 @@
                     let timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
                     let matchId = `${matchType}_${dateStr.replace(/\//g, '')}_${timeStr.replace(':', '')}`;
                     
-                    let fee = 10, prize = 80, perkill = 0, slots = 48, map = "BERMUDA";
+                    let fee = 10, prize = 80, perkill = 0, slots = 48, map = "BERMUDA", type = "SOLO";
 
-                    // --- BR PRIZE LOGIC ---
                     if (matchType === "BR") {
                         prize = 380;
                         if (m === 0) { fee = 5; perkill = 3; }
@@ -99,19 +98,21 @@
                         else if (m === 30) { fee = 10; perkill = 7; }
                         else { fee = 5; perkill = 3; }
                     } 
-                    // --- 1V1 / LW / HEADSHOT LOGIC ---
                     else if (["1V1", "LW", "LW2", "1V1HS", "ONLE HEAD"].includes(matchType)) {
                         slots = 2; map = "LONE WOLF";
                         if (m === 0) { fee = 20; prize = 30; }
                         else if (m === 15) { fee = 30; prize = 40; }
                         else { fee = 10; prize = 15; }
                     }
-                    // --- FREE MATCH LOGIC ---
                     else if (matchType === "FREE") {
                         if (h !== 12 || m !== 0) continue; 
                         fee = 0; prize = 1000; perkill = 1;
                     }
-                    // --- CS LOGIC ---
+                    // --- CSHS ARENA LOGIC UPDATED ---
+                    else if (matchType === "CSHS") {
+                        slots = 8; map = "BERMUDA";
+                        fee = 10; prize = 65; type = "SQUAD";
+                    }
                     else if (matchType.includes("CS")) {
                         slots = 8; map = "BERMUDA";
                         fee = 10; prize = 80;
@@ -124,7 +125,7 @@
                     if (diff >= 0 && diff < 20) status = 'ongoing';
                     else if (diff >= 20) status = 'result';
 
-                    matches.push({ id: matchId, title: `${matchType} TOURNAMENT`, time: timeStr, date: dateStr, fee: fee, prize: prize, perkill: perkill, status: status, slots: slots, map: map });
+                    matches.push({ id: matchId, title: `${matchType} TOURNAMENT`, time: timeStr, date: dateStr, fee: fee, prize: prize, perkill: perkill, status: status, slots: slots, map: map, type: type });
                 }
             }
             return matches;
@@ -143,8 +144,6 @@
             for (let m of matches) {
                 const joinedSnap = await database.ref(`match_joins/${m.id}/${userData.uid}`).once('value');
                 const isJoined = joinedSnap.exists();
-                
-                // Real-time participant count from Firebase
                 const partSnap = await database.ref(`match_joins/${m.id}`).once('value');
                 const pCount = partSnap.numChildren();
 
@@ -161,7 +160,7 @@
                         <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${m.prize}</span></div>
                         <div class="stat-box"><span class="stat-label">Per Kill</span><span class="stat-value">₹${m.perkill}</span></div>
                         <div class="stat-box"><span class="stat-label">Entry</span><span class="stat-value">${m.fee === 0 ? 'FREE' : '₹'+m.fee}</span></div>
-                        <div class="stat-box light"><span class="stat-label">Type</span><span class="stat-value">SOLO</span></div>
+                        <div class="stat-box light"><span class="stat-label">Type</span><span class="stat-value">${m.type}</span></div>
                         <div class="stat-box light"><span class="stat-label">Version</span><span class="stat-value">TPP</span></div>
                         <div class="stat-box light"><span class="stat-label">Map</span><span class="stat-value">${m.map}</span></div>
                     </div>
