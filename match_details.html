@@ -10,51 +10,59 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         
-        body { background: #0F041C; color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 50px; overflow-x: hidden; }
-        
+        :root {
+            --primary: #8B3EEB;
+            --secondary: #160826;
+            --bg: #0F041C;
+            --white: #FFFFFF;
+            --gray: #888;
+        }
+
+        body { background: var(--bg); color: var(--white); font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 60px; overflow-x: hidden; }
+
         /* HEADER */
-        .header { display: flex; align-items: center; padding: 12px 18px; background: #160826; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2D1B44; }
-        .back-btn { font-size: 16px; color: #fff; cursor: pointer; }
-        .title { font-size: 14px; font-weight: 800; flex: 1; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; margin-right: 15px; background: linear-gradient(to right, #fff, #8B3EEB); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
+        .header { display: flex; align-items: center; padding: 15px 20px; background: var(--secondary); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .back-btn { font-size: 18px; color: var(--white); cursor: pointer; }
+        .title { font-size: 15px; font-weight: 800; flex: 1; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; margin-right: 20px; }
+
         /* TABS */
-        .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 10px 15px; border-radius: 50px; padding: 3px; border: 1px solid #2D1B44; }
-        .tab { padding: 6px 12px; border-radius: 50px; font-size: 9px; font-weight: 700; color: #888; cursor: pointer; text-transform: uppercase; flex: 1; text-align: center; transition: 0.3s; }
-        .tab.active { background: #8B3EEB; color: #fff; }
+        .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 15px; border-radius: 50px; padding: 4px; border: 1px solid rgba(255,255,255,0.05); }
+        .tab { padding: 8px 15px; border-radius: 50px; font-size: 10px; font-weight: 700; color: var(--gray); cursor: pointer; text-transform: uppercase; flex: 1; text-align: center; }
+        .tab.active { background: var(--primary); color: var(--white); }
 
         /* MATCH CARD UI */
-        .match-list { padding: 0 12px; }
-        .card { background: #FFFFFF; border-radius: 14px; margin-bottom: 12px; color: #000; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.4); border: 1px solid rgba(0,0,0,0.05); }
-        .card-top { padding: 10px 12px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f2f2f2; }
-        .match-logo { width: 35px; height: 35px; border-radius: 8px; object-fit: cover; border: 1px solid #8B3EEB; }
-        .match-name { font-size: 10.5px; font-weight: 800; text-transform: uppercase; margin: 0; color: #000; }
-        .match-dt { font-size: 8px; color: #666; font-weight: 700; display: block; margin-top: 1px; }
-        .view-link { font-size: 9px; color: #8B3EEB; font-weight: 800; text-transform: lowercase; cursor: pointer; text-decoration: underline; }
+        .match-list { padding: 0 14px; }
+        .card { background: var(--white); border-radius: 16px; margin-bottom: 15px; color: #000; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.4); position: relative; }
+        .card-top { padding: 12px 15px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f0f0f0; }
+        .match-logo { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; border: 1.5px solid var(--primary); background: #fff; }
+        .match-name { font-size: 11px; font-weight: 800; text-transform: uppercase; margin: 0; color: #111; }
+        .match-dt { font-size: 8.5px; color: #666; font-weight: 700; display: block; margin-top: 1px; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 10px 12px 6px; }
-        .stat-box { background: #8B3EEB; border-radius: 6px; padding: 5px 2px; text-align: center; color: white; }
-        .stat-box.light { background: #F3EEFF; color: #000; border: 0.5px solid #dcdcdc; }
-        .stat-label { font-size: 6.5px; font-weight: 700; text-transform: uppercase; opacity: 0.95; }
-        .stat-value { font-size: 9.5px; font-weight: 900; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 12px 15px 8px; }
+        .stat-box { background: var(--primary); border-radius: 8px; padding: 6px 2px; text-align: center; color: white; display: flex; flex-direction: column; justify-content: center; }
+        .stat-box.light { background: #F3EEFF; color: #111; border: 1px solid #e2e2e2; }
+        .stat-label { font-size: 7px; font-weight: 700; text-transform: uppercase; opacity: 0.9; margin-bottom: 1px; }
+        .stat-value { font-size: 10px; font-weight: 900; }
 
-        .progress-box { padding: 0 12px 8px; }
-        .progress-bar-bg { width: 100%; height: 11px; background: #E0D4FF; border-radius: 12px; position: relative; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #8B3EEB, #6219c4); width: 0%; transition: 1s ease; }
-        .progress-text { position: absolute; width: 100%; text-align: center; font-size: 7.5px; font-weight: 900; line-height: 11px; color: #fff; z-index: 2; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        .progress-box { padding: 0 15px 10px; }
+        .progress-bar-bg { width: 100%; height: 12px; background: #E0D4FF; border-radius: 20px; position: relative; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #8B3EEB, #6219c4); transition: 1s; }
+        .progress-text { position: absolute; width: 100%; text-align: center; font-size: 8px; font-weight: 900; line-height: 12px; color: var(--white); z-index: 2; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
-        .card-footer { padding: 0 12px 10px; display: flex; justify-content: flex-end; }
-        .btn-join { background: #160826; color: #fff; border: none; padding: 7px 22px; border-radius: 7px; font-weight: 900; font-size: 10px; text-transform: uppercase; cursor: pointer; }
+        .card-footer { padding: 0 15px 12px; display: flex; justify-content: flex-end; align-items: center; }
+        .btn-join { background: var(--secondary); color: var(--white); border: none; padding: 8px 28px; border-radius: 10px; font-weight: 900; font-size: 10px; text-transform: uppercase; cursor: pointer; }
 
-        .mini-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .mini-card { background: #1A0A2D; width: 100%; max-width: 300px; border-radius: 20px; padding: 25px; border: 1px solid #8B3EEB; text-align: center; color: white; }
-        .mini-card input { width: 100%; padding: 12px; background: #000; border: 1px solid #8B3EEB; border-radius: 8px; color: #fff; margin: 10px 0; box-sizing: border-box; text-align: center; font-family: 'Poppins'; outline: none; }
+        .mini-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 4, 28, 0.95); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .mini-card { background: #1A0A2D; width: 100%; max-width: 320px; border-radius: 24px; padding: 30px; border: 1px solid var(--primary); text-align: center; color: var(--white); }
+        .mini-card input { width: 100%; padding: 14px; background: #000; border: 1px solid var(--primary); border-radius: 12px; color: var(--white); margin: 12px 0; box-sizing: border-box; text-align: center; font-size: 13px; }
+        .confirm-btn { background: #39ff14; color: #000; width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 900; text-transform: uppercase; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <i class="fas fa-arrow-left back-btn" onclick="location.href='index.html'"></i>
-        <div class="title" id="pageTitle">ARENA</div>
+        <div class="title" id="pageTitle">TOURNAMENTS</div>
     </div>
 
     <div class="tab-container">
@@ -67,12 +75,12 @@
 
     <div id="joinModal" class="mini-modal">
         <div class="mini-card">
-            <h3 style="margin:0 0 10px; font-size:17px; font-weight:800;">Confirm Entry</h3>
-            <p id="feeText" style="font-size:12px; color:#8B3EEB; font-weight:700; margin-bottom:15px;"></p>
-            <input type="text" id="gName" placeholder="Game Name">
-            <input type="number" id="gID" placeholder="Character UID">
-            <button onclick="processJoin()" style="background:#39ff14; color:#000; width:100%; padding:12px; border-radius:10px; border:none; font-weight:900; margin-top:10px; font-size:12px;">PAY & JOIN NOW</button>
-            <p onclick="closeModal()" style="margin-top:15px; font-size:11px; color:#888; cursor:pointer;">Cancel</p>
+            <h3 style="margin:0 0 10px; font-size:18px; font-weight:800;">ENTER DETAILS</h3>
+            <p id="feeText" style="font-size:12px; color:var(--primary); font-weight:700; margin-bottom:20px;"></p>
+            <input type="text" id="gName" placeholder="In-Game Name">
+            <input type="number" id="gID" placeholder="In-Game UID">
+            <button class="confirm-btn" onclick="processJoin()">PAY & JOIN</button>
+            <p onclick="closeModal()" style="margin-top:20px; font-size:11px; color:var(--gray); cursor:pointer;">Cancel</p>
         </div>
     </div>
 
@@ -88,13 +96,13 @@
         let currentTab = 'upcoming';
         let selectedMatchData = null;
 
-        function formatTimeAMPM(h, m) {
-            const ampm = h >= 12 ? 'PM' : 'AM';
-            const hours = h % 12 || 12;
-            return `${hours.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
+        function formatAMPM(h, m) {
+            let ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
         }
 
-        // 🛠️ GENERATE MATCHES WITH PURANA MATCH ID STYLE (101, 102...)
+        // 🛠️ UNIVERSAL MATCH GENERATOR
         function generateMatches() {
             if(matchType === "FREE") return [];
             const matches = [];
@@ -103,16 +111,15 @@
             if (now.getHours() >= 21) displayDate.setDate(now.getDate() + 1);
             const dateStr = displayDate.toLocaleDateString('en-GB');
 
-            let baseId = 100; // Purana style base ID
+            let serialCount = 1001; // Start Universal Counting
 
             for (let h = 9; h <= 21; h++) {
                 for (let m = 0; m < 60; m += 15) {
                     if (h === 21 && m > 0) break;
-                    baseId++;
+                    let timeText = formatAMPM(h, m);
                     
-                    let timeStr = formatTimeAMPM(h, m);
-                    let matchId = baseId.toString(); // Pure match ID style
-                    let firebaseId = `${matchType}_${dateStr.replace(/\//g, '')}_${h}${m}`;
+                    // PURANA STYLE ID: Category + Date + Serial
+                    let matchId = `${matchType}${serialCount}`;
                     
                     let fee = 10, prize = 80, perkill = 0, slots = 48, map = "BERMUDA", type = "SOLO";
                     let logo = matchType.toLowerCase() + "_poster.jpg";
@@ -123,15 +130,13 @@
                         else if (m === 15) { fee = 7; perkill = 5; type = "DUO"; }
                         else if (m === 30) { fee = 10; perkill = 7; type = "SQUAD"; }
                         else { fee = 5; perkill = 3; type = "SOLO"; }
-                    } 
-                    else if (["1V1", "LW", "LW2", "1V1HS"].includes(matchType)) {
+                    } else if (["1V1", "LW", "LW2", "1V1HS"].includes(matchType)) {
                         slots = 2; map = "LONE WOLF";
                         if (m === 0) { fee = 20; prize = 30; }
                         else if (m === 15) { fee = 30; prize = 40; }
                         else { fee = 10; prize = 15; }
-                    }
-                    else if (matchType === "CSHS") {
-                        slots = 8; map = "BERMUDA"; fee = 10; prize = 65; type = "SQUAD";
+                    } else if (matchType === "CSHS") {
+                        slots = 8; fee = 10; prize = 65; type = "SQUAD";
                     }
 
                     let status = 'upcoming';
@@ -140,67 +145,62 @@
                     if (diff >= 0 && diff < 25) status = 'ongoing';
                     else if (diff >= 25) status = 'result';
 
-                    matches.push({ id: matchId, fbId: firebaseId, title: `FREE FIRE ${matchType} MATCH`, time: timeStr, date: dateStr, fee: fee, prize: prize, perkill: perkill, status: status, slots: slots, map: map, type: type, logo: logo });
+                    matches.push({ id: matchId, title: `${matchType} MATCH`, time: timeText, date: dateStr, fee, prize, perkill, status, slots, map, type, logo });
+                    serialCount++;
                 }
             }
             return matches;
         }
 
-        // 🖥️ NO BLINK RENDERER
         async function renderMatches() {
             const container = document.getElementById('matchList');
             const matches = generateMatches().filter(m => m.status === currentTab);
 
             if(matches.length === 0) {
-                container.innerHTML = `<center style="padding:60px; color:#888; font-size:11px;">No matches found.</center>`;
+                container.innerHTML = `<div style="text-align:center; margin-top:50px; opacity:0.5;"><i class="fas fa-calendar-times" style="font-size:30px;"></i><p>No matches here.</p></div>`;
                 return;
             }
 
-            // Batch Fetching: Get all join data at once to prevent blinking
-            const joinsSnap = await database.ref(`match_joins`).once('value');
-            const allJoins = joinsSnap.val() || {};
-
-            let finalHTML = "";
-            matches.forEach(m => {
-                const matchJoins = allJoins[m.fbId] || {};
-                const isJoined = matchJoins[userData.uid] ? true : false;
-                const pCount = Object.keys(matchJoins).length;
+            // Syncing with Firebase for Join Count WITHOUT blinking
+            let htmlContent = "";
+            for (let m of matches) {
+                const snapshot = await database.ref(`match_joins/${m.id}`).once('value');
+                const pCount = snapshot.numChildren();
+                const isJoined = snapshot.hasChild(userData.uid);
                 const progress = (pCount / m.slots) * 100;
 
-                finalHTML += `
+                htmlContent += `
                 <div class="card">
                     <div class="card-top">
                         <img src="${m.logo}" class="match-logo" onerror="this.src='icon.png'">
                         <div style="flex:1">
-                            <p class="match-name">${m.title} #${m.id}</p>
+                            <p class="match-name">${m.title} #${m.id.replace(matchType, '')}</p>
                             <span class="match-dt">${m.date} | ${m.time}</span>
                         </div>
-                        <span class="view-link">view</span>
                     </div>
                     <div class="stats-grid">
-                        <div class="stat-box"><span class="stat-label">Prize Pool</span><span class="stat-value">₹${m.prize}</span></div>
+                        <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${m.prize}</span></div>
                         <div class="stat-box"><span class="stat-label">Per Kill</span><span class="stat-value">₹${m.perkill}</span></div>
-                        <div class="stat-box"><span class="stat-label">Entry Fee</span><span class="stat-value">${m.fee === 0 ? 'FREE' : '₹'+m.fee}</span></div>
+                        <div class="stat-box"><span class="stat-label">Entry</span><span class="stat-value">${m.fee === 0 ? 'FREE' : '₹'+m.fee}</span></div>
                         <div class="stat-box light"><span class="stat-label">Type</span><span class="stat-value">${m.type}</span></div>
                         <div class="stat-box light"><span class="stat-label">Version</span><span class="stat-value">TPP</span></div>
                         <div class="stat-box light"><span class="stat-label">Map</span><span class="stat-value">${m.map}</span></div>
                     </div>
                     <div class="progress-box">
                         <div class="progress-bar-bg">
-                            <div class="progress-text">${pCount}/${m.slots} Slots Filled</div>
+                            <div class="progress-text">${pCount}/${m.slots} Joined</div>
                             <div class="progress-fill" style="width:${progress}%"></div>
                         </div>
                     </div>
                     <div class="card-footer">
                         ${currentTab === 'upcoming' ? 
-                            (isJoined ? `<button class="btn-join" style="background:#555">JOINED ✅</button>` : 
-                            (pCount >= m.slots ? `<button class="btn-join" style="background:#ff3131">FULL</button>` : `<button class="btn-join" onclick="openJoinModal('${m.fbId}', ${m.fee})">JOIN</button>`)) 
-                        : `<button class="btn-join" style="background:#8B3EEB">${currentTab.toUpperCase()}</button>`}
+                            (isJoined ? `<button class="btn-join" style="background:#444">JOINED ✅</button>` : 
+                            (pCount >= m.slots ? `<button class="btn-join" style="background:#ff3131">FULL</button>` : `<button class="btn-join" onclick="openJoinModal('${m.id}', ${m.fee})">JOIN NOW</button>`)) 
+                        : `<button class="btn-join" style="background:var(--primary)">${currentTab.toUpperCase()}</button>`}
                     </div>
                 </div>`;
-            });
-
-            container.innerHTML = finalHTML; // Single update to DOM
+            }
+            container.innerHTML = htmlContent;
         }
 
         function openJoinModal(id, fee) {
@@ -214,7 +214,7 @@
         async function processJoin() {
             const name = document.getElementById('gName').value.trim();
             const uid = document.getElementById('gID').value.trim();
-            if(!name || !uid) return alert("Details bharo!");
+            if(!name || !uid) return alert("Fill details!");
 
             const playerRef = database.ref('players/' + userData.uid);
             const snap = await playerRef.once('value');
@@ -223,11 +223,9 @@
             if(balance < selectedMatchData.fee) return alert("Low balance!");
 
             await playerRef.update({ cash: balance - selectedMatchData.fee });
-            await database.ref(`match_joins/${selectedMatchData.id}/${userData.uid}`).set({
-                name, uid, joinedAt: new Date().toISOString()
-            });
+            await database.ref(`match_joins/${selectedMatchData.id}/${userData.uid}`).set({ name, uid, joinedAt: new Date().toISOString() });
 
-            alert("Entry Successful! 🔥");
+            alert("Joined!");
             closeModal(); renderMatches();
         }
 
