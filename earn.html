@@ -45,16 +45,33 @@
         .btn-yellow { background: var(--rare-gold); color: #000; }
         .btn-action:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* 🟢 NAVIGATION SYSTEM (As remembered from index.html) */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
-        .nav-item i { font-size: 20px; }
+        /* 🟢 UNIFORM NAVIGATION SYSTEM (Exactly from index.html) */
+        .bottom-nav { 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
+            background: rgba(10, 10, 15, 0.95); display: flex; 
+            justify-content: space-around; align-items: center; 
+            backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000; border-radius: 20px 20px 0 0; 
+        }
+        .nav-item { 
+            text-decoration: none; color: #666; font-size: 10px; font-weight: 700; 
+            display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;
+        }
         .nav-item.active { color: var(--neon-blue); }
-        
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
+        .nav-item i { font-size: 20px; }
+
+        .center-btn .icon-circle { 
+            width: 55px; height: 55px; background: #39ff14; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 4px solid #030305; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
+            margin-top: -35px; 
+        }
         .center-btn i { color: #000 !important; font-size: 22px; }
         
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+        .system-nav-bar { 
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; 
+            background-color: #1a1b22; z-index: 1001; 
+        }
     </style>
 </head>
 <body>
@@ -91,15 +108,30 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item active"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
-            <span style="margin-top: 5px; color: #fff;">SEND</span>
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>HOME</span>
         </a>
-        <a href="refer.html" class="nav-item"><i class="fas fa-gift"></i><span>REFER</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
+        <a href="earn.html" class="nav-item active">
+            <i class="fas fa-wallet"></i>
+            <span>EARN</span>
+        </a>
+        <a href="transfer.html" class="nav-item center-btn">
+            <div class="icon-circle">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+            <span style="margin-top:5px; color:#fff;">SEND</span>
+        </a>
+        <a href="refer.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>REFER</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user-alt"></i>
+            <span>PROFILE</span>
+        </a>
     </nav>
+
     <div class="system-nav-bar"></div>
 
     <script>
@@ -133,10 +165,9 @@
             let upi = document.getElementById('witUpi').value;
             let btn = document.getElementById('btnWithdraw');
 
-            if(!amt || !upi) return alert("Bhai, saari details bhariye!");
+            if(!amt || !upi) return alert("Pura detail bharo bhai!");
             if(amt < 50) return alert("Minimum ₹50 withdraw kar sakte ho!");
 
-            // Live balance check
             const snapshot = await database.ref('players/' + userData.uid + '/cash').get();
             const currentCash = snapshot.val() || 0;
 
@@ -144,10 +175,8 @@
 
             btn.innerText = "WAITING..."; btn.disabled = true;
 
-            // 1. Pehle user ka balance kam karo (Security)
             await database.ref('players/' + userData.uid).update({ cash: currentCash - amt });
 
-            // 2. Withdrawal request bhej do
             const withdrawalData = {
                 userId: userData.uid,
                 userName: userData.name || "Unknown",
@@ -160,7 +189,6 @@
                 await database.ref('withdrawals').push(withdrawalData);
                 alert("Request Sent! Admin paise bhejte hi status update kar dega.");
             } catch (e) {
-                // Agar fail hua toh balance wapas kar do
                 await database.ref('players/' + userData.uid).update({ cash: currentCash });
                 alert("Error! Please try again.");
             } finally {
