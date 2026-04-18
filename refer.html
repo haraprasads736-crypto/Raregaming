@@ -3,232 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>My Profile - RARE GAMING</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <title>Refer & Earn - RARE GAMING</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
         
-        :root {
-            --bg-color: #030305;
-            --neon-blue: #00f2fe;
-            --rare-gold: #ffd700;
-            --transfer-green: #39ff14;
-            --panel-color: #0a0a0f;
-            --pink: #ff007f;
-        }
-
+        :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; }
+        
         * { box-sizing: border-box; }
         body { 
-            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
-            margin: 0; padding-bottom: 160px; overflow-x: hidden; 
+            background: var(--bg); color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding-bottom: 160px; text-align: center;
             background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
         }
 
-        .header-top { padding: 30px 20px; text-align: center; color: var(--rare-gold); font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* Profile Card */
-        .profile-card { margin: 0 20px 20px; padding: 25px; background: var(--panel-color); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; cursor: pointer; }
-        #dpPreview { width: 100px; height: 100px; border-radius: 50%; border: 2.5px solid var(--neon-blue); object-fit: cover; background: #111; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
-        .avatar-pulse { position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid var(--transfer-green); border-radius: 50%; animation: pulse 2s infinite; pointer-events: none; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.3); opacity: 0; } }
-
-        .name-container { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; }
-        .player-name { font-size: 22px; font-weight: 900; margin: 0; text-transform: uppercase; color: #fff; }
-        .verified-badge { color: var(--neon-blue); font-size: 18px; display: none; text-shadow: 0 0 10px var(--neon-blue); }
+        .container { padding: 40px 25px; }
         
-        #genderSelector { background: #000; color: var(--neon-blue); border: 1px solid #333; padding: 8px 15px; border-radius: 50px; font-size: 11px; font-weight: 700; outline: none; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-
-        .battlecard-trigger { margin: 10px 20px 20px; background: linear-gradient(90deg, #1a1a2e, #0a0a0f); border: 1px solid var(--rare-gold); border-radius: 15px; padding: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
-
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
-        .stat-box { background: var(--panel-color); padding: 18px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
-        .stat-label { font-size: 10px; color: #888; text-transform: uppercase; }
-        .stat-value { font-size: 20px; font-weight: 800; color: #fff; margin-top: 5px; }
-
-        .options-container { margin: 0 20px 20px; background: var(--panel-color); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
-        .option-item i { width: 20px; color: var(--neon-blue); font-size: 18px; }
-
-        /* Battle Card Overlay */
-        #bcOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 5000; align-items: center; justify-content: center; flex-direction: column; backdrop-filter: blur(12px); }
-        .bc-container { position: relative; width: 330px; height: 500px; perspective: 1200px; }
-        .bc-card { width: 100%; height: 100%; background: #000; border: 2.5px solid var(--rare-gold); border-radius: 30px; display: flex; flex-direction: column; align-items: center; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.5); transition: 0.1s; transform-style: preserve-3d; }
-        .bc-thematic-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0.35; z-index: 0; }
-        .bc-header { width: 100%; padding: 25px; display: flex; justify-content: space-between; align-items: flex-start; z-index: 2; }
-        .bc-tag { background: var(--rare-gold); color: #000; padding: 3px 12px; border-radius: 4px; font-weight: 900; font-size: 10px; letter-spacing: 1px; }
-        .bc-avatar-mini { width: 60px; height: 60px; border-radius: 12px; border: 2px solid #fff; object-fit: cover; }
-        .bc-bottom-info { width: 100%; margin-top: auto; padding: 0 25px; z-index: 2; }
-        .bc-name { font-size: 28px; font-weight: 900; color: #fff; text-transform: uppercase; margin: 0; }
-        .bc-stats-row { width: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: space-around; padding: 20px 0; border-top: 1px solid rgba(255,215,0,0.3); z-index: 2; }
-        .bc-stat-box b { font-size: 20px; color: var(--transfer-green); display: block; font-weight: 900; }
-        .bc-back-btn { margin-top: 30px; background: #fff; color: #000; padding: 12px 30px; border-radius: 50px; font-size: 12px; font-weight: 800; cursor: pointer; border: none; }
-
-        /* 🟢 UNIFORM NAVIGATION SYSTEM (Exactly from index.html) */
-        .bottom-nav { 
-            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
-            background: rgba(10, 10, 15, 0.95); display: flex; 
-            justify-content: space-around; align-items: center; 
-            backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
-            z-index: 1000; border-radius: 20px 20px 0 0; 
+        /* Hero Section */
+        .gift-icon-wrap { 
+            width: 120px; height: 120px; background: rgba(0, 242, 254, 0.1); 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; margin: 0 auto 20px;
+            border: 2px solid var(--neon); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
         }
-        .nav-item { 
-            text-decoration: none; color: #666; font-size: 10px; font-weight: 700; 
-            display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;
-        }
-        .nav-item.active { color: var(--neon-blue); }
-        .nav-item i { font-size: 20px; }
+        .gift-icon-wrap i { font-size: 50px; color: var(--neon); }
+        
+        h1 { font-size: 26px; font-weight: 900; margin: 10px 0; letter-spacing: 1px; }
+        .sub-text { color: #888; font-size: 13px; line-height: 1.6; margin-bottom: 30px; }
 
-        .center-btn .icon-circle { 
-            width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; 
+        /* Refer Box */
+        .refer-card { 
+            background: var(--panel); border-radius: 24px; padding: 30px 20px; 
+            border: 1px solid rgba(255,255,255,0.05); position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .label { font-size: 10px; color: var(--gold); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+        
+        .code-row { 
             display: flex; align-items: center; justify-content: center; 
-            border: 4px solid #030305; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
-            margin-top: -35px; 
+            gap: 15px; margin: 15px 0 25px; background: #000; 
+            padding: 15px; border-radius: 15px; border: 1px dashed #333;
         }
-        .center-btn i { color: #000 !important; font-size: 22px; }
-        .system-nav-bar { 
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; 
-            background-color: #1a1b22; z-index: 1001; 
+        #myCode { font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; }
+        .copy-btn { color: var(--neon); font-size: 20px; cursor: pointer; }
+
+        .btn-invite { 
+            background: var(--green); color: #000; border: none; padding: 18px; 
+            border-radius: 15px; width: 100%; font-weight: 900; font-size: 15px; 
+            text-transform: uppercase; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(57, 255, 20, 0.2);
         }
+
+        /* Steps */
+        .how-it-works { text-align: left; margin-top: 40px; }
+        .step-item { display: flex; gap: 15px; margin-bottom: 25px; align-items: flex-start; }
+        .step-num { 
+            background: #1a1a2e; width: 30px; height: 30px; border-radius: 8px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 800; color: var(--neon); border: 1px solid var(--neon); flex-shrink: 0;
+        }
+        .step-info b { display: block; font-size: 14px; color: #fff; margin-bottom: 2px; }
+        .step-info p { font-size: 11px; color: #777; margin: 0; }
+
+        /* Navigation Bar */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        .nav-item.active { color: var(--neon); }
+        .nav-item i { font-size: 20px; }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -45px; }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
 </head>
 <body>
 
-    <div class="header-top">MY PROFILE</div>
+    <div class="container">
+        <div class="gift-icon-wrap">
+            <i class="fas fa-gift"></i>
+        </div>
+        <h1>Invite & Earn Cash</h1>
+        <p class="sub-text">Share your code with friends. When they join their first match, you get ₹5 and they get ₹2 bonus!</p>
 
-    <div class="profile-card">
-        <div class="avatar-wrapper" onclick="document.getElementById('uploadInput').click()">
-            <img id="dpPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-            <div class="avatar-pulse"></div>
-            <div style="position: absolute; bottom: 0; right: 0; background: var(--neon-blue); width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 10px; border: 2px solid var(--panel-color);">
-                <i class="fas fa-camera"></i>
+        <div class="refer-card">
+            <div class="label">Your Referral Code</div>
+            <div class="code-row">
+                <span id="myCode">LOADING...</span>
+                <i class="far fa-copy copy-btn" onclick="copyCode()"></i>
             </div>
+            <button class="btn-invite" onclick="shareToWhatsApp()">
+                <i class="fab fa-whatsapp"></i> Send Invite
+            </button>
         </div>
-        <input type="file" id="uploadInput" style="display:none;" accept="image/*">
-        <div class="name-container">
-            <p class="player-name" id="userName">PLAYER</p>
-            <i class="fas fa-check-circle verified-badge" id="vBadge"></i>
-        </div>
-        <select id="genderSelector" onchange="updateGender()">
-            <option value="Male">♂ MALE</option>
-            <option value="Female">♀ FEMALE</option>
-        </select>
-        <p id="userUID" style="font-size: 10px; color: #555; margin-top: 10px;">UID: --</p>
-    </div>
 
-    <div class="battlecard-trigger" onclick="openBattleCard()">
-        <div style="display:flex; align-items:center; gap:12px;">
-            <i class="fas fa-id-card" style="color:var(--rare-gold);"></i>
-            <div><b style="font-size:14px;">View Battle Card</b><br><small style="color:#666;">Pro Esports ID</small></div>
-        </div>
-        <i class="fas fa-chevron-right" style="color:#333;"></i>
-    </div>
-
-    <div class="stats-grid">
-        <div class="stat-box"><div class="stat-label">Main Wallet</div><div class="stat-value" id="cashVal">₹0</div></div>
-        <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--rare-gold);">0</div></div>
-    </div>
-
-    <div class="options-container">
-        <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
-        <div class="option-item" onclick="logout()" style="color:#ff3131;"><i class="fas fa-sign-out-alt"></i> Logout System</div>
-    </div>
-
-    <div id="bcOverlay">
-        <div class="bc-container">
-            <div class="bc-card" id="bcCard">
-                <div class="bc-thematic-bg" id="bcThematicBg"></div>
-                <div class="bc-header"><span class="bc-tag">RARE GAMING</span><img id="bcAvatar" class="bc-avatar-mini" src=""></div>
-                <div class="bc-bottom-info">
-                    <p class="bc-name" id="bcName">PLAYER</p>
-                    <p class="bc-gender-txt" id="bcGender">MALE</p>
+        <div class="how-it-works">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-info">
+                    <b>Share Code</b>
+                    <p>Send your referral code to your friends or gaming groups.</p>
                 </div>
-                <div class="bc-stats-row">
-                    <div class="bc-stat-box"><b id="bcKD">0.0</b><small>K/D RATIO</small></div>
-                    <div class="bc-stat-box"><b id="bcWin">0%</b><small>WIN RATE</small></div>
-                    <div class="bc-stat-box"><b id="bcTier">BRONZE</b><small>RANK TIER</small></div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-info">
+                    <b>Friend Joins</b>
+                    <p>Your friend registers and plays their first paid match.</p>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-info">
+                    <b>Get Rewards</b>
+                    <p>You receive ₹5 instantly in your Main Wallet!</p>
                 </div>
             </div>
         </div>
-        <button class="bc-back-btn" onclick="closeBattleCard()">BACK TO PROFILE</button>
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>HOME</span>
-        </a>
-        <a href="earn.html" class="nav-item">
-            <i class="fas fa-wallet"></i>
-            <span>EARN</span>
-        </a>
-        <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle">
-                <i class="fas fa-exchange-alt"></i>
-            </div>
-            <span style="margin-top:5px; color:#fff;">SEND</span>
-        </a>
-        <a href="refer.html" class="nav-item">
-            <i class="fas fa-gift"></i>
-            <span>REFER</span>
-        </a>
-        <a href="profile.html" class="nav-item active">
-            <i class="fas fa-user-alt"></i>
-            <span>PROFILE</span>
-        </a>
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
+        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="refer.html" class="nav-item active"><i class="fas fa-gift"></i><span>REFER</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
     <div class="system-nav-bar"></div>
 
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk", authDomain: "rare-gaming-b8875.firebaseapp.com", projectId: "rare-gaming-b8875", databaseURL: "https://rare-gaming-b8875-default-rtdb.firebaseio.com" };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         if(!userData) window.location.href = "login.html";
 
-        function loadProfileLive() {
-            database.ref('players/' + userData.uid).on('value', (snap) => {
-                const data = snap.val();
-                if(data) {
-                    window.currentData = data;
-                    document.getElementById('userName').innerText = data.name || "PLAYER";
-                    document.getElementById('userUID').innerText = "UID: " + userData.uid;
-                    document.getElementById('cashVal').innerText = "₹" + (data.cash || 0);
-                    document.getElementById('coinVal').innerText = (data.coins || 0);
-                    if(data.dp) document.getElementById('dpPreview').src = data.dp;
-                    if(data.gender) document.getElementById('genderSelector').value = data.gender;
-                    document.getElementById('vBadge').style.display = data.isVerified ? "block" : "none";
-                }
-            });
+        const referralCode = userData.uid.substring(userData.uid.length - 6).toUpperCase();
+        document.getElementById('myCode').innerText = "RG-" + referralCode;
+
+        function copyCode() {
+            const fullCode = document.getElementById('myCode').innerText;
+            navigator.clipboard.writeText(fullCode);
+            alert("Refer Code Copied! 🔥");
         }
 
-        function openBattleCard() {
-            const d = window.currentData;
-            const bcCard = document.getElementById('bcCard');
-            const bcThematicBg = document.getElementById('bcThematicBg');
-            const bcGender = document.getElementById('bcGender');
-            document.getElementById('bcName').innerText = d.name || "PLAYER";
-            document.getElementById('bcAvatar').src = d.dp || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-            document.getElementById('bcKD').innerText = d.kd || "0.0";
-            document.getElementById('bcWin').innerText = (d.winRate || "0") + "%";
-            document.getElementById('bcTier').innerText = d.tier || "BRONZE";
-            const gender = d.gender || "Male";
-            bcGender.innerText = gender.toUpperCase();
-            if(gender === "Female") { bcThematicBg.style.backgroundImage = "url('image_8.png')"; bcGender.style.color = "var(--pink)"; bcCard.style.borderColor = "var(--pink)"; }
-            else { bcThematicBg.style.backgroundImage = "url('image_7.png')"; bcGender.style.color = "var(--neon-blue)"; bcCard.style.borderColor = "var(--rare-gold)"; }
-            document.getElementById('bcOverlay').style.display = 'flex';
+        function shareToWhatsApp() {
+            const fullCode = document.getElementById('myCode').innerText;
+            const appLink = "https://raregaming.github.io/";
+            const msg = `Hey! Join *Rare Gaming Esports* and win daily cash prizes! 🏆\n\nUse my Referral Code: *${fullCode}*\n\nDownload App Now: ${appLink}`;
+            window.open(`whatsapp://send?text=${encodeURIComponent(msg)}`);
         }
-
-        function closeBattleCard() { document.getElementById('bcOverlay').style.display = 'none'; }
-        function updateGender() { database.ref('players/' + userData.uid).update({ gender: document.getElementById('genderSelector').value }); }
-        function logout() { if(confirm("Logout System?")) { localStorage.clear(); window.location.href="login.html"; } }
-        window.onload = loadProfileLive;
     </script>
 </body>
 </html>
