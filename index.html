@@ -57,12 +57,21 @@
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
         .match-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 0 5px #000; text-transform: uppercase; }
 
-        /* NAVIGATION */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;}
+        /* NAVIGATION - UPDATED TO 4 ITEMS */
+        .bottom-nav { 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
+            background: rgba(10, 10, 15, 0.95); display: flex; 
+            justify-content: space-around; align-items: center; 
+            backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000; border-radius: 20px 20px 0 0; 
+        }
+        .nav-item { 
+            text-decoration: none; color: #666; font-size: 10px; font-weight: 700; 
+            display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;
+        }
         .nav-item.active { color: var(--neon-blue); }
         .nav-item i { font-size: 20px; }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: #39ff14; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
+        
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
 </head>
@@ -94,20 +103,27 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle"><i class="fas fa-exchange-alt" style="color:#000;"></i></div>
-            <span style="margin-top:5px; color:#fff;">SEND</span>
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>HOME</span>
         </a>
-        <a href="refer.html" class="nav-item"><i class="fas fa-gift"></i><span>REFER</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
+        <a href="earn.html" class="nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>EARN</span>
+        </a>
+        <a href="refer.html" class="nav-item">
+            <i class="fas fa-gift"></i>
+            <span>REFER</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user-alt"></i>
+            <span>PROFILE</span>
+        </a>
     </nav>
 
     <div class="system-nav-bar"></div>
 
     <script>
-        // 1. 🔥 FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -117,7 +133,6 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 2. 🛡️ AUTH CHECK
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         const userUID = localStorage.getItem("userUID") || (userData ? userData.uid : null);
 
@@ -125,7 +140,6 @@
             window.location.href = "login.html";
         }
 
-        // 3. 🚀 LIVE BALANCE SYNC
         function startLiveDashboard() {
             const balEl = document.getElementById('walletBal');
             database.ref('players/' + userUID).on('value', (snapshot) => {
