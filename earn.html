@@ -17,6 +17,7 @@
             --neon-blue: #00f2fe;
             --rare-gold: #ffd700;
             --transfer-green: #39ff14;
+            --panel-color: #0a0a0f;
         }
 
         body { 
@@ -29,11 +30,11 @@
 
         /* Balance Cards */
         .balance-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px 20px; }
-        .bal-card { background: #0a0a0f; border: 1.5px solid var(--rare-gold); border-radius: 20px; padding: 18px; text-align: center; box-shadow: 0 5px 15px rgba(255, 215, 0, 0.05); }
+        .bal-card { background: var(--panel-color); border: 1.5px solid var(--rare-gold); border-radius: 20px; padding: 18px; text-align: center; box-shadow: 0 5px 15px rgba(255, 215, 0, 0.05); }
         .bal-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
         .bal-amount { font-size: 22px; font-weight: 800; margin-top: 5px; }
 
-        .wallet-panel { background: #0a0a0f; border-radius: 20px; padding: 20px; border: 1px solid #1f1f25; margin: 0 20px 20px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .wallet-panel { background: var(--panel-color); border-radius: 20px; padding: 20px; border: 1px solid #1f1f25; margin: 0 20px 20px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .panel-title { font-size: 14px; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
         
         input { width: 100%; padding: 14px; background: #000; border: 1px solid #2a2a30; color: #fff; border-radius: 12px; margin-bottom: 12px; box-sizing: border-box; font-family: 'Poppins'; outline: none; transition: 0.3s; }
@@ -44,13 +45,15 @@
         .btn-yellow { background: var(--rare-gold); color: #000; }
         .btn-action:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* 🌟 FIXED NAVIGATION SYSTEM (Matches Index/Profile/Refer) 🌟 */
+        /* 🟢 NAVIGATION SYSTEM (As remembered from index.html) */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
         .nav-item i { font-size: 20px; }
         .nav-item.active { color: var(--neon-blue); }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #050508; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
+        
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg-color); box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
         .center-btn i { color: #000 !important; font-size: 22px; }
+        
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
 </head>
@@ -113,8 +116,7 @@
         if (!userData) window.location.href = "login.html";
 
         function startLiveSync() {
-            const playerRef = database.ref('players/' + userData.uid);
-            playerRef.on('value', (snapshot) => {
+            database.ref('players/' + userData.uid).on('value', (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
                     document.getElementById('mainBal').innerText = "₹" + (data.cash || 0);
@@ -127,38 +129,43 @@
         }
 
         async function withdraw() {
-            let amt = document.getElementById('witAmt').value;
+            let amt = parseInt(document.getElementById('witAmt').value);
             let upi = document.getElementById('witUpi').value;
             let btn = document.getElementById('btnWithdraw');
 
-            if(!amt || !upi) return alert("Pura detail bharo bhai!");
+            if(!amt || !upi) return alert("Bhai, saari details bhariye!");
             if(amt < 50) return alert("Minimum ₹50 withdraw kar sakte ho!");
 
+            // Live balance check
             const snapshot = await database.ref('players/' + userData.uid + '/cash').get();
             const currentCash = snapshot.val() || 0;
 
-            if (currentCash < amt) return alert("Insufficient Balance!");
+            if (currentCash < amt) return alert("Balance kam hai bhai!");
 
-            btn.innerText = "PROCESSING..."; btn.disabled = true;
+            btn.innerText = "WAITING..."; btn.disabled = true;
 
+            // 1. Pehle user ka balance kam karo (Security)
+            await database.ref('players/' + userData.uid).update({ cash: currentCash - amt });
+
+            // 2. Withdrawal request bhej do
             const withdrawalData = {
                 userId: userData.uid,
                 userName: userData.name || "Unknown",
-                amount: parseInt(amt),
+                amount: amt,
                 upi: upi,
-                status: "Pending",
                 timestamp: Date.now()
             };
 
             try {
                 await database.ref('withdrawals').push(withdrawalData);
-                alert("Withdrawal Request Sent! Admin will process it soon.");
+                alert("Request Sent! Admin paise bhejte hi status update kar dega.");
             } catch (e) {
-                alert("Technical Issue!");
+                // Agar fail hua toh balance wapas kar do
+                await database.ref('players/' + userData.uid).update({ cash: currentCash });
+                alert("Error! Please try again.");
             } finally {
                 btn.innerText = "Withdraw Now"; btn.disabled = false;
-                document.getElementById('witAmt').value = ""; 
-                document.getElementById('witUpi').value = "";
+                document.getElementById('witAmt').value = ""; document.getElementById('witUpi').value = "";
             }
         }
 
@@ -172,16 +179,16 @@
             if(currentCoins < 100) return alert("Minimum 100 Coins chahiye!");
 
             let btn = document.getElementById('btnRedeem');
-            btn.innerText = "REDEEMING..."; btn.disabled = true;
+            btn.innerText = "WAIT..."; btn.disabled = true;
 
             try {
                 await playerRef.update({
                     coins: currentCoins - 100,
                     cash: currentCash + 2
                 });
-                alert("Redeemed! ₹2 added to Main Wallet.");
+                alert("Coins Redeemed! ₹2 Cash added.");
             } catch (e) {
-                alert("Redeem Failed!");
+                alert("Technical Issue!");
             } finally {
                 btn.innerText = "Redeem 100 Coins"; btn.disabled = false;
             }
