@@ -45,7 +45,7 @@
         .btn-yellow { background: var(--rare-gold); color: #000; }
         .btn-action:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* 🟢 UNIFORM NAVIGATION SYSTEM (Exactly from index.html) */
+        /* 🟢 NAVIGATION - UPDATED TO 4 ITEMS (Dashboard Style) */
         .bottom-nav { 
             position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
             background: rgba(10, 10, 15, 0.95); display: flex; 
@@ -59,19 +59,8 @@
         }
         .nav-item.active { color: var(--neon-blue); }
         .nav-item i { font-size: 20px; }
-
-        .center-btn .icon-circle { 
-            width: 55px; height: 55px; background: #39ff14; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            border: 4px solid #030305; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
-            margin-top: -35px; 
-        }
-        .center-btn i { color: #000 !important; font-size: 22px; }
         
-        .system-nav-bar { 
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; 
-            background-color: #1a1b22; z-index: 1001; 
-        }
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
     </style>
 </head>
 <body>
@@ -116,12 +105,6 @@
             <i class="fas fa-wallet"></i>
             <span>EARN</span>
         </a>
-        <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle">
-                <i class="fas fa-exchange-alt"></i>
-            </div>
-            <span style="margin-top:5px; color:#fff;">SEND</span>
-        </a>
         <a href="refer.html" class="nav-item">
             <i class="fas fa-gift"></i>
             <span>REFER</span>
@@ -164,62 +147,24 @@
             let amt = parseInt(document.getElementById('witAmt').value);
             let upi = document.getElementById('witUpi').value;
             let btn = document.getElementById('btnWithdraw');
-
             if(!amt || !upi) return alert("Pura detail bharo bhai!");
             if(amt < 50) return alert("Minimum ₹50 withdraw kar sakte ho!");
-
             const snapshot = await database.ref('players/' + userData.uid + '/cash').get();
             const currentCash = snapshot.val() || 0;
-
             if (currentCash < amt) return alert("Balance kam hai bhai!");
-
             btn.innerText = "WAITING..."; btn.disabled = true;
-
             await database.ref('players/' + userData.uid).update({ cash: currentCash - amt });
-
-            const withdrawalData = {
-                userId: userData.uid,
-                userName: userData.name || "Unknown",
-                amount: amt,
-                upi: upi,
-                timestamp: Date.now()
-            };
-
-            try {
-                await database.ref('withdrawals').push(withdrawalData);
-                alert("Request Sent! Admin paise bhejte hi status update kar dega.");
-            } catch (e) {
-                await database.ref('players/' + userData.uid).update({ cash: currentCash });
-                alert("Error! Please try again.");
-            } finally {
-                btn.innerText = "Withdraw Now"; btn.disabled = false;
-                document.getElementById('witAmt').value = ""; document.getElementById('witUpi').value = "";
-            }
+            await database.ref('withdrawals').push({ userId: userData.uid, userName: userData.name || "Unknown", amount: amt, upi: upi, timestamp: Date.now() });
+            alert("Request Sent!"); btn.innerText = "Withdraw Now"; btn.disabled = false;
         }
 
         async function redeemCoins() {
             const playerRef = database.ref('players/' + userData.uid);
             const snapshot = await playerRef.get();
             const data = snapshot.val();
-            const currentCoins = data.coins || 0;
-            const currentCash = data.cash || 0;
-
-            if(currentCoins < 100) return alert("Minimum 100 Coins chahiye!");
-
-            let btn = document.getElementById('btnRedeem');
-            btn.innerText = "WAIT..."; btn.disabled = true;
-
-            try {
-                await playerRef.update({
-                    coins: currentCoins - 100,
-                    cash: currentCash + 2
-                });
-                alert("Coins Redeemed! ₹2 Cash added.");
-            } catch (e) {
-                alert("Technical Issue!");
-            } finally {
-                btn.innerText = "Redeem 100 Coins"; btn.disabled = false;
-            }
+            if((data.coins || 0) < 100) return alert("Minimum 100 Coins chahiye!");
+            await playerRef.update({ coins: data.coins - 100, cash: (data.cash || 0) + 2 });
+            alert("Redeemed!");
         }
 
         window.onload = startLiveSync;
