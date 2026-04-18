@@ -48,7 +48,7 @@
             cursor: pointer;
         }
 
-        /* 📸 SLIDING BANNER SYSTEM */
+        /* 📸 SWIPEABLE SLIDER */
         .slider-container {
             margin: 15px 20px;
             position: relative;
@@ -56,23 +56,25 @@
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             aspect-ratio: 16/8;
+            touch-action: pan-y; /* Allows vertical scrolling while swiping horizontal */
         }
         .slides {
             display: flex;
             width: 100%;
             height: 100%;
-            transition: transform 0.5s ease-in-out;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .slide {
             min-width: 100%;
             height: 100%;
+            user-select: none;
         }
         .slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            pointer-events: none; /* Prevents dragging image instead of slider */
         }
-        /* Dots Navigation */
         .slider-dots {
             position: absolute;
             bottom: 10px;
@@ -133,14 +135,16 @@
         </div>
     </div>
 
-    <div class="slider-container">
+    <div class="slider-container" id="swipeArea">
         <div class="slides" id="slider">
             <div class="slide"><img src="banner1.jpg" alt="Banner 1"></div>
             <div class="slide" onclick="window.location.href='https://t.me/Raregaming_7'">
                 <img src="banner2.jpg" alt="Banner 2">
             </div>
             <div class="slide"><img src="banner3.jpg" alt="Banner 3"></div>
-            <div class="slide"><img src="banner4.jpg" alt="Banner 4"></div>
+            <div class="slide" onclick="window.location.href='https://t.me/Raregaming_7'">
+                <img src="banner4.jpg" alt="Banner 4">
+            </div>
         </div>
         <div class="slider-dots" id="dots">
             <div class="dot active"></div>
@@ -166,32 +170,28 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">
-            <i class="fas fa-home"></i>
-            <span>HOME</span>
-        </a>
+        <a href="index.html" class="nav-item active"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item">
-            <i class="fas fa-wallet"></i>
-            <span>EARN</span>
+            <i class="fas fa-wallet"></i><span>EARN</span>
         </a>
         <a href="refer.html" class="nav-item">
-            <i class="fas fa-gift"></i>
-            <span>REFER</span>
+            <i class="fas fa-gift"></i><span>REFER</span>
         </a>
         <a href="profile.html" class="nav-item">
-            <i class="fas fa-user-alt"></i>
-            <span>PROFILE</span>
+            <i class="fas fa-user-alt"></i><span>PROFILE</span>
         </a>
     </nav>
 
     <div class="system-nav-bar"></div>
 
     <script>
-        // ⚡ SLIDER LOGIC
+        // ⚡ SLIDER + SWIPE LOGIC
         let currentIndex = 0;
         const slider = document.getElementById('slider');
         const dots = document.querySelectorAll('.dot');
         const totalSlides = 4;
+        let startX = 0;
+        let isDragging = false;
 
         function updateSlider() {
             slider.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -205,10 +205,36 @@
             updateSlider();
         }
 
-        // Auto slide every 3 seconds
-        setInterval(nextSlide, 3000);
+        // Auto Slide Timer
+        let slideInterval = setInterval(nextSlide, 3500);
 
-        // 🔗 FIREBASE & DASHBOARD
+        // --- Touch Events for Hand Sliding ---
+        const swipeArea = document.getElementById('swipeArea');
+
+        swipeArea.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            clearInterval(slideInterval); // Stop auto-slide when user touches
+        });
+
+        swipeArea.addEventListener('touchend', (e) => {
+            let endX = e.changedTouches[0].clientX;
+            let diff = startX - endX;
+
+            if (Math.abs(diff) > 50) { // Threshold for swipe
+                if (diff > 0) {
+                    // Swiped Left -> Next
+                    currentIndex = (currentIndex + 1) % totalSlides;
+                } else {
+                    // Swiped Right -> Prev
+                    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                }
+                updateSlider();
+            }
+            // Restart auto-slide
+            slideInterval = setInterval(nextSlide, 3500);
+        });
+
+        // 🔗 FIREBASE LOGIC
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -221,9 +247,7 @@
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         const userUID = localStorage.getItem("userUID") || (userData ? userData.uid : null);
 
-        if (!userUID) {
-            window.location.href = "login.html";
-        }
+        if (!userUID) window.location.href = "login.html";
 
         function startLiveDashboard() {
             const balEl = document.getElementById('walletBal');
@@ -231,8 +255,6 @@
                 const data = snapshot.val();
                 if (data) {
                     balEl.innerHTML = `<i class="fas fa-coins"></i> ₹${data.cash || 0}`;
-                } else {
-                    balEl.innerHTML = `<i class="fas fa-coins"></i> ₹0`;
                 }
             });
         }
