@@ -48,17 +48,6 @@
             cursor: pointer;
         }
 
-        /* MONEY BANNER */
-        .money-banner {
-            margin: 20px 20px 15px 20px; padding: 20px;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a2e1a 100%);
-            border-radius: 24px; border: 1px solid rgba(57, 255, 20, 0.2);
-            position: relative; overflow: hidden;
-        }
-        .money-tag { background: #39ff14; color: #000; font-size: 9px; font-weight: 800; padding: 3px 10px; border-radius: 50px; display: inline-block; margin-bottom: 10px; text-transform: uppercase; }
-        .money-title { font-size: 18px; font-weight: 800; margin: 0; color: #fff; }
-        .money-btn { background: #39ff14; color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-
         /* MATCH GRID */
         .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 15px 20px; }
         .section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-left: 4px solid var(--neon-blue); padding-left: 12px; }
@@ -67,7 +56,6 @@
         .match-card { position: relative; border-radius: 15px; overflow: hidden; aspect-ratio: 1/1.2; background: #0a0a0f; border: 1px solid var(--border-color); text-decoration: none; }
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
         .match-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 0 5px #000; text-transform: uppercase; }
-        .coming-soon-badge { position: absolute; top: 5px; right: 5px; background: #ff3131; color: white; font-size: 6px; font-weight: 800; padding: 2px 5px; border-radius: 4px; z-index: 2; }
 
         /* NAVIGATION */
         .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
@@ -88,14 +76,6 @@
                 <i class="fas fa-plus"></i>
             </div>
         </div>
-    </div>
-
-    <div class="money-banner">
-        <div class="money-tag">Fast & Secure</div>
-        <p class="money-title">Transfer Earnings</p>
-        <button class="money-btn" onclick="location.href='transfer.html'">
-            <i class="fas fa-paper-plane"></i> Send Money Now
-        </button>
     </div>
 
     <div class="section-header">
@@ -137,7 +117,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 2. 🛡️ AUTH CHECK (Fix: checking both possible keys)
+        // 2. 🛡️ AUTH CHECK
         const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
         const userUID = localStorage.getItem("userUID") || (userData ? userData.uid : null);
 
