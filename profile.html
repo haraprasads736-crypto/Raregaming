@@ -30,10 +30,9 @@
             background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
         }
 
-        /* 🟢 HEADER STYLE (Matches Earn HTML) */
         .header-top { padding: 30px 20px; text-align: center; color: var(--rare-gold); font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* 🟢 PROFILE CARD */
+        /* Profile Card */
         .profile-card { margin: 0 20px 20px; padding: 25px; background: var(--panel-color); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; cursor: pointer; }
         #dpPreview { width: 100px; height: 100px; border-radius: 50%; border: 2.5px solid var(--neon-blue); object-fit: cover; background: #111; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
@@ -48,18 +47,16 @@
 
         .battlecard-trigger { margin: 10px 20px 20px; background: linear-gradient(90deg, #1a1a2e, #0a0a0f); border: 1px solid var(--rare-gold); border-radius: 15px; padding: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
 
-        /* 🟢 STATS GRID (Balance Style) */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
         .stat-box { background: var(--panel-color); padding: 18px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
         .stat-label { font-size: 10px; color: #888; text-transform: uppercase; }
         .stat-value { font-size: 20px; font-weight: 800; color: #fff; margin-top: 5px; }
 
-        /* 🟢 OPTIONS CONTAINER */
         .options-container { margin: 0 20px 20px; background: var(--panel-color); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
         .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
         .option-item i { width: 20px; color: var(--neon-blue); font-size: 18px; }
 
-        /* 🎴 BATTLE CARD OVERLAY */
+        /* Battle Card Overlay */
         #bcOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 5000; align-items: center; justify-content: center; flex-direction: column; backdrop-filter: blur(12px); }
         .bc-container { position: relative; width: 330px; height: 500px; perspective: 1200px; }
         .bc-card { width: 100%; height: 100%; background: #000; border: 2.5px solid var(--rare-gold); border-radius: 30px; display: flex; flex-direction: column; align-items: center; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.5); transition: 0.1s; transform-style: preserve-3d; }
@@ -73,11 +70,7 @@
         .bc-stat-box b { font-size: 20px; color: var(--transfer-green); display: block; font-weight: 900; }
         .bc-back-btn { margin-top: 30px; background: #fff; color: #000; padding: 12px 30px; border-radius: 50px; font-size: 12px; font-weight: 800; cursor: pointer; border: none; }
 
-        /* 📄 RULES OVERLAY */
-        #rulesOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 7000; padding: 20px; overflow-y: auto; }
-        .rules-box { background: #0a0a0f; border: 1px solid #1a1a2e; border-radius: 15px; padding: 20px; font-size: 12px; color: #ccc; line-height: 1.6; }
-
-        /* 🟢 UNIFORM NAVIGATION SYSTEM (Exactly from index.html) */
+        /* 🟢 NAVIGATION - UPDATED TO 4 ITEMS (Matches index.html) */
         .bottom-nav { 
             position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
             background: rgba(10, 10, 15, 0.95); display: flex; 
@@ -91,20 +84,11 @@
         }
         .nav-item.active { color: var(--neon-blue); }
         .nav-item i { font-size: 20px; }
+        
+        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
 
-        .center-btn .icon-circle { 
-            width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            border: 4px solid #030305; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
-            margin-top: -35px; 
-        }
-        .center-btn i { color: #000 !important; font-size: 22px; }
-        .system-nav-bar { 
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; 
-            background-color: #1a1b22; z-index: 1001; 
-        }
-
-        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 6000; padding: 20px; }
+        #rulesOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 7000; padding: 20px; overflow-y: auto; }
+        .rules-box { background: #0a0a0f; border: 1px solid #1a1a2e; border-radius: 15px; padding: 20px; font-size: 12px; color: #ccc; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -187,12 +171,6 @@
             <i class="fas fa-wallet"></i>
             <span>EARN</span>
         </a>
-        <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle">
-                <i class="fas fa-exchange-alt"></i>
-            </div>
-            <span style="margin-top:5px; color:#fff;">SEND</span>
-        </a>
         <a href="refer.html" class="nav-item">
             <i class="fas fa-gift"></i>
             <span>REFER</span>
@@ -243,6 +221,7 @@
             else { bcThematicBg.style.backgroundImage = "url('image_7.png')"; bcGender.style.color = "var(--neon-blue)"; bcCard.style.borderColor = "var(--rare-gold)"; }
             document.getElementById('bcOverlay').style.display = 'flex';
         }
+
         function closeBattleCard() { document.getElementById('bcOverlay').style.display = 'none'; }
         function openRules() { document.getElementById('rulesOverlay').style.display = 'block'; }
         function closeRules() { document.getElementById('rulesOverlay').style.display = 'none'; }
