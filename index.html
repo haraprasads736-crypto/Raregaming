@@ -48,6 +48,52 @@
             cursor: pointer;
         }
 
+        /* 📸 SLIDING BANNER SYSTEM */
+        .slider-container {
+            margin: 15px 20px;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            aspect-ratio: 16/8;
+        }
+        .slides {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            min-width: 100%;
+            height: 100%;
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Dots Navigation */
+        .slider-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .dot.active {
+            background: var(--neon-blue);
+            width: 20px;
+            border-radius: 10px;
+        }
+
         /* MATCH GRID */
         .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 20px 15px 20px; }
         .section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-left: 4px solid var(--neon-blue); padding-left: 12px; }
@@ -57,7 +103,7 @@
         .match-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
         .match-label { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 8px; font-weight: 700; color: #fff; text-shadow: 0 0 5px #000; text-transform: uppercase; }
 
-        /* NAVIGATION - UPDATED TO 4 ITEMS */
+        /* NAVIGATION */
         .bottom-nav { 
             position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
             background: rgba(10, 10, 15, 0.95); display: flex; 
@@ -84,6 +130,21 @@
             <div onclick="window.location.href='payment.html'" style="background: var(--neon-green); color: black; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
                 <i class="fas fa-plus"></i>
             </div>
+        </div>
+    </div>
+
+    <div class="slider-container">
+        <div class="slides" id="slider">
+            <div class="slide"><img src="banner1.jpg" alt="Banner 1"></div>
+            <div class="slide"><img src="banner2.jpg" alt="Banner 2"></div>
+            <div class="slide"><img src="banner3.jpg" alt="Banner 3"></div>
+            <div class="slide"><img src="banner4.jpg" alt="Banner 4"></div>
+        </div>
+        <div class="slider-dots" id="dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
         </div>
     </div>
 
@@ -124,6 +185,28 @@
     <div class="system-nav-bar"></div>
 
     <script>
+        // ⚡ SLIDER LOGIC
+        let currentIndex = 0;
+        const slider = document.getElementById('slider');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = 4;
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            updateSlider();
+        }
+
+        // Auto slide every 3 seconds
+        setInterval(nextSlide, 3000);
+
+        // 🔗 FIREBASE & DASHBOARD
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
