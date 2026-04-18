@@ -8,7 +8,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
         
-        :root { --bg: #030305; --neon: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; }
+        :root { --bg: #030305; --neon-blue: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; }
         
         * { box-sizing: border-box; }
         body { 
@@ -23,9 +23,9 @@
             width: 120px; height: 120px; background: rgba(0, 242, 254, 0.1); 
             border-radius: 50%; display: flex; align-items: center; 
             justify-content: center; margin: 0 auto 20px;
-            border: 2px solid var(--neon); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+            border: 2px solid var(--neon-blue); box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
         }
-        .gift-icon-wrap i { font-size: 50px; color: var(--neon); }
+        .gift-icon-wrap i { font-size: 50px; color: var(--neon-blue); }
         
         h1 { font-size: 26px; font-weight: 900; margin: 10px 0; letter-spacing: 1px; }
         .sub-text { color: #888; font-size: 13px; line-height: 1.6; margin-bottom: 30px; }
@@ -43,7 +43,7 @@
             padding: 15px; border-radius: 15px; border: 1px dashed #333;
         }
         #myCode { font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; }
-        .copy-btn { color: var(--neon); font-size: 20px; cursor: pointer; }
+        .copy-btn { color: var(--neon-blue); font-size: 20px; cursor: pointer; }
 
         .btn-invite { 
             background: var(--green); color: #000; border: none; padding: 18px; 
@@ -58,22 +58,37 @@
         .step-num { 
             background: #1a1a2e; width: 30px; height: 30px; border-radius: 8px; 
             display: flex; align-items: center; justify-content: center; 
-            font-weight: 800; color: var(--neon); border: 1px solid var(--neon); flex-shrink: 0;
+            font-weight: 800; color: var(--neon-blue); border: 1px solid var(--neon-blue); flex-shrink: 0;
         }
         .step-info b { display: block; font-size: 14px; color: #fff; margin-bottom: 2px; }
         .step-info p { font-size: 11px; color: #777; margin: 0; }
 
-        /* 🟢 NAVIGATION SYSTEM (Matches index.html) */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        /* 🟢 UNIFORM NAVIGATION SYSTEM (Matches index.html) */
+        .bottom-nav { 
+            position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; 
+            background: rgba(10, 10, 15, 0.95); display: flex; 
+            justify-content: space-around; align-items: center; 
+            backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            z-index: 1000; border-radius: 20px 20px 0 0; 
+        }
+        .nav-item { 
+            text-decoration: none; color: #666; font-size: 10px; font-weight: 700; 
+            display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;
+        }
+        .nav-item.active { color: var(--neon-blue); }
         .nav-item i { font-size: 20px; }
-        .nav-item.active { color: var(--neon); }
-        
-        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid var(--bg); margin-top: -35px; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
+
+        .center-btn .icon-circle { 
+            width: 55px; height: 55px; background: #39ff14; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 4px solid #030305; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
+            margin-top: -35px; 
+        }
         .center-btn i { color: #000 !important; font-size: 22px; }
-        .center-btn span { color: #fff; margin-top: 5px; font-weight: 800; }
-        
-        .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
+        .system-nav-bar { 
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; 
+            background-color: #1a1b22; z-index: 1001; 
+        }
     </style>
 </head>
 <body>
@@ -113,15 +128,30 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn">
-            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
-            <span>SEND</span>
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>HOME</span>
         </a>
-        <a href="refer.html" class="nav-item active"><i class="fas fa-gift"></i><span>REFER</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
+        <a href="earn.html" class="nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>EARN</span>
+        </a>
+        <a href="transfer.html" class="nav-item center-btn">
+            <div class="icon-circle">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+            <span style="margin-top:5px; color:#fff;">SEND</span>
+        </a>
+        <a href="refer.html" class="nav-item active">
+            <i class="fas fa-gift"></i>
+            <span>REFER</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user-alt"></i>
+            <span>PROFILE</span>
+        </a>
     </nav>
+
     <div class="system-nav-bar"></div>
 
     <script>
