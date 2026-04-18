@@ -5,146 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>My Profile - RARE GAMING</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
-        :root { --bg: #030305; --neon-blue: #00f2fe; --gold: #ffd700; --panel: #0a0a0f; --green: #39ff14; --pink: #ff007f; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         
-        * { box-sizing: border-box; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 160px; overflow-x: hidden; background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%); }
+        :root {
+            --bg-color: #030305;
+            --neon-blue: #00f2fe;
+            --rare-gold: #ffd700;
+            --transfer-green: #39ff14;
+            --panel-color: #0a0a0f;
+        }
 
-        .header { padding: 30px 20px; text-align: center; background: rgba(3, 3, 5, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .header h2 { font-size: 22px; margin: 0; color: var(--gold); text-transform: uppercase; font-weight: 800; letter-spacing: 2px; }
+        body { 
+            background-color: #050508; color: white; font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; padding-bottom: 160px; 
+            background-image: radial-gradient(circle at 50% -20%, #1a1a2e 0%, #030305 60%);
+        }
+        
+        /* Earn Style Header */
+        .header-top { padding: 30px 20px; text-align: center; color: var(--rare-gold); font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; }
 
-        .profile-card { margin: 20px; padding: 25px; background: var(--panel); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; position: relative; }
-        .avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; cursor: pointer; }
-        #dpPreview { width: 100px; height: 100px; border-radius: 50%; border: 2.5px solid var(--neon-blue); object-fit: cover; background: #111; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
-        .avatar-pulse { position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; border: 2px solid var(--green); border-radius: 50%; animation: pulse 2s infinite; pointer-events: none; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.3); opacity: 0; } }
+        /* Profile Main Card */
+        .profile-panel { background: var(--panel-color); border-radius: 24px; padding: 25px; border: 1px solid #1f1f25; margin: 0 20px 20px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        
+        .avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; }
+        #dpPreview { width: 100px; height: 100px; border-radius: 50%; border: 2.5px solid var(--neon-blue); object-fit: cover; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+        
+        .player-name { font-size: 22px; font-weight: 800; margin: 5px 0; color: #fff; text-transform: uppercase; }
+        
+        select { width: 100%; padding: 12px; background: #000; border: 1px solid #2a2a30; color: var(--neon-blue); border-radius: 12px; margin-top: 10px; font-family: 'Poppins'; font-weight: 700; outline: none; }
 
-        .name-container { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; }
-        .player-name { font-size: 22px; font-weight: 900; margin: 0; text-transform: uppercase; color: #fff; }
-        .verified-badge { color: var(--neon-blue); font-size: 18px; display: none; text-shadow: 0 0 10px var(--neon-blue); }
-        #genderSelector { background: #111; color: var(--neon-blue); border: 1px solid #333; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 700; outline: none; cursor: pointer; text-transform: uppercase; margin-top: 8px; }
+        /* Stats Grid like Earn Balance */
+        .balance-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px 20px; }
+        .bal-card { background: var(--panel-color); border: 1.5px solid var(--rare-gold); border-radius: 20px; padding: 18px; text-align: center; }
+        .bal-label { font-size: 10px; color: #888; text-transform: uppercase; }
+        .bal-amount { font-size: 20px; font-weight: 800; margin-top: 5px; }
 
-        .battlecard-trigger { margin: 10px 20px 20px; background: linear-gradient(90deg, #1a1a2e, #0a0a0f); border: 1px solid var(--gold); border-radius: 15px; padding: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 0 20px 20px; }
-        .stat-box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; }
-        .stat-value { font-size: 18px; font-weight: 800; color: #fff; margin-top: 5px; }
+        /* Action Buttons */
+        .btn-action { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
+        .btn-gold { background: var(--rare-gold); color: #000; }
+        .btn-blue { background: var(--neon-blue); color: #000; }
+        .btn-red { background: #ff3131; color: #fff; }
 
-        .options-container { margin: 0 20px 20px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .option-item { padding: 18px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: #bbb; font-size: 14px; font-weight: 600; cursor: pointer; }
-        .option-item i { width: 20px; color: var(--neon-blue); font-size: 18px; }
-
-        /* 🎴 BATTLE CARD */
+        /* Battle Card Overlay */
         #bcOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 5000; align-items: center; justify-content: center; flex-direction: column; backdrop-filter: blur(12px); }
-        .bc-container { position: relative; width: 330px; height: 500px; perspective: 1200px; }
-        .bc-card { width: 100%; height: 100%; background: #000; border: 2.5px solid var(--gold); border-radius: 30px; display: flex; flex-direction: column; align-items: center; overflow: hidden; box-shadow: 0 0 40px rgba(0,0,0,0.5); transition: 0.1s; transform-style: preserve-3d; }
-        .bc-thematic-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0.35; z-index: 0; }
-        .bc-header { width: 100%; padding: 25px; display: flex; justify-content: space-between; align-items: flex-start; z-index: 2; }
-        .bc-tag { background: var(--gold); color: #000; padding: 3px 12px; border-radius: 4px; font-weight: 900; font-size: 10px; letter-spacing: 1px; }
-        .bc-avatar-mini { width: 60px; height: 60px; border-radius: 12px; border: 2px solid #fff; object-fit: cover; }
-        .bc-bottom-info { width: 100%; margin-top: auto; padding: 0 25px; z-index: 2; }
-        .bc-name { font-size: 28px; font-weight: 900; color: #fff; text-transform: uppercase; margin: 0; }
-        .bc-gender-txt { font-size: 12px; font-weight: 700; letter-spacing: 3px; margin: 5px 0 15px; }
-        .bc-stats-row { width: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: space-around; padding: 20px 0; border-top: 1px solid rgba(255,215,0,0.3); z-index: 2; }
-        .bc-stat-box b { font-size: 20px; color: var(--green); display: block; font-weight: 900; }
-        .bc-stat-box small { font-size: 9px; color: #777; }
-        .bc-back-btn { margin-top: 30px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px 30px; border-radius: 50px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .bc-card { width: 300px; height: 450px; background: #000; border: 2.5px solid var(--rare-gold); border-radius: 30px; position: relative; overflow: hidden; text-align: center; }
+        .bc-back-btn { margin-top: 20px; background: #fff; color: #000; padding: 10px 25px; border-radius: 50px; font-weight: 800; border: none; }
 
-        /* 🟢 UNIFORM NAVIGATION (Matches index.html) */
-        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
+        /* 🟢 NAVIGATION SYSTEM (EXACTLY FROM EARN/INDEX) */
+        .bottom-nav { position: fixed; bottom: 48px; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
         .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
-        .nav-item.active { color: var(--neon-blue); }
         .nav-item i { font-size: 20px; }
-        .center-btn .icon-circle { width: 55px; height: 55px; background: #39ff14; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #030305; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
+        .nav-item.active { color: var(--neon-blue); }
+        .center-btn .icon-circle { width: 55px; height: 55px; background: var(--transfer-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #050508; box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); margin-top: -35px; }
         .center-btn i { color: #000 !important; font-size: 22px; }
         .system-nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background-color: #1a1b22; z-index: 1001; }
-
-        #rulesOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 7000; padding: 20px; overflow-y: auto; }
-        .rules-box { background: #0a0a0f; border: 1px solid #1a1a2e; border-radius: 15px; padding: 20px; font-size: 12px; color: #ccc; line-height: 1.6; }
-        #cropModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 6000; padding: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="header"><h2>Account Profile</h2></div>
+    <div class="header-top">MY PROFILE</div>
 
-    <div class="profile-card">
-        <div class="avatar-wrapper" onclick="document.getElementById('uploadInput').click()">
+    <div class="profile-panel">
+        <div class="avatar-wrapper">
             <img id="dpPreview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-            <div class="avatar-pulse"></div>
-            <div style="position: absolute; bottom: 0; right: 0; background: var(--neon-blue); width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 10px; border: 2px solid var(--panel);">
-                <i class="fas fa-camera"></i>
-            </div>
         </div>
-        <input type="file" id="uploadInput" style="display:none;" accept="image/*">
-        <div class="name-container">
-            <p class="player-name" id="userName">PLAYER</p>
-            <i class="fas fa-check-circle verified-badge" id="vBadge"></i>
-        </div>
+        <div class="player-name" id="userName">PLAYER</div>
+        <p id="userUID" style="font-size: 11px; color: #555; margin: 0;">UID: --</p>
+        
         <select id="genderSelector" onchange="updateGender()">
             <option value="Male">♂ MALE</option>
             <option value="Female">♀ FEMALE</option>
         </select>
-        <p id="userUID" style="font-size: 10px; color: #555; margin-top: 5px;">UID: --</p>
     </div>
 
-    <div class="battlecard-trigger" onclick="openBattleCard()">
-        <div style="display:flex; align-items:center; gap:12px;">
-            <i class="fas fa-id-card" style="color:var(--gold);"></i>
-            <div><b style="font-size:14px;">View Battle Card</b><br><small style="color:#666;">Pro Esports ID</small></div>
+    <div class="balance-container">
+        <div class="bal-card">
+            <div class="bal-label">Main Wallet</div>
+            <div class="bal-amount" id="cashVal">₹0</div>
         </div>
-        <i class="fas fa-chevron-right" style="color:#333;"></i>
+        <div class="bal-card" style="border-color: var(--rare-gold);">
+            <div class="bal-label">Rare Coins</div>
+            <div class="bal-amount" id="coinVal" style="color: var(--rare-gold);">0</div>
+        </div>
     </div>
 
-    <div class="stats-grid">
-        <div class="stat-box"><div class="stat-label">Total Cash</div><div class="stat-value" id="cashVal">₹0</div></div>
-        <div class="stat-box"><div class="stat-label">Rare Coins</div><div class="stat-value" id="coinVal" style="color:var(--gold);">0</div></div>
-    </div>
-
-    <div class="options-container">
-        <div class="option-item" onclick="openRules()"><i class="fas fa-file-contract"></i> Terms & Conditions</div>
-        <a href="https://wa.me/917008170291" class="option-item"><i class="fab fa-whatsapp"></i> Customer Support</a>
-        <div class="option-item" onclick="logout()" style="color:#ff3131;"><i class="fas fa-sign-out-alt"></i> Logout System</div>
+    <div style="padding: 0 20px;">
+        <button class="btn-action btn-gold" onclick="openBattleCard()">
+            <i class="fas fa-id-card"></i> View Battle Card
+        </button>
+        <button class="btn-action btn-blue" onclick="window.location.href='https://wa.me/917008170291'">
+            <i class="fab fa-whatsapp"></i> Customer Support
+        </button>
+        <button class="btn-action btn-red" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout System
+        </button>
     </div>
 
     <div id="bcOverlay">
-        <div class="bc-container">
-            <div class="bc-card" id="bcCard">
-                <div class="bc-thematic-bg" id="bcThematicBg"></div>
-                <div class="bc-header"><span class="bc-tag">RARE GAMING</span><img id="bcAvatar" class="bc-avatar-mini" src=""></div>
-                <div class="bc-bottom-info">
-                    <p class="bc-name" id="bcName">PLAYER</p>
-                    <p class="bc-gender-txt" id="bcGender">MALE</p>
-                </div>
-                <div class="bc-stats-row">
-                    <div class="bc-stat-box"><b id="bcKD">0.0</b><small>K/D RATIO</small></div>
-                    <div class="bc-stat-box"><b id="bcWin">0%</b><small>WIN RATE</small></div>
-                    <div class="bc-stat-box"><b id="bcTier">BRONZE</b><small>RANK TIER</small></div>
+        <div class="bc-card" id="bcCard">
+            <div style="padding:40px 20px;">
+                <h2 id="bcName" style="color:#fff; text-transform:uppercase;">PLAYER</h2>
+                <p id="bcGender" style="color:var(--neon-blue); font-weight:bold;">MALE</p>
+                <hr style="border:0.5px solid #333; margin:20px 0;">
+                <div style="display:flex; justify-content:space-around;">
+                    <div><b id="bcKD" style="font-size:20px; color:var(--transfer-green);">0.0</b><br><small style="color:#777;">K/D</small></div>
+                    <div><b id="bcWin" style="font-size:20px; color:var(--transfer-green);">0%</b><br><small style="color:#777;">WIN</small></div>
                 </div>
             </div>
         </div>
-        <button class="bc-back-btn" onclick="closeBattleCard()"><i class="fas fa-arrow-left"></i> BACK TO PROFILE</button>
-    </div>
-
-    <div id="rulesOverlay">
-        <div class="header"><i class="fas fa-times" onclick="closeRules()" style="float:left; cursor:pointer;"></i><h2 style="font-size:16px;">Rules & Conditions</h2></div>
-        <div class="rules-box">
-            <b style="color:var(--gold)">FAIR PLAY RULES:</b><br><br>
-            • Room ID shared 8 mins before start.<br>• Level 40+ required.<br>• Headshot under 28%.<br>• Mobile only. No Emulators.<br>• Screen recording mandatory for prizes.
-        </div>
+        <button class="bc-back-btn" onclick="closeBattleCard()">BACK TO PROFILE</button>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
         <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
-        <a href="transfer.html" class="nav-item center-btn"><div class="icon-circle"><i class="fas fa-exchange-alt"></i></div><span style="margin-top:5px; color:#fff;">SEND</span></a>
+        <a href="transfer.html" class="nav-item center-btn">
+            <div class="icon-circle"><i class="fas fa-exchange-alt"></i></div>
+            <span style="margin-top: 5px; color: #fff;">SEND</span>
+        </a>
         <a href="refer.html" class="nav-item"><i class="fas fa-gift"></i><span>REFER</span></a>
         <a href="profile.html" class="nav-item active"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
     </nav>
@@ -168,38 +151,23 @@
                     document.getElementById('coinVal').innerText = (data.coins || 0);
                     if(data.dp) document.getElementById('dpPreview').src = data.dp;
                     if(data.gender) document.getElementById('genderSelector').value = data.gender;
-                    document.getElementById('vBadge').style.display = data.isVerified ? "block" : "none";
                 }
             });
         }
 
         function openBattleCard() {
             const d = window.currentData;
-            const bcCard = document.getElementById('bcCard');
-            const bcThematicBg = document.getElementById('bcThematicBg');
-            const bcGender = document.getElementById('bcGender');
             document.getElementById('bcName').innerText = d.name || "PLAYER";
-            document.getElementById('bcAvatar').src = d.dp || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+            document.getElementById('bcGender').innerText = (d.gender || "Male").toUpperCase();
             document.getElementById('bcKD').innerText = d.kd || "0.0";
             document.getElementById('bcWin').innerText = (d.winRate || "0") + "%";
-            document.getElementById('bcTier').innerText = d.tier || "BRONZE";
-            const gender = d.gender || "Male";
-            bcGender.innerText = gender.toUpperCase();
-            if(gender === "Female") { bcThematicBg.style.backgroundImage = "url('image_8.png')"; bcGender.style.color = "var(--pink)"; bcCard.style.borderColor = "var(--pink)"; }
-            else { bcThematicBg.style.backgroundImage = "url('image_7.png')"; bcGender.style.color = "var(--neon-blue)"; bcCard.style.borderColor = "var(--gold)"; }
             document.getElementById('bcOverlay').style.display = 'flex';
-            document.getElementById('bcOverlay').onmousemove = (e) => {
-                const rect = bcCard.getBoundingClientRect();
-                const x = (rect.left + rect.width/2 - e.clientX) / 20;
-                const y = (rect.top + rect.height/2 - e.clientY) / 20;
-                bcCard.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
-            };
         }
+
         function closeBattleCard() { document.getElementById('bcOverlay').style.display = 'none'; }
-        function openRules() { document.getElementById('rulesOverlay').style.display = 'block'; }
-        function closeRules() { document.getElementById('rulesOverlay').style.display = 'none'; }
         function updateGender() { database.ref('players/' + userData.uid).update({ gender: document.getElementById('genderSelector').value }); }
-        function logout() { if(confirm("Logout?")) { localStorage.clear(); window.location.href="login.html"; } }
+        function logout() { if(confirm("Logout System?")) { localStorage.clear(); window.location.href="login.html"; } }
+        
         window.onload = loadProfileLive;
     </script>
 </body>
