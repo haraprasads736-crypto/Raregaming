@@ -80,20 +80,22 @@
 
         function formatAMPM(h, m) {
             let ampm = h >= 12 ? 'PM' : 'AM';
-            h = h % 12 || 12;
-            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
+            let hours = h % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            return `${hours.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
         }
 
         async function renderMatches() {
             const container = document.getElementById('matchList');
             const now = new Date();
             let displayDate = new Date();
+            // Agar raat ke 9 baje ke baad hai, toh kal ke matches dikhao
             if (now.getHours() >= 21) displayDate.setDate(now.getDate() + 1);
             const dateStr = displayDate.toLocaleDateString('en-GB');
 
             let matchesHtml = "";
             
-            // 🔥 UNIQUE SERIAL LOGIC
+            // UNIQUE SERIAL STARTING POINTS
             let serial = 1001; 
             if(matchType.includes("CS")) serial = 2001;
             else if(matchType.includes("1V1") || matchType.includes("LW")) serial = 3001;
@@ -102,23 +104,24 @@
             const matchJoinsSnap = await database.ref(`match_joins`).once('value');
             const allJoins = matchJoinsSnap.val() || {};
 
-            for (let h = 9; h <= 21; h++) {
+            // 🔥 CHANGED: Start from 12 (12 PM) instead of 9
+            for (let h = 12; h <= 21; h++) {
                 for (let m = 0; m < 60; m += 15) {
+                    // Raat ke 9 baje ke baad koi match nahi (9:00 PM is the last)
                     if (h === 21 && m > 0) break;
 
                     let matchId = `${matchType}${serial}`;
                     let timeText = formatAMPM(h, m);
                     
-                    let fee = 10, prize = 80, perkill = 0, slots = 48, map = "BERMUDA", type = "SOLO";
+                    let fee = 10, prize = 380, perkill = 0, slots = 48, map = "BERMUDA", type = "SOLO";
                     if (matchType === "BR") {
-                        prize = 380;
                         if (m === 0) { fee = 5; perkill = 3; type = "SOLO"; }
                         else if (m === 15) { fee = 7; perkill = 5; type = "DUO"; }
                         else if (m === 30) { fee = 10; perkill = 7; type = "SQUAD"; }
                         else { fee = 5; perkill = 3; type = "SOLO"; }
                     } else if (["1V1", "LW", "LW2", "1V1HS"].includes(matchType)) {
-                        slots = 2; map = "LONE WOLF";
-                        if (m === 0) { fee = 20; prize = 30; }
+                        slots = 2; map = "LONE WOLF"; prize = 30;
+                        if (m === 0) { fee = 20; }
                         else if (m === 15) { fee = 30; prize = 40; }
                         else { fee = 10; prize = 15; }
                     } else if (matchType === "CSHS") { slots = 8; fee = 10; prize = 65; type = "SQUAD"; }
@@ -126,6 +129,7 @@
                     let status = 'upcoming';
                     let mTime = new Date(displayDate); mTime.setHours(h, m, 0);
                     let diff = (now - mTime) / (1000 * 60);
+                    
                     if (diff >= 0 && diff < 25) status = 'ongoing';
                     else if (diff >= 25) status = 'result';
 
@@ -170,7 +174,7 @@
                     serial++;
                 }
             }
-            container.innerHTML = matchesHtml || `<div style="text-align:center; margin-top:50px; opacity:0.5;"><p>No matches found.</p></div>`;
+            container.innerHTML = matchesHtml || `<div style="text-align:center; margin-top:50px; opacity:0.5;"><p>No matches scheduled yet.</p></div>`;
         }
 
         function openJoinModal(id, fee, prize, perkill) {
@@ -213,4 +217,3 @@
     </script>
 </body>
 </html>
-
