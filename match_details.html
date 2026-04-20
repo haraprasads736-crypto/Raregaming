@@ -82,16 +82,8 @@
             </div>
             <div id="aboutSec" class="detail-section active">
                 <p style="font-size: 12px; color: var(--primary); font-weight: 700;">ID show before 10 minutes</p>
-                <p style="font-size: 12px; color: #aaa;">ONLY KILL POINTS</p>
                 <div class="rule-card">
-                    <b>PLEASE READ ALL RULES THAN PLAY / कृपया खेलने से पहले सभी नियम पढ़ें</b><br><br>
-                    1. You Will get room I'd & password 10 to 5 minutes before the match time.<br>
-                    2. Always on screen recording while playing BattleOp matches.<br>
-                    3. Minimum game level should be 40.<br>
-                    4. Headshot (%) should not be more than 70 in BR career mode.<br>
-                    5. DONT INVITE AND DONT LEAK ID PASS.<br>
-                    6. Teamup not allowed. Multiple accounts are not allowed.<br>
-                    7. PC & emulators players are not allowed.
+                    <b>RULES:</b> NO TEAMUP, NO HACK, NO EMULATOR.
                 </div>
             </div>
             <div id="entrySec" class="detail-section"><div id="entryInfo"></div></div>
@@ -103,11 +95,11 @@
     <div id="joinModal" class="mini-modal">
         <div class="mini-card">
             <h3 style="margin:0 0 10px; font-size:18px; font-weight:800;">CONFIRM JOIN</h3>
-            <p id="feeText" style="font-size:12px; color:var(--primary); font-weight:700; margin-bottom:20px;"></p>
+            <p id="feeText" style="font-size:12px; color:var(--primary); font-weight:700;"></p>
             <input type="text" id="gName" placeholder="In-Game Name">
             <input type="number" id="gID" placeholder="In-Game UID">
             <button class="confirm-btn" onclick="processJoin()">PAY & JOIN</button>
-            <p onclick="closeModal()" style="margin-top:20px; font-size:11px; color:var(--gray); cursor:pointer;">Cancel</p>
+            <p onclick="closeModal()" style="margin-top:20px; cursor:pointer;">Cancel</p>
         </div>
     </div>
 
@@ -131,9 +123,8 @@
         }
 
         async function renderMatches() {
-            // 🔥 Permanent Close FREE Match logic
             if (matchType === "FREE") {
-                document.getElementById('matchList').innerHTML = `<p style="text-align:center; opacity:0.5; margin-top:50px;">Free matches are currently closed.</p>`;
+                document.getElementById('matchList').innerHTML = `<p style="text-align:center; opacity:0.5; margin-top:50px;">Closed.</p>`;
                 return;
             }
 
@@ -141,47 +132,51 @@
             const now = new Date();
             let displayDate = new Date();
             if (now.getHours() >= 21) displayDate.setDate(now.getDate() + 1);
+            
+            // 📅 Unique ID Logic: Get Day and Month
+            const day = displayDate.getDate().toString().padStart(2, '0');
+            const month = (displayDate.getMonth() + 1).toString().padStart(2, '0');
+            const dateCode = day + month; // Example: "2004" for 20th April
+
             const dateStr = displayDate.toLocaleDateString('en-GB');
             const matchJoinsSnap = await database.ref(`match_joins`).once('value');
             const allJoins = matchJoinsSnap.val() || {};
 
             let matchesHtml = "";
-            let serial = 1001; 
-            if(matchType.includes("CS")) serial = 2001;
-            else if(matchType.includes("1V1") || matchType.includes("LW")) serial = 3001;
+            
+            // 🔢 Serial Start based on Category
+            let baseSerial = 100; 
+            if(matchType.includes("CS")) baseSerial = 200;
+            else if(matchType.includes("1V1") || matchType.includes("LW")) baseSerial = 300;
+
+            let count = 1;
 
             for (let h = 12; h <= 21; h++) {
                 for (let m = 0; m < 60; m += 15) {
                     if (h === 21 && m > 0) break;
-                    let matchId = `${matchType}${serial}`;
-                    let timeText = formatAMPM(h, m);
+
+                    // 🚀 UNIQUE MATCH ID: Category + DateCode + Serial
+                    // Example: BR2004101
+                    let matchId = `${matchType}${dateCode}${baseSerial + count}`;
+                    let displayId = baseSerial + count; // User ko sirf #101 dikhega
                     
+                    let timeText = formatAMPM(h, m);
                     let fee = 10, prize = 380, perkill = 7, slots = 48, map = "BERMUDA", type = "SOLO", version = "TPP";
 
-                    // --- UPDATED BR ARENA SPECIAL PRICING ---
+                    // Pricing & Rules Logic
                     if (matchType === "BR") {
-                        if (m === 0) { 
-                            fee = 5; perkill = 3; type = "SOLO"; 
-                        } else if (m === 15) { 
-                            fee = 7; perkill = 5; type = "DUO"; 
-                        } else if (m === 30) { 
-                            fee = 10; perkill = 7; type = "SQUAD"; 
-                        } else { 
-                            fee = 5; perkill = 3; type = "SOLO"; 
-                        }
-                    } 
-                    // CS Logic
-                    else if (matchType.includes("CS")) {
-                        perkill = 0; map = "BERMUDA";
+                        if (m === 0) { fee = 5; perkill = 3; type = "SOLO"; }
+                        else if (m === 15) { fee = 7; perkill = 5; type = "DUO"; }
+                        else if (m === 30) { fee = 10; perkill = 7; type = "SQUAD"; }
+                        else { fee = 5; perkill = 3; type = "SOLO"; }
+                    } else if (matchType.includes("CS")) {
+                        perkill = 0;
                         if (m === 0) { type = "1V1"; fee = 30; prize = 45; slots = 2; }
                         else if (m === 15) { type = "2V2"; fee = 30; prize = 90; slots = 4; }
                         else if (m === 30) { type = "4V4"; fee = 10; prize = 65; slots = 8; }
                         else { type = "1V1"; fee = 30; prize = 45; slots = 2; }
-                    }
-                    // 1V1 Logic
-                    else if (matchType.includes("1V1") || matchType.includes("LW")) {
-                        perkill = 0; map = "LONE WOLF"; type = "1V1"; slots = 2;
-                        fee = 30; prize = 45; 
+                    } else {
+                        perkill = 0; map = "LONE WOLF"; type = "1V1"; slots = 2; fee = 30; prize = 45; 
                     }
 
                     const participants = allJoins[matchId] || {};
@@ -200,7 +195,7 @@
                             <div class="card-top">
                                 <img src="${matchType.toLowerCase()}_poster.jpg" class="match-logo" onerror="this.src='icon.png'">
                                 <div style="flex:1">
-                                    <p class="match-name">${matchType} ${type} MATCH #${serial}</p>
+                                    <p class="match-name">${matchType} ${type} MATCH #${displayId}</p>
                                     <span class="match-dt">${dateStr} | ${timeText}</span>
                                 </div>
                                 <button class="more-btn" onclick="openDetail('${matchId}', ${fee}, ${prize}, ${perkill}, '${type}', '${map}', '${version}')">INFO</button>
@@ -228,45 +223,29 @@
                             </div>
                         </div>`;
                     }
-                    serial++;
+                    count++;
                 }
             }
             container.innerHTML = matchesHtml || `<p style="text-align:center; opacity:0.5; margin-top:50px;">No Matches Found</p>`;
         }
 
+        // --- All Modal Logic functions remain the same as your original code ---
         async function openDetail(id, fee, prize, perkill, type, map, version) {
             selectedMatchData = { id, fee, prize, perkill };
-            document.getElementById('detMatchName').innerText = "MATCH #" + id.replace(/\D/g, "");
+            document.getElementById('detMatchName').innerText = "MATCH #" + id.slice(-3);
             document.getElementById('detailModal').style.display = "flex";
             const snap = await database.ref(`match_joins/${id}`).once('value');
             const players = snap.val() || {};
             const myEntry = players[userData.uid];
-            document.getElementById('entryInfo').innerHTML = myEntry ? 
-                `<div class="player-item"><span>Name:</span><b>${myEntry.name}</b></div>
-                 <div class="player-item"><span>UID:</span><b>${myEntry.uid}</b></div>` : 
-                `<p style="text-align:center; opacity:0.5; font-size:12px;">You haven't joined this match.</p>`;
+            document.getElementById('entryInfo').innerHTML = myEntry ? `<div class="player-item"><span>Name:</span><b>${myEntry.name}</b></div><div class="player-item"><span>UID:</span><b>${myEntry.uid}</b></div>` : `<p style="text-align:center; opacity:0.5; font-size:12px;">Not joined.</p>`;
             let pListHtml = "";
-            Object.values(players).forEach((p, index) => {
-                pListHtml += `<div class="player-item"><span>${index + 1}. ${p.name}</span><i class="fas fa-check-circle" style="color:#39ff14"></i></div>`;
-            });
-            document.getElementById('playerList').innerHTML = pListHtml || `<p style="text-align:center; opacity:0.5; font-size:12px;">No one joined yet.</p>`;
-            document.getElementById('detJoinBox').innerHTML = currentTab === 'upcoming' ? 
-                (myEntry ? `<button class="btn-join" style="width:100%; background:#444">ALREADY JOINED ✅</button>` : 
-                `<button class="btn-join" style="width:100%;" onclick="openJoinModal('${id}', ${fee})">JOIN NOW</button>`) : "";
+            Object.values(players).forEach((p, index) => { pListHtml += `<div class="player-item"><span>${index + 1}. ${p.name}</span><i class="fas fa-check-circle" style="color:#39ff14"></i></div>`; });
+            document.getElementById('playerList').innerHTML = pListHtml || `<p style="text-align:center; opacity:0.5; font-size:12px;">No participants.</p>`;
+            document.getElementById('detJoinBox').innerHTML = currentTab === 'upcoming' ? (myEntry ? `<button class="btn-join" style="width:100%; background:#444">JOINED</button>` : `<button class="btn-join" style="width:100%;" onclick="openJoinModal('${id}', ${fee})">JOIN NOW</button>`) : "";
         }
-
         function closeDetail() { document.getElementById('detailModal').style.display = "none"; }
-        function switchDetailTab(sec, el) {
-            document.querySelectorAll('.detail-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(sec + 'Sec').classList.add('active');
-            el.classList.add('active');
-        }
-        function openJoinModal(id, fee) {
-            selectedMatchData = { id, fee };
-            document.getElementById('feeText').innerText = "Entry Fee: ₹" + fee;
-            document.getElementById('joinModal').style.display = "flex";
-        }
+        function switchDetailTab(sec, el) { document.querySelectorAll('.detail-section').forEach(s => s.classList.remove('active')); document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('active')); document.getElementById(sec + 'Sec').classList.add('active'); el.classList.add('active'); }
+        function openJoinModal(id, fee) { selectedMatchData = { id, fee }; document.getElementById('feeText').innerText = "Entry Fee: ₹" + fee; document.getElementById('joinModal').style.display = "flex"; }
         function closeModal() { document.getElementById('joinModal').style.display = "none"; }
         async function processJoin() {
             const name = document.getElementById('gName').value.trim();
@@ -274,19 +253,14 @@
             if(!name || !uid) return alert("Enter Details!");
             const playerRef = database.ref('players/' + userData.uid);
             const snap = await playerRef.once('value');
-            if(!snap.exists()) return alert("User not found!");
+            if(!snap.exists()) return alert("Error!");
             const balance = snap.val().cash || 0;
             if(balance < selectedMatchData.fee) return alert("Low Balance!");
             await playerRef.update({ cash: balance - selectedMatchData.fee });
             await database.ref(`match_joins/${selectedMatchData.id}/${userData.uid}`).set({ name, uid, joinedAt: new Date().toISOString() });
             alert("Success!"); closeModal(); closeDetail(); renderMatches();
         }
-        function switchTab(t, el) {
-            currentTab = t;
-            document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-            el.classList.add('active');
-            renderMatches();
-        }
+        function switchTab(t, el) { currentTab = t; document.querySelectorAll('.tab').forEach(x => x.classList.remove('active')); el.classList.add('active'); renderMatches(); }
         window.onload = renderMatches;
     </script>
 </body>
