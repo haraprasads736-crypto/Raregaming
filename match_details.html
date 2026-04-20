@@ -36,7 +36,6 @@
         .card-footer { padding: 0 15px 12px; display: flex; justify-content: flex-end; align-items: center; }
         .btn-join { background: var(--secondary); color: var(--white); border: none; padding: 8px 28px; border-radius: 10px; font-weight: 900; font-size: 10px; text-transform: uppercase; cursor: pointer; }
 
-        /* Detail Modal */
         .detail-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; align-items: flex-end; }
         .detail-content { background: var(--secondary); width: 100%; height: 85%; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; box-sizing: border-box; overflow-y: auto; border-top: 2px solid var(--primary); }
         .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -126,12 +125,13 @@
 
         function formatAMPM(h, m) {
             let ampm = h >= 12 ? 'PM' : 'AM';
-            let hours = h % 12 || 12;
+            let hours = h % 12;
+            hours = hours ? hours : 12;
             return `${hours.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
         }
 
         async function renderMatches() {
-            // 🔥 Don't show FREE matches
+            // 🔥 Permanent Close FREE Match logic
             if (matchType === "FREE") {
                 document.getElementById('matchList').innerHTML = `<p style="text-align:center; opacity:0.5; margin-top:50px;">Free matches are currently closed.</p>`;
                 return;
@@ -158,15 +158,19 @@
                     
                     let fee = 10, prize = 380, perkill = 7, slots = 48, map = "BERMUDA", type = "SOLO", version = "TPP";
 
-                    // 1. BR ARENA LOGIC (Updated to Rs 10 Fee / Rs 7 Per Kill)
+                    // --- UPDATED BR ARENA SPECIAL PRICING ---
                     if (matchType === "BR") {
-                        fee = 10; perkill = 7;
-                        if (m === 0) { type = "SOLO"; }
-                        else if (m === 15) { type = "DUO"; }
-                        else if (m === 30) { type = "SQUAD"; }
-                        else { type = "SOLO"; }
+                        if (m === 0) { 
+                            fee = 5; perkill = 3; type = "SOLO"; 
+                        } else if (m === 15) { 
+                            fee = 7; perkill = 5; type = "DUO"; 
+                        } else if (m === 30) { 
+                            fee = 10; perkill = 7; type = "SQUAD"; 
+                        } else { 
+                            fee = 5; perkill = 3; type = "SOLO"; 
+                        }
                     } 
-                    // 2. CS & CS HEADSHOT (Mixed Types)
+                    // CS Logic
                     else if (matchType.includes("CS")) {
                         perkill = 0; map = "BERMUDA";
                         if (m === 0) { type = "1V1"; fee = 30; prize = 45; slots = 2; }
@@ -174,7 +178,7 @@
                         else if (m === 30) { type = "4V4"; fee = 10; prize = 65; slots = 8; }
                         else { type = "1V1"; fee = 30; prize = 45; slots = 2; }
                     }
-                    // 3. 1V1 & 1V1 HEADSHOT (Strictly 1V1 Only)
+                    // 1V1 Logic
                     else if (matchType.includes("1V1") || matchType.includes("LW")) {
                         perkill = 0; map = "LONE WOLF"; type = "1V1"; slots = 2;
                         fee = 30; prize = 45; 
@@ -270,6 +274,7 @@
             if(!name || !uid) return alert("Enter Details!");
             const playerRef = database.ref('players/' + userData.uid);
             const snap = await playerRef.once('value');
+            if(!snap.exists()) return alert("User not found!");
             const balance = snap.val().cash || 0;
             if(balance < selectedMatchData.fee) return alert("Low Balance!");
             await playerRef.update({ cash: balance - selectedMatchData.fee });
@@ -286,4 +291,3 @@
     </script>
 </body>
 </html>
-
