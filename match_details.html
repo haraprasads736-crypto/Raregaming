@@ -14,27 +14,51 @@
         .header { display: flex; align-items: center; padding: 15px 20px; background: var(--secondary); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .back-btn { font-size: 18px; color: var(--white); cursor: pointer; }
         .title { font-size: 15px; font-weight: 800; flex: 1; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; margin-right: 20px; }
+        
         .tab-container { display: flex; justify-content: space-around; background: #1A0A2D; margin: 15px; border-radius: 50px; padding: 4px; }
         .tab { padding: 8px 15px; border-radius: 50px; font-size: 10px; font-weight: 700; color: var(--gray); cursor: pointer; text-transform: uppercase; flex: 1; text-align: center; }
         .tab.active { background: var(--primary); color: var(--white); }
+        
         .match-list { padding: 0 14px; }
         .card { background: var(--white); border-radius: 16px; margin-bottom: 15px; color: #000; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.4); position: relative; border: 1px solid #ddd; }
         .card-top { padding: 12px 15px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f0f0f0; }
         .match-logo { width: 38px; height: 38px; border-radius: 10px; object-fit: cover; border: 1.5px solid var(--primary); background: #fff; }
         .match-name { font-size: 11px; font-weight: 800; text-transform: uppercase; margin: 0; color: #111; }
         .match-dt { font-size: 8.5px; color: #666; font-weight: 700; display: block; margin-top: 1px; }
+        .more-btn { background: #f0f0f0; border: none; padding: 5px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; cursor: pointer; color: var(--primary); }
+
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 12px 15px 8px; }
         .stat-box { background: var(--primary); border-radius: 8px; padding: 6px 2px; text-align: center; color: white; display: flex; flex-direction: column; justify-content: center; }
         .stat-box.light { background: #F3EEFF; color: #111; border: 1px solid #e2e2e2; }
         .stat-label { font-size: 7px; font-weight: 700; text-transform: uppercase; opacity: 0.9; margin-bottom: 1px; }
         .stat-value { font-size: 10px; font-weight: 900; }
+
         .progress-box { padding: 0 15px 10px; }
         .progress-bar-bg { width: 100%; height: 12px; background: #E0D4FF; border-radius: 20px; position: relative; overflow: hidden; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, #8B3EEB, #6219c4); transition: 1s; width: 0%; }
         .progress-text { position: absolute; width: 100%; text-align: center; font-size: 8px; font-weight: 900; line-height: 12px; color: var(--white); z-index: 2; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+
         .card-footer { padding: 0 15px 12px; display: flex; justify-content: flex-end; align-items: center; }
         .btn-join { background: var(--secondary); color: var(--white); border: none; padding: 8px 28px; border-radius: 10px; font-weight: 900; font-size: 10px; text-transform: uppercase; cursor: pointer; }
-        .mini-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+
+        /* Detail Modal Styling */
+        .detail-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; align-items: flex-end; }
+        .detail-content { background: var(--secondary); width: 100%; height: 85%; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; box-sizing: border-box; overflow-y: auto; border-top: 2px solid var(--primary); }
+        .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .detail-title { font-size: 16px; font-weight: 800; color: var(--white); margin: 0; }
+        
+        .detail-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .d-tab { flex: 1; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px; text-align: center; font-size: 11px; font-weight: 700; color: #fff; cursor: pointer; }
+        .d-tab.active { background: var(--primary); }
+
+        .detail-section { display: none; }
+        .detail-section.active { display: block; }
+
+        .rule-card { background: rgba(139, 62, 235, 0.1); border-left: 4px solid var(--primary); padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 11px; line-height: 1.6; color: #ddd; }
+        .player-item { display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.03); margin-bottom: 5px; border-radius: 8px; font-size: 12px; }
+
+        /* Join Modal */
+        .mini-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 4000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .mini-card { background: #1A0A2D; width: 100%; max-width: 320px; border-radius: 24px; padding: 30px; border: 1px solid var(--primary); text-align: center; color: var(--white); }
         .mini-card input { width: 100%; padding: 14px; background: #000; border: 1px solid var(--primary); border-radius: 12px; color: var(--white); margin: 12px 0; box-sizing: border-box; text-align: center; font-size: 13px; outline: none; }
         .confirm-btn { background: #39ff14; color: #000; width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 900; text-transform: uppercase; cursor: pointer; }
@@ -54,6 +78,46 @@
     </div>
 
     <div class="match-list" id="matchList"></div>
+
+    <div id="detailModal" class="detail-modal">
+        <div class="detail-content">
+            <div class="detail-header">
+                <p class="detail-title" id="detMatchName">MATCH DETAILS</p>
+                <i class="fas fa-times" onclick="closeDetail()" style="font-size: 20px;"></i>
+            </div>
+
+            <div class="detail-tabs">
+                <div class="d-tab active" onclick="switchDetailTab('about', this)">About</div>
+                <div class="d-tab" onclick="switchDetailTab('entry', this)">My Entry</div>
+                <div class="d-tab" onclick="switchDetailTab('players', this)">Participants</div>
+            </div>
+
+            <div id="aboutSec" class="detail-section active">
+                <p style="font-size: 12px; color: var(--primary); font-weight: 700;">ID show before 10 minutes</p>
+                <p style="font-size: 12px; color: #aaa;">ONLY KILL POINTS</p>
+                <div class="rule-card">
+                    <b>PLEASE READ ALL RULES THAN PLAY / कृपया खेलने से पहले सभी नियम पढ़ें</b><br><br>
+                    1. You Will get room I'd & password 10 to 5 minutes before the match time.<br>
+                    2. Always on screen recording while playing BattleOp matches.<br>
+                    3. Minimum game level should be 40.<br>
+                    4. Headshot (%) should not be more than 70 in BR career mode.<br>
+                    5. DONT INVITE AND DONT LEAK ID PASS.<br>
+                    6. Teamup not allowed. Multiple accounts are not allowed.<br>
+                    7. PC & emulators players are not allowed.
+                </div>
+            </div>
+
+            <div id="entrySec" class="detail-section">
+                <div id="entryInfo"></div>
+            </div>
+
+            <div id="playersSec" class="detail-section">
+                <div id="playerList"></div>
+            </div>
+
+            <div id="detJoinBox" style="margin-top: 30px;"></div>
+        </div>
+    </div>
 
     <div id="joinModal" class="mini-modal">
         <div class="mini-card">
@@ -77,11 +141,11 @@
 
         let currentTab = 'upcoming';
         let selectedMatchData = null;
+        let allMatchesData = [];
 
         function formatAMPM(h, m) {
             let ampm = h >= 12 ? 'PM' : 'AM';
-            let hours = h % 12;
-            hours = hours ? hours : 12; // the hour '0' should be '12'
+            let hours = h % 12 || 12;
             return `${hours.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
         }
 
@@ -89,56 +153,41 @@
             const container = document.getElementById('matchList');
             const now = new Date();
             let displayDate = new Date();
-            // Agar raat ke 9 baje ke baad hai, toh kal ke matches dikhao
             if (now.getHours() >= 21) displayDate.setDate(now.getDate() + 1);
             const dateStr = displayDate.toLocaleDateString('en-GB');
-
-            let matchesHtml = "";
-            
-            // UNIQUE SERIAL STARTING POINTS
-            let serial = 1001; 
-            if(matchType.includes("CS")) serial = 2001;
-            else if(matchType.includes("1V1") || matchType.includes("LW")) serial = 3001;
-            else if(matchType === "FREE") serial = 4001;
 
             const matchJoinsSnap = await database.ref(`match_joins`).once('value');
             const allJoins = matchJoinsSnap.val() || {};
 
-            // 🔥 CHANGED: Start from 12 (12 PM) instead of 9
+            let matchesHtml = "";
+            let serial = 1001; 
+            if(matchType.includes("CS")) serial = 2001;
+            else if(matchType.includes("1V1") || matchType.includes("LW")) serial = 3001;
+
             for (let h = 12; h <= 21; h++) {
                 for (let m = 0; m < 60; m += 15) {
-                    // Raat ke 9 baje ke baad koi match nahi (9:00 PM is the last)
                     if (h === 21 && m > 0) break;
 
                     let matchId = `${matchType}${serial}`;
                     let timeText = formatAMPM(h, m);
-                    
                     let fee = 10, prize = 380, perkill = 0, slots = 48, map = "BERMUDA", type = "SOLO";
-                    if (matchType === "BR") {
-                        if (m === 0) { fee = 5; perkill = 3; type = "SOLO"; }
-                        else if (m === 15) { fee = 7; perkill = 5; type = "DUO"; }
-                        else if (m === 30) { fee = 10; perkill = 7; type = "SQUAD"; }
-                        else { fee = 5; perkill = 3; type = "SOLO"; }
-                    } else if (["1V1", "LW", "LW2", "1V1HS"].includes(matchType)) {
-                        slots = 2; map = "LONE WOLF"; prize = 30;
-                        if (m === 0) { fee = 20; }
-                        else if (m === 15) { fee = 30; prize = 40; }
-                        else { fee = 10; prize = 15; }
-                    } else if (matchType === "CSHS") { slots = 8; fee = 10; prize = 65; type = "SQUAD"; }
 
+                    if (matchType === "BR") {
+                        if (m === 15) { fee = 7; perkill = 5; type = "DUO"; }
+                        else if (m === 30) { fee = 10; perkill = 7; type = "SQUAD"; }
+                    }
+
+                    const participants = allJoins[matchId] || {};
+                    const isJoined = participants[userData.uid] ? true : false;
+                    const pCount = Object.keys(participants).length;
+                    
                     let status = 'upcoming';
                     let mTime = new Date(displayDate); mTime.setHours(h, m, 0);
                     let diff = (now - mTime) / (1000 * 60);
-                    
                     if (diff >= 0 && diff < 25) status = 'ongoing';
                     else if (diff >= 25) status = 'result';
 
                     if (status === currentTab) {
-                        const matchParticipants = allJoins[matchId] || {};
-                        const pCount = Object.keys(matchParticipants).length;
-                        const isJoined = matchParticipants[userData.uid] ? true : false;
-                        const progress = (pCount / slots) * 100;
-
                         matchesHtml += `
                         <div class="card">
                             <div class="card-top">
@@ -147,19 +196,17 @@
                                     <p class="match-name">${matchType} MATCH #${serial}</p>
                                     <span class="match-dt">${dateStr} | ${timeText}</span>
                                 </div>
+                                <button class="more-btn" onclick="openDetail('${matchId}', ${fee}, ${prize}, ${perkill}, '${timeText}', '${type}', '${map}')">INFO</button>
                             </div>
                             <div class="stats-grid">
                                 <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${prize}</span></div>
                                 <div class="stat-box"><span class="stat-label">Per Kill</span><span class="stat-value">₹${perkill}</span></div>
                                 <div class="stat-box"><span class="stat-label">Entry</span><span class="stat-value">₹${fee}</span></div>
-                                <div class="stat-box light"><span class="stat-label">Type</span><span class="stat-value">${type}</span></div>
-                                <div class="stat-box light"><span class="stat-label">Version</span><span class="stat-value">TPP</span></div>
-                                <div class="stat-box light"><span class="stat-label">Map</span><span class="stat-value">${map}</span></div>
                             </div>
                             <div class="progress-box">
                                 <div class="progress-bar-bg">
                                     <div class="progress-text">${pCount}/${slots} Joined</div>
-                                    <div class="progress-fill" style="width:${progress}%"></div>
+                                    <div class="progress-fill" style="width:${(pCount/slots)*100}%"></div>
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -174,12 +221,52 @@
                     serial++;
                 }
             }
-            container.innerHTML = matchesHtml || `<div style="text-align:center; margin-top:50px; opacity:0.5;"><p>No matches scheduled yet.</p></div>`;
+            container.innerHTML = matchesHtml || `<p style="text-align:center; opacity:0.5; margin-top:50px;">No Matches Found</p>`;
         }
 
-        function openJoinModal(id, fee, prize, perkill) {
+        async function openDetail(id, fee, prize, perkill, time, type, map) {
             selectedMatchData = { id, fee, prize, perkill };
-            document.getElementById('feeText').innerText = "Joining Fee: ₹" + fee;
+            document.getElementById('detMatchName').innerText = "MATCH #" + id.replace(/\D/g, "");
+            document.getElementById('detailModal').style.display = "flex";
+            
+            // Load Participants
+            const snap = await database.ref(`match_joins/${id}`).once('value');
+            const players = snap.val() || {};
+            const pCount = Object.keys(players).length;
+            const myEntry = players[userData.uid];
+
+            // Render My Entry
+            document.getElementById('entryInfo').innerHTML = myEntry ? 
+                `<div class="player-item"><span>Name:</span><b>${myEntry.name}</b></div>
+                 <div class="player-item"><span>UID:</span><b>${myEntry.uid}</b></div>` : 
+                `<p style="text-align:center; opacity:0.5; font-size:12px;">You haven't joined this match.</p>`;
+
+            // Render Participants
+            let pListHtml = "";
+            Object.values(players).forEach((p, index) => {
+                pListHtml += `<div class="player-item"><span>${index + 1}. ${p.name}</span><i class="fas fa-check-circle" style="color:#39ff14"></i></div>`;
+            });
+            document.getElementById('playerList').innerHTML = pListHtml || `<p style="text-align:center; opacity:0.5; font-size:12px;">No one joined yet.</p>`;
+
+            // Render Bottom Join Button in Detail
+            document.getElementById('detJoinBox').innerHTML = currentTab === 'upcoming' ? 
+                (myEntry ? `<button class="btn-join" style="width:100%; background:#444">ALREADY JOINED ✅</button>` : 
+                `<button class="btn-join" style="width:100%;" onclick="openJoinModal('${id}', ${fee})">JOIN NOW</button>`) : "";
+        }
+
+        function closeDetail() { document.getElementById('detailModal').style.display = "none"; }
+
+        function switchDetailTab(sec, el) {
+            document.querySelectorAll('.detail-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(sec + 'Sec').classList.add('active');
+            el.classList.add('active');
+        }
+
+        function openJoinModal(id, fee) {
+            selectedMatchData.id = id;
+            selectedMatchData.fee = fee;
+            document.getElementById('feeText').innerText = "Entry Fee: ₹" + fee;
             document.getElementById('joinModal').style.display = "flex";
         }
 
@@ -188,22 +275,18 @@
         async function processJoin() {
             const name = document.getElementById('gName').value.trim();
             const uid = document.getElementById('gID').value.trim();
-            if(!name || !uid) return alert("Enter all details!");
+            if(!name || !uid) return alert("Enter Details!");
+            
             const playerRef = database.ref('players/' + userData.uid);
             const snap = await playerRef.once('value');
             const balance = snap.val().cash || 0;
-            if(balance < selectedMatchData.fee) return alert("Low balance!");
-
-            await database.ref('matches/' + selectedMatchData.id).update({
-                prize: selectedMatchData.prize.toString(),
-                perkill: selectedMatchData.perkill.toString(),
-                status: 'upcoming'
-            });
+            if(balance < selectedMatchData.fee) return alert("Low Balance!");
 
             await playerRef.update({ cash: balance - selectedMatchData.fee });
             await database.ref(`match_joins/${selectedMatchData.id}/${userData.uid}`).set({ name, uid, joinedAt: new Date().toISOString() });
-            alert("Joined Successfully!");
-            closeModal(); renderMatches();
+            
+            alert("Success!");
+            closeModal(); closeDetail(); renderMatches();
         }
 
         function switchTab(t, el) {
