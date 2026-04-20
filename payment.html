@@ -8,8 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Tera Pura CSS (No Change) */
-        body { background: linear-gradient(to bottom, #1b103c, #a1368b); font-family: 'Poppins', sans-serif; color: white; margin: 0; padding: 0; min-height: 100vh; padding-bottom: 120px; /* Thodi space badhai nav ke liye */ }
+        body { background: linear-gradient(to bottom, #1b103c, #a1368b); font-family: 'Poppins', sans-serif; color: white; margin: 0; padding: 0; min-height: 100vh; padding-bottom: 120px; }
         .container { padding: 20px; max-width: 400px; margin: 0 auto; }
         .header { display: flex; align-items: center; margin-bottom: 30px; }
         .back-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; margin-right: 15px; }
@@ -17,14 +16,15 @@
         .grid-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 40px; }
         .amount-btn { background-color: #1a153a; border: none; color: white; padding: 12px 0; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
         .continue-btn { background: linear-gradient(90deg, #1b3266, #2d559e); width: 100%; padding: 15px; border: none; border-radius: 30px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; }
-        #step2 { background: white; color: black; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; }
-        .trans-input { width: 95%; padding: 12px; margin-top: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; font-weight: bold; }
-        .verify-btn { background: #4caf50; color: white; width: 100%; padding: 12px; margin-top: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .hindi-text { font-size: 12px; color: #444; display: block; margin-top: 5px; }
+        
+        #step2 { background: white; color: black; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .trans-input { width: 95%; padding: 12px; margin-top: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; font-weight: bold; outline: none; }
+        .verify-btn { background: #4caf50; color: white; width: 100%; padding: 15px; margin-top: 20px; border: none; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .verify-btn:disabled { background: #888; }
+        .status-card { margin-top: 15px; padding: 10px; border-radius: 10px; background: #f0f8ff; color: #007bff; font-size: 13px; font-weight: bold; border: 1px dashed #007bff; }
 
-        /* 🌟 NAVIGATION (Matched Style) 🌟 */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; transition: 0.3s; }
+        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
         .nav-item.active { color: #00f2fe; }
         .nav-item i { font-size: 20px; }
     </style>
@@ -54,15 +54,20 @@
             <h2 style="margin-top: 0; font-size: 20px; color: #333;">RareGaming Pay</h2>
             <p style="font-size: 14px; color: #555;">Paying ₹<span id="displayAmount"></span></p>
             
-            <img id="qrImage" src="" alt="Loading QR..." style="width: 220px; height: 220px; margin: 15px 0; border: 2px solid #eee; padding: 5px;">
+            <img id="qrImage" src="" alt="QR" style="width: 220px; height: 220px; margin: 15px 0;">
             
-            <p style="color: #d9534f; font-weight: bold; margin: 10px 0;">Expire in <span id="timer">05:00</span></p>
+            <p style="color: #d9534f; font-weight: bold; margin: 10px 0;">Time Left: <span id="timer">05:00</span></p>
 
-            <p style="font-size: 14px; font-weight: bold; color: #333; margin-bottom: 2px;">UTR / Transaction ID</p>
-            <span class="hindi-text">पेमेंट के बाद 12 अंकों का UTR नंबर यहाँ डालें</span>
+            <div id="inputSection">
+                <p style="font-size: 14px; font-weight: bold; color: #333; margin-bottom: 2px;">Enter Transaction ID (UTR)</p>
+                <input type="number" id="transNumber" class="trans-input" placeholder="12 Digit Transaction ID">
+                <button class="verify-btn" id="subBtn" onclick="submitWithUTR()">SUBMIT & VERIFY ✅</button>
+            </div>
             
-            <input type="number" id="transNumber" class="trans-input" placeholder="Example: 4123XXXXXXXX">
-            <button class="verify-btn" id="subBtn" onclick="submitPayment()">Submit for Approval</button>
+            <div id="statusMsg" class="status-card" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i> Verifying with FamPay...<br>
+                <span style="font-size: 10px; font-weight: normal;">Paisa milte hi coins add ho jayenge.</span>
+            </div>
         </div>
     </div>
 
@@ -89,11 +94,10 @@
 
         function generateQR() {
             let amount = document.getElementById('payAmount').value;
-            if(amount < 1) return alert("Sahi amount dalo!");
+            if(amount < 1) return alert("Valid amount dalo!");
 
             let upiId = "8328875119-3@ybl"; 
-            let upiName = "RareGaming";
-            let upiLink = `upi://pay?pa=${upiId}&pn=${upiName}&am=${amount}&cu=INR`;
+            let upiLink = `upi://pay?pa=${upiId}&pn=RareGaming&am=${amount}&cu=INR`;
             
             document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
             document.getElementById('displayAmount').innerText = amount;
@@ -113,32 +117,40 @@
             }, 1000);
         }
 
-        function submitPayment() {
-            const transId = document.getElementById('transNumber').value;
+        function submitWithUTR() {
+            const utr = document.getElementById('transNumber').value;
             const amount = document.getElementById('payAmount').value;
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
-            const usedReferCode = localStorage.getItem("pendingReferral") || "NONE";
 
-            if(transId.length !== 12) return alert("12-digit UTR number sahi se dalo!");
+            if(utr.length !== 12) return alert("12-digit Transaction ID dalo!");
+            if(!userData) return alert("User not logged in!");
 
-            const btn = document.getElementById('subBtn');
-            btn.disabled = true;
-            btn.innerText = "Sending Request...";
+            const inputSection = document.getElementById('inputSection');
+            const statusMsg = document.getElementById('statusMsg');
+            
+            inputSection.style.display = "none";
+            statusMsg.style.display = "block";
 
-            database.ref('payment_requests').push({
+            // 🌟 Folder 'Requests' mein Transaction ID ko key banaya hai
+            const requestRef = database.ref('Requests/' + utr);
+            
+            requestRef.set({
                 userId: userData.uid,
                 userName: userData.name,
                 amount: parseFloat(amount),
-                utr: transId,
-                referUsed: usedReferCode,
-                time: new Date().toLocaleString(),
-                status: "pending"
+                status: "Pending",
+                utr: utr,
+                time: new Date().toLocaleString()
             }).then(() => {
-                alert("Request Sent! Admin verify karke balance add kar dega. ✅");
-                window.location.href = 'index.html';
-            }).catch(err => {
-                alert("Error! Please check internet.");
-                btn.disabled = false;
+                // MacroDroid jab ise "Success" karega, ye apne aap detect karega
+                requestRef.on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data && data.status === "Success") {
+                        clearInterval(timerInterval);
+                        alert("Transaction Verified! Coins added. ✅");
+                        window.location.href = 'index.html';
+                    }
+                });
             });
         }
     </script>
