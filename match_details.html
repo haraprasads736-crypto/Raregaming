@@ -27,7 +27,6 @@
         .match-dt { font-size: 8.5px; color: #666; font-weight: 700; display: block; margin-top: 1px; }
         .more-btn { background: #f0f0f0; border: none; padding: 5px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; cursor: pointer; color: var(--primary); }
 
-        /* Updated Stats Grid for 6 Boxes */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 12px 15px 8px; }
         .stat-box { background: var(--primary); border-radius: 8px; padding: 6px 2px; text-align: center; color: white; display: flex; flex-direction: column; justify-content: center; }
         .stat-box.light { background: #F3EEFF; color: #111; border: 1px solid #e2e2e2; }
@@ -42,7 +41,6 @@
         .card-footer { padding: 0 15px 12px; display: flex; justify-content: flex-end; align-items: center; }
         .btn-join { background: var(--secondary); color: var(--white); border: none; padding: 8px 28px; border-radius: 10px; font-weight: 900; font-size: 10px; text-transform: uppercase; cursor: pointer; }
 
-        /* Detail Modal */
         .detail-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; align-items: flex-end; }
         .detail-content { background: var(--secondary); width: 100%; height: 85%; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; box-sizing: border-box; overflow-y: auto; border-top: 2px solid var(--primary); }
         .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -170,16 +168,27 @@
                     let matchId = `${matchType}${serial}`;
                     let timeText = formatAMPM(h, m);
                     
-                    // FIXED PRIZE & PER KILL LOGIC
                     let fee = 10, prize = 380, perkill = 5, slots = 48, map = "BERMUDA", type = "SOLO", version = "TPP";
 
                     if (matchType === "BR") {
                         if (m === 0) { fee = 5; perkill = 3; type = "SOLO"; }
                         else if (m === 15) { fee = 7; perkill = 5; type = "DUO"; }
                         else if (m === 30) { fee = 10; perkill = 7; type = "SQUAD"; }
-                    } else if (["1V1", "LW", "LW2"].includes(matchType)) {
-                        slots = 2; map = "LONE WOLF"; prize = 30; perkill = 0; fee = 20;
-                    } else if (matchType === "CSHS") { slots = 8; fee = 10; prize = 65; type = "SQUAD"; perkill = 0; map = "BERMUDA"; }
+                    } 
+                    else if (matchType.includes("CS") || matchType.includes("CLASH")) {
+                        perkill = 0; 
+                        map = "BERMUDA";
+                        if (m === 0) { type = "1V1"; fee = 30; prize = 45; slots = 2; }
+                        else if (m === 15) { type = "2V2"; fee = 30; prize = 90; slots = 4; }
+                        else if (m === 30) { type = "4V4"; fee = 10; prize = 65; slots = 8; }
+                        else { type = "1V1"; fee = 30; prize = 45; slots = 2; }
+                    }
+                    else if (["1V1", "LW", "LW2", "1V1HS"].includes(matchType)) {
+                        perkill = 0; map = "LONE WOLF"; slots = 2;
+                        if (m === 0) { type = "1V1"; fee = 30; prize = 45; }
+                        else if (m === 30) { type = "2V2"; fee = 30; prize = 90; slots = 4; }
+                        else { type = "1V1"; fee = 20; prize = 35; }
+                    }
 
                     const participants = allJoins[matchId] || {};
                     const isJoined = participants[userData.uid] ? true : false;
@@ -197,7 +206,7 @@
                             <div class="card-top">
                                 <img src="${matchType.toLowerCase()}_poster.jpg" class="match-logo" onerror="this.src='icon.png'">
                                 <div style="flex:1">
-                                    <p class="match-name">${matchType} MATCH #${serial}</p>
+                                    <p class="match-name">${matchType} ${type} MATCH #${serial}</p>
                                     <span class="match-dt">${dateStr} | ${timeText}</span>
                                 </div>
                                 <button class="more-btn" onclick="openDetail('${matchId}', ${fee}, ${prize}, ${perkill}, '${type}', '${map}', '${version}')">INFO</button>
@@ -236,7 +245,6 @@
             document.getElementById('detMatchName').innerText = "MATCH #" + id.replace(/\D/g, "");
             document.getElementById('detailModal').style.display = "flex";
             
-            // Participants load
             const snap = await database.ref(`match_joins/${id}`).once('value');
             const players = snap.val() || {};
             const myEntry = players[userData.uid];
@@ -301,6 +309,4 @@
         }
 
         window.onload = renderMatches;
-    </script>
-</body>
-</html>
+    </s
