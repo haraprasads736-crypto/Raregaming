@@ -131,6 +131,12 @@
         }
 
         async function renderMatches() {
+            // 🔥 Don't show FREE matches
+            if (matchType === "FREE") {
+                document.getElementById('matchList').innerHTML = `<p style="text-align:center; opacity:0.5; margin-top:50px;">Free matches are currently closed.</p>`;
+                return;
+            }
+
             const container = document.getElementById('matchList');
             const now = new Date();
             let displayDate = new Date();
@@ -150,14 +156,15 @@
                     let matchId = `${matchType}${serial}`;
                     let timeText = formatAMPM(h, m);
                     
-                    // --- STRICT DYNAMIC LOGIC ---
-                    let fee = 10, prize = 380, perkill = 5, slots = 48, map = "BERMUDA", type = "SOLO", version = "TPP";
+                    let fee = 10, prize = 380, perkill = 7, slots = 48, map = "BERMUDA", type = "SOLO", version = "TPP";
 
-                    // 1. BR ARENA LOGIC
+                    // 1. BR ARENA LOGIC (Updated to Rs 10 Fee / Rs 7 Per Kill)
                     if (matchType === "BR") {
-                        if (m === 0) { fee = 5; perkill = 3; type = "SOLO"; }
-                        else if (m === 15) { fee = 7; perkill = 5; type = "DUO"; }
-                        else if (m === 30) { fee = 10; perkill = 7; type = "SQUAD"; }
+                        fee = 10; perkill = 7;
+                        if (m === 0) { type = "SOLO"; }
+                        else if (m === 15) { type = "DUO"; }
+                        else if (m === 30) { type = "SQUAD"; }
+                        else { type = "SOLO"; }
                     } 
                     // 2. CS & CS HEADSHOT (Mixed Types)
                     else if (matchType.includes("CS")) {
@@ -275,7 +282,4 @@
             el.classList.add('active');
             renderMatches();
         }
-        window.onload = renderMatches;
-    </script>
-</body>
-</html>
+        window.onlo
