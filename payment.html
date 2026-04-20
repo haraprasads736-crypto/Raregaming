@@ -6,79 +6,211 @@
     <title>Deposit - Rare Gaming</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: linear-gradient(to bottom, #1b103c, #a1368b); font-family: 'Poppins', sans-serif; color: white; margin: 0; padding: 0; min-height: 100vh; padding-bottom: 120px; }
-        .container { padding: 20px; max-width: 400px; margin: 0 auto; }
-        .header { display: flex; align-items: center; margin-bottom: 30px; }
-        .back-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; margin-right: 15px; }
-        .input-box { background: transparent; border: 1px solid #4a3b75; border-radius: 8px; width: 100%; padding: 15px; font-size: 20px; color: white; box-sizing: border-box; margin-bottom: 20px; outline: none; }
-        .grid-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 40px; }
-        .amount-btn { background-color: #1a153a; border: none; color: white; padding: 12px 0; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
-        .continue-btn { background: linear-gradient(90deg, #1b3266, #2d559e); width: 100%; padding: 15px; border: none; border-radius: 30px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; }
-        
-        #step2 { background: white; color: black; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .trans-input { width: 95%; padding: 12px; margin-top: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; font-weight: bold; outline: none; }
-        .verify-btn { background: #4caf50; color: white; width: 100%; padding: 15px; margin-top: 20px; border: none; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .verify-btn:disabled { background: #888; }
-        .status-card { margin-top: 15px; padding: 10px; border-radius: 10px; background: #f0f8ff; color: #007bff; font-size: 13px; font-weight: bold; border: 1px dashed #007bff; }
+        :root {
+            --primary: #00f2fe;
+            --secondary: #7000ff;
+            --accent: #f0f;
+            --bg: #0a0b1e;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(10, 10, 15, 0.95); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .nav-item { text-decoration: none; color: #666; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
-        .nav-item.active { color: #00f2fe; }
-        .nav-item i { font-size: 20px; }
+        body { 
+            background: var(--bg); 
+            background-image: radial-gradient(circle at 50% 50%, #1a1b3a 0%, #0a0b1e 100%);
+            font-family: 'Rajdhani', sans-serif; 
+            color: white; 
+            margin: 0; 
+            padding: 0; 
+            min-height: 100vh; 
+            overflow-x: hidden;
+        }
+
+        .container { 
+            padding: 25px; 
+            max-width: 450px; 
+            margin: 0 auto; 
+            box-sizing: border-box;
+        }
+
+        /* Header Design */
+        .header { 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 30px; 
+            padding-top: 10px;
+        }
+        .back-btn { 
+            background: var(--glass); 
+            border: 1px solid rgba(255,255,255,0.2); 
+            color: white; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: var(--secondary); box-shadow: 0 0 15px var(--secondary); }
+
+        /* Main Card */
+        .deposit-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .input-box { 
+            background: rgba(0,0,0,0.3); 
+            border: 2px solid #4a3b75; 
+            border-radius: 12px; 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 24px; 
+            color: var(--primary); 
+            box-sizing: border-box; 
+            margin-bottom: 20px; 
+            outline: none; 
+            text-align: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .input-box:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+
+        /* Amount Buttons */
+        .grid-container { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 12px; 
+            margin-bottom: 30px; 
+        }
+        .amount-btn { 
+            background: var(--glass); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            color: white; 
+            padding: 12px 0; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        .amount-btn:hover { background: var(--secondary); border-color: var(--primary); }
+
+        .continue-btn { 
+            background: linear-gradient(90deg, var(--secondary), #bc00ff); 
+            width: 100%; 
+            padding: 16px; 
+            border: none; 
+            border-radius: 15px; 
+            color: white; 
+            font-size: 20px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(112, 0, 255, 0.4);
+            transition: 0.3s;
+        }
+        .continue-btn:active { transform: scale(0.98); }
+
+        /* Step 2 Look */
+        #qrSection { display: none; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .qr-wrapper {
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 20px 0;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+        }
+
+        .timer-text { color: var(--accent); font-weight: bold; font-size: 18px; text-shadow: 0 0 10px var(--accent); }
+        
+        .trans-input { 
+            width: 100%; 
+            padding: 14px; 
+            margin-top: 15px; 
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed var(--primary); 
+            border-radius: 10px; 
+            font-size: 16px; 
+            text-align: center; 
+            color: white;
+            box-sizing: border-box;
+        }
+
+        /* 🌟 NAVIGATION 🌟 */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(10, 11, 30, 0.9); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.1); z-index: 1000; border-radius: 25px 25px 0 0; }
+        .nav-item { text-decoration: none; color: #5c607b; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: 0.3s; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 22px; }
+
+        .status-msg { font-size: 12px; color: #aaa; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="header">
-            <button class="back-btn" onclick="window.location.href='index.html'">←</button>
-            <h2 style="margin: 0; font-size: 20px; font-weight: normal; margin-left: 20px;">Deposit Coins</h2>
+            <button class="back-btn" onclick="window.location.href='index.html'"><i class="fas fa-chevron-left"></i></button>
+            <h2 style="margin: 0; font-size: 22px; font-weight: 700; margin-left: 15px; letter-spacing: 1px;">DEPOSIT COINS</h2>
         </div>
 
-        <div id="step1">
-            <p style="font-weight: bold; margin-bottom: 10px;">Amount to Deposit</p>
-            <input type="number" id="payAmount" class="input-box" placeholder="Enter Amount">
+        <div class="deposit-card">
+            <div id="step1">
+                <p style="font-weight: 500; color: #ccc; margin-bottom: 15px; text-align: left;">Enter Coins to Purchase</p>
+                <input type="number" id="payAmount" class="input-box" placeholder="000" value="20">
 
-            <div class="grid-container">
-                <button class="amount-btn" onclick="setAmount(20)">20</button>
-                <button class="amount-btn" onclick="setAmount(50)">50</button>
-                <button class="amount-btn" onclick="setAmount(100)">100</button>
-                <button class="amount-btn" onclick="setAmount(200)">200</button>
+                <div class="grid-container">
+                    <button class="amount-btn" onclick="setAmount(20)">+20</button>
+                    <button class="amount-btn" onclick="setAmount(50)">+50</button>
+                    <button class="amount-btn" onclick="setAmount(100)">+100</button>
+                    <button class="amount-btn" onclick="setAmount(500)">+500</button>
+                </div>
+                <button class="continue-btn" onclick="generateQR()">Pay Now</button>
             </div>
-            <button class="continue-btn" onclick="generateQR()">Continue</button>
-        </div>
 
-        <div id="step2" style="display: none;">
-            <h2 style="margin-top: 0; font-size: 20px; color: #333;">RareGaming Pay</h2>
-            <p style="font-size: 14px; color: #555;">Paying ₹<span id="displayAmount"></span></p>
-            
-            <img id="qrImage" src="" alt="QR" style="width: 220px; height: 220px; margin: 15px 0;">
-            
-            <p style="color: #d9534f; font-weight: bold; margin: 10px 0;">Time Left: <span id="timer">05:00</span></p>
+            <div id="qrSection">
+                <p style="font-size: 16px; color: #ccc;">Pay Amount: <span style="color: var(--primary); font-weight: bold;">₹<span id="displayAmount"></span></span></p>
+                
+                <div class="qr-wrapper">
+                    <img id="qrImage" src="" alt="QR" style="width: 200px; height: 200px; display: block;">
+                </div>
+                
+                <p class="timer-text">Expiring in <span id="timer">05:00</span></p>
 
-            <div id="inputSection">
-                <p style="font-size: 14px; font-weight: bold; color: #333; margin-bottom: 2px;">Enter Transaction ID (UTR)</p>
-                <input type="number" id="transNumber" class="trans-input" placeholder="12 Digit Transaction ID">
-                <button class="verify-btn" id="subBtn" onclick="submitWithUTR()">SUBMIT & VERIFY ✅</button>
-            </div>
-            
-            <div id="statusMsg" class="status-card" style="display: none;">
-                <i class="fas fa-spinner fa-spin"></i> Verifying with FamPay...<br>
-                <span style="font-size: 10px; font-weight: normal;">Paisa milte hi coins add ho jayenge.</span>
+                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-top: 10px;">
+                    <p style="font-size: 14px; font-weight: bold; margin: 0;">Transaction ID (UTR)</p>
+                    <p style="font-size: 11px; color: #888; margin-bottom: 10px;">Payment ke baad 12-digit ID niche daale</p>
+                    <input type="number" id="transNumber" class="trans-input" placeholder="Ex: 4321XXXXXXXX">
+                    <button class="continue-btn" id="subBtn" style="margin-top: 15px; background: #28a745;" onclick="submitPayment()">Submit Request</button>
+                    <p class="status-msg">Coins will be added after manual verification.</p>
+                </div>
             </div>
         </div>
     </div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>HOME</span></a>
-        <a href="earn.html" class="nav-item"><i class="fas fa-wallet"></i><span>EARN</span></a>
+        <a href="earn.html" class="nav-item active"><i class="fas fa-wallet"></i><span>WALLET</span></a>
         <a href="refer.html" class="nav-item"><i class="fas fa-gift"></i><span>REFER</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-alt"></i><span>PROFILE</span></a>
+        <a href="profile.html" class="nav-item"><i class="fas fa-user"></i><span>PROFILE</span></a>
     </nav>
 
     <script>
+        // FIREBASE CONFIG (SAME)
         const firebaseConfig = {
             apiKey: "AIzaSyApqtB-__m6OBgMInODlMskCyidmyiqLlk",
             authDomain: "rare-gaming-b8875.firebaseapp.com",
@@ -94,16 +226,17 @@
 
         function generateQR() {
             let amount = document.getElementById('payAmount').value;
-            if(amount < 1) return alert("Valid amount dalo!");
+            if(amount < 1) return alert("Sahi amount dalo!");
 
             let upiId = "8328875119-3@ybl"; 
-            let upiLink = `upi://pay?pa=${upiId}&pn=RareGaming&am=${amount}&cu=INR`;
+            let upiName = "RareGaming";
+            let upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(upiName)}&am=${amount}&cu=INR`;
             
             document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
             document.getElementById('displayAmount').innerText = amount;
             
             document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
+            document.getElementById('qrSection').style.display = 'block';
             startTimer(300);
         }
 
@@ -117,40 +250,33 @@
             }, 1000);
         }
 
-        function submitWithUTR() {
+        function submitPayment() {
             const utr = document.getElementById('transNumber').value;
             const amount = document.getElementById('payAmount').value;
             const userData = JSON.parse(localStorage.getItem("rareGamingUser"));
 
-            if(utr.length !== 12) return alert("12-digit Transaction ID dalo!");
-            if(!userData) return alert("User not logged in!");
+            if(utr.length !== 12) return alert("12-digit UTR number dalo!");
+            if(!userData) return alert("Please Login first!");
 
-            const inputSection = document.getElementById('inputSection');
-            const statusMsg = document.getElementById('statusMsg');
-            
-            inputSection.style.display = "none";
-            statusMsg.style.display = "block";
+            const btn = document.getElementById('subBtn');
+            btn.disabled = true;
+            btn.innerText = "Sending...";
 
-            // 🌟 Folder 'Requests' mein Transaction ID ko key banaya hai
-            const requestRef = database.ref('Requests/' + utr);
-            
-            requestRef.set({
+            // 🌟 Important: Folder name 'Requests' hi rakha hai tere Admin Panel ke liye
+            database.ref('Requests/' + utr).set({
                 userId: userData.uid,
-                userName: userData.name,
+                userName: userData.name || "Gamer",
                 amount: parseFloat(amount),
-                status: "Pending",
                 utr: utr,
+                status: "Pending",
                 time: new Date().toLocaleString()
             }).then(() => {
-                // MacroDroid jab ise "Success" karega, ye apne aap detect karega
-                requestRef.on('value', (snapshot) => {
-                    const data = snapshot.val();
-                    if (data && data.status === "Success") {
-                        clearInterval(timerInterval);
-                        alert("Transaction Verified! Coins added. ✅");
-                        window.location.href = 'index.html';
-                    }
-                });
+                alert("Request Sent! ✅ Coins will be added soon.");
+                window.location.href = 'index.html';
+            }).catch(err => {
+                alert("Error! Check Internet.");
+                btn.disabled = false;
+                btn.innerText = "Submit Request";
             });
         }
     </script>
