@@ -27,6 +27,7 @@
         .match-dt { font-size: 8.5px; color: #666; font-weight: 700; display: block; margin-top: 1px; }
         .more-btn { background: #f0f0f0; border: none; padding: 5px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; cursor: pointer; color: var(--primary); }
 
+        /* Updated Stats Grid for 6 Boxes */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 12px 15px 8px; }
         .stat-box { background: var(--primary); border-radius: 8px; padding: 6px 2px; text-align: center; color: white; display: flex; flex-direction: column; justify-content: center; }
         .stat-box.light { background: #F3EEFF; color: #111; border: 1px solid #e2e2e2; }
@@ -41,7 +42,7 @@
         .card-footer { padding: 0 15px 12px; display: flex; justify-content: flex-end; align-items: center; }
         .btn-join { background: var(--secondary); color: var(--white); border: none; padding: 8px 28px; border-radius: 10px; font-weight: 900; font-size: 10px; text-transform: uppercase; cursor: pointer; }
 
-        /* Detail Modal Styling */
+        /* Detail Modal */
         .detail-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; align-items: flex-end; }
         .detail-content { background: var(--secondary); width: 100%; height: 85%; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; box-sizing: border-box; overflow-y: auto; border-top: 2px solid var(--primary); }
         .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -57,7 +58,6 @@
         .rule-card { background: rgba(139, 62, 235, 0.1); border-left: 4px solid var(--primary); padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 11px; line-height: 1.6; color: #ddd; }
         .player-item { display: flex; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.03); margin-bottom: 5px; border-radius: 8px; font-size: 12px; }
 
-        /* Join Modal */
         .mini-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 4000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .mini-card { background: #1A0A2D; width: 100%; max-width: 320px; border-radius: 24px; padding: 30px; border: 1px solid var(--primary); text-align: center; color: var(--white); }
         .mini-card input { width: 100%; padding: 14px; background: #000; border: 1px solid var(--primary); border-radius: 12px; color: var(--white); margin: 12px 0; box-sizing: border-box; text-align: center; font-size: 13px; outline: none; }
@@ -93,8 +93,8 @@
             </div>
 
             <div id="aboutSec" class="detail-section active">
-                <p style="font-size: 12px; color: var(--primary); font-weight: 700;">ID show before 10 minutes</p>
-                <p style="font-size: 12px; color: #aaa;">ONLY KILL POINTS</p>
+                <p id="detIdShow" style="font-size: 12px; color: var(--primary); font-weight: 700;">ID show before 10 minutes</p>
+                <p id="detKillPoint" style="font-size: 12px; color: #aaa;">ONLY KILL POINTS</p>
                 <div class="rule-card">
                     <b>PLEASE READ ALL RULES THAN PLAY / कृपया खेलने से पहले सभी नियम पढ़ें</b><br><br>
                     1. You Will get room I'd & password 10 to 5 minutes before the match time.<br>
@@ -141,7 +141,6 @@
 
         let currentTab = 'upcoming';
         let selectedMatchData = null;
-        let allMatchesData = [];
 
         function formatAMPM(h, m) {
             let ampm = h >= 12 ? 'PM' : 'AM';
@@ -170,12 +169,17 @@
 
                     let matchId = `${matchType}${serial}`;
                     let timeText = formatAMPM(h, m);
-                    let fee = 10, prize = 380, perkill = 0, slots = 48, map = "BERMUDA", type = "SOLO";
+                    
+                    // FIXED PRIZE & PER KILL LOGIC
+                    let fee = 10, prize = 380, perkill = 5, slots = 48, map = "BERMUDA", type = "SOLO", version = "TPP";
 
                     if (matchType === "BR") {
-                        if (m === 15) { fee = 7; perkill = 5; type = "DUO"; }
+                        if (m === 0) { fee = 5; perkill = 3; type = "SOLO"; }
+                        else if (m === 15) { fee = 7; perkill = 5; type = "DUO"; }
                         else if (m === 30) { fee = 10; perkill = 7; type = "SQUAD"; }
-                    }
+                    } else if (["1V1", "LW", "LW2"].includes(matchType)) {
+                        slots = 2; map = "LONE WOLF"; prize = 30; perkill = 0; fee = 20;
+                    } else if (matchType === "CSHS") { slots = 8; fee = 10; prize = 65; type = "SQUAD"; perkill = 0; map = "BERMUDA"; }
 
                     const participants = allJoins[matchId] || {};
                     const isJoined = participants[userData.uid] ? true : false;
@@ -196,12 +200,15 @@
                                     <p class="match-name">${matchType} MATCH #${serial}</p>
                                     <span class="match-dt">${dateStr} | ${timeText}</span>
                                 </div>
-                                <button class="more-btn" onclick="openDetail('${matchId}', ${fee}, ${prize}, ${perkill}, '${timeText}', '${type}', '${map}')">INFO</button>
+                                <button class="more-btn" onclick="openDetail('${matchId}', ${fee}, ${prize}, ${perkill}, '${type}', '${map}', '${version}')">INFO</button>
                             </div>
                             <div class="stats-grid">
                                 <div class="stat-box"><span class="stat-label">Prize</span><span class="stat-value">₹${prize}</span></div>
                                 <div class="stat-box"><span class="stat-label">Per Kill</span><span class="stat-value">₹${perkill}</span></div>
                                 <div class="stat-box"><span class="stat-label">Entry</span><span class="stat-value">₹${fee}</span></div>
+                                <div class="stat-box light"><span class="stat-label">Type</span><span class="stat-value">${type}</span></div>
+                                <div class="stat-box light"><span class="stat-label">Version</span><span class="stat-value">${version}</span></div>
+                                <div class="stat-box light"><span class="stat-label">Map</span><span class="stat-value">${map}</span></div>
                             </div>
                             <div class="progress-box">
                                 <div class="progress-bar-bg">
@@ -213,7 +220,7 @@
                                 ${currentTab === 'upcoming' ? 
                                     (isJoined ? `<button class="btn-join" style="background:#444">JOINED ✅</button>` : 
                                     (pCount >= slots ? `<button class="btn-join" style="background:#ff3131">FULL</button>` : 
-                                    `<button class="btn-join" onclick="openJoinModal('${matchId}', ${fee}, ${prize}, ${perkill})">JOIN</button>`)) 
+                                    `<button class="btn-join" onclick="openJoinModal('${matchId}', ${fee})">JOIN</button>`)) 
                                 : `<button class="btn-join" style="background:var(--primary)">${currentTab.toUpperCase()}</button>`}
                             </div>
                         </div>`;
@@ -224,31 +231,27 @@
             container.innerHTML = matchesHtml || `<p style="text-align:center; opacity:0.5; margin-top:50px;">No Matches Found</p>`;
         }
 
-        async function openDetail(id, fee, prize, perkill, time, type, map) {
+        async function openDetail(id, fee, prize, perkill, type, map, version) {
             selectedMatchData = { id, fee, prize, perkill };
             document.getElementById('detMatchName').innerText = "MATCH #" + id.replace(/\D/g, "");
             document.getElementById('detailModal').style.display = "flex";
             
-            // Load Participants
+            // Participants load
             const snap = await database.ref(`match_joins/${id}`).once('value');
             const players = snap.val() || {};
-            const pCount = Object.keys(players).length;
             const myEntry = players[userData.uid];
 
-            // Render My Entry
             document.getElementById('entryInfo').innerHTML = myEntry ? 
                 `<div class="player-item"><span>Name:</span><b>${myEntry.name}</b></div>
                  <div class="player-item"><span>UID:</span><b>${myEntry.uid}</b></div>` : 
                 `<p style="text-align:center; opacity:0.5; font-size:12px;">You haven't joined this match.</p>`;
 
-            // Render Participants
             let pListHtml = "";
             Object.values(players).forEach((p, index) => {
                 pListHtml += `<div class="player-item"><span>${index + 1}. ${p.name}</span><i class="fas fa-check-circle" style="color:#39ff14"></i></div>`;
             });
             document.getElementById('playerList').innerHTML = pListHtml || `<p style="text-align:center; opacity:0.5; font-size:12px;">No one joined yet.</p>`;
 
-            // Render Bottom Join Button in Detail
             document.getElementById('detJoinBox').innerHTML = currentTab === 'upcoming' ? 
                 (myEntry ? `<button class="btn-join" style="width:100%; background:#444">ALREADY JOINED ✅</button>` : 
                 `<button class="btn-join" style="width:100%;" onclick="openJoinModal('${id}', ${fee})">JOIN NOW</button>`) : "";
@@ -264,6 +267,7 @@
         }
 
         function openJoinModal(id, fee) {
+            if(!selectedMatchData) selectedMatchData = {};
             selectedMatchData.id = id;
             selectedMatchData.fee = fee;
             document.getElementById('feeText').innerText = "Entry Fee: ₹" + fee;
